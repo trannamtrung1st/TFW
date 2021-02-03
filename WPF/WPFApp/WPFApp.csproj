@@ -57,11 +57,21 @@
     <Compile Include="DataBindingWindow.xaml.cs">
       <DependentUpon>DataBindingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EllipseEventHandlingWindow.xaml.cs">
+      <DependentUpon>EllipseEventHandlingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MediaWindow.xaml.cs">
+      <DependentUpon>MediaWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Person.cs" />
     <Compile Include="DockWindow1.xaml.cs">
       <DependentUpon>DockWindow1.xaml</DependentUpon>
     </Compile>
     <Page Include="DataBindingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EllipseEventHandlingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -78,6 +88,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="DockWindow1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MediaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -107,6 +121,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Medias\test.avi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Medias\test.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
