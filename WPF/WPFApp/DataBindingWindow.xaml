@@ -1,0 +1,22 @@
+﻿<Window x:Class="WPFApp.DataBindingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFApp"
+        mc:Ignorable="d"
+        Title="DataBindingWindow" Height="450" Width="800">
+
+    <Grid>
+        <!-- Bind the TextBox to the data source (TextBox.Text to Person.Name) -->
+        <TextBox Name="personNameTextBox1" Margin="0,0,0,337">
+            <TextBox.Text>
+                <Binding Path="Name"
+                   UpdateSourceTrigger="PropertyChanged"/>
+            </TextBox.Text>
+        </TextBox>
+        <TextBox Name="personNameTextBox2" Text="{Binding Path=Name}" Margin="0,87,0,260" />
+        <Label Name="personNameLabel" Content="{Binding Path=Name}" Margin="0,164,0,0"/>
+    </Grid>
+
+</Window>
