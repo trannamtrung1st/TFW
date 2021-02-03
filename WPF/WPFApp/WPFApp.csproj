@@ -54,8 +54,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ContentModelWindow.xaml.cs">
+      <DependentUpon>ContentModelWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumericUpDown.xaml.cs">
+      <DependentUpon>NumericUpDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControlWindow.xaml.cs">
+      <DependentUpon>CustomControlWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataBindingWindow.xaml.cs">
       <DependentUpon>DataBindingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataTemplateWindow.xaml.cs">
+      <DependentUpon>DataTemplateWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EllipseEventHandlingWindow.xaml.cs">
       <DependentUpon>EllipseEventHandlingWindow.xaml</DependentUpon>
@@ -67,11 +79,38 @@
     <Compile Include="DockWindow1.xaml.cs">
       <DependentUpon>DockWindow1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ResourcesWindow.xaml.cs">
+      <DependentUpon>ResourcesWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StyleWindow.xaml.cs">
+      <DependentUpon>StyleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TaskObject.cs" />
+    <Page Include="ContentModelWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumericUpDown.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomControlWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataBindingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DataTemplateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="EllipseEventHandlingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GlobalDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -92,6 +131,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MediaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StyleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

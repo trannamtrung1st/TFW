@@ -1,0 +1,42 @@
+﻿<Window x:Class="WPFApp.ContentModelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFApp"
+        mc:Ignorable="d"
+        Title="ContentModelWindow" Height="450" Width="800">
+    <Grid>
+        <Button Margin="20">
+            <!-- Button Content -->
+            <DockPanel Width="200" Height="180">
+                <Label DockPanel.Dock="Top" HorizontalAlignment="Center">Click Me!</Label>
+                <Border Background="Black" BorderBrush="Yellow" BorderThickness="2"
+                    CornerRadius="2" Margin="5">
+                    <MediaElement Source="Medias/test.mp4" Stretch="Fill" />
+                </Border>
+            </DockPanel>
+        </Button>
+
+        <!-- Button using an ellipse -->
+        <Button Content="Click Me!" Click="button_Click" Margin="58,52,578,206">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid Margin="5">
+                        <Ellipse Stroke="DarkBlue" StrokeThickness="2">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush Center="0.3,0.2" RadiusX="0.5" RadiusY="0.5">
+                                    <GradientStop Color="Azure" Offset="0.1" />
+                                    <GradientStop Color="CornflowerBlue" Offset="1.1" />
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter Name="content" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+
+        </Button>
+    </Grid>
+</Window>
