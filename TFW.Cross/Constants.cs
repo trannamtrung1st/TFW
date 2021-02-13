@@ -17,6 +17,11 @@ namespace TFW.Cross
         public const int DefaultPageLimit = 100;
     }
 
+    public static class ApiEndpoint
+    {
+        public const string Error = "error";
+    }
+
     public enum AppError
     {
         [Description("Invalid paging request")]

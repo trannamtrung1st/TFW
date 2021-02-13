@@ -6,7 +6,7 @@ using TFW.Cross.Models;
 
 namespace TFW.Business.Services
 {
-    public interface IIdentityService
+    public interface IIdentityService : IService
     {
         Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             DynamicQueryAppUserModel queryModel);

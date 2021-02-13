@@ -8,6 +8,10 @@ using TFW.Data;
 
 namespace TFW.Business.Logics
 {
+    public interface ILogic
+    {
+    }
+
     public abstract class BaseLogic
     {
         protected readonly DataContext dataContext;
@@ -19,9 +23,9 @@ namespace TFW.Business.Logics
 
         protected IQueryable<T> BuildQueryPaging<T>(IQueryable<T> query, PagingQueryModel pagingModel)
         {
-            if (pagingModel.Page == null)
+            if (pagingModel.Page <= 0)
                 throw AppException.Create(error: Cross.AppError.InvalidPagingRequest);
-            query = query.Skip((pagingModel.Page.Value - 1) * pagingModel.PageLimit).Take(pagingModel.PageLimit);
+            query = query.Skip((pagingModel.Page - 1) * pagingModel.PageLimit).Take(pagingModel.PageLimit);
             return query;
         }
     }

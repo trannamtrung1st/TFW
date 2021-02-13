@@ -8,7 +8,7 @@ using TFW.Cross.Models;
 
 namespace TFW.Business.Logics
 {
-    public interface IAppUserLogic
+    public interface IAppUserLogic : ILogic
     {
         Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             DynamicQueryAppUserModel queryModel);

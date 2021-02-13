@@ -33,7 +33,7 @@ namespace TFW.Business.Core.Logics
                 query = BuildQueryProjection(query, queryModel);
             if (queryModel.SortBy != null)
                 query = BuildQuerySorting(query, queryModel);
-            if (queryModel.Page != null)
+            if (queryModel.Page > 0)
                 query = BuildQueryPaging(query, queryModel);
             var entities = await query.ToArrayAsync();
             var responseList = entities.To<AppUserResponseModel>().ToArray();
