@@ -7,7 +7,7 @@ namespace TFW.Data
 
     public static class DataConsts
     {
-        public const string CONN_STR_VAR_NAME = "conn_str";
+        public const string ConnStrVarName = "conn_str";
     }
 
 }

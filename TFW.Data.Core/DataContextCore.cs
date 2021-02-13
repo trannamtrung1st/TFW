@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,26 +6,22 @@ using TFW.Cross.Entities;
 
 namespace TFW.Data.Core
 {
-    public partial class DataContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
-        AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public partial class DataContextCore : DataContext
     {
-        public DataContext()
+        public DataContextCore()
         {
         }
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContextCore(DbContextOptions<DataContext> options) : base(options)
         {
         }
-
-        public virtual DbSet<Note> Note { get; set; }
-        public virtual DbSet<NoteCategory> Category { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.CONN_STR_VAR_NAME));
+                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.ConnStrVarName));
                 //require Microsoft.EntityFrameworkCore.Proxies
                 //.UseLazyLoadingProxies();
             }
@@ -73,17 +66,6 @@ namespace TFW.Data.Core
                 entity.Property(e => e.Description)
                     .HasMaxLength(1000);
             });
-        }
-    }
-
-    public class DbContextFactory : IDesignTimeDbContextFactory<DataContext>
-    {
-
-        public DataContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.CONN_STR_VAR_NAME));
-            return new DataContext(optionsBuilder.Options);
         }
     }
 }
