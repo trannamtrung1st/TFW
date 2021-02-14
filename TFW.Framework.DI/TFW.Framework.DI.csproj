@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TFW.Data.Core\TFW.Data.Core.csproj" />
-    <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.12" />
   </ItemGroup>
 
 </Project>

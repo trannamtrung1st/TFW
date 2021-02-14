@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TFW.Business.Logics;
@@ -13,9 +15,11 @@ using TFW.Cross.Models.Exceptions;
 using TFW.Data;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common;
+using TFW.Framework.DI;
 
 namespace TFW.Business.Core.Logics
 {
+    [ScopedService(ServiceType = typeof(IAppUserLogic))]
     public class AppUserLogic : BaseLogic, IAppUserLogic
     {
         public AppUserLogic(DataContext dataContext) : base(dataContext)
@@ -24,14 +28,15 @@ namespace TFW.Business.Core.Logics
 
         #region AppUser
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
-            DynamicQueryAppUserModel queryModel)
+            GetAppUserListRequestModel requestModel)
         {
+            var queryModel = requestModel.To<DynamicQueryAppUserModel>();
             IQueryable<AppUser> query = dataContext.Users;
             query = BuildQueryFilter(query, queryModel);
             var orgQuery = query;
-            if (queryModel.Fields != null)
+            if (!queryModel.Fields.IsNullOrEmpty())
                 query = BuildQueryProjection(query, queryModel);
-            if (queryModel.SortBy != null)
+            if (!queryModel.SortBy.IsNullOrEmpty())
                 query = BuildQuerySorting(query, queryModel);
             if (queryModel.Page > 0)
                 query = BuildQueryPaging(query, queryModel);
@@ -60,12 +65,24 @@ namespace TFW.Business.Core.Logics
             return query;
         }
 
+        public async Task<ValidationData> ValidateGetAppUserListAsync(
+            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel)
+        {
+            var principalInfo =  principal.To<PrincipalInfo>();
+            var validationData = new ValidationData();
+            if (requestModel.page < 0)
+                validationData.Fail(code: Cross.ResultCode.InvalidPagingRequest);
+            return await Task.FromResult(validationData);
+        }
+
         private IQueryable<AppUser> BuildQueryFilter(IQueryable<AppUser> query, DynamicQueryAppUserModel model)
         {
             if (model.Id != null)
                 query = BuildQueryById(query, model.Id);
             if (model.UserName != null)
                 query = BuildQueryByUsername(query, model.UserName);
+            if (model.Search != null)
+                query = BuildQueryBySearch(query, model.Search);
             return query;
         }
 
@@ -93,7 +110,7 @@ namespace TFW.Business.Core.Logics
                         }
                         break;
                     default:
-                        throw AppException.Create(error: AppError.InvalidAppUserSorting);
+                        throw AppException.From(ResultCode.InvalidAppUserSorting);
                 }
             }
             return query;
@@ -107,6 +124,12 @@ namespace TFW.Business.Core.Logics
         private IQueryable<AppUser> BuildQueryByUsername(IQueryable<AppUser> query, string username)
         {
             return query.Where(o => o.UserName == username);
+        }
+
+        private IQueryable<AppUser> BuildQueryBySearch(IQueryable<AppUser> query, string search)
+        {
+            return query.Where(o => o.UserName.Contains(search)
+                || o.FullName.Contains(search));
         }
         #endregion
     }

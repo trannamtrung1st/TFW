@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TFW.Cross.Models;
 
 namespace TFW.Business.Services
 {
-    public interface IIdentityService : IService
+    public interface IIdentityService
     {
         Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
-            DynamicQueryAppUserModel queryModel);
+            GetAppUserListRequestModel requestModel);
+        Task<ValidationData> ValidateGetAppUserListAsync(
+            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel);
     }
 }

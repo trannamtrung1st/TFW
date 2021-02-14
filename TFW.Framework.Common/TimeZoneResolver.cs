@@ -15,7 +15,7 @@ namespace TFW.Framework.Common
     {
         private readonly IDictionary<string, TimeZoneInfo> _timeZoneMap;
         private Func<CultureInfo, string> _getCurrentCultureFunc
-            = ((cultureInfo) => cultureInfo.TwoLetterISOLanguageName);
+            = ((cultureInfo) => cultureInfo.Name.Split('-')[1]);
 
         public DefaultTimeZoneResolver(IDictionary<string, string> timeZoneMap,
             Func<CultureInfo, string> getCurrentCultureFunc = null)

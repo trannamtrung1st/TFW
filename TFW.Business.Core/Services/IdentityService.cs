@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TFW.Business.Logics;
@@ -11,10 +12,12 @@ using TFW.Cross.Entities;
 using TFW.Cross.Models;
 using TFW.Data;
 using TFW.Framework.AutoMapper;
+using TFW.Framework.DI;
 
 namespace TFW.Business.Core.Services
 {
-    public class IdentityService : BaseService
+    [ScopedService(ServiceType = typeof(IIdentityService))]
+    public class IdentityService : BaseService, IIdentityService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
@@ -35,10 +38,17 @@ namespace TFW.Business.Core.Services
 
         #region AppUser
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
-            DynamicQueryAppUserModel queryModel)
+            GetAppUserListRequestModel requestModel)
         {
-            var response = await _appUserLogic.GetListAppUserAsync(queryModel);
+            var response = await _appUserLogic.GetListAppUserAsync(requestModel);
             return response;
+        }
+
+        public async Task<ValidationData> ValidateGetAppUserListAsync(
+            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel)
+        {
+            var validationData = await _appUserLogic.ValidateGetAppUserListAsync(principal, requestModel);
+            return validationData;
         }
         #endregion
     }

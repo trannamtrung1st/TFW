@@ -6,14 +6,14 @@ using System.Text;
 
 namespace TFW.Data.Core
 {
-    public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
+    public class DataContextFactory : IDesignTimeDbContextFactory<Data.DataContext>
     {
 
-        public DataContext CreateDbContext(string[] args)
+        public Data.DataContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<Data.DataContext>();
             optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.ConnStrVarName));
-            return new DataContextCore(optionsBuilder.Options);
+            return new DataContext(optionsBuilder.Options);
         }
     }
 }

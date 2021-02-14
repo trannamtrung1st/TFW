@@ -7,25 +7,18 @@ namespace TFW.Cross.Models.Exceptions
 {
     public class AppException : Exception
     {
-        public AppError Error { get; }
+        public AppResult Result { get; }
 
-        private AppException(AppError error) : this(error, message: error.Description())
+        private AppException(AppResult result) : base(result?.Message)
         {
+            if (result == null)
+                throw new ArgumentNullException(nameof(result));
+            Result = result;
         }
 
-        private AppException(AppError error, string message) : base(message)
+        public static AppException From(ResultCode code, object data = null, string mess = null)
         {
-            Error = error;
-        }
-
-        public static AppException Create(AppError error)
-        {
-            return new AppException(error);
-        }
-
-        public static AppException Create(AppError error, string message)
-        {
-            return new AppException(error, message);
+            return new AppException(result: AppResult.OfCode(code, data, mess));
         }
     }
 }

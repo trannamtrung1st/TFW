@@ -5,10 +5,6 @@ using TFW.Data;
 
 namespace TFW.Business.Services
 {
-    public interface IService
-    {
-    }
-
     public abstract class BaseService
     {
         protected readonly DataContext dataContext;

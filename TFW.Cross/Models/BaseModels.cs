@@ -5,13 +5,22 @@ using System.Text;
 
 namespace TFW.Cross.Models
 {
+    public abstract class BaseGetListRequestModel
+    {
+        public string[] fields { get; set; }
+        public string[] sortBy { get; set; }
+        public bool countTotal { get; set; }
+        public int page { get; set; } = 1;
+        public int pageLimit { get; set; } = QueryConsts.DefaultPageLimit;
+    }
+
     public abstract class PagingQueryModel
     {
         public int Page { get; set; } = 1;
         public int PageLimit { get; set; } = QueryConsts.DefaultPageLimit;
     }
 
-    public abstract class BaseQueryModel : PagingQueryModel
+    public abstract class BaseDynamicQueryModel : PagingQueryModel
     {
         // projection
         public string[] Fields { get; set; }
@@ -23,11 +32,4 @@ namespace TFW.Cross.Models
         public bool CountTotal { get; set; }
     }
 
-    public class GetListResponseModel<T>
-    {
-        [JsonProperty("list")]
-        public T[] List { get; set; }
-        [JsonProperty("totalCount", NullValueHandling = NullValueHandling.Ignore)]
-        public int? TotalCount { get; set; }
-    }
 }

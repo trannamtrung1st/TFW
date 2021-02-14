@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,10 +23,18 @@ using TFW.Business.Extensions;
 using TFW.Business.Logics;
 using TFW.Cross;
 using TFW.Cross.Entities;
+using TFW.Cross.Extensions;
 using TFW.Cross.Models;
+using TFW.Cross.Profiles;
 using TFW.Data;
+using TFW.Data.Core;
 using TFW.Data.Extensions;
+using TFW.Framework.AutoMapper;
+using TFW.Framework.Common;
+using TFW.Framework.DI;
+using TFW.Framework.EFCore;
 using TFW.Framework.WebAPI.Bindings;
+using TFW.Framework.WebConfiguration;
 using TFW.WebAPI.Models;
 
 namespace TFW.WebAPI
@@ -39,8 +50,8 @@ namespace TFW.WebAPI
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-            Settings.App = Configuration.GetValue<AppSettings>(nameof(AppSettings));
-            Settings.Jwt = Configuration.GetValue<JwtSettings>(nameof(JwtSettings));
+            Settings.App = Configuration.Parse<AppSettings>(nameof(AppSettings));
+            Settings.Jwt = Configuration.Parse<JwtSettings>(nameof(JwtSettings));
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
         }
 
@@ -50,20 +61,25 @@ namespace TFW.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var connStr = Configuration.GetConnectionString(Data.DataConsts.ConnStrKey);
+            var assemblies = ReflectionHelper.GetAllAssemblies();
+
             services.AddDbContext<DataContext>(options => options
                     .UseSqlServer(connStr)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
+                .AddDefaultDbMigrator()
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
-                }).ConfigureData()
-                .ConfigureBusiness();
+                }).ConfigureCross()
+                .ConfigureData()
+                .ConfigureBusiness()
+                .ScanServices(assemblies);
 
             #region OAuth
             services.AddIdentityCore<AppUser>(options =>
-            {
-                options.SignIn.RequireConfirmedEmail = false;
-            }).AddRoles<AppRole>()
+             {
+                 options.SignIn.RequireConfirmedEmail = false;
+             }).AddRoles<AppRole>()
                 .AddDefaultTokenProviders()
                 .AddSignInManager()
                 .AddEntityFrameworkStores<DataContext>();
@@ -115,6 +131,7 @@ namespace TFW.WebAPI
                 });
             #endregion
 
+            services.AddSingleton<ITimeZoneResolver>(new DefaultTimeZoneResolver(TimeZoneConsts.TimezoneMap));
             services.AddSingleton(new DefaultDateTimeModelBinder());
             services.AddControllers(options =>
             {
@@ -154,8 +171,16 @@ namespace TFW.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IHostApplicationLifetime appLifetime)
         {
+            // AutoMapper
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddMaps(Assembly.GetAssembly(typeof(CommonModelsProfile)));
+            });
+            GlobalMapper.Instance = mapConfig.CreateMapper();
+
             PrepareEnvironment(env);
 
             if (env.IsDevelopment())
@@ -200,11 +225,19 @@ namespace TFW.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            // app lifetime
+            appLifetime.ApplicationStarted.Register(OnApplicationStarted);
         }
 
         private void PrepareEnvironment(IWebHostEnvironment env)
         {
             // create directories ...
+        }
+
+        private void OnApplicationStarted()
+        {
+            // handle application started
         }
     }
 }

@@ -6,6 +6,11 @@ namespace TFW.Framework.Common
 {
     public static class ArrayExtensions
     {
+        public static bool IsNullOrEmpty(this object[] arr)
+        {
+            return arr == null || arr.Length == 0;
+        }
+
         public static string ToCommaString(this object[] arr)
         {
             return string.Join(',', arr);

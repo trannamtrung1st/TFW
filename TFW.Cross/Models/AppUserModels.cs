@@ -5,11 +5,19 @@ using System.Text;
 
 namespace TFW.Cross.Models
 {
-    public class DynamicQueryAppUserModel : BaseQueryModel
+    public class GetAppUserListRequestModel : BaseGetListRequestModel
+    {
+        public string id { get; set; }
+        public string userName { get; set; }
+        public string search { get; set; }
+    }
+
+    public class DynamicQueryAppUserModel : BaseDynamicQueryModel
     {
         // filter
         public string Id { get; set; }
         public string UserName { get; set; }
+        public string Search { get; set; }
     }
 
     public class AppUserResponseModel

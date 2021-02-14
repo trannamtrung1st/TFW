@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace TFW.Framework.AutoMapper
@@ -22,18 +23,18 @@ namespace TFW.Framework.AutoMapper
             mapper.Map(obj, dest);
         }
 
-        public static ET To<ET>(this object obj, IMapper mapper = null)
+        public static Dest To<Dest>(this object obj, IMapper mapper = null)
         {
             mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            return mapper.Map<ET>(obj);
+            return mapper.Map<Dest>(obj);
         }
 
-        public static IEnumerable<ET> To<ET>(this IEnumerable<object> obj, IMapper mapper = null)
+        public static IEnumerable<Dest> To<Dest>(this IEnumerable<object> obj, IMapper mapper = null)
         {
             mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            return obj.Select(o => o.To<ET>());
+            return obj.Select(o => o.To<Dest>());
         }
 
         private static void CheckMapperNull(IMapper mapper)

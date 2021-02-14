@@ -9,7 +9,7 @@ using TFW.Cross.Entities;
 
 namespace TFW.Data
 {
-    public abstract partial class DataContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
+    public partial class DataContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public DataContext()
@@ -22,6 +22,59 @@ namespace TFW.Data
 
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<NoteCategory> Category { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.ConnStrVarName));
+                //require Microsoft.EntityFrameworkCore.Proxies
+                //.UseLazyLoadingProxies();
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<AppUser>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+            });
+            modelBuilder.Entity<AppRole>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .IsUnicode(false)
+                    .HasMaxLength(100);
+            });
+            modelBuilder.Entity<Note>(entity =>
+            {
+                entity.Property(e => e.Title).IsRequired()
+                    .HasMaxLength(255);
+                entity.Property(e => e.Content)
+                    .IsUnicode();
+                entity.HasOne(e => e.CreatedUser)
+                    .WithMany(e => e.Notes)
+                    .HasForeignKey(e => e.CreatedUserId)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Note_AppUser");
+                entity.HasOne(e => e.Category)
+                    .WithMany(e => e.Notes)
+                    .HasForeignKey(e => e.CategoryName)
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .HasConstraintName("FK_Note_Category");
+            });
+            modelBuilder.Entity<NoteCategory>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+                entity.Property(e => e.Name).IsRequired()
+                    .HasMaxLength(255);
+                entity.Property(e => e.Description)
+                    .HasMaxLength(1000);
+            });
+        }
     }
 
 }
