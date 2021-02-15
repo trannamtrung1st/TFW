@@ -177,9 +177,9 @@ namespace TFW.WebAPI
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(Assembly.GetAssembly(typeof(CommonModelsProfile)));
+                cfg.AddMaps(Assembly.GetAssembly(typeof(GlobalResources)));
             });
-            GlobalMapper.Instance = mapConfig.CreateMapper();
+            GlobalResources.Mapper = mapConfig.CreateMapper();
 
             PrepareEnvironment(env);
 

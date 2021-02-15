@@ -9,32 +9,28 @@ namespace TFW.Framework.AutoMapper
 {
     public static class MapperExtensions
     {
-        public static void CopyFrom(this object obj, object src, IMapper mapper = null)
+        public static void CopyFrom(this IMapper mapper, object dest, object src)
         {
-            mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            mapper.Map(src, obj);
+            mapper.Map(src, dest);
         }
 
-        public static void CopyTo(this object obj, object dest, IMapper mapper = null)
+        public static void CopyTo(this IMapper mapper, object src, object dest)
         {
-            mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            mapper.Map(obj, dest);
+            mapper.Map(src, dest);
         }
 
-        public static Dest To<Dest>(this object obj, IMapper mapper = null)
+        public static Dest MapTo<Dest>(this IMapper mapper, object src)
         {
-            mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            return mapper.Map<Dest>(obj);
+            return mapper.Map<Dest>(src);
         }
 
-        public static IEnumerable<Dest> To<Dest>(this IEnumerable<object> obj, IMapper mapper = null)
+        public static IEnumerable<Dest> MapTo<Dest>(this IMapper mapper, IEnumerable<object> src)
         {
-            mapper = mapper ?? GlobalMapper.Instance;
             CheckMapperNull(mapper);
-            return obj.Select(o => o.To<Dest>());
+            return src.Select(o => mapper.MapTo<Dest>(o));
         }
 
         private static void CheckMapperNull(IMapper mapper)

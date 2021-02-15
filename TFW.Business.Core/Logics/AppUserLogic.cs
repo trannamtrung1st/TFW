@@ -30,7 +30,7 @@ namespace TFW.Business.Core.Logics
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             GetAppUserListRequestModel requestModel)
         {
-            var queryModel = requestModel.To<DynamicQueryAppUserModel>();
+            var queryModel = GlobalResources.Mapper.MapTo<DynamicQueryAppUserModel>(requestModel);
             IQueryable<AppUser> query = dataContext.Users;
             query = BuildQueryFilter(query, queryModel);
             var orgQuery = query;
@@ -41,7 +41,7 @@ namespace TFW.Business.Core.Logics
             if (queryModel.Page > 0)
                 query = BuildQueryPaging(query, queryModel);
             var entities = await query.ToArrayAsync();
-            var responseList = entities.To<AppUserResponseModel>().ToArray();
+            var responseList = GlobalResources.Mapper.MapTo<AppUserResponseModel>(entities).ToArray();
             var response = new GetListResponseModel<AppUserResponseModel>
             {
                 List = responseList,
@@ -68,7 +68,7 @@ namespace TFW.Business.Core.Logics
         public async Task<ValidationData> ValidateGetAppUserListAsync(
             ClaimsPrincipal principal, GetAppUserListRequestModel requestModel)
         {
-            var principalInfo =  principal.To<PrincipalInfo>();
+            var principalInfo = GlobalResources.Mapper.MapTo<PrincipalInfo>(principal);
             var validationData = new ValidationData();
             if (requestModel.page < 0)
                 validationData.Fail(code: Cross.ResultCode.InvalidPagingRequest);
