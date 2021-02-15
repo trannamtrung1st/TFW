@@ -8,11 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Framework.AutoMapper\TFW.Framework.AutoMapper.csproj" />
     <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
+    <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
     <ProjectReference Include="..\TFW.Framework.i18n\TFW.Framework.i18n.csproj" />
   </ItemGroup>
 

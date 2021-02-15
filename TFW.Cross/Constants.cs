@@ -6,12 +6,6 @@ using TFW.Framework.i18n;
 
 namespace TFW.Cross
 {
-    public static class AppUserQueryConsts
-    {
-        public const string SortByUsername = "username";
-        public const string DefaultSortBy = "a" + SortByUsername;
-    }
-
     public static class QueryConsts
     {
         public const char SortAscPrefix = 'a';
@@ -55,8 +49,10 @@ namespace TFW.Cross
         AccessDenied = 9,
         [Description("Invalid paging request")]
         InvalidPagingRequest = 10,
-        [Description("Invalid app user sorting")]
-        InvalidAppUserSorting = 11
+        [Description("Invalid sorting request")]
+        InvalidSortingRequest = 11,
+        [Description("Invalid projection request")]
+        InvalidProjectionRequest = 12,
     }
 
 }

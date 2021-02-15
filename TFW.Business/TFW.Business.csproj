@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TFW.Data.Core\TFW.Data.Core.csproj" />
     <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
   </ItemGroup>

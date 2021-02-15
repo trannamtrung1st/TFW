@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,8 @@ namespace TFW.Business.Core.Logics
     [ScopedService(ServiceType = typeof(IAppUserLogic))]
     public class AppUserLogic : BaseLogic, IAppUserLogic
     {
-        public AppUserLogic(DataContext dataContext) : base(dataContext)
+        public AppUserLogic(DataContext dataContext, IDynamicLinkCustomTypeProvider dynamicLinkCustomTypeProvider)
+            : base(dataContext, dynamicLinkCustomTypeProvider)
         {
         }
 
@@ -34,8 +36,10 @@ namespace TFW.Business.Core.Logics
             IQueryable<AppUser> query = dataContext.Users;
             query = BuildQueryFilter(query, queryModel);
             var orgQuery = query;
-            if (!queryModel.Fields.IsNullOrEmpty())
-                query = BuildQueryProjection(query, queryModel);
+            if (queryModel.Fields.IsNullOrEmpty() ||
+                queryModel.Fields.Any(o => !DynamicQueryAppUserModel.Projections.ContainsKey(o)))
+                throw AppException.From(ResultCode.InvalidProjectionRequest);
+            query = BuildQueryProjection(query, queryModel);
             if (!queryModel.SortBy.IsNullOrEmpty())
                 query = BuildQuerySorting(query, queryModel);
             if (queryModel.Page > 0)
@@ -88,8 +92,9 @@ namespace TFW.Business.Core.Logics
 
         private IQueryable<AppUser> BuildQueryProjection(IQueryable<AppUser> query, DynamicQueryAppUserModel model)
         {
-            var fieldStr = model.Fields.ToCommaString();
-            query = query.Select<AppUser>($"new ({fieldStr})");
+            var projectionArr = model.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
+            var projectionStr = string.Join(',', projectionArr);
+            query = query.Select<AppUser>(defaultParsingConfig, $"new ({projectionStr})");
             return query;
         }
 
@@ -101,7 +106,7 @@ namespace TFW.Business.Core.Logics
                 var fieldName = field.Remove(0, 1);
                 switch (fieldName)
                 {
-                    case AppUserQueryConsts.SortByUsername:
+                    case DynamicQueryAppUserModel.SortByUsername:
                         {
                             if (asc)
                                 query = query.SequentialOrderBy(o => o.UserName);
@@ -110,7 +115,7 @@ namespace TFW.Business.Core.Logics
                         }
                         break;
                     default:
-                        throw AppException.From(ResultCode.InvalidAppUserSorting);
+                        throw AppException.From(ResultCode.InvalidPagingRequest);
                 }
             }
             return query;
