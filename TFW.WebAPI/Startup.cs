@@ -27,7 +27,6 @@ using TFW.Cross.Extensions;
 using TFW.Cross.Models;
 using TFW.Cross.Profiles;
 using TFW.Data;
-using TFW.Data.Core;
 using TFW.Data.Extensions;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common;
