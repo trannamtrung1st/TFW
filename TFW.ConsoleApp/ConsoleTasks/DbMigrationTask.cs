@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Framework.ConsoleApp;
 
-namespace TFW.ConsoleApp
+namespace TFW.ConsoleApp.ConsoleTasks
 {
-    public class DbMigrationTask : ConsoleTask
+    public class DbMigrationTask : DefaultConsoleTask
     {
         public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
         {

@@ -2,9 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
+using TFW.Framework.ConsoleApp;
 
 namespace TFW
 {
+    public class TestConsoleApp : DefaultConsoleTask
+    {
+        public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
+        {
+        };
+
+        public override string Title => "Test task";
+
+        public override string Description => "Test task description";
+
+        public override Task Start()
+        {
+            return Task.CompletedTask;
+        }
+    }
+
     public class A
     {
         public string Name { get; set; }

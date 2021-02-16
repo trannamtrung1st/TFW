@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TFW.ConsoleApp
+namespace TFW.Framework.ConsoleApp
 {
     public interface IConsoleTask
     {
@@ -14,7 +14,7 @@ namespace TFW.ConsoleApp
         Task Start();
     }
 
-    public abstract class ConsoleTask : IConsoleTask
+    public abstract class DefaultConsoleTask : IConsoleTask
     {
         public abstract IDictionary<string, Func<Task>> Tasks { get; }
         public abstract string Title { get; }

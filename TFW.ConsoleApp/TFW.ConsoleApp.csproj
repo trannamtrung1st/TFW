@@ -5,4 +5,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
+    <ProjectReference Include="..\TFW.Framework.ConsoleApp\TFW.Framework.ConsoleApp.csproj" />
+  </ItemGroup>
+
 </Project>

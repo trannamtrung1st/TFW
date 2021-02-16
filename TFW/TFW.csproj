@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Cross\TFW.Cross.csproj" />
+    <ProjectReference Include="..\TFW.Framework.ConsoleApp\TFW.Framework.ConsoleApp.csproj" />
   </ItemGroup>
 
 </Project>

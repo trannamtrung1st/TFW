@@ -38,6 +38,17 @@ namespace TFW.Framework.Common
             return allAssemblies;
         }
 
+        public static IEnumerable<Type> GetAllTypesAssignableTo(Type baseType, IEnumerable<Assembly> assemblies)
+        {
+            var types = assemblies.SelectMany(o => o.GetTypes()).Where(o => baseType.IsAssignableFrom(o));
+            return types;
+        }
+
+        public static T CreateInstance<T>(Type type) where T : class
+        {
+            return Activator.CreateInstance(type) as T;
+        }
+
         public static string GetExecutingAssemblyLocation()
         {
             return Assembly.GetExecutingAssembly().Location;

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TFW.Framework.Common;
+using TFW.Framework.ConsoleApp;
 
 namespace TFW.ConsoleApp
 {
@@ -9,8 +11,10 @@ namespace TFW.ConsoleApp
         static void Main(string[] args)
         {
             var program = new Program();
-            program.Start(
-                new DbMigrationTask());
+            var assemblies = ReflectionHelper.GetAllAssemblies();
+            var taskTypes = ReflectionHelper.GetAllTypesAssignableTo(typeof(IConsoleTask), assemblies);
+            var tasks = taskTypes.Select(o => ReflectionHelper.CreateInstance<IConsoleTask>(o)).ToArray();
+            program.Start(tasks);
         }
 
         public IConsoleTask[] Tasks { get; set; }
