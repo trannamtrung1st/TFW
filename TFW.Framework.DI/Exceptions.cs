@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace TFW.Framework.DI
 {
-    public class ConflictServicesRegistrationException : Exception
+    public class ConflictServiceRegistrationException : Exception
     {
-        public ConflictServicesRegistrationException()
+        public ConflictServiceRegistrationException()
         {
         }
 
-        public ConflictServicesRegistrationException(string message) : base(message)
+        public ConflictServiceRegistrationException(string message) : base(message)
         {
         }
     }

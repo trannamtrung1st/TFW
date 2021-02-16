@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,6 +70,7 @@ namespace TFW.Cross.Models
     {
         // projection
         protected string defaultField;
+
         protected string[] fields;
         public string[] Fields
         {
@@ -78,6 +78,7 @@ namespace TFW.Cross.Models
             {
                 if (fields.IsNullOrEmpty() && defaultField != null)
                     fields = new[] { defaultField };
+                
                 return fields;
             }
             set

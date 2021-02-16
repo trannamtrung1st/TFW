@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using TFW.Cross.Models;
 
 namespace TFW.WebAPI.Controllers
 {
@@ -14,11 +15,17 @@ namespace TFW.WebAPI.Controllers
     {
         protected readonly DbContext dbContext;
 
-        public string UserId
+        public PrincipalInfo UserInfo
         {
             get
             {
-                return User.Identity.Name;
+                object principalInfo;
+                var items = HttpContext.Items;
+
+                if (items.TryGetValue(ControllerConsts.PrincipalInfoItemKey, out principalInfo))
+                    return principalInfo as PrincipalInfo;
+
+                return new PrincipalInfo();
             }
         }
 

@@ -13,7 +13,6 @@ namespace TFW.ConsoleApp.ConsoleTasks
         {
             { $"{AddMigrationOpt}", AddMigration }
         };
-        public const string AddMigrationOpt = "1";
 
         public override string Title => "Database migration tasks";
 
@@ -22,17 +21,19 @@ namespace TFW.ConsoleApp.ConsoleTasks
             $"-----------------------------------------\n" +
             $"Input: ";
 
-        public Task AddMigration()
+        private Task AddMigration()
         {
             Console.Clear();
             Console.Write("Solution folder: ");
             var solutionFolder = Console.ReadLine();
+ 
             if (string.IsNullOrWhiteSpace(solutionFolder))
                 solutionFolder = Directory.GetParent(
                     System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
 
             Console.Write("Migration name: ");
             var migrationName = Console.ReadLine();
+            
             if (string.IsNullOrWhiteSpace(migrationName))
             {
                 Console.Write("Invalid migration name");
@@ -58,6 +59,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
+            
             return Task.CompletedTask;
         }
 
@@ -65,17 +67,20 @@ namespace TFW.ConsoleApp.ConsoleTasks
         {
             Console.Write(Description);
             var opt = Console.ReadLine();
+        
             switch (opt)
             {
                 case AddMigrationOpt:
                     await AddMigration();
                     break;
             }
+            
             Console.WriteLine();
             Console.WriteLine("Press enter to exit task");
             Console.ReadLine();
         }
 
+        public const string AddMigrationOpt = "1";
         private const string DefaultDestinationProject = "TFW.Data";
         private const string DefaultStartupProject = "TFW.WebAPI";
     }

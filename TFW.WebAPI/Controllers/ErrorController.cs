@@ -29,11 +29,13 @@ namespace TFW.WebAPI.Controllers
         public IActionResult HandleException()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            
             if (context.Error == null) return BadRequest();
+
             var e = context.Error;
             // logging ...
-
             AppResult response;
+            
             if (e is AppException)
                 response = (e as AppException).Result;
             else
@@ -42,6 +44,7 @@ namespace TFW.WebAPI.Controllers
                     response = AppResult.Error(data: e);
                 else response = AppResult.Error();
             }
+            
             return Error(response);
         }
     }

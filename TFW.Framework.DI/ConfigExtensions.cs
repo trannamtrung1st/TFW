@@ -18,6 +18,7 @@ namespace TFW.Framework.DI
                 Type = o,
                 Attributes = o.GetCustomAttributes<ServiceAttribute>().ToArray()
             }).Where(o => o.Attributes.Any()).ToArray();
+
             foreach (var typeObj in serviceTypes)
             {
                 foreach (var attr in typeObj.Attributes)
@@ -36,7 +37,7 @@ namespace TFW.Framework.DI
                             services.Single(x => x.ServiceType.FullName == serviceDescriptor.ServiceType.FullName)
                                 .ImplementationType;
 
-                        throw new ConflictServicesRegistrationException(
+                        throw new ConflictServiceRegistrationException(
                             $"Conflict register, ${serviceDescriptor.ImplementationType} try to register for {serviceDescriptor.ServiceType.FullName}. It already register by {implementationRegister.FullName} before.");
                     }
 

@@ -21,6 +21,7 @@ namespace TFW.Cross
     public static class TimeZoneConsts
     {
         public static readonly IDictionary<string, TimeZoneInfo> TimezoneMap;
+        
         static TimeZoneConsts()
         {
             TimezoneMap = TimezoneHelper.GetIsoToTimeZoneMapping();
@@ -31,26 +32,37 @@ namespace TFW.Cross
     {
         [Description("Unknown error")]
         UnknownError = 1,
+        
         [Description("Success")]
         Success = 2,
+        
         [Description("Fail")]
         Fail = 3,
+        
         [Description("Fail validation")]
         FailValidation = 4,
+        
         [Description("Not found")]
         NotFound = 5,
+        
         [Description("Unsupported")]
         Unsupported = 6,
+        
         [Description("Can not delete because of dependencies")]
         DependencyDeleteFail = 7,
+        
         [Description("Unauthorized")]
         Unauthorized = 8,
+        
         [Description("Access denied")]
         AccessDenied = 9,
+        
         [Description("Invalid paging request")]
         InvalidPagingRequest = 10,
+        
         [Description("Invalid sorting request")]
         InvalidSortingRequest = 11,
+        
         [Description("Invalid projection request")]
         InvalidProjectionRequest = 12,
     }

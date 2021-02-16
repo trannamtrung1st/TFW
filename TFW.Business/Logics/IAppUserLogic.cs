@@ -11,11 +11,16 @@ namespace TFW.Business.Logics
 {
     public interface IAppUserLogic
     {
-        Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
+        Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
             GetAppUserListRequestModel requestModel);
+
         IQueryable<AppUser> QueryById(string id);
+        
         IQueryable<AppUser> QueryByUsername(string username);
-        Task<ValidationData> ValidateGetAppUserListAsync(
-            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel);
+
+        PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal);
+
+        Task<ValidationData> ValidateGetListAsync(
+            PrincipalInfo principal, GetAppUserListRequestModel requestModel);
     }
 }

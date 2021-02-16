@@ -11,7 +11,10 @@ namespace TFW.Business.Services
     {
         Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             GetAppUserListRequestModel requestModel);
+
+        PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal);
+
         Task<ValidationData> ValidateGetAppUserListAsync(
-            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel);
+            PrincipalInfo principal, GetAppUserListRequestModel requestModel);
     }
 }

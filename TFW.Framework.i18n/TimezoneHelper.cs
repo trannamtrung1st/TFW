@@ -15,10 +15,10 @@ namespace TFW.Framework.i18n
 
             return source.WindowsMapping.MapZones
                 .GroupBy(z => z.Territory)
-                .ToDictionary(grp => grp.Key, grp => GetTimeZone(source, grp));
+                .ToDictionary(grp => grp.Key, grp => source.GetTimeZone(grp));
         }
 
-        public static TimeZoneInfo GetTimeZone(TzdbDateTimeZoneSource source, IEnumerable<MapZone> territoryLocations)
+        public static TimeZoneInfo GetTimeZone(this TzdbDateTimeZoneSource source, IEnumerable<MapZone> territoryLocations)
         {
             var result = territoryLocations
                 .Select(l => l.WindowsId)

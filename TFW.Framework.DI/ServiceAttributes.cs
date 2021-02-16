@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace TFW.Framework.DI
@@ -22,6 +20,7 @@ namespace TFW.Framework.DI
         public ServiceDescriptor BuildServiceDescriptor(Type type)
         {
             var serviceType = ServiceType ?? type;
+
             return new ServiceDescriptor(serviceType, type, Lifetime);
         }
     }

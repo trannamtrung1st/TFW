@@ -31,9 +31,11 @@ namespace TFW.Framework.WebAPI.Bindings
             {
                 throw new ArgumentNullException(nameof(context));
             }
+
             if (context.Metadata.IsComplexType && context.Metadata.BinderType == typeof(QueryObjectModelBinder))
             {
                 var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
+            
                 foreach (var p in context.Metadata.Properties)
                 {
                     if (QueryObjectModelBinderTypes.Contains(p.BinderType))
@@ -41,9 +43,12 @@ namespace TFW.Framework.WebAPI.Bindings
                     else
                         propertyBinders.Add(p, context.CreateBinder(p));
                 }
+                
                 var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
+                
                 return new QueryObjectModelBinder(propertyBinders, loggerFactory);
             }
+
             return null;
         }
 

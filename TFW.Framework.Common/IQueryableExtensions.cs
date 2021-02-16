@@ -20,6 +20,7 @@ namespace TFW.Framework.Common
                 query = (query as IOrderedQueryable<T>).ThenBy(keySelector);
             else
                 query = query.OrderBy(keySelector);
+            
             return query;
         }
 

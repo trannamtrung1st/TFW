@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
     [ApiController]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IIdentityService _identityService;
@@ -24,10 +26,13 @@ namespace TFW.WebAPI.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetAppUserList([FromQuery][QueryObject]GetAppUserListRequestModel model)
         {
-            var validationData = await _identityService.ValidateGetAppUserListAsync(User, model);
+            var validationData = await _identityService.ValidateGetAppUserListAsync(UserInfo, model);
+
             if (!validationData.IsValid)
                 return BadRequest(AppResult.FailValidation(data: validationData));
+
             var result = await _identityService.GetListAppUserAsync(model);
+
             return Ok(AppResult.Success(result));
         }
 

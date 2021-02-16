@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
+using TFW.Data.Core.Configs.Entities;
 
 namespace TFW.Data
 {
@@ -37,43 +38,14 @@ namespace TFW.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<AppUser>(entity =>
-            {
-                entity.Property(e => e.Id)
-                    .IsUnicode(false)
-                    .HasMaxLength(100);
-            });
-            modelBuilder.Entity<AppRole>(entity =>
-            {
-                entity.Property(e => e.Id)
-                    .IsUnicode(false)
-                    .HasMaxLength(100);
-            });
-            modelBuilder.Entity<Note>(entity =>
-            {
-                entity.Property(e => e.Title).IsRequired()
-                    .HasMaxLength(255);
-                entity.Property(e => e.Content)
-                    .IsUnicode();
-                entity.HasOne(e => e.CreatedUser)
-                    .WithMany(e => e.Notes)
-                    .HasForeignKey(e => e.CreatedUserId)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_Note_AppUser");
-                entity.HasOne(e => e.Category)
-                    .WithMany(e => e.Notes)
-                    .HasForeignKey(e => e.CategoryName)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_Note_Category");
-            });
-            modelBuilder.Entity<NoteCategory>(entity =>
-            {
-                entity.HasKey(e => e.Name);
-                entity.Property(e => e.Name).IsRequired()
-                    .HasMaxLength(255);
-                entity.Property(e => e.Description)
-                    .HasMaxLength(1000);
-            });
+
+            modelBuilder.ApplyConfiguration(new AppUserConfig());
+
+            modelBuilder.ApplyConfiguration(new AppRoleConfig());
+
+            modelBuilder.ApplyConfiguration(new NoteConfig());
+
+            modelBuilder.ApplyConfiguration(new NoteCategoryConfig());
         }
     }
 

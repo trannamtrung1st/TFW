@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Text;
 using TFW.Framework.Common;
 
@@ -11,8 +10,10 @@ namespace TFW.Cross.Models
     {
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
+
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
         public object Data { get; set; }
+
         [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
         public ResultCode? Code { get; set; }
 
@@ -112,8 +113,10 @@ namespace TFW.Cross.Models
     {
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }
+
         [JsonProperty("details")]
         public List<AppResult> Details { get; set; }
+
         [JsonIgnore]
         public IDictionary<string, object> TempData { get; set; }
 
@@ -127,8 +130,10 @@ namespace TFW.Cross.Models
         public T GetTempData<T>(string key)
         {
             object data = null;
+
             if (TempData.TryGetValue(key, out data))
                 return (T)data;
+
             return default;
         }
 
@@ -140,7 +145,9 @@ namespace TFW.Cross.Models
                 Data = data,
                 Code = code
             });
+
             IsValid = false;
+
             return this;
         }
 
@@ -150,6 +157,7 @@ namespace TFW.Cross.Models
     {
         [JsonProperty("list")]
         public T[] List { get; set; }
+
         [JsonProperty("totalCount", NullValueHandling = NullValueHandling.Ignore)]
         public int? TotalCount { get; set; }
     }
@@ -157,5 +165,6 @@ namespace TFW.Cross.Models
     public class PrincipalInfo
     {
         public string UserId { get; set; }
+        public bool IsAuthenticated { get; set; } = false;
     }
 }

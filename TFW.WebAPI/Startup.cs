@@ -1,39 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Reflection;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TFW.Business.Extensions;
-using TFW.Business.Logics;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Extensions;
 using TFW.Cross.Models;
-using TFW.Cross.Profiles;
 using TFW.Data;
 using TFW.Data.Extensions;
-using TFW.Framework.AutoMapper;
 using TFW.Framework.Common;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
 using TFW.Framework.WebAPI.Bindings;
+using TFW.Framework.WebAPI.Extensions;
 using TFW.Framework.WebConfiguration;
+using TFW.WebAPI.Extensions;
+using TFW.WebAPI.Middlewares;
 using TFW.WebAPI.Models;
 
 namespace TFW.WebAPI
@@ -49,6 +46,7 @@ namespace TFW.WebAPI
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+
             Settings.App = Configuration.Parse<AppSettings>(nameof(AppSettings));
             Settings.Jwt = Configuration.Parse<JwtSettings>(nameof(JwtSettings));
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
@@ -66,6 +64,8 @@ namespace TFW.WebAPI
                     .UseSqlServer(connStr)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
                 .AddDefaultDbMigrator()
+                .AddDefaultTimezoneResolver(TimeZoneConsts.TimezoneMap)
+                .AddDefaultDateTimeModelBinder()
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
@@ -130,12 +130,11 @@ namespace TFW.WebAPI
                 });
             #endregion
 
-            services.AddSingleton<ITimeZoneResolver>(new DefaultTimeZoneResolver(TimeZoneConsts.TimezoneMap));
-            services.AddSingleton(new DefaultDateTimeModelBinder());
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Insert(0, new QueryObjectModelBinderProvider());
             }).AddNewtonsoftJson();
+
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(c =>
             {
@@ -171,7 +170,8 @@ namespace TFW.WebAPI
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            IHostApplicationLifetime appLifetime)
+            IHostApplicationLifetime appLifetime,
+            IDynamicLinkCustomTypeProvider dynamicLinkCustomTypeProvider)
         {
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
@@ -179,6 +179,9 @@ namespace TFW.WebAPI
                 cfg.AddMaps(Assembly.GetAssembly(typeof(GlobalResources)));
             });
             GlobalResources.Mapper = mapConfig.CreateMapper();
+
+            // Dynamic Linq
+            GlobalResources.CustomTypeProvider = dynamicLinkCustomTypeProvider;
 
             PrepareEnvironment(env);
 
@@ -204,6 +207,7 @@ namespace TFW.WebAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
+
             app.UseCors(builder =>
             {
                 builder.AllowAnyHeader();
@@ -219,6 +223,8 @@ namespace TFW.WebAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UsePrincipalInfoMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

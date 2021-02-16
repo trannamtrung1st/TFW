@@ -27,15 +27,14 @@ namespace TFW.Framework.WebAPI.Bindings
             }
 
             var modelName = GetModelName(bindingContext);
-
             var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
+            
             if (valueProviderResult == ValueProviderResult.None)
             {
                 return Task.CompletedTask;
             }
 
             bindingContext.ModelState.SetModelValue(modelName, valueProviderResult);
-
             var dateToParse = valueProviderResult.FirstValue;
 
             if (string.IsNullOrEmpty(dateToParse))
@@ -44,7 +43,6 @@ namespace TFW.Framework.WebAPI.Bindings
             }
 
             var dateTime = ParseDate(bindingContext, dateToParse);
-
             bindingContext.Result = ModelBindingResult.Success(dateTime);
 
             return Task.CompletedTask;
@@ -55,17 +53,20 @@ namespace TFW.Framework.WebAPI.Bindings
             var attribute = GetBinderAttribute(bindingContext);
             var dateFormat = attribute?.DateFormat;
             var toUtc = attribute?.ToUtc;
-
             DateTime dateTime;
+            
             if (dateStr.TryConvertToDateTime(dateFormat, out dateTime))
             {
                 var timeZoneResolver = bindingContext
                     .HttpContext.RequestServices.GetRequiredService<ITimeZoneResolver>();
-                var currentTimeZone = timeZoneResolver.Current;
+                var currentUITimeZone = timeZoneResolver.CurrentUITimeZone;
+            
                 if (toUtc == true)
-                    dateTime = dateTime.ToUtc(currentTimeZone);
+                    dateTime = dateTime.ToUtc(currentUITimeZone);
+                
                 return dateTime;
             }
+
             return null;
         }
 

@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TFW.Cross.Entities;
-using TFW.Framework.Common;
 
 namespace TFW.Cross.Models
 {
@@ -27,7 +25,7 @@ namespace TFW.Cross.Models
         public string UserName { get; set; }
         public string Search { get; set; }
 
-        //---------------------------------------
+        // consts
         public const string SortByUsername = "username";
         public const string DefaultSortBy = "a" + SortByUsername;
 
@@ -52,10 +50,13 @@ namespace TFW.Cross.Models
     {
         [JsonProperty("fullName")]
         public string FullName { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
+        
         [JsonProperty("id")]
         public string Id { get; set; }
+        
         [JsonProperty("username")]
         public string UserName { get; set; }
     }

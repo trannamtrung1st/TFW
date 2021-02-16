@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +8,6 @@ using TFW.Business.Services;
 using TFW.Cross.Entities;
 using TFW.Cross.Models;
 using TFW.Data;
-using TFW.Framework.AutoMapper;
 using TFW.Framework.DI;
 
 namespace TFW.Business.Core.Services
@@ -40,15 +36,26 @@ namespace TFW.Business.Core.Services
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             GetAppUserListRequestModel requestModel)
         {
-            var response = await _appUserLogic.GetListAppUserAsync(requestModel);
+            var response = await _appUserLogic.GetListAsync(requestModel);
+
             return response;
         }
 
         public async Task<ValidationData> ValidateGetAppUserListAsync(
-            ClaimsPrincipal principal, GetAppUserListRequestModel requestModel)
+            PrincipalInfo principal, GetAppUserListRequestModel requestModel)
         {
-            var validationData = await _appUserLogic.ValidateGetAppUserListAsync(principal, requestModel);
+            var validationData = await _appUserLogic.ValidateGetListAsync(principal, requestModel);
+
             return validationData;
+        }
+        #endregion
+
+        #region Common
+        public PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal)
+        {
+            var principalInfo = _appUserLogic.MapToPrincipalInfo(principal);
+
+            return principalInfo;
         }
         #endregion
     }

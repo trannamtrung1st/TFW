@@ -12,6 +12,7 @@ namespace TFW.Framework.Common
         public static IEnumerable<Type> GetClassesOfNamespace(string nameSpace, Assembly assembly = null, bool includeSubns = false)
         {
             assembly = assembly ?? Assembly.GetExecutingAssembly();
+
             return assembly.GetTypes()
                 .Where(type => includeSubns ? type.Namespace == nameSpace || type.Namespace.StartsWith(nameSpace + ".") :
                     type.Namespace == nameSpace).ToArray();
@@ -22,10 +23,11 @@ namespace TFW.Framework.Common
         {
             if (string.IsNullOrEmpty(path))
                 path = GetExecutingAssemblyLocation();
+
             List<Assembly> allAssemblies = new List<Assembly>();
             string folderPath = Path.GetDirectoryName(path);
-
             var allDlls = Directory.GetFiles(folderPath, searchPattern, searchOption);
+            
             foreach (string dll in allDlls)
             {
                 try
@@ -35,12 +37,14 @@ namespace TFW.Framework.Common
                 catch (FileLoadException) { }
                 catch (BadImageFormatException) { }
             }
+            
             return allAssemblies;
         }
 
         public static IEnumerable<Type> GetAllTypesAssignableTo(Type baseType, IEnumerable<Assembly> assemblies)
         {
             var types = assemblies.SelectMany(o => o.GetTypes()).Where(o => baseType.IsAssignableFrom(o));
+            
             return types;
         }
 
