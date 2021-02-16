@@ -28,7 +28,7 @@ namespace TFW.Business.Core.Logics
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
             GetAppUserListRequestModel requestModel)
         {
-            var queryModel = GlobalResources.Mapper.MapTo<DynamicQueryAppUserModel>(requestModel);
+            var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
             IQueryable<AppUser> query = dataContext.Users;
 
             query = BuildQueryFilter(query, queryModel);
@@ -38,19 +38,18 @@ namespace TFW.Business.Core.Logics
                 queryModel.Fields.Any(o => !DynamicQueryAppUserModel.Projections.ContainsKey(o)))
                 throw AppException.From(ResultCode.InvalidProjectionRequest);
 
-            query = BuildQueryProjection(query, queryModel);
-
             if (!queryModel.SortBy.IsNullOrEmpty())
                 query = BuildQuerySorting(query, queryModel);
 
             if (queryModel.Page > 0)
                 query = BuildQueryPaging(query, queryModel);
 
-            var entities = await query.ToArrayAsync();
-            var responseList = GlobalResources.Mapper.MapTo<AppUserResponseModel>(entities).ToArray();
+            var projectedQuery = BuildQueryProjection<AppUserResponseModel>(query, queryModel);
+
+            var responseModels = await projectedQuery.ToArrayAsync();
             var response = new GetListResponseModel<AppUserResponseModel>
             {
-                List = responseList,
+                List = responseModels,
             };
 
             if (queryModel.CountTotal)
@@ -88,8 +87,8 @@ namespace TFW.Business.Core.Logics
 
         public PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal)
         {
-            var principalInfo = GlobalResources.Mapper.MapTo<PrincipalInfo>(principal);
-            
+            var principalInfo = principal.MapTo<PrincipalInfo>();
+
             return principalInfo;
         }
 
@@ -107,14 +106,15 @@ namespace TFW.Business.Core.Logics
             return query;
         }
 
-        private IQueryable<AppUser> BuildQueryProjection(IQueryable<AppUser> query, DynamicQueryAppUserModel model)
+        private IQueryable<T> BuildQueryProjection<T>(IQueryable<AppUser> query, DynamicQueryAppUserModel model,
+            string projectionTypeName = nameof(AppUserResponseModel))
         {
             var projectionArr = model.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
             var projectionStr = string.Join(',', projectionArr);
 
-            query = query.Select<AppUser>(defaultParsingConfig, $"new ({projectionStr})");
+            var projectedQuery = query.Select<T>(defaultParsingConfig, $"new {projectionTypeName}({projectionStr})");
 
-            return query;
+            return projectedQuery;
         }
 
         private IQueryable<AppUser> BuildQuerySorting(IQueryable<AppUser> query, DynamicQueryAppUserModel model)

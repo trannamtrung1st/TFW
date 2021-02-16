@@ -23,6 +23,7 @@ using TFW.Cross.Extensions;
 using TFW.Cross.Models;
 using TFW.Data;
 using TFW.Data.Extensions;
+using TFW.Framework.AutoMapper;
 using TFW.Framework.Common;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
@@ -58,7 +59,7 @@ namespace TFW.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var connStr = Configuration.GetConnectionString(Data.DataConsts.ConnStrKey);
-            var assemblies = ReflectionHelper.GetAllAssemblies();
+            GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies();
 
             services.AddDbContext<DataContext>(options => options
                     .UseSqlServer(connStr)
@@ -72,7 +73,7 @@ namespace TFW.WebAPI
                 }).ConfigureCross()
                 .ConfigureData()
                 .ConfigureBusiness()
-                .ScanServices(assemblies);
+                .ScanServices(GlobalResources.TempAssemblyList);
 
             #region OAuth
             services.AddIdentityCore<AppUser>(options =>
@@ -176,9 +177,9 @@ namespace TFW.WebAPI
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(Assembly.GetAssembly(typeof(GlobalResources)));
+                cfg.AddMaps(GlobalResources.TempAssemblyList);
             });
-            GlobalResources.Mapper = mapConfig.CreateMapper();
+            GlobalMapper.Instance = mapConfig.CreateMapper();
 
             // Dynamic Linq
             GlobalResources.CustomTypeProvider = dynamicLinkCustomTypeProvider;
@@ -243,6 +244,7 @@ namespace TFW.WebAPI
         private void OnApplicationStarted()
         {
             // handle application started
+            GlobalResources.TempAssemblyList = null; // release temp list
         }
     }
 }

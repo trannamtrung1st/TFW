@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,28 +10,47 @@ namespace TFW.Framework.AutoMapper
 {
     public static class MapperExtensions
     {
-        public static void CopyFrom(this IMapper mapper, object dest, object src)
+        public static void CopyFrom(this object dest, object src, IMapper mapper = null)
         {
+            if (mapper == null) mapper = GlobalMapper.Instance;
+
             CheckMapperNull(mapper);
+
             mapper.Map(src, dest);
         }
 
-        public static void CopyTo(this IMapper mapper, object src, object dest)
+        public static void CopyTo(this object src, object dest, IMapper mapper = null)
         {
+            if (mapper == null) mapper = GlobalMapper.Instance;
+
             CheckMapperNull(mapper);
+
             mapper.Map(src, dest);
         }
 
-        public static Dest MapTo<Dest>(this IMapper mapper, object src)
+        public static Dest MapTo<Dest>(this object src, IMapper mapper = null)
         {
+            if (mapper == null) mapper = GlobalMapper.Instance;
+
             CheckMapperNull(mapper);
+
             return mapper.Map<Dest>(src);
         }
 
-        public static IEnumerable<Dest> MapTo<Dest>(this IMapper mapper, IEnumerable<object> src)
+        public static IEnumerable<Dest> MapTo<Dest>(this IEnumerable<object> src, IMapper mapper = null)
         {
+            if (mapper == null) mapper = GlobalMapper.Instance;
+
             CheckMapperNull(mapper);
-            return src.Select(o => mapper.MapTo<Dest>(o));
+
+            return src.Select(o => o.MapTo<Dest>());
+        }
+
+        public static IQueryable<T> DefaultProjectTo<T>(this IQueryable query, IConfigurationProvider configurationProvider = null)
+        {
+            if (configurationProvider == null) configurationProvider = GlobalMapper.Instance?.ConfigurationProvider;
+
+            return query.ProjectTo<T>(configurationProvider);
         }
 
         private static void CheckMapperNull(IMapper mapper)

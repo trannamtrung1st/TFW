@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
+using AU = TFW.Cross.Entities.AppUser;
+using AUR = TFW.Cross.Models.AppUserResponseModel;
+using N = TFW.Cross.Entities.Note;
 
 namespace TFW.Cross.Models
 {
@@ -36,12 +39,13 @@ namespace TFW.Cross.Models
             new Dictionary<string, string>()
             {
                 {
-                    FieldInfo, $"{nameof(AppUser.Id)},{nameof(AppUser.UserName)},{nameof(AppUser.Email)}," +
-                    $"{nameof(AppUser.FullName)}"
+                    FieldInfo, $"{nameof(AU.Id)},{nameof(AU.UserName)},{nameof(AU.Email)}," +
+                    $"{nameof(AU.FullName)}"
                 },
                 {
-                    FieldNotes, $"{nameof(AppUser.Notes)}" +
-                    $".Select(new {nameof(Note)}({nameof(Note.Title)},{nameof(Note.CategoryName)})).ToList() as {nameof(AppUser.Notes)}"
+                    FieldNotes, $"{nameof(AU.Notes)}" +
+                    $".Select(new {typeof(AUR.NoteResponseModel).FullName}" +
+                    $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
                 }
             };
     }
@@ -53,11 +57,26 @@ namespace TFW.Cross.Models
 
         [JsonProperty("email")]
         public string Email { get; set; }
-        
+
         [JsonProperty("id")]
         public string Id { get; set; }
-        
+
         [JsonProperty("username")]
         public string UserName { get; set; }
+
+        [JsonProperty("notes")]
+        public IEnumerable<NoteResponseModel> Notes { get; set; }
+
+        public class NoteResponseModel
+        {
+            [JsonProperty("id")]
+            public int Id { get; set; }
+
+            [JsonProperty("title")]
+            public string Title { get; set; }
+
+            [JsonProperty("categoryName")]
+            public string CategoryName { get; set; }
+        }
     }
 }

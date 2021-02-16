@@ -11,40 +11,46 @@ namespace TFW.Framework.Common
     {
         public static IEnumerable<Type> GetClassesOfNamespace(string nameSpace, Assembly assembly = null, bool includeSubns = false)
         {
-            assembly = assembly ?? Assembly.GetExecutingAssembly();
+            assembly = assembly ?? Assembly.GetEntryAssembly();
 
             return assembly.GetTypes()
                 .Where(type => includeSubns ? type.Namespace == nameSpace || type.Namespace.StartsWith(nameSpace + ".") :
-                    type.Namespace == nameSpace).ToArray();
+                    type.Namespace == nameSpace);
         }
 
         public static List<Assembly> GetAllAssemblies(string path = null,
             string searchPattern = "*.dll", SearchOption searchOption = SearchOption.AllDirectories)
         {
             if (string.IsNullOrEmpty(path))
-                path = GetExecutingAssemblyLocation();
+                path = GetEntryAssemblyLocation();
 
             List<Assembly> allAssemblies = new List<Assembly>();
             string folderPath = Path.GetDirectoryName(path);
             var allDlls = Directory.GetFiles(folderPath, searchPattern, searchOption);
-            
+
             foreach (string dll in allDlls)
             {
                 try
                 {
-                    allAssemblies.Add(Assembly.LoadFile(dll));
+                    var assembly = Assembly.Load(AssemblyName.GetAssemblyName(dll));
+                    allAssemblies.Add(assembly);
+                }
+                catch (FileNotFoundException)
+                {
+                    var assembly = Assembly.LoadFile(dll);
+                    allAssemblies.Add(assembly);
                 }
                 catch (FileLoadException) { }
                 catch (BadImageFormatException) { }
             }
-            
+
             return allAssemblies;
         }
 
         public static IEnumerable<Type> GetAllTypesAssignableTo(Type baseType, IEnumerable<Assembly> assemblies)
         {
             var types = assemblies.SelectMany(o => o.GetTypes()).Where(o => baseType.IsAssignableFrom(o));
-            
+
             return types;
         }
 
@@ -53,9 +59,9 @@ namespace TFW.Framework.Common
             return Activator.CreateInstance(type) as T;
         }
 
-        public static string GetExecutingAssemblyLocation()
+        public static string GetEntryAssemblyLocation()
         {
-            return Assembly.GetExecutingAssembly().Location;
+            return Assembly.GetEntryAssembly().Location;
         }
     }
 }

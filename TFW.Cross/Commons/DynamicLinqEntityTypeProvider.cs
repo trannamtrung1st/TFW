@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
+using System.Reflection;
 using TFW.Cross.Entities;
+using TFW.Cross.Models;
 using TFW.Framework.Common;
 using TFW.Framework.DI;
 
@@ -17,7 +19,14 @@ namespace TFW.Cross.Commons
 
         static DynamicLinqEntityTypeProvider()
         {
-            _entityTypes = ReflectionHelper.GetClassesOfNamespace(typeof(AppUser).Namespace).ToHashSet();
+            var assembly = Assembly.GetExecutingAssembly();
+            
+            var entityTypes = ReflectionHelper.GetClassesOfNamespace(
+                typeof(AppUser).Namespace, assembly);
+            var modelTypes = ReflectionHelper.GetClassesOfNamespace(
+                typeof(AppResult).Namespace, assembly, includeSubns: true);
+
+            _entityTypes = entityTypes.Concat(modelTypes).ToHashSet();
         }
     }
 }
