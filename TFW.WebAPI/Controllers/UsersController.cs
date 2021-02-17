@@ -29,11 +29,11 @@ namespace TFW.WebAPI.Controllers
             var validationData = await _identityService.ValidateGetAppUserListAsync(UserInfo, model);
 
             if (!validationData.IsValid)
-                return BadRequest(AppResult.FailValidation(data: validationData));
+                return FailValidation(validationData);
 
-            var result = await _identityService.GetListAppUserAsync(model);
+            var data = await _identityService.GetListAppUserAsync(model);
 
-            return Ok(AppResult.Success(result));
+            return Success(data);
         }
 
     }

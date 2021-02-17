@@ -43,5 +43,20 @@ namespace TFW.WebAPI.Controllers
         {
             return new Uri(Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority);
         }
+
+        protected IActionResult FailValidation(ValidationData validationData = null)
+        {
+            return BadRequest(AppResult.FailValidation(data: validationData));
+        }
+
+        protected IActionResult Success(object data)
+        {
+            return Ok(AppResult.Success(data));
+        }
+
+        protected IActionResult Success()
+        {
+            return Ok(AppResult.Success());
+        }
     }
 }
