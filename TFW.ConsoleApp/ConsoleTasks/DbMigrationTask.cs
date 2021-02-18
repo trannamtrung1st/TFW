@@ -24,21 +24,22 @@ namespace TFW.ConsoleApp.ConsoleTasks
         private Task AddMigration()
         {
             Console.Clear();
+
+            Console.Write("Migration name: ");
+            var migrationName = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(migrationName))
+            {
+                Console.Write("Invalid migration name");
+                return Task.CompletedTask;
+            }
+
             Console.Write("Solution folder: ");
             var solutionFolder = Console.ReadLine();
  
             if (string.IsNullOrWhiteSpace(solutionFolder))
                 solutionFolder = Directory.GetParent(
                     System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
-
-            Console.Write("Migration name: ");
-            var migrationName = Console.ReadLine();
-            
-            if (string.IsNullOrWhiteSpace(migrationName))
-            {
-                Console.Write("Invalid migration name");
-                return Task.CompletedTask;
-            }
 
             Console.Write("Destination project: ");
             var destPrj = Console.ReadLine();
@@ -81,7 +82,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
         }
 
         public const string AddMigrationOpt = "1";
-        private const string DefaultDestinationProject = "TFW.Data";
+        private const string DefaultDestinationProject = "TFW.Data.Core";
         private const string DefaultStartupProject = "TFW.WebAPI";
     }
 }

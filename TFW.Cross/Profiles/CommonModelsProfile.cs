@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
-using TFW.Cross.Models;
+using TFW.Cross.Models.Common;
 
 namespace TFW.Cross.Profiles
 {

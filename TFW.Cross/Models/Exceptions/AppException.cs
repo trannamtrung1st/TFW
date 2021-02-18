@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Cross.Models.Common;
 
 namespace TFW.Cross.Models.Exceptions
 {
-    public class AppException : Exception
+    public class AppException : BaseException
     {
-        public AppResult Result { get; }
-
         private AppException(AppResult result) : base(result?.Message)
         {
             if (result == null)
                 throw new ArgumentNullException(nameof(result));
+        
             Result = result;
         }
 

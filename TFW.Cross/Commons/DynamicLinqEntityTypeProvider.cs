@@ -22,9 +22,9 @@ namespace TFW.Cross.Commons
             var assembly = Assembly.GetExecutingAssembly();
             
             var entityTypes = ReflectionHelper.GetClassesOfNamespace(
-                typeof(AppUser).Namespace, assembly);
+                typeof(AppUser).Namespace, assembly, includeSubns: true);
             var modelTypes = ReflectionHelper.GetClassesOfNamespace(
-                typeof(AppResult).Namespace, assembly, includeSubns: true);
+                typeof(NamespaceModel).Namespace, assembly, includeSubns: true);
 
             _entityTypes = entityTypes.Concat(modelTypes).ToHashSet();
         }

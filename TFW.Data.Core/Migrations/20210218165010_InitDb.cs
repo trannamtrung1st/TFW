@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TFW.Data.Migrations
+namespace TFW.Data.Core.Migrations
 {
     public partial class InitDb : Migration
     {
@@ -40,6 +40,13 @@ namespace TFW.Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    LastModifiedTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    DeletedTime = table.Column<DateTime>(nullable: false),
+                    DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     FullName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -48,18 +55,18 @@ namespace TFW.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "NoteCategory",
                 columns: table => new
                 {
                     Name = table.Column<string>(maxLength: 255, nullable: false),
-                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     DeletedTime = table.Column<DateTime>(nullable: false),
-                    DeletedUserId = table.Column<string>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Name);
+                    table.PrimaryKey("PK_NoteCategory", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,25 +195,25 @@ namespace TFW.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    LastModifiedTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     Title = table.Column<string>(maxLength: 255, nullable: false),
                     Content = table.Column<string>(nullable: true),
-                    CategoryName = table.Column<string>(nullable: true),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
-                    CreatedUserId = table.Column<string>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: false),
-                    LastModifiedUserId = table.Column<string>(nullable: true)
+                    CategoryName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Note", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Note_Category",
+                        name: "FK_Note_Category_CategoryName",
                         column: x => x.CategoryName,
-                        principalTable: "Category",
+                        principalTable: "NoteCategory",
                         principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Note_AppUser",
+                        name: "FK_Note_AppUser_CreatedUserId",
                         column: x => x.CreatedUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -297,7 +304,7 @@ namespace TFW.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "NoteCategory");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

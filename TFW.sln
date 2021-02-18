@@ -47,9 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.WebConfigurat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.i18n", "TFW.Framework.i18n\TFW.Framework.i18n.csproj", "{6D01FA74-44D2-4FF5-A0D8-032E56FABDF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.ConsoleApp", "TFW.Framework.ConsoleApp\TFW.Framework.ConsoleApp.csproj", "{C6219FBA-1B43-4BDC-ABD9-F20652E6934B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.ConsoleApp", "TFW.Framework.ConsoleApp\TFW.Framework.ConsoleApp.csproj", "{C6219FBA-1B43-4BDC-ABD9-F20652E6934B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Data.Core", "TFW.Data.Core\TFW.Data.Core.csproj", "{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Data.Core", "TFW.Data.Core\TFW.Data.Core.csproj", "{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.Cross", "TFW.Framework.Cross\TFW.Framework.Cross.csproj", "{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +127,10 @@ Global
 		{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,6 +156,7 @@ Global
 		{6D01FA74-44D2-4FF5-A0D8-032E56FABDF7} = {6A322B02-8C6C-45ED-8F0B-982B1C7B139A}
 		{C6219FBA-1B43-4BDC-ABD9-F20652E6934B} = {6A322B02-8C6C-45ED-8F0B-982B1C7B139A}
 		{E117CF8C-2300-4AD3-A461-CCEC8C4FA5D6} = {7BE27AF6-F0E1-4CB1-A5FF-E1F9B2941152}
+		{0DBFAFDF-6BAF-4B86-AC5D-ECAAECC4B2D9} = {6A322B02-8C6C-45ED-8F0B-982B1C7B139A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7026D7F0-4EB7-4B18-A4FE-81D32724A9DF}

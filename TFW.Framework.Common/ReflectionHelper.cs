@@ -47,9 +47,12 @@ namespace TFW.Framework.Common
             return allAssemblies;
         }
 
-        public static IEnumerable<Type> GetAllTypesAssignableTo(Type baseType, IEnumerable<Assembly> assemblies)
+        public static IEnumerable<Type> GetAllTypesAssignableTo(Type baseType, IEnumerable<Assembly> assemblies,
+            bool baseTypeExcluded = true, bool isAbstract = false, bool isInterface = false)
         {
-            var types = assemblies.SelectMany(o => o.GetTypes()).Where(o => baseType.IsAssignableFrom(o));
+            var types = assemblies.SelectMany(o => o.GetTypes()).Where(o => baseType.IsAssignableFrom(o)
+                && (!baseTypeExcluded || o != baseType) && o.IsAbstract == isAbstract
+                && o.IsInterface == isInterface);
 
             return types;
         }

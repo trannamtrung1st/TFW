@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
-using TFW.Cross.Models;
+using TFW.Cross.Models.AppUser;
 
 namespace TFW.Cross.Profiles
 {

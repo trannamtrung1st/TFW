@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using TFW.Business.Logics;
 using TFW.Business.Services;
 using TFW.Cross.Entities;
-using TFW.Cross.Models;
-using TFW.Data;
+using TFW.Cross.Models.AppUser;
+using TFW.Cross.Models.Common;
 using TFW.Framework.DI;
 
 namespace TFW.Business.Core.Services
@@ -20,11 +20,10 @@ namespace TFW.Business.Core.Services
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IAppUserLogic _appUserLogic;
 
-        public IdentityService(DataContext dataContext,
-            UserManager<AppUser> userManager,
+        public IdentityService(UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
-            IAppUserLogic appUserLogic) : base(dataContext)
+            IAppUserLogic appUserLogic)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,14 +38,6 @@ namespace TFW.Business.Core.Services
             var response = await _appUserLogic.GetListAsync(requestModel);
 
             return response;
-        }
-
-        public async Task<ValidationData> ValidateGetAppUserListAsync(
-            PrincipalInfo principal, GetAppUserListRequestModel requestModel)
-        {
-            var validationData = await _appUserLogic.ValidateGetListAsync(principal, requestModel);
-
-            return validationData;
         }
         #endregion
 

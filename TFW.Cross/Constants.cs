@@ -21,50 +21,74 @@ namespace TFW.Cross
     public static class TimeZoneConsts
     {
         public static readonly IDictionary<string, TimeZoneInfo> TimezoneMap;
-        
+
         static TimeZoneConsts()
         {
             TimezoneMap = TimezoneHelper.GetIsoToTimeZoneMapping();
         }
     }
 
+    public static class ResultCodeGroup
+    {
+        public const int Common = 0;
+
+        public const int AppUser = 0;
+    }
+
     public enum ResultCode
     {
+        #region Common
         [Description("Unknown error")]
-        UnknownError = 1,
-        
+        UnknownError = ResultCodeGroup.Common + 1,
+
         [Description("Success")]
-        Success = 2,
-        
+        Success = ResultCodeGroup.Common + 2,
+
         [Description("Fail")]
-        Fail = 3,
-        
+        Fail = ResultCodeGroup.Common + 3,
+
         [Description("Fail validation")]
-        FailValidation = 4,
-        
+        FailValidation = ResultCodeGroup.Common + 4,
+
         [Description("Not found")]
-        NotFound = 5,
-        
+        NotFound = ResultCodeGroup.Common + 5,
+
         [Description("Unsupported")]
-        Unsupported = 6,
-        
+        Unsupported = ResultCodeGroup.Common + 6,
+
         [Description("Can not delete because of dependencies")]
-        DependencyDeleteFail = 7,
-        
+        DependencyDeleteFail = ResultCodeGroup.Common + 7,
+
         [Description("Unauthorized")]
-        Unauthorized = 8,
-        
+        Unauthorized = ResultCodeGroup.Common + 8,
+
         [Description("Access denied")]
-        AccessDenied = 9,
-        
+        AccessDenied = ResultCodeGroup.Common + 9,
+
         [Description("Invalid paging request")]
-        InvalidPagingRequest = 10,
-        
+        InvalidPagingRequest = ResultCodeGroup.Common + 10,
+
         [Description("Invalid sorting request")]
-        InvalidSortingRequest = 11,
-        
+        InvalidSortingRequest = ResultCodeGroup.Common + 11,
+
         [Description("Invalid projection request")]
-        InvalidProjectionRequest = 12,
+        InvalidProjectionRequest = ResultCodeGroup.Common + 12,
+
+        [Description("Entity not found")]
+        EntityNotFound = ResultCodeGroup.Common + 13,
+        #endregion
+
+        #region AppUser
+        #endregion
+    }
+
+    public static class EntityName
+    {
+        public const string AppUser = "AspNetUsers";
+        public const string AppRole = "AspNetRoles";
+        public const string AppUserRole = "AspNetUserRoles";
+        public const string Note = nameof(Entities.Note);
+        public const string NoteCategory = nameof(Entities.NoteCategory);
     }
 
 }

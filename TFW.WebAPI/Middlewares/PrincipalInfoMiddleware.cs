@@ -2,6 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using TFW.Business.Services;
+using TFW.Cross.Models.Common;
 using TFW.Framework.DI;
 
 namespace TFW.WebAPI.Middlewares
@@ -20,7 +21,8 @@ namespace TFW.WebAPI.Middlewares
         {
             var principal = context.User;
             var principalInfo = _identityService.MapToPrincipalInfo(principal);
-            context.Items[ControllerConsts.PrincipalInfoItemKey] = principalInfo;
+            
+            PrincipalInfo.Current = principalInfo;
 
             await next(context);
         }

@@ -5,15 +5,17 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
 
-namespace TFW.Data.Core.Configs.Entities
+namespace TFW.Data.Core.EntityConfigs
 {
-    public class AppUserConfig : IEntityTypeConfiguration<AppUser>
+    public class AppUserEntityConfig : AuditableEntityConfig<AppUser>
     {
-        public void Configure(EntityTypeBuilder<AppUser> builder)
+        public override void Configure(EntityTypeBuilder<AppUser> builder)
         {
+            base.Configure(builder);
+
             builder.Property(e => e.Id)
                 .IsUnicode(false)
-                .HasMaxLength(100);
+                .HasMaxLength(DataConsts.UserKeyStringLength);
         }
     }
 }

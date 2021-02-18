@@ -5,7 +5,19 @@ using System.Text;
 
 namespace TFW.Cross.Entities
 {
-    public class AppUser : IdentityUser<string>
+    public abstract class FullAuditableUser : IdentityUser<string>,
+        IAppAuditableEntity, IAppShallowDeleteEntity
+    {
+        public DateTime CreatedTime { get; set; }
+        public string CreatedUserId { get; set; }
+        public DateTime LastModifiedTime { get; set; }
+        public string LastModifiedUserId { get; set; }
+        public DateTime DeletedTime { get; set; }
+        public string DeletedUserId { get; set; }
+        public bool IsDeleted { get; set; }
+    }
+
+    public class AppUser : FullAuditableUser
     {
         public AppUser()
         {

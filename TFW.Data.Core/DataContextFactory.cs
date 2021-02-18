@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Data
+namespace TFW.Data.Core
 {
     //public class DataContextFactory : IDesignTimeDbContextFactory<Data.DataContext>
     //{

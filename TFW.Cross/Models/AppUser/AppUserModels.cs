@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Cross.Entities;
+using TFW.Cross.Models.Common;
 using AU = TFW.Cross.Entities.AppUser;
-using AUR = TFW.Cross.Models.AppUserResponseModel;
 using N = TFW.Cross.Entities.Note;
 
-namespace TFW.Cross.Models
+namespace TFW.Cross.Models.AppUser
 {
     public class GetAppUserListRequestModel : BaseGetListRequestModel
     {
@@ -44,7 +43,7 @@ namespace TFW.Cross.Models
                 },
                 {
                     FieldNotes, $"{nameof(AU.Notes)}" +
-                    $".Select(new {typeof(AUR.NoteResponseModel).FullName}" +
+                    $".Select(new {typeof(NoteResponseModel).FullName}" +
                     $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
                 }
             };
@@ -66,17 +65,17 @@ namespace TFW.Cross.Models
 
         [JsonProperty("notes")]
         public IEnumerable<NoteResponseModel> Notes { get; set; }
+    }
 
-        public class NoteResponseModel
-        {
-            [JsonProperty("id")]
-            public int Id { get; set; }
+    public class NoteResponseModel
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
 
-            [JsonProperty("title")]
-            public string Title { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; }
 
-            [JsonProperty("categoryName")]
-            public string CategoryName { get; set; }
-        }
+        [JsonProperty("categoryName")]
+        public string CategoryName { get; set; }
     }
 }

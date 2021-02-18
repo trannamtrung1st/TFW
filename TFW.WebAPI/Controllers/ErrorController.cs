@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using TFW.Cross;
-using TFW.Cross.Models;
+using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
 
 namespace TFW.WebAPI.Controllers

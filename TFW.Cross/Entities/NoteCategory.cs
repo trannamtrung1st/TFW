@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Cross.Entities
 {
-    public class NoteCategory : IShallowDeleteEntity<string>
+    public class NoteCategory : AppShallowDeleteEntity
     {
         public NoteCategory()
         {
@@ -15,10 +15,5 @@ namespace TFW.Cross.Entities
         public string Description { get; set; }
 
         public virtual IList<Note> Notes { get; set; }
-
-        // audited
-        public DateTime DeletedTime { get; set; }
-        public string DeletedUserId { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

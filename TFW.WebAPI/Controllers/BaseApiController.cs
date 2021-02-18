@@ -4,30 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TFW.Cross.Models;
+using TFW.Cross.Models.Common;
+using TFW.Cross.Models.Exceptions;
 
 namespace TFW.WebAPI.Controllers
 {
     public abstract class BaseApiController : ControllerBase
     {
         protected readonly DbContext dbContext;
-
-        public PrincipalInfo UserInfo
-        {
-            get
-            {
-                object principalInfo;
-                var items = HttpContext.Items;
-
-                if (items.TryGetValue(ControllerConsts.PrincipalInfoItemKey, out principalInfo))
-                    return principalInfo as PrincipalInfo;
-
-                return new PrincipalInfo();
-            }
-        }
 
         protected T Service<T>()
         {
@@ -44,9 +30,9 @@ namespace TFW.WebAPI.Controllers
             return new Uri(Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority);
         }
 
-        protected IActionResult FailValidation(ValidationData validationData = null)
+        protected IActionResult FailValidation(AppValidationException exception)
         {
-            return BadRequest(AppResult.FailValidation(data: validationData));
+            return BadRequest(exception.Result);
         }
 
         protected IActionResult Success(object data)

@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
-using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,9 +18,10 @@ using TFW.Business.Extensions;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Extensions;
-using TFW.Cross.Models;
+using TFW.Cross.Models.Setting;
 using TFW.Data;
-using TFW.Data.Extensions;
+using TFW.Data.Core;
+using TFW.Data.Core.Extensions;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common;
 using TFW.Framework.DI;
@@ -58,7 +57,7 @@ namespace TFW.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connStr = Configuration.GetConnectionString(Data.DataConsts.ConnStrKey);
+            var connStr = Configuration.GetConnectionString(DataConsts.ConnStrKey);
             GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies();
 
             services.AddDbContext<DataContext>(options => options

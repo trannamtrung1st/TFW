@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TFW.Data;
+using TFW.Data.Core;
 
-namespace TFW.Data.Migrations
+namespace TFW.Data.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210215170320_InitDb")]
+    [Migration("20210218165010_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -153,6 +153,22 @@ namespace TFW.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -162,6 +178,17 @@ namespace TFW.Data.Migrations
 
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -252,13 +279,17 @@ namespace TFW.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedUserId")
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -284,7 +315,9 @@ namespace TFW.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(1000)")
@@ -295,7 +328,7 @@ namespace TFW.Data.Migrations
 
                     b.HasKey("Name");
 
-                    b.ToTable("Category");
+                    b.ToTable("NoteCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -362,13 +395,13 @@ namespace TFW.Data.Migrations
                     b.HasOne("TFW.Cross.Entities.NoteCategory", "Category")
                         .WithMany("Notes")
                         .HasForeignKey("CategoryName")
-                        .HasConstraintName("FK_Note_Category")
+                        .HasConstraintName("FK_Note_Category_CategoryName")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TFW.Cross.Entities.AppUser", "CreatedUser")
                         .WithMany("Notes")
                         .HasForeignKey("CreatedUserId")
-                        .HasConstraintName("FK_Note_AppUser")
+                        .HasConstraintName("FK_Note_AppUser_CreatedUserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618

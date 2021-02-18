@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
 
-namespace TFW.Data.Core.Configs.Entities
+namespace TFW.Data.Core.EntityConfigs
 {
-    public class AppRoleConfig : IEntityTypeConfiguration<AppRole>
+    public class AppRoleEntityConfig : AuditableEntityConfig<AppRole>
     {
-        public void Configure(EntityTypeBuilder<AppRole> builder)
+        public override void Configure(EntityTypeBuilder<AppRole> builder)
         {
+            base.Configure(builder);
+
             builder.Property(e => e.Id)
                 .IsUnicode(false)
                 .HasMaxLength(100);

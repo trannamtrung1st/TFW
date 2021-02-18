@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
 
-namespace TFW.Data.Core.Configs.Entities
+namespace TFW.Data.Core.EntityConfigs
 {
-    public class NoteCategoryConfig : IEntityTypeConfiguration<NoteCategory>
+    public class NoteCategoryEntityConfig : AuditableEntityConfig<NoteCategory>
     {
-        public void Configure(EntityTypeBuilder<NoteCategory> builder)
+        public override void Configure(EntityTypeBuilder<NoteCategory> builder)
         {
+            base.Configure(builder);
+
             builder.HasKey(e => e.Name);
 
             builder.Property(e => e.Name).IsRequired()

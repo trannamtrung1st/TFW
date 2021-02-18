@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Data.Extensions
+namespace TFW.Data.Core.Extensions
 {
     public static class ConfigExtensions
     {

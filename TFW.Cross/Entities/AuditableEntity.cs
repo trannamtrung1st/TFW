@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Framework.Cross.Models;
 
 namespace TFW.Cross.Entities
 {
-    public interface IAuditableEntity<TUserKey>
+    public interface IAppAuditableEntity : IAuditableEntity<string>
     {
-        public DateTime CreatedTime { get; set; }
-        public TUserKey CreatedUserId { get; set; }
-        public DateTime LastModifiedTime { get; set; }
-        public TUserKey LastModifiedUserId { get; set; }
     }
 
-    public interface IShallowDeleteEntity<TUserKey>
+    public interface IAppShallowDeleteEntity : IShallowDeleteEntity<string>
     {
-        public DateTime DeletedTime { get; set; }
-        public TUserKey DeletedUserId { get; set; }
-        public bool IsDeleted { get; set; }
+    }
+
+    public abstract class AppAuditableEntity : AuditableEntity<string>
+    {
+    }
+
+    public abstract class AppShallowDeleteEntity : ShallowDeleteEntity<string>
+    {
+    }
+
+    public abstract class AppFullAuditableEntity : FullAuditableEntity<string>
+    {
     }
 }

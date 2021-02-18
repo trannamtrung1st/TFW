@@ -20,6 +20,7 @@
     <ProjectReference Include="..\TFW.Business.Core\TFW.Business.Core.csproj" />
     <ProjectReference Include="..\TFW.Business\TFW.Business.csproj" />
     <ProjectReference Include="..\TFW.Cross\TFW.Cross.csproj" />
+    <ProjectReference Include="..\TFW.Data.Core\TFW.Data.Core.csproj" />
     <ProjectReference Include="..\TFW.Data\TFW.Data.csproj" />
     <ProjectReference Include="..\TFW.Framework.EFCore\TFW.Framework.EFCore.csproj" />
     <ProjectReference Include="..\TFW.Framework.WebAPI\TFW.Framework.WebAPI.csproj" />

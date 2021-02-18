@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Text;
 using TFW.Framework.Common;
 
-namespace TFW.Cross.Models
+namespace TFW.Cross.Models.Common
 {
     public class AppResult
     {
@@ -107,64 +105,5 @@ namespace TFW.Cross.Models
             };
         }
 
-    }
-
-    public class ValidationData
-    {
-        [JsonProperty("isValid")]
-        public bool IsValid { get; set; }
-
-        [JsonProperty("details")]
-        public List<AppResult> Details { get; set; }
-
-        [JsonIgnore]
-        public IDictionary<string, object> TempData { get; set; }
-
-        public ValidationData()
-        {
-            Details = new List<AppResult>();
-            IsValid = true;
-            TempData = new Dictionary<string, object>();
-        }
-
-        public T GetTempData<T>(string key)
-        {
-            object data = null;
-
-            if (TempData.TryGetValue(key, out data))
-                return (T)data;
-
-            return default;
-        }
-
-        public ValidationData Fail(string mess = null, ResultCode? code = null, object data = null)
-        {
-            Details.Add(new AppResult
-            {
-                Message = mess ?? code?.Description(),
-                Data = data,
-                Code = code
-            });
-
-            IsValid = false;
-
-            return this;
-        }
-
-    }
-
-    public class GetListResponseModel<T>
-    {
-        [JsonProperty("list")]
-        public T[] List { get; set; }
-
-        [JsonProperty("totalCount", NullValueHandling = NullValueHandling.Ignore)]
-        public int? TotalCount { get; set; }
-    }
-
-    public class PrincipalInfo
-    {
-        public string UserId { get; set; }
-        public bool IsAuthenticated { get; set; } = false;
     }
 }

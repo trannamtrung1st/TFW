@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
-using TFW.Data.Core.Configs.Entities;
+using TFW.Data.Core.EntityConfigs;
 
-namespace TFW.Data
+namespace TFW.Data.Core
 {
     public partial class DataContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
@@ -22,7 +21,7 @@ namespace TFW.Data
         }
 
         public virtual DbSet<Note> Note { get; set; }
-        public virtual DbSet<NoteCategory> Category { get; set; }
+        public virtual DbSet<NoteCategory> NoteCategory { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -39,13 +38,13 @@ namespace TFW.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new AppUserConfig());
+            modelBuilder.ApplyConfiguration(new AppUserEntityConfig());
 
-            modelBuilder.ApplyConfiguration(new AppRoleConfig());
+            modelBuilder.ApplyConfiguration(new AppRoleEntityConfig());
 
-            modelBuilder.ApplyConfiguration(new NoteConfig());
+            modelBuilder.ApplyConfiguration(new NoteEntityConfig());
 
-            modelBuilder.ApplyConfiguration(new NoteCategoryConfig());
+            modelBuilder.ApplyConfiguration(new NoteCategoryEntityConfig());
         }
     }
 
