@@ -9,7 +9,7 @@ using System.Text;
 
 namespace TFW.Framework.DI
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection ScanServices(this IServiceCollection services, IEnumerable<Assembly> assemblies)
         {
@@ -54,6 +54,7 @@ namespace TFW.Framework.DI
                         services.Add(serviceDescriptor);
                 }
             }
+
             return services;
         }
     }

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Cross.Extensions
+namespace TFW.Cross.Helpers
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection ConfigureCross(this IServiceCollection services)
         {

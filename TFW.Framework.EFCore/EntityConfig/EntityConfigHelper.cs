@@ -6,7 +6,7 @@ using TFW.Framework.Cross.Models;
 
 namespace TFW.Framework.EFCore.EntityConfig
 {
-    public static class EntityConfigExtensions
+    public static class EntityConfigHelper
     {
         public static EntityTypeBuilder<T> ConfigureAuditableEntity<T>(this EntityTypeBuilder<T> builder,
             int? userKeyStringLength = null,

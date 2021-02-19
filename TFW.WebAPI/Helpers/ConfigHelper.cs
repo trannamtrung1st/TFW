@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using TFW.WebAPI.Middlewares;
 
-namespace TFW.WebAPI.Extensions
+namespace TFW.WebAPI.Helpers
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IApplicationBuilder UsePrincipalInfoMiddleware(this IApplicationBuilder app)
         {

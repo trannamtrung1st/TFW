@@ -7,7 +7,7 @@ using System.Text;
 
 namespace TFW.Framework.Common
 {
-    public static class EnumExtensions
+    public static class EnumHelper
     {
         public static string Description(this Enum enumVal, bool fromDisplayAttribute = true)
         {

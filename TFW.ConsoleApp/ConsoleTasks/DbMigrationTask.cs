@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Framework.Common;
 using TFW.Framework.ConsoleApp;
 
 namespace TFW.ConsoleApp.ConsoleTasks
@@ -25,29 +26,22 @@ namespace TFW.ConsoleApp.ConsoleTasks
         {
             Console.Clear();
 
-            Console.Write("Migration name: ");
-            var migrationName = Console.ReadLine();
-
+            var migrationName = XConsole.PromptLine("Migration name: ");
             if (string.IsNullOrWhiteSpace(migrationName))
             {
                 Console.Write("Invalid migration name");
                 return Task.CompletedTask;
             }
 
-            Console.Write("Solution folder: ");
-            var solutionFolder = Console.ReadLine();
- 
+            var solutionFolder = XConsole.PromptLine("Solution folder: ");
             if (string.IsNullOrWhiteSpace(solutionFolder))
-                solutionFolder = Directory.GetParent(
-                    System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+                solutionFolder = DirectoryHelper.GetSolutionFolder();
 
-            Console.Write("Destination project: ");
-            var destPrj = Console.ReadLine();
+            var destPrj = XConsole.PromptLine("Destination project: ");
             if (string.IsNullOrWhiteSpace(destPrj))
                 destPrj = DefaultDestinationProject;
 
-            Console.Write("Startup project: ");
-            var startupPrj = Console.ReadLine();
+            var startupPrj = XConsole.PromptLine("Startup project: ");
             if (string.IsNullOrWhiteSpace(startupPrj))
                 startupPrj = DefaultStartupProject;
 
@@ -60,14 +54,13 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
-            
+
             return Task.CompletedTask;
         }
 
         public override async Task Start()
         {
-            Console.Write(Description);
-            var opt = Console.ReadLine();
+            var opt = XConsole.PromptLine(Description);
         
             switch (opt)
             {
@@ -76,9 +69,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
                     break;
             }
             
-            Console.WriteLine();
-            Console.WriteLine("Press enter to exit task");
-            Console.ReadLine();
+            XConsole.PromptLine("\nPress enter to exit task");
         }
 
         public const string AddMigrationOpt = "1";

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Data.Core.Extensions
+namespace TFW.Data.Core.Helpers
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection ConfigureData(this IServiceCollection services)
         {

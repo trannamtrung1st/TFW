@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.WebConfiguration
+namespace TFW.Framework.Configuration
 {
-    public static class WebConfigurationExtensions
+    public static class ConfigurationHelper
     {
         public static T Parse<T>(this IConfiguration configuration, string key)
         {

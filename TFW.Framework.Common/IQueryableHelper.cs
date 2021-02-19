@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TFW.Framework.Common
 {
-    public static class IQueryableExtensions
+    public static class IQueryableHelper
     {
         public static bool IsOrdered<T>(this IQueryable<T> query)
         {

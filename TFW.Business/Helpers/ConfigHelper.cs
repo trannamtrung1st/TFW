@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace TFW.Business.Extensions
+namespace TFW.Business.Helpers
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection ConfigureBusiness(this IServiceCollection services)
         {

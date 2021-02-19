@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TFW.Framework.Common
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection AddDefaultTimezoneResolver(this IServiceCollection services,
             IDictionary<string, TimeZoneInfo> timeZoneMap)

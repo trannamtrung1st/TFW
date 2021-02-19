@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.WebAPI.Bindings;
 
-namespace TFW.Framework.WebAPI.Extensions
+namespace TFW.Framework.WebAPI.Helpers
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection AddDefaultDateTimeModelBinder(this IServiceCollection services)
         {

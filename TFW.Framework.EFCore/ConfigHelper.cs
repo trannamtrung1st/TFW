@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TFW.Framework.EFCore
 {
-    public static class ConfigExtensions
+    public static class ConfigHelper
     {
         public static IServiceCollection AddDefaultDbMigrator(this IServiceCollection services)
         {

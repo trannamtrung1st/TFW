@@ -6,7 +6,7 @@ using System.Text;
 namespace TFW.Framework.Common
 {
 
-    public static class DateTimeExtensions
+    public static class DateTimeHelper
     {
         public static bool TryConvertToDateTime(this string str, string dateFormat, out DateTime dateTime,
             IFormatProvider formatProvider = null,

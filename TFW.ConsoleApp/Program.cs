@@ -30,15 +30,13 @@ namespace TFW.ConsoleApp
             {
                 var options = tasks.Select((o, i) => $"{i + 1}. {o}");
 
-                Console.Write($"Welcome to console app!\n" +
+                line = XConsole.PromptLine($"Welcome to console app!\n" +
                     $"Choose 1 option\n" +
                     $"Or type 'exit' then enter to exit.\n" +
                     $"----------------------------------\n" +
                     string.Join("\n", options) + $"\n" +
                     $"----------------------------------\n" +
                     $"Input: ");
-                
-                line = Console.ReadLine();
                 int optIdx;
                 
                 if (int.TryParse(line, out optIdx))

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace TFW.Framework.AutoMapper
 {
-    public static class MapperExtensions
+    public static class MapperHelper
     {
         public static void CopyFrom(this object dest, object src, IMapper mapper = null)
         {

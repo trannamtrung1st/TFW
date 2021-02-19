@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Framework.Common
 {
-    public static class ArrayExtensions
+    public static class ArrayHelper
     {
         public static bool IsNullOrEmpty(this object[] arr)
         {
