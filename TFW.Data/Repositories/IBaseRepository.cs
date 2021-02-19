@@ -11,7 +11,7 @@ namespace TFW.Data.Repositories
 {
     public partial interface IBaseRepository<E> where E : class
     {
-        IQueryable<T> Limit<T>(IQueryable<T> query, PagingQueryModel pagingModel);
+        IQueryable<T> Limit<T>(IQueryable<T> query, int page, int pageLimit);
         Task<EntityEntry<E>> ReloadAsync(E entity);
         EntityEntry<E> Add(E entity);
         void AddRange(IEnumerable<E> entities);

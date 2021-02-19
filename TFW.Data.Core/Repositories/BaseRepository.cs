@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,24 +17,19 @@ namespace TFW.Data.Core.Repositories
     {
         protected readonly DbContext dbContext;
         protected readonly DbSet<E> dbSet;
-        protected readonly ParsingConfig defaultParsingConfig;
 
         public BaseRepository(DbContext context)
         {
             this.dbContext = context;
             this.dbSet = context.Set<E>();
-            this.defaultParsingConfig = new ParsingConfig
-            {
-                CustomTypeProvider = GlobalResources.CustomTypeProvider
-            };
         }
 
-        public virtual IQueryable<T> Limit<T>(IQueryable<T> query, PagingQueryModel pagingModel)
+        public virtual IQueryable<T> Limit<T>(IQueryable<T> query, int page, int pageLimit)
         {
-            if (pagingModel.Page <= 0)
+            if (page <= 0 || pageLimit <= 0)
                 throw AppException.From(Cross.ResultCode.InvalidPagingRequest);
 
-            query = query.Skip((pagingModel.Page - 1) * pagingModel.PageLimit).Take(pagingModel.PageLimit);
+            query = query.Skip((page - 1) * pageLimit).Take(pageLimit);
 
             return query;
         }

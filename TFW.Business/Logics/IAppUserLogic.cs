@@ -11,7 +11,7 @@ namespace TFW.Business.Logics
     public interface IAppUserLogic
     {
         Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
-            GetAppUserListRequestModel requestModel);
+            GetAppUserListRequestModel requestModel, Type projectionType = null);
 
         PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal);
     }
