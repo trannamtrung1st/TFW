@@ -7,7 +7,7 @@ using TFW.Cross.Entities;
 
 namespace TFW.Data.Core.EntityConfigs
 {
-    public class AppUserEntityConfig : AuditableEntityConfig<AppUser>
+    public class AppUserEntityConfig : BaseEntityConfig<AppUser>
     {
         public override void Configure(EntityTypeBuilder<AppUser> builder)
         {

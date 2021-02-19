@@ -7,7 +7,7 @@ using TFW.Cross.Entities;
 
 namespace TFW.Data.Core.EntityConfigs
 {
-    public class NoteCategoryEntityConfig : AuditableEntityConfig<NoteCategory>
+    public class NoteCategoryEntityConfig : BaseEntityConfig<NoteCategory>
     {
         public override void Configure(EntityTypeBuilder<NoteCategory> builder)
         {
