@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TFW.Framework.i18n;
 
@@ -38,43 +39,43 @@ namespace TFW.Cross
     public enum ResultCode
     {
         #region Common
-        [Description("Unknown error")]
+        [Display(Name = "Unknown error")]
         UnknownError = ResultCodeGroup.Common + 1,
 
-        [Description("Success")]
+        [Display(Name = "Success")]
         Success = ResultCodeGroup.Common + 2,
 
-        [Description("Fail")]
+        [Display(Name = "Fail")]
         Fail = ResultCodeGroup.Common + 3,
 
-        [Description("Fail validation")]
+        [Display(Name = "Fail validation")]
         FailValidation = ResultCodeGroup.Common + 4,
 
-        [Description("Not found")]
+        [Display(Name = "Not found")]
         NotFound = ResultCodeGroup.Common + 5,
 
-        [Description("Unsupported")]
+        [Display(Name = "Unsupported")]
         Unsupported = ResultCodeGroup.Common + 6,
 
-        [Description("Can not delete because of dependencies")]
+        [Display(Name = "Can not delete because of dependencies")]
         DependencyDeleteFail = ResultCodeGroup.Common + 7,
 
-        [Description("Unauthorized")]
+        [Display(Name = "Unauthorized")]
         Unauthorized = ResultCodeGroup.Common + 8,
 
-        [Description("Access denied")]
+        [Display(Name = "Access denied")]
         AccessDenied = ResultCodeGroup.Common + 9,
 
-        [Description("Invalid paging request")]
+        [Display(Name = "Invalid paging request")]
         InvalidPagingRequest = ResultCodeGroup.Common + 10,
 
-        [Description("Invalid sorting request")]
+        [Display(Name = "Invalid sorting request")]
         InvalidSortingRequest = ResultCodeGroup.Common + 11,
 
-        [Description("Invalid projection request")]
+        [Display(Name = "Invalid projection request")]
         InvalidProjectionRequest = ResultCodeGroup.Common + 12,
 
-        [Description("Entity not found")]
+        [Display(Name = "Entity not found")]
         EntityNotFound = ResultCodeGroup.Common + 13,
         #endregion
 
