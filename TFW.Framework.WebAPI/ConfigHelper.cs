@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,12 @@ namespace TFW.Framework.WebAPI
 {
     public static class ConfigHelper
     {
-        public static IApplicationBuilder UseRequestThread(this IApplicationBuilder app)
+        public static IApplicationBuilder ConfigureHttpContext(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<RequestThreadMiddleware>();
-        }
+            System.Web.HttpContext.Configure(
+                app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
-        public static IServiceCollection AddRequestThreadMiddleware(this IServiceCollection services)
-        {
-            return services.AddScoped<RequestThreadMiddleware>();
+            return app;
         }
 
         public static IApplicationBuilder UseRequestTimeZone(this IApplicationBuilder app)

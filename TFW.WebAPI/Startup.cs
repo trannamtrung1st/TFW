@@ -68,13 +68,14 @@ namespace TFW.WebAPI
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
-                }).ConfigureCross()
+                })
+                .AddHttpContextAccessor()
+                .ConfigureCross()
                 .ConfigureData()
                 .ConfigureBusiness()
                 .ScanServices(GlobalResources.TempAssemblyList)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
-                .AddRequestThreadMiddleware()
                 .AddRequestTimeZoneMiddleware()
                 .ConfigureRequestTimeZoneDefault();
 
@@ -190,6 +191,9 @@ namespace TFW.WebAPI
             // i18n
             Time.Providers.Default = Time.Providers.Utc;
 
+            // HttpContext
+            app.ConfigureHttpContext();
+
             PrepareEnvironment(env);
 
             if (env.IsDevelopment())
@@ -230,8 +234,6 @@ namespace TFW.WebAPI
             app.UseAuthentication();
 
             app.UseAuthorization();
-
-            app.UseRequestThread();
 
             app.UsePrincipalInfoMiddleware();
 
