@@ -9,7 +9,7 @@ namespace TFW.Cross.Entities
     {
     }
 
-    public interface IAppShallowDeleteEntity : IShallowDeleteEntity<string>
+    public interface IAppSoftDeleteEntity : ISoftDeleteEntity<string>
     {
     }
 
@@ -17,7 +17,7 @@ namespace TFW.Cross.Entities
     {
     }
 
-    public abstract class AppShallowDeleteEntity : ShallowDeleteEntity<string>
+    public abstract class AppSoftDeleteEntity : SoftDeleteEntity<string>
     {
     }
 

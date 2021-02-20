@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using TFW.Framework.ConsoleApp;
+using TFW.Framework.i18n.Helpers;
 
 namespace TFW
 {
@@ -39,28 +40,31 @@ namespace TFW
 
         static void Main(string[] args)
         {
-            var list = new List<A> { new A
-            {
-                B = new B{Name="1"},
-                Name = "B1",
-                ListB = new List<B>{ new B { Name = "BB1"} }
-            },new A{
-                B = new B{Name="2"},
-                Name = "B2",
-                ListB = new List<B>{ new B { Name = "BB2"} }
-            },
-            };
+            //var list = new List<A> { new A
+            //{
+            //    B = new B{Name="1"},
+            //    Name = "B1",
+            //    ListB = new List<B>{ new B { Name = "BB1"} }
+            //},new A{
+            //    B = new B{Name="2"},
+            //    Name = "B2",
+            //    ListB = new List<B>{ new B { Name = "BB2"} }
+            //},
+            //};
 
-            var test = list.AsQueryable().Select<A>(new ParsingConfig()
-            {
-                AllowNewToEvaluateAnyType = true,
-                ResolveTypesBySimpleName = true
-            },
-            "new (Name,new B(B.Name) as B,ListB.Select(new B(Name)).ToList() as ListB)").ToList();
-            foreach (var t in test)
-            {
-                Console.WriteLine($"{t.Name},{t.B.Name},{t.ListB.FirstOrDefault()?.Name}");
-            }
+            //var test = list.AsQueryable().Select<A>(new ParsingConfig()
+            //{
+            //    AllowNewToEvaluateAnyType = true,
+            //    ResolveTypesBySimpleName = true
+            //},
+            //"new (Name,new B(B.Name) as B,ListB.Select(new B(Name)).ToList() as ListB)").ToList();
+            //foreach (var t in test)
+            //{
+            //    Console.WriteLine($"{t.Name},{t.B.Name},{t.ListB.FirstOrDefault()?.Name}");
+            //}
+
+            Console.WriteLine(TimeZoneHelper.GetFirstTimeZoneByUTCOffset(TimeSpan.FromMinutes(420)));
+
         }
     }
 }

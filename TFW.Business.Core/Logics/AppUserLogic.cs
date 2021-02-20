@@ -13,8 +13,8 @@ using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
 using TFW.Data.Repositories;
-using TFW.Framework.AutoMapper;
-using TFW.Framework.Common;
+using TFW.Framework.AutoMapper.Helpers;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.DI;
 
 namespace TFW.Business.Core.Logics
@@ -39,8 +39,8 @@ namespace TFW.Business.Core.Logics
             if (requestModel.page < 0 || requestModel.pageLimit <= 0)
                 validationData.Fail(code: Cross.ResultCode.InvalidPagingRequest);
 
-            if (string.IsNullOrWhiteSpace(requestModel.fields) ||
-                requestModel.GetFieldsArr()?.All(o => DynamicQueryAppUserModel.Projections.ContainsKey(o)) == false)
+            if (requestModel.GetFieldsArr() != null &&
+                requestModel.GetFieldsArr().Any(o => !DynamicQueryAppUserModel.Projections.ContainsKey(o)))
                 validationData.Fail(code: Cross.ResultCode.InvalidProjectionRequest);
 
             if (!validationData.IsValid)

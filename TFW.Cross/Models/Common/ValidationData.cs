@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TFW.Framework.Common;
+using TFW.Framework.Common.Helpers;
 
 namespace TFW.Cross.Models.Common
 {

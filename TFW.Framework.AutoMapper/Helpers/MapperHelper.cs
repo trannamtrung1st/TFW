@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace TFW.Framework.AutoMapper
+namespace TFW.Framework.AutoMapper.Helpers
 {
     public static class MapperHelper
     {

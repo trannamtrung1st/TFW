@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.EFCore
+namespace TFW.Framework.EFCore.Migration
 {
     public interface IDbMigrator
     {

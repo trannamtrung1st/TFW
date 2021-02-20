@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace TFW.Framework.Common
+namespace TFW.Framework.Common.Helpers
 {
     public static class DirectoryHelper
     {

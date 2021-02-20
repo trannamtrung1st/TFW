@@ -4,19 +4,28 @@ using System.Text;
 
 namespace TFW.Framework.Cross.Models
 {
-    public interface IAuditableEntity<TUserKey>
+    public interface IAuditableEntity
     {
         public DateTime CreatedTime { get; set; }
-        public TUserKey CreatedUserId { get; set; }
         public DateTime LastModifiedTime { get; set; }
+    }
+
+    public interface IAuditableEntity<TUserKey> : IAuditableEntity
+    {
+        public TUserKey CreatedUserId { get; set; }
         public TUserKey LastModifiedUserId { get; set; }
     }
 
-    public interface IShallowDeleteEntity<TUserKey>
+    public interface ISoftDeleteEntity
     {
         public DateTime DeletedTime { get; set; }
-        public TUserKey DeletedUserId { get; set; }
         public bool IsDeleted { get; set; }
+
+    }
+
+    public interface ISoftDeleteEntity<TUserKey> : ISoftDeleteEntity
+    {
+        public TUserKey DeletedUserId { get; set; }
     }
 
     public abstract class AuditableEntity<TUserKey> : IAuditableEntity<TUserKey>
@@ -27,14 +36,14 @@ namespace TFW.Framework.Cross.Models
         public virtual TUserKey LastModifiedUserId { get; set; }
     }
 
-    public abstract class ShallowDeleteEntity<TUserKey> : IShallowDeleteEntity<TUserKey>
+    public abstract class SoftDeleteEntity<TUserKey> : ISoftDeleteEntity<TUserKey>
     {
         public virtual DateTime DeletedTime { get; set; }
         public virtual TUserKey DeletedUserId { get; set; }
         public virtual bool IsDeleted { get; set; }
     }
 
-    public abstract class FullAuditableEntity<TUserKey> : IAuditableEntity<TUserKey>, IShallowDeleteEntity<TUserKey>
+    public abstract class FullAuditableEntity<TUserKey> : IAuditableEntity<TUserKey>, ISoftDeleteEntity<TUserKey>
     {
         public virtual DateTime DeletedTime { get; set; }
         public virtual TUserKey DeletedUserId { get; set; }

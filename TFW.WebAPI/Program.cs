@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TFW.Framework.EFCore;
+using TFW.Framework.EFCore.Migration;
 
 namespace TFW.WebAPI
 {

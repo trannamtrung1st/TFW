@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Framework.EFCore.Migration;
 
 namespace TFW.Framework.EFCore
 {

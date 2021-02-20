@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TFW.Framework.Common;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.ConsoleApp;
 
 namespace TFW.ConsoleApp

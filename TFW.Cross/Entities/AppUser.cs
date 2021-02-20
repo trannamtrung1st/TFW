@@ -6,7 +6,7 @@ using System.Text;
 namespace TFW.Cross.Entities
 {
     public abstract class FullAuditableUser : IdentityUser<string>,
-        IAppAuditableEntity, IAppShallowDeleteEntity
+        IAppAuditableEntity, IAppSoftDeleteEntity
     {
         public DateTime CreatedTime { get; set; }
         public string CreatedUserId { get; set; }

@@ -17,11 +17,25 @@ namespace TFW.Framework.DI
 
         public Type ServiceType { get; set; }
 
-        public ServiceDescriptor BuildServiceDescriptor(Type type)
+        public virtual ServiceDescriptor BuildServiceDescriptor(Type type)
         {
             var serviceType = ServiceType ?? type;
 
             return new ServiceDescriptor(serviceType, type, Lifetime);
+        }
+    }
+
+    public class ProviderServiceAttribute : ServiceAttribute
+    {
+        public ProviderServiceAttribute(ServiceLifetime lifetime) : base(lifetime)
+        {
+        }
+
+        public override ServiceDescriptor BuildServiceDescriptor(Type type)
+        {
+            var serviceType = ServiceType ?? type;
+
+            return new ServiceDescriptor(serviceType, o => o.GetRequiredService(type), Lifetime);
         }
     }
 

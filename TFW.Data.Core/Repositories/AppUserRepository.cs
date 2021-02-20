@@ -1,27 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
-using TFW.Cross;
 using TFW.Cross.Entities;
-using TFW.Cross.Models.AppUser;
-using TFW.Cross.Models.Exceptions;
 using TFW.Data.Repositories;
-using TFW.Framework.Common;
 using TFW.Framework.DI;
+using TFW.Framework.EFCore.Repository;
 
 namespace TFW.Data.Core.Repositories
 {
     [ScopedService(ServiceType = typeof(IAppUserRepository))]
-    public class AppUserRepository : BaseRepository<AppUser>, IAppUserRepository
+    public class AppUserRepository : BaseRepository<AppUser, DataContext>, IAppUserRepository
     {
-        public AppUserRepository(DbContext context) : base(context)
+        public AppUserRepository(DataContext context) : base(context)
         {
         }
 
-        public override string EntityName => Cross.EntityName.AppUser;
+        public override string EntityTableName => Cross.EntityTableName.AppUser;
 
         public IQueryable<AppUser> FilterById(IQueryable<AppUser> query, string id)
         {

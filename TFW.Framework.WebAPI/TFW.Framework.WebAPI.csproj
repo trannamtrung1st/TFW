@@ -7,6 +7,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
+    <ProjectReference Include="..\TFW.Framework.i18n\TFW.Framework.i18n.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

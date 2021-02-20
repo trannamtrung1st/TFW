@@ -5,7 +5,7 @@ using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Reflection;
 using TFW.Cross.Entities;
 using TFW.Cross.Models;
-using TFW.Framework.Common;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.DI;
 
 namespace TFW.Cross.Commons

@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
 using TFW.Data.Core.EntityConfigs;
+using TFW.Framework.DI;
+using TFW.Framework.EFCore.Context;
 
 namespace TFW.Data.Core
 {
-    public partial class DataContext : IdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
+    [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(DbContext))]
+    [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IFullAuditableDbContext))]
+    [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IBaseDbContext))]
+    public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
         public DataContext()

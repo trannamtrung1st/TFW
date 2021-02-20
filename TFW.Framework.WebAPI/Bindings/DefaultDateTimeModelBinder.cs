@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TFW.Framework.Common;
+using TFW.Framework.i18n;
+using TFW.Framework.i18n.Helpers;
 
 namespace TFW.Framework.WebAPI.Bindings
 {
@@ -28,7 +28,7 @@ namespace TFW.Framework.WebAPI.Bindings
 
             var modelName = GetModelName(bindingContext);
             var valueProviderResult = bindingContext.ValueProvider.GetValue(modelName);
-            
+
             if (valueProviderResult == ValueProviderResult.None)
             {
                 return Task.CompletedTask;
@@ -54,16 +54,14 @@ namespace TFW.Framework.WebAPI.Bindings
             var dateFormat = attribute?.DateFormat;
             var toUtc = attribute?.ToUtc;
             DateTime dateTime;
-            
+
             if (dateStr.TryConvertToDateTime(dateFormat, out dateTime))
             {
-                var timeZoneResolver = bindingContext
-                    .HttpContext.RequestServices.GetRequiredService<ITimeZoneResolver>();
-                var currentUITimeZone = timeZoneResolver.CurrentUITimeZone;
-            
+                var currentTimeZone = Time.ThreadTimeZone;
+
                 if (toUtc == true)
-                    dateTime = dateTime.ToUtc(currentUITimeZone);
-                
+                    dateTime = dateTime.ToUtcFromTimeZone(currentTimeZone);
+
                 return dateTime;
             }
 

@@ -10,9 +10,8 @@ namespace TFW.Data.Core.Helpers
     {
         public static IServiceCollection ConfigureData(this IServiceCollection services)
         {
-            return services.AddScoped<DataContext>()
-                //return only 1 scoped context 
-                .AddScoped<DbContext>(p => p.GetRequiredService<DataContext>());
+            // configure Data
+            return services;
         }
     }
 }

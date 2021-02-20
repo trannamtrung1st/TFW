@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.Configuration
+namespace TFW.Framework.Configuration.Helpers
 {
     public static class ConfigurationHelper
     {

@@ -23,12 +23,14 @@ using TFW.Data;
 using TFW.Data.Core;
 using TFW.Data.Core.Helpers;
 using TFW.Framework.AutoMapper;
-using TFW.Framework.Common;
-using TFW.Framework.Configuration;
+using TFW.Framework.Common.Helpers;
+using TFW.Framework.Configuration.Helpers;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
+using TFW.Framework.i18n;
+using TFW.Framework.WebAPI;
 using TFW.Framework.WebAPI.Bindings;
-using TFW.Framework.WebAPI.Helpers;
+using TFW.Framework.WebAPI.Options;
 using TFW.WebAPI.Helpers;
 using TFW.WebAPI.Middlewares;
 using TFW.WebAPI.Models;
@@ -63,16 +65,18 @@ namespace TFW.WebAPI
             services.AddDbContext<DataContext>(options => options
                     .UseSqlServer(connStr)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
-                .AddDefaultDbMigrator()
-                .AddDefaultTimezoneResolver(TimeZoneConsts.TimezoneMap)
-                .AddDefaultDateTimeModelBinder()
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
                 }).ConfigureCross()
                 .ConfigureData()
                 .ConfigureBusiness()
-                .ScanServices(GlobalResources.TempAssemblyList);
+                .ScanServices(GlobalResources.TempAssemblyList)
+                .AddDefaultDbMigrator()
+                .AddDefaultDateTimeModelBinder()
+                .AddRequestThreadMiddleware()
+                .AddRequestTimeZoneMiddleware()
+                .ConfigureRequestTimeZoneDefault();
 
             #region OAuth
             services.AddIdentityCore<AppUser>(options =>
@@ -183,6 +187,9 @@ namespace TFW.WebAPI
             // Dynamic Linq
             GlobalResources.CustomTypeProvider = dynamicLinkCustomTypeProvider;
 
+            // i18n
+            Time.Providers.Default = Time.Providers.Utc;
+
             PrepareEnvironment(env);
 
             if (env.IsDevelopment())
@@ -224,7 +231,11 @@ namespace TFW.WebAPI
 
             app.UseAuthorization();
 
+            app.UseRequestThread();
+
             app.UsePrincipalInfoMiddleware();
+
+            app.UseRequestTimeZone();
 
             app.UseEndpoints(endpoints =>
             {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Cross.Entities
 {
-    public class NoteCategory : AppShallowDeleteEntity
+    public class NoteCategory : AppSoftDeleteEntity
     {
         public NoteCategory()
         {

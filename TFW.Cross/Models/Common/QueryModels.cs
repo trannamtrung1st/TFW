@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Framework.Common;
+using TFW.Framework.Common.Helpers;
 
 namespace TFW.Cross.Models.Common
 {

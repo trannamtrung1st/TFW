@@ -21,12 +21,7 @@ namespace TFW.Cross
 
     public static class TimeZoneConsts
     {
-        public static readonly IDictionary<string, TimeZoneInfo> TimezoneMap;
-
-        static TimeZoneConsts()
-        {
-            TimezoneMap = TimezoneHelper.GetIsoToTimeZoneMapping();
-        }
+        public static readonly TimeZoneInfo Default = TimeZoneInfo.Local;
     }
 
     public static class ResultCodeGroup
@@ -83,7 +78,7 @@ namespace TFW.Cross
         #endregion
     }
 
-    public static class EntityName
+    public static class EntityTableName
     {
         public const string AppUser = "AspNetUsers";
         public const string AppRole = "AspNetRoles";

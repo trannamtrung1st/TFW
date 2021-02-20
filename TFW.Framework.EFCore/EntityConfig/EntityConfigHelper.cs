@@ -29,9 +29,9 @@ namespace TFW.Framework.EFCore.EntityConfig
                     lastModifiedUserId.HasMaxLength(userKeyStringLength.Value);
             }
 
-            if (typeof(IShallowDeleteEntity<string>).IsAssignableFrom(entityType))
+            if (typeof(ISoftDeleteEntity<string>).IsAssignableFrom(entityType))
             {
-                var deletedUserId = builder.Property(o => (o as IShallowDeleteEntity<string>).DeletedUserId)
+                var deletedUserId = builder.Property(o => (o as ISoftDeleteEntity<string>).DeletedUserId)
                     .IsUnicode(isUnicode);
 
                 if (userKeyStringLength.HasValue)

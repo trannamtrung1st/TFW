@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Framework.Common;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.ConsoleApp;
 
 namespace TFW.ConsoleApp.ConsoleTasks

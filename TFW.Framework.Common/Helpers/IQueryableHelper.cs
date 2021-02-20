@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace TFW.Framework.Common
+namespace TFW.Framework.Common.Helpers
 {
     public static class IQueryableHelper
     {
@@ -20,7 +20,7 @@ namespace TFW.Framework.Common
                 query = (query as IOrderedQueryable<T>).ThenBy(keySelector);
             else
                 query = query.OrderBy(keySelector);
-            
+
             return query;
         }
 

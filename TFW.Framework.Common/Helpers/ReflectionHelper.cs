@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace TFW.Framework.Common
+namespace TFW.Framework.Common.Helpers
 {
     public static class ReflectionHelper
     {

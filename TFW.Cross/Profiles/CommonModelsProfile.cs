@@ -19,6 +19,9 @@ namespace TFW.Cross.Profiles
             CreateMap<ClaimsPrincipal, PrincipalInfo>()
                 .ForMember(o => o.UserId, opt => opt.MapFrom(o => o.Identity.Name))
                 .ForMember(o => o.IsAuthenticated, opt => opt.MapFrom(o => o.Identity.IsAuthenticated));
+
+            CreateMap<TimeZoneInfo, TimeZoneOption>()
+                .ForMember(o => o.UtcOffsetInMinutes, opt => opt.MapFrom(o => o.BaseUtcOffset.TotalMinutes));
         }
     }
 }
