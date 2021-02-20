@@ -7,9 +7,9 @@ namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {
-        public static IApplicationBuilder UsePrincipalInfoMiddleware(this IApplicationBuilder app)
+        public static IApplicationBuilder UseRequestDataExtraction(this IApplicationBuilder app)
         {
-            return app.UseMiddleware<PrincipalInfoMiddleware>();
+            return app.UseMiddleware<RequestDataExtractionMiddleware>();
         }
     }
 }

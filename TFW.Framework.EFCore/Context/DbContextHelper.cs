@@ -48,14 +48,11 @@ namespace TFW.Framework.EFCore.Context
 
         public static void PrepareModifyDefault(this IFullAuditableDbContext dbContext, object entity)
         {
-            if (entity is IAuditableEntity == false) return;
+            var isSoftDeleted = false;
 
-            var auditableEntity = entity as IAuditableEntity;
-            var isDeleted = true;
-
-            if (auditableEntity is ISoftDeleteEntity)
+            if (entity is ISoftDeleteEntity)
             {
-                var softDeleteEntity = auditableEntity as ISoftDeleteEntity;
+                var softDeleteEntity = entity as ISoftDeleteEntity;
 
                 if (softDeleteEntity.IsDeleted)
                 {
@@ -63,11 +60,14 @@ namespace TFW.Framework.EFCore.Context
                         throw new InvalidOperationException($"{nameof(entity)} is already deleted");
 
                     softDeleteEntity.DeletedTime = Time.Now;
-                    isDeleted = true;
+                    isSoftDeleted = true;
                 }
             }
 
-            if (!isDeleted) auditableEntity.LastModifiedTime = Time.Now;
+            if (isSoftDeleted || entity is IAuditableEntity == false) return;
+
+            var auditableEntity = entity as IAuditableEntity;
+            auditableEntity.LastModifiedTime = Time.Now;
         }
 
         public static EntityEntry SoftRemoveDefault(this IFullAuditableDbContext dbContext, object entity)
@@ -140,7 +140,7 @@ namespace TFW.Framework.EFCore.Context
             return entry;
         }
 
-        public static EntityEntry<E> UpdateDefault<E>(this IBaseDbContext dbContext, 
+        public static EntityEntry<E> UpdateDefault<E>(this IBaseDbContext dbContext,
             E entity, params Expression<Func<E, object>>[] changedProperties)
             where E : class
         {

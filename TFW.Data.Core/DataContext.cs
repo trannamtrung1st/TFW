@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
+using TFW.Cross.Models.Common;
 using TFW.Data.Core.EntityConfigs;
+using TFW.Framework.Cross.Models;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore.Context;
 
@@ -50,6 +52,39 @@ namespace TFW.Data.Core
             modelBuilder.ApplyConfiguration(new NoteEntityConfig());
 
             modelBuilder.ApplyConfiguration(new NoteCategoryEntityConfig());
+        }
+
+        public override void PrepareAdd(object entity)
+        {
+            base.PrepareAdd(entity);
+
+            if (entity is IAppAuditableEntity == false) return;
+
+            var auditableEntity = entity as IAppAuditableEntity;
+            auditableEntity.CreatedUserId = PrincipalInfo.Current?.UserId;
+        }
+
+        public override void PrepareModify(object entity)
+        {
+            base.PrepareModify(entity);
+
+            var isSoftDeleted = false;
+
+            if (entity is IAppSoftDeleteEntity)
+            {
+                var softDeleteEntity = entity as IAppSoftDeleteEntity;
+
+                if (softDeleteEntity.IsDeleted)
+                {
+                    softDeleteEntity.DeletedUserId = PrincipalInfo.Current?.UserId;
+                    isSoftDeleted = true;
+                }
+            }
+
+            if (isSoftDeleted || entity is IAppAuditableEntity == false) return;
+
+            var auditableEntity = entity as IAppAuditableEntity;
+            auditableEntity.LastModifiedUserId = PrincipalInfo.Current?.UserId;
         }
     }
 

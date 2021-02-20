@@ -8,11 +8,11 @@ using TFW.Framework.DI;
 namespace TFW.WebAPI.Middlewares
 {
     [ScopedService]
-    public class PrincipalInfoMiddleware : IMiddleware
+    public class RequestDataExtractionMiddleware : IMiddleware
     {
         private readonly IIdentityService _identityService;
 
-        public PrincipalInfoMiddleware(IIdentityService identityService)
+        public RequestDataExtractionMiddleware(IIdentityService identityService)
         {
             _identityService = identityService;
         }

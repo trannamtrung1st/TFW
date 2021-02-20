@@ -13,15 +13,16 @@ namespace TFW.Cross.Entities
     {
     }
 
-    public abstract class AppAuditableEntity : AuditableEntity<string>
+    public abstract class AppAuditableEntity : AuditableEntity<string>, IAppAuditableEntity
     {
     }
 
-    public abstract class AppSoftDeleteEntity : SoftDeleteEntity<string>
+    public abstract class AppSoftDeleteEntity : SoftDeleteEntity<string>, IAppSoftDeleteEntity
     {
     }
 
-    public abstract class AppFullAuditableEntity : FullAuditableEntity<string>
+    public abstract class AppFullAuditableEntity : FullAuditableEntity<string>,
+        IAppAuditableEntity, IAppSoftDeleteEntity
     {
     }
 }

@@ -232,7 +232,7 @@ namespace TFW.WebAPI
 
             app.UseAuthorization();
 
-            app.UsePrincipalInfoMiddleware();
+            app.UseRequestDataExtraction();
 
             app.UseRequestTimeZone();
 
