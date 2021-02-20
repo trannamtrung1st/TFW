@@ -7,26 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.i18n.Helpers;
+using TFW.Framework.WebAPI.Options;
 
 namespace TFW.Framework.WebAPI.Providers
 {
-    public class HeaderTimeZoneProviderOptions
-    {
-        public const string DefaultHeaderName = "Content-TZ";
-
-        private string _headerName = DefaultHeaderName;
-        public string HeaderName
-        {
-            get => _headerName; set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                _headerName = value;
-            }
-        }
-    }
-
     public class HeaderTimeZoneProvider : IRequestTimeZoneProvider
     {
         public Task<TimeZoneInfo> DetermineRequestTimeZoneAsync(HttpContext httpContext)

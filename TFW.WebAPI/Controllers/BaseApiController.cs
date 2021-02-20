@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
 

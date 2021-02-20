@@ -7,26 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.i18n.Helpers;
+using TFW.Framework.WebAPI.Options;
 
 namespace TFW.Framework.WebAPI.Providers
 {
-    public class QueryTimeZoneProviderOptions
-    {
-        public const string DefaultQueryKey = "tz";
-
-        private string _queryKey = DefaultQueryKey;
-        public string QueryKey
-        {
-            get => _queryKey; set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                _queryKey = value;
-            }
-        }
-    }
-
     public class QueryTimeZoneProvider : IRequestTimeZoneProvider
     {
         public Task<TimeZoneInfo> DetermineRequestTimeZoneAsync(HttpContext httpContext)

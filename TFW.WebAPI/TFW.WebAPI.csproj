@@ -27,5 +27,9 @@
     <ProjectReference Include="..\TFW.Framework.WebAPI\TFW.Framework.WebAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 
 </Project>

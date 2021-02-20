@@ -6,26 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.i18n.Helpers;
+using TFW.Framework.WebAPI.Options;
 
 namespace TFW.Framework.WebAPI.Providers
 {
-    public class CookieTimeZoneProviderOptions
-    {
-        public const string DefaultCookieName = "_tz";
-
-        private string _cookieName = DefaultCookieName;
-        public string CookieName
-        {
-            get => _cookieName; set
-            {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                _cookieName = value;
-            }
-        }
-    }
-
     public class CookieTimeZoneProvider : IRequestTimeZoneProvider
     {
         public Task<TimeZoneInfo> DetermineRequestTimeZoneAsync(HttpContext httpContext)

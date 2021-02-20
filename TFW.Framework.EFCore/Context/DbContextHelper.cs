@@ -25,6 +25,7 @@ namespace TFW.Framework.EFCore.Context
             foreach (var entry in entries)
             {
                 var entity = entry.Entity;
+
                 switch (entry.State)
                 {
                     case EntityState.Modified:
@@ -51,9 +52,11 @@ namespace TFW.Framework.EFCore.Context
 
             var auditableEntity = entity as IAuditableEntity;
             var isDeleted = true;
+
             if (auditableEntity is ISoftDeleteEntity)
             {
                 var softDeleteEntity = auditableEntity as ISoftDeleteEntity;
+
                 if (softDeleteEntity.IsDeleted)
                 {
                     if (softDeleteEntity.DeletedTime != null)

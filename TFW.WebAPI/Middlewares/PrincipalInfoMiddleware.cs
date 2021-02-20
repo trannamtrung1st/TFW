@@ -7,7 +7,7 @@ using TFW.Framework.DI;
 
 namespace TFW.WebAPI.Middlewares
 {
-    [TransientService]
+    [ScopedService]
     public class PrincipalInfoMiddleware : IMiddleware
     {
         private readonly IIdentityService _identityService;
@@ -21,7 +21,7 @@ namespace TFW.WebAPI.Middlewares
         {
             var principal = context.User;
             var principalInfo = _identityService.MapToPrincipalInfo(principal);
-            
+
             PrincipalInfo.Current = principalInfo;
 
             await next(context);

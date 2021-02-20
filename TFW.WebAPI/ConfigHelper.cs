@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TFW.WebAPI.Middlewares;
 
-namespace TFW.WebAPI.Helpers
+namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Framework.Cross.Models;
 
-namespace TFW.Framework.EFCore.EntityConfig
+namespace TFW.Framework.EFCore.Helpers
 {
     public static class EntityConfigHelper
     {
