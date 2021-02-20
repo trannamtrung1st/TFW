@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.ConsoleApp;
 using TFW.Framework.i18n.Helpers;
 
@@ -63,8 +64,10 @@ namespace TFW
             //    Console.WriteLine($"{t.Name},{t.B.Name},{t.ListB.FirstOrDefault()?.Name}");
             //}
 
-            Console.WriteLine(TimeZoneHelper.GetFirstTimeZoneByUTCOffset(TimeSpan.FromMinutes(420)));
+            //Console.WriteLine(TimeZoneHelper.GetFirstTimeZoneByUTCOffset(TimeSpan.FromMinutes(420)));
 
+            Console.WriteLine(typeof(List<>).GetNameWithoutGenericParameters());
+            Console.WriteLine(typeof(List<string>).GetNameWithoutGenericParameters());
         }
     }
 }

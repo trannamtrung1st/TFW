@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Common;
-using TFW.Data.Core.EntityConfigs;
-using TFW.Framework.Cross.Models;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore.Context;
+using TFW.Framework.EFCore.Helpers;
 
 namespace TFW.Data.Core
 {
@@ -45,13 +45,39 @@ namespace TFW.Data.Core
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new AppUserEntityConfig());
+            // we can pass a 'predicate' to these below extensions to filter which type to apply
 
-            modelBuilder.ApplyConfiguration(new AppRoleEntityConfig());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
 
-            modelBuilder.ApplyConfiguration(new NoteEntityConfig());
+            modelBuilder.RestrictDeleteBehaviour();
 
-            modelBuilder.ApplyConfiguration(new NoteCategoryEntityConfig());
+            //modelBuilder.UseEntityTypeNameForTable();
+
+            modelBuilder.RestrictStringLength(EntityConfigConsts.DefaultTitleLikeStringLength,
+                extraColumnPredicate: col =>
+                {
+                    var colName = col.GetColumnName();
+                    return EntityConfigConsts
+                        .CommonTitleLikeColumnEndWiths.Any(o => colName.EndsWith(o));
+                });
+
+            modelBuilder.RestrictStringLength(EntityConfigConsts.DefaultCodeLikeStringLength,
+                extraColumnPredicate: col =>
+                {
+                    var colName = col.GetColumnName();
+                    return EntityConfigConsts
+                        .CommonCodeLikeColumnEndWiths.Any(o => colName.EndsWith(o));
+                });
+
+            modelBuilder.RestrictStringLength(EntityConfigConsts.DefaultDescriptionLikeStringLength,
+                extraColumnPredicate: col =>
+                {
+                    var colName = col.GetColumnName();
+                    return EntityConfigConsts
+                        .CommonDescriptionLikeColumnEndWiths.Any(o => colName.EndsWith(o));
+                });
+
+            Framework.EFCore.Caching.ClearCache();
         }
 
         public override void PrepareAdd(object entity)

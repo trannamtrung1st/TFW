@@ -13,7 +13,7 @@ namespace TFW.Data.Core.EntityConfigs
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.ConfigureAuditableEntity(
-                userKeyStringLength: DataConsts.UserKeyStringLength,
+                userKeyStringLength: EntityConfigConsts.UserKeyStringLength,
                 isUnicode: false);
         }
     }

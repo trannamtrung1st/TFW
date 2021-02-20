@@ -15,7 +15,7 @@ namespace TFW.Data.Core.EntityConfigs
 
             builder.Property(e => e.Id)
                 .IsUnicode(false)
-                .HasMaxLength(DataConsts.UserKeyStringLength);
+                .HasMaxLength(EntityConfigConsts.UserKeyStringLength);
         }
     }
 }

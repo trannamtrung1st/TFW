@@ -9,6 +9,16 @@ namespace TFW.Framework.Common.Helpers
 {
     public static class ReflectionHelper
     {
+        public static string GetNameWithoutGenericParameters(this Type type)
+        {
+            return type.Name.Split('`')[0];
+        }
+
+        public static IEnumerable<PropertyInfo> GetPublicProperties(this Type type)
+        {
+            return type.GetProperties(BindingFlags.Public);
+        }
+
         public static IEnumerable<Type> GetClassesOfNamespace(string nameSpace, Assembly assembly = null, bool includeSubns = false)
         {
             assembly = assembly ?? Assembly.GetEntryAssembly();
