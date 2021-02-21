@@ -15,11 +15,10 @@ namespace TFW.Framework.EFCore.Context
     public interface IBaseDbContext :
         IDisposable, IAsyncDisposable,
         IInfrastructure<IServiceProvider>, IDbContextDependencies,
-        IDbSetCache, IDbContextPoolable, IResettableService
+        IDbSetCache, IDbContextPoolable, IResettableService, IHighLevelDbContext
     {
         ChangeTracker ChangeTracker { get; }
         DatabaseFacade Database { get; }
-        DbContextId ContextId { get; }
         EntityEntry Add([NotNullAttribute] object entity);
         EntityEntry<TEntity> Add<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
         ValueTask<EntityEntry> AddAsync([NotNullAttribute] object entity, CancellationToken cancellationToken = default);
@@ -44,10 +43,6 @@ namespace TFW.Framework.EFCore.Context
         EntityEntry<TEntity> Remove<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
         void RemoveRange([NotNullAttribute] IEnumerable<object> entities);
         void RemoveRange([NotNullAttribute] params object[] entities);
-        int SaveChanges(bool acceptAllChangesOnSuccess);
-        int SaveChanges();
-        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
         EntityEntry Update([NotNullAttribute] object entity);
         EntityEntry<TEntity> Update<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;

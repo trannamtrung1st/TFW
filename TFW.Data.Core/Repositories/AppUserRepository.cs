@@ -6,6 +6,7 @@ using System.Text;
 using TFW.Cross.Entities;
 using TFW.Data.Repositories;
 using TFW.Framework.DI;
+using TFW.Framework.EFCore;
 using TFW.Framework.EFCore.Repository;
 
 namespace TFW.Data.Core.Repositories
@@ -34,5 +35,23 @@ namespace TFW.Data.Core.Repositories
             return query.Where(o => o.UserName.Contains(search)
                 || o.FullName.Contains(search));
         }
+
+        public IQueryable<AppUser> FilterDeleted(IQueryable<AppUser> query)
+        {
+            if (dbContext.QueryFilterOptions.IsEnabledAndAppliedForEntity(
+                QueryFilterConsts.SoftDeleteDefaultName, typeof(AppUser)))
+            {
+                var clonedFilter = dbContext.QueryFilterOptions.FilterMap[QueryFilterConsts.SoftDeleteDefaultName]
+                    .Clone();
+
+                var oldFilter = clonedFilter.ApplyFilter;
+                clonedFilter.ApplyFilter = o => oldFilter(o) && o != typeof(AppUser);
+
+                dbContext.QueryFilterOptions.ReplaceOrAddFilter(clonedFilter);
+            }
+
+            return query.Where(o => o.IsDeleted);
+        }
+
     }
 }

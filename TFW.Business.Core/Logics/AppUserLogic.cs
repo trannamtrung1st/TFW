@@ -112,6 +112,22 @@ namespace TFW.Business.Core.Logics
             return response;
         }
 
+        public async Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync()
+        {
+            var query = _appUserRepository.AsNoTracking();
+
+            var responseModels = await _appUserRepository.FilterDeleted(query)
+                .DefaultProjectTo<AppUserResponseModel>().ToArrayAsync();
+
+            var response = new GetListResponseModel<AppUserResponseModel>
+            {
+                List = responseModels,
+                TotalCount = responseModels.Length
+            };
+
+            return response;
+        }
+
         public PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal)
         {
             var principalInfo = principal.MapTo<PrincipalInfo>();

@@ -12,5 +12,6 @@ namespace TFW.Data.Repositories
         IQueryable<AppUser> FilterById(IQueryable<AppUser> query, string id);
         IQueryable<AppUser> FilterByUsername(IQueryable<AppUser> query, string username);
         IQueryable<AppUser> FilterBySearch(IQueryable<AppUser> query, string search);
+        IQueryable<AppUser> FilterDeleted(IQueryable<AppUser> query);
     }
 }

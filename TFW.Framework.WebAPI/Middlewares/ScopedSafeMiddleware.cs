@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace TFW.Framework.WebAPI.Middlewares
@@ -12,22 +11,30 @@ namespace TFW.Framework.WebAPI.Middlewares
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (_hasException)
+            await SafeCall(ForwardInvokeAsync, context);
+
+            await next(context);
+
+            await SafeCall(BackwardInvokeAsync, context);
+        }
+
+        protected virtual async Task SafeCall(Func<HttpContext, Task> func, HttpContext context)
+        {
+            if (!_hasException)
             {
-                await next(context);
-                return;
-            }
-            try
-            {
-                await InvokeCoreAsync(context, next);
-            }
-            catch (Exception e)
-            {
-                _hasException = true;
-                throw e;
+                try
+                {
+                    await func(context);
+                }
+                catch (Exception e)
+                {
+                    _hasException = true;
+                    throw e;
+                }
             }
         }
 
-        protected abstract Task InvokeCoreAsync(HttpContext context, RequestDelegate next);
+        protected abstract Task ForwardInvokeAsync(HttpContext context);
+        protected abstract Task BackwardInvokeAsync(HttpContext context);
     }
 }

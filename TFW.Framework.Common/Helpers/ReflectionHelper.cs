@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -9,6 +10,28 @@ namespace TFW.Framework.Common.Helpers
 {
     public static class ReflectionHelper
     {
+        public static MethodInfo GetInstanceMethod(this Type type, string methodName, bool isPublic = true,
+            bool nonPublic = false)
+        {
+            var flag = BindingFlags.Instance;
+
+            if (isPublic)
+                flag = flag | BindingFlags.Public;
+
+            if (nonPublic)
+                flag = flag | BindingFlags.NonPublic;
+
+            return type.GetMethod(methodName, flag);
+        }
+
+        public static TOut InvokeGeneric<TOut>(this MethodInfo genMethodInfo,
+            object subject, Type[] genArgs, params object[] args)
+        {
+            genMethodInfo = genMethodInfo.MakeGenericMethod(genArgs);
+
+            return (TOut)genMethodInfo.Invoke(subject, args);
+        }
+
         public static string GetNameWithoutGenericParameters(this Type type)
         {
             return type.Name.Split('`')[0];
@@ -67,7 +90,7 @@ namespace TFW.Framework.Common.Helpers
             return types;
         }
 
-        public static T CreateInstance<T>(Type type) where T : class
+        public static T CreateInstance<T>(this Type type) where T : class
         {
             return Activator.CreateInstance(type) as T;
         }

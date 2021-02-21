@@ -19,7 +19,7 @@ namespace TFW.Framework.WebAPI.Middlewares
             _options = options.Value;
         }
 
-        protected override async Task InvokeCoreAsync(HttpContext context, RequestDelegate next)
+        protected override async Task ForwardInvokeAsync(HttpContext context)
         {
             TimeZoneInfo requestTimeZone = null;
             var allowFallbackTask = IsFallbackAllowedAsync(context);
@@ -57,8 +57,6 @@ namespace TFW.Framework.WebAPI.Middlewares
                 context.Response.Headers.Add(
                     RequestTimeZoneOptions.TimeZoneResponseHeaderName, headerValue);
             }
-
-            await next(context);
         }
 
         public virtual Task<bool> IsFallbackAllowedAsync(HttpContext httpContext)
@@ -89,6 +87,11 @@ namespace TFW.Framework.WebAPI.Middlewares
 
             var finalAllowFallback = overrideFallback != false && (overrideFallback == true || _options.AllowFallback);
             return Task.FromResult(finalAllowFallback);
+        }
+
+        protected override Task BackwardInvokeAsync(HttpContext context)
+        {
+            return Task.CompletedTask;
         }
     }
 }

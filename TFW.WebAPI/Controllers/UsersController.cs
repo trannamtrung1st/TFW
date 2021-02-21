@@ -7,6 +7,7 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Exceptions;
+using TFW.Framework.EFCore.Context;
 using TFW.Framework.WebAPI.Bindings;
 
 namespace TFW.WebAPI.Controllers
@@ -18,7 +19,7 @@ namespace TFW.WebAPI.Controllers
     {
         private readonly IIdentityService _identityService;
 
-        public UsersController(IIdentityService identityService)
+        public UsersController(IHighLevelDbContext dbContext, IIdentityService identityService) : base(dbContext)
         {
             _identityService = identityService;
         }
@@ -37,6 +38,25 @@ namespace TFW.WebAPI.Controllers
                 return FailValidation(e);
             }
         }
+
+
+#if DEBUG
+        [HttpGet("deleted")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetDeletedAppUserList()
+        {
+            try
+            {
+                var data = await _identityService.GetListDeletedAppUserAsync();
+
+                return Success(data);
+            }
+            catch (AppValidationException e)
+            {
+                return FailValidation(e);
+            }
+        }
+#endif
 
     }
 }

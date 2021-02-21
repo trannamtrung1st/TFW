@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.Cross.Models;
 using TFW.Framework.i18n;
@@ -36,6 +38,23 @@ namespace TFW.Framework.EFCore.Context
                         break;
                 }
             }
+        }
+
+        public static Task<IDbContextTransaction> BeginTransactionAsyncDefault(this IBaseDbContext dbContext,
+            CancellationToken cancellationToken = default)
+        {
+            return dbContext.Database.BeginTransactionAsync(cancellationToken);
+        }
+
+        public static bool IsSoftDeleteEnabledDefault(this IBaseDbContext dbContext)
+        {
+            return dbContext.QueryFilterOptions.IsEnabled(QueryFilterConsts.SoftDeleteDefaultName);
+        }
+
+        public static bool IsSoftDeleteAppliedForEntityDefault(this IBaseDbContext dbContext, Type eType)
+        {
+            return typeof(ISoftDeleteEntity).IsAssignableFrom(eType)
+                && dbContext.QueryFilterOptions.IsAppliedForEntity(QueryFilterConsts.SoftDeleteDefaultName, eType);
         }
 
         public static void PrepareAddDefault(this IFullAuditableDbContext dbContext, object entity)

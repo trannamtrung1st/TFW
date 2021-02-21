@@ -14,7 +14,7 @@ namespace TFW.ConsoleApp
             
             var assemblies = ReflectionHelper.GetAllAssemblies();
             var taskTypes = ReflectionHelper.GetAllTypesAssignableTo(typeof(IConsoleTask), assemblies);
-            var tasks = taskTypes.Select(o => ReflectionHelper.CreateInstance<IConsoleTask>(o)).ToArray();
+            var tasks = taskTypes.Select(o => o.CreateInstance<IConsoleTask>()).ToArray();
             
             program.Start(tasks);
         }

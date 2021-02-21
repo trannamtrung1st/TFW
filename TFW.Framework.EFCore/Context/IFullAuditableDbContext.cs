@@ -13,5 +13,7 @@ namespace TFW.Framework.EFCore.Context
         EntityEntry SoftDelete(object entity);
         EntityEntry<T> SoftDelete<T>(T entity) where T : class;
         void SoftDeleteRange(params object[] entities);
+        bool IsSoftDeleteEnabled();
+        bool IsSoftDeleteAppliedForEntity(Type eType);
     }
 }

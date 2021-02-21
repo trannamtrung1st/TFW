@@ -1,28 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TFW.Framework.EFCore.Options;
 
 namespace TFW.Framework.EFCore.Context
 {
     public abstract class BaseDbContext : DbContext, IFullAuditableDbContext
     {
-        protected BaseDbContext()
+        protected readonly QueryFilterOptions queryFilterOptions;
+        public QueryFilterOptions QueryFilterOptions => queryFilterOptions;
+
+        public BaseDbContext()
         {
+            queryFilterOptions = new QueryFilterOptions();
         }
 
-        protected BaseDbContext([NotNullAttribute] DbContextOptions options) : base(options)
+        public BaseDbContext(QueryFilterOptions queryFilterOptions)
         {
+            this.queryFilterOptions = queryFilterOptions ?? new QueryFilterOptions();
+        }
+
+        public BaseDbContext(DbContextOptions options,
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options)
+        {
+            this.queryFilterOptions = queryFilterOptions.Value;
         }
 
         public virtual void AuditEntities()
         {
             this.AuditEntitiesDefault();
+        }
+
+        public virtual bool IsSoftDeleteEnabled()
+        {
+            return this.IsSoftDeleteEnabledDefault();
+        }
+
+        public virtual bool IsSoftDeleteAppliedForEntity(Type eType)
+        {
+            return this.IsSoftDeleteAppliedForEntityDefault(eType);
         }
 
         public virtual void PrepareAdd(object entity)
@@ -101,6 +124,11 @@ namespace TFW.Framework.EFCore.Context
             where E : class
         {
             return this.UpdateAsyncDefault(entity, patchAction);
+        }
+
+        public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            return this.BeginTransactionAsyncDefault(cancellationToken);
         }
     }
 }

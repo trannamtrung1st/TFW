@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Cross.Models;
+using TFW.Framework.EFCore.Providers;
 
 namespace TFW.Framework.EFCore.Helpers
 {
@@ -70,9 +72,60 @@ namespace TFW.Framework.EFCore.Helpers
 
             foreach (var entityType in entityTypes)
             {
-                // skip Shadow types like Identity... (IdentityFramework)
+                // skip Shadow types
                 if (entityType.ClrType != null)
                     entityType.SetTableName(entityType.ClrType.Name);
+            }
+
+            return builder;
+        }
+
+        public static ModelBuilder AddGlobalQueryFilter(this ModelBuilder builder,
+            DbContext dbContext, IEnumerable<Assembly> assemblies)
+        {
+            if (assemblies?.Any() != true)
+                throw new ArgumentNullException(nameof(assemblies));
+
+            var filterProviders = ReflectionHelper.GetAllTypesAssignableTo(
+                typeof(IQueryFilterConfigProvider), assemblies).Select(o => o.CreateInstance<IQueryFilterConfigProvider>())
+                    .ToArray();
+
+            if (!filterProviders.Any()) return builder;
+
+            var eTypes = builder.Model.GetEntityTypes();
+
+            foreach (var entityType in eTypes)
+            {
+                // skip Shadow types
+                if (entityType.ClrType == null) continue;
+
+                LambdaExpression finalExpr = null;
+
+                foreach (var provider in filterProviders.Where(o => !o.Conditions.IsNullOrEmpty()))
+                {
+                    LambdaExpression andExpr = null;
+
+                    foreach (var cond in provider.Conditions)
+                    {
+                        if (cond.Item1(entityType))
+                        {
+                            var expr = provider.GetType().GetInstanceMethod(
+                                cond.Item2, nonPublic: true).InvokeGeneric<LambdaExpression>(
+                                    provider, new[] { entityType.ClrType }, dbContext);
+
+                            if (andExpr == null) andExpr = expr;
+                            else andExpr = andExpr.And(expr);
+                        }
+                    }
+
+                    if (andExpr == null) continue;
+
+                    if (finalExpr == null) finalExpr = andExpr;
+                    else finalExpr = finalExpr.Or(andExpr);
+                }
+
+                if (finalExpr != null)
+                    entityType.SetQueryFilter(finalExpr);
             }
 
             return builder;
@@ -161,5 +214,9 @@ namespace TFW.Framework.EFCore.Helpers
             return prop.GetMaxLength() == null;
         }
 
+        public static bool IsSoftDeleteEntity(this IMutableEntityType entityType)
+        {
+            return typeof(ISoftDeleteEntity).IsAssignableFrom(entityType.ClrType);
+        }
     }
 }

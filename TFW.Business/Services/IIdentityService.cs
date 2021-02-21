@@ -13,6 +13,8 @@ namespace TFW.Business.Services
         Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             GetAppUserListRequestModel requestModel);
 
+        Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync();
+
         PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal);
     }
 }

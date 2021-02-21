@@ -1,18 +1,23 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
+using TFW.Framework.EFCore.Context;
 
 namespace TFW.WebAPI.Controllers
 {
     public abstract class BaseApiController : ControllerBase
     {
-        protected readonly DbContext dbContext;
+        protected readonly IHighLevelDbContext dbContext;
+
+        public BaseApiController(IHighLevelDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
 
         protected T Service<T>()
         {

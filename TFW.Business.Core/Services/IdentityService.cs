@@ -32,13 +32,17 @@ namespace TFW.Business.Core.Services
         }
 
         #region AppUser
-        public async Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
+        public Task<GetListResponseModel<AppUserResponseModel>> GetListAppUserAsync(
             GetAppUserListRequestModel requestModel)
         {
-            var response = await _appUserLogic.GetListAsync(requestModel);
-
-            return response;
+            return _appUserLogic.GetListAsync(requestModel);
         }
+
+        public Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync()
+        {
+            return _appUserLogic.GetListDeletedAppUserAsync();
+        }
+
         #endregion
 
         #region Common

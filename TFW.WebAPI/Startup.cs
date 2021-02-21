@@ -74,7 +74,8 @@ namespace TFW.WebAPI
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestTimeZoneMiddleware()
-                .ConfigureRequestTimeZoneDefault();
+                .ConfigureRequestTimeZoneDefault()
+                .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly });
 
             #region OAuth
             services.AddIdentityCore<AppUser>(options =>

@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TFW.Framework.EFCore.Options;
 
 namespace TFW.Framework.EFCore.Context
 {
@@ -23,17 +26,38 @@ namespace TFW.Framework.EFCore.Context
         where TRoleClaim : IdentityRoleClaim<TKey>
         where TUserToken : IdentityUserToken<TKey>
     {
-        protected BaseIdentityDbContext()
+        protected readonly QueryFilterOptions queryFilterOptions;
+        public QueryFilterOptions QueryFilterOptions => queryFilterOptions;
+
+        public BaseIdentityDbContext()
         {
+            queryFilterOptions = new QueryFilterOptions();
         }
 
-        protected BaseIdentityDbContext(DbContextOptions options) : base(options)
+        public BaseIdentityDbContext(QueryFilterOptions queryFilterOptions)
         {
+            this.queryFilterOptions = queryFilterOptions ?? new QueryFilterOptions();
+        }
+
+        public BaseIdentityDbContext(DbContextOptions options,
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options)
+        {
+            this.queryFilterOptions = queryFilterOptions.Value;
         }
 
         public virtual void AuditEntities()
         {
             this.AuditEntitiesDefault();
+        }
+
+        public virtual bool IsSoftDeleteEnabled()
+        {
+            return this.IsSoftDeleteEnabledDefault();
+        }
+
+        public virtual bool IsSoftDeleteAppliedForEntity(Type eType)
+        {
+            return this.IsSoftDeleteAppliedForEntityDefault(eType);
         }
 
         public virtual void PrepareAdd(object entity)
@@ -113,6 +137,11 @@ namespace TFW.Framework.EFCore.Context
         {
             return this.UpdateAsyncDefault(entity, patchAction);
         }
+
+        public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        {
+            return this.BeginTransactionAsyncDefault(cancellationToken);
+        }
     }
 
     public abstract class BaseIdentityDbContext<TUser, TRole, TKey> : BaseIdentityDbContext<TUser, TRole, TKey,
@@ -126,7 +155,11 @@ namespace TFW.Framework.EFCore.Context
         {
         }
 
-        protected BaseIdentityDbContext(DbContextOptions options) : base(options)
+        protected BaseIdentityDbContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
+        {
+        }
+
+        protected BaseIdentityDbContext(DbContextOptions options, IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options, queryFilterOptions)
         {
         }
     }
@@ -138,7 +171,11 @@ namespace TFW.Framework.EFCore.Context
         {
         }
 
-        protected BaseIdentityDbContext(DbContextOptions options) : base(options)
+        protected BaseIdentityDbContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
+        {
+        }
+
+        protected BaseIdentityDbContext(DbContextOptions options, IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options, queryFilterOptions)
         {
         }
     }
@@ -149,7 +186,11 @@ namespace TFW.Framework.EFCore.Context
         {
         }
 
-        protected BaseIdentityDbContext(DbContextOptions options) : base(options)
+        protected BaseIdentityDbContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
+        {
+        }
+
+        protected BaseIdentityDbContext(DbContextOptions options, IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options, queryFilterOptions)
         {
         }
     }

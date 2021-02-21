@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,14 @@ using TFW.Cross.Models.Common;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
+using TFW.Framework.EFCore.Options;
 
 namespace TFW.Data.Core
 {
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(DbContext))]
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IFullAuditableDbContext))]
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IBaseDbContext))]
+    [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IHighLevelDbContext))]
     public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
@@ -23,7 +26,11 @@ namespace TFW.Data.Core
         {
         }
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
+        {
+        }
+
+        public DataContext(DbContextOptions options, IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options, queryFilterOptions)
         {
         }
 
@@ -45,13 +52,17 @@ namespace TFW.Data.Core
         {
             base.OnModelCreating(modelBuilder);
 
+            var dataContextAssembly = typeof(DataContext).Assembly;
+
             // we can pass a 'predicate' to these below extensions to filter which type to apply
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(dataContextAssembly);
 
             modelBuilder.RestrictDeleteBehaviour();
 
             //modelBuilder.UseEntityTypeNameForTable();
+
+            modelBuilder.AddGlobalQueryFilter(this, new[] { dataContextAssembly });
 
             modelBuilder.RestrictStringLength(EntityConfigConsts.DefaultTitleLikeStringLength,
                 extraColumnPredicate: col =>
@@ -113,5 +124,4 @@ namespace TFW.Data.Core
             auditableEntity.LastModifiedUserId = PrincipalInfo.Current?.UserId;
         }
     }
-
 }
