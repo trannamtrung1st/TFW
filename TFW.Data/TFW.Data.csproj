@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TFW.Cross\TFW.Cross.csproj" />
     <ProjectReference Include="..\TFW.Framework.EFCore\TFW.Framework.EFCore.csproj" />
+    <ProjectReference Include="..\TFW.Framework.UoW\TFW.Framework.UoW.csproj" />
   </ItemGroup>
 
 </Project>

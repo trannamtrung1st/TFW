@@ -7,7 +7,7 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Exceptions;
-using TFW.Framework.EFCore.Context;
+using TFW.Data;
 using TFW.Framework.WebAPI.Bindings;
 
 namespace TFW.WebAPI.Controllers
@@ -19,7 +19,7 @@ namespace TFW.WebAPI.Controllers
     {
         private readonly IIdentityService _identityService;
 
-        public UsersController(IHighLevelDbContext dbContext, IIdentityService identityService) : base(dbContext)
+        public UsersController(IAppUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
         {
             _identityService = identityService;
         }

@@ -6,17 +6,17 @@ using System.Collections.Generic;
 using System.Net;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
-using TFW.Framework.EFCore.Context;
+using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
 {
     public abstract class BaseApiController : ControllerBase
     {
-        protected readonly IHighLevelDbContext dbContext;
+        protected readonly IAppUnitOfWork unitOfWork;
 
-        public BaseApiController(IHighLevelDbContext dbContext)
+        public BaseApiController(IAppUnitOfWork unitOfWork)
         {
-            this.dbContext = dbContext;
+            this.unitOfWork = unitOfWork;
         }
 
         protected T Service<T>()

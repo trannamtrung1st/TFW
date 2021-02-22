@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
-using TFW.Framework.EFCore.Context;
+using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
 {
@@ -20,7 +20,7 @@ namespace TFW.WebAPI.Controllers
     {
         private readonly IWebHostEnvironment _env;
 
-        public ErrorController(IHighLevelDbContext dbContext, IWebHostEnvironment env) : base(dbContext)
+        public ErrorController(IAppUnitOfWork unitOfWork, IWebHostEnvironment env) : base(unitOfWork)
         {
             _env = env;
         }

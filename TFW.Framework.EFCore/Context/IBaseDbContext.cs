@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 namespace TFW.Framework.EFCore.Context
 {
     public interface IBaseDbContext :
-        IDisposable, IAsyncDisposable,
         IInfrastructure<IServiceProvider>, IDbContextDependencies,
         IDbSetCache, IDbContextPoolable, IResettableService, IHighLevelDbContext
     {

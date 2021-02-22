@@ -48,13 +48,13 @@ namespace TFW.Framework.EFCore.Context
 
         public static bool IsSoftDeleteEnabledDefault(this IBaseDbContext dbContext)
         {
-            return dbContext.QueryFilterOptions.IsEnabled(QueryFilterConsts.SoftDeleteDefaultName);
+            return dbContext.IsFilterEnabled(QueryFilterConsts.SoftDeleteDefaultName);
         }
 
         public static bool IsSoftDeleteAppliedForEntityDefault(this IBaseDbContext dbContext, Type eType)
         {
             return typeof(ISoftDeleteEntity).IsAssignableFrom(eType)
-                && dbContext.QueryFilterOptions.IsAppliedForEntity(QueryFilterConsts.SoftDeleteDefaultName, eType);
+                && dbContext.IsFilterAppliedForEntity(QueryFilterConsts.SoftDeleteDefaultName, eType);
         }
 
         public static void PrepareAddDefault(this IFullAuditableDbContext dbContext, object entity)

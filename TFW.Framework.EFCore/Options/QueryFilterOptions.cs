@@ -44,23 +44,26 @@ namespace TFW.Framework.EFCore.Options
             _filterMap = new Dictionary<string, QueryFilter>();
         }
 
-        public QueryFilterOptions EnableFilter(string filterName)
+        public QueryFilterOptions EnableFilter(params string[] filterNames)
         {
-            _filterMap[filterName].IsEnabled = true;
+            foreach (var name in filterNames)
+                _filterMap[name].IsEnabled = true;
 
             return this;
         }
 
-        public QueryFilterOptions DisableFilter(string filterName)
+        public QueryFilterOptions DisableFilter(params string[] filterNames)
         {
-            _filterMap[filterName].IsEnabled = false;
+            foreach (var name in filterNames)
+                _filterMap[name].IsEnabled = false;
 
             return this;
         }
 
-        public QueryFilterOptions ReplaceOrAddFilter(QueryFilter filter)
+        public QueryFilterOptions ReplaceOrAddFilter(params QueryFilter[] filters)
         {
-            _filterMap[filter.Name] = filter;
+            foreach (var filter in filters)
+                _filterMap[filter.Name] = filter;
 
             return this;
         }

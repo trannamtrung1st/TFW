@@ -38,16 +38,15 @@ namespace TFW.Data.Core.Repositories
 
         public IQueryable<AppUser> FilterDeleted(IQueryable<AppUser> query)
         {
-            if (dbContext.QueryFilterOptions.IsEnabledAndAppliedForEntity(
+            if (dbContext.IsFilterEnabledAndAppliedForEntity(
                 QueryFilterConsts.SoftDeleteDefaultName, typeof(AppUser)))
             {
-                var clonedFilter = dbContext.QueryFilterOptions.FilterMap[QueryFilterConsts.SoftDeleteDefaultName]
-                    .Clone();
+                var clonedFilter = dbContext.GetClonedFilter(QueryFilterConsts.SoftDeleteDefaultName);
 
                 var oldFilter = clonedFilter.ApplyFilter;
                 clonedFilter.ApplyFilter = o => oldFilter(o) && o != typeof(AppUser);
 
-                dbContext.QueryFilterOptions.ReplaceOrAddFilter(clonedFilter);
+                dbContext.ReplaceOrAddFilter(clonedFilter);
             }
 
             return query.Where(o => o.IsDeleted);

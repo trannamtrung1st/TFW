@@ -27,7 +27,6 @@ namespace TFW.Framework.EFCore.Context
         where TUserToken : IdentityUserToken<TKey>
     {
         protected readonly QueryFilterOptions queryFilterOptions;
-        public QueryFilterOptions QueryFilterOptions => queryFilterOptions;
 
         public BaseIdentityDbContext()
         {
@@ -141,6 +140,47 @@ namespace TFW.Framework.EFCore.Context
         public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
             return this.BeginTransactionAsyncDefault(cancellationToken);
+        }
+
+        public QueryFilter GetClonedFilter(string filterName)
+        {
+            return queryFilterOptions.FilterMap[filterName].Clone();
+        }
+
+        public IHighLevelDbContext EnableFilter(params string[] filterNames)
+        {
+            queryFilterOptions.EnableFilter(filterNames);
+
+            return this;
+        }
+
+        public IHighLevelDbContext DisableFilter(params string[] filterNames)
+        {
+            queryFilterOptions.DisableFilter(filterNames);
+
+            return this;
+        }
+
+        public IHighLevelDbContext ReplaceOrAddFilter(params QueryFilter[] filters)
+        {
+            queryFilterOptions.ReplaceOrAddFilter(filters);
+
+            return this;
+        }
+
+        public bool IsFilterEnabled(string filterName)
+        {
+            return queryFilterOptions.IsEnabled(filterName);
+        }
+
+        public bool IsFilterAppliedForEntity(string filterName, Type eType)
+        {
+            return queryFilterOptions.IsAppliedForEntity(filterName, eType);
+        }
+
+        public bool IsFilterEnabledAndAppliedForEntity(string filterName, Type eType)
+        {
+            return queryFilterOptions.IsEnabledAndAppliedForEntity(filterName, eType);
         }
     }
 
