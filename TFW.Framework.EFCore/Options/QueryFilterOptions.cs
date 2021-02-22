@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using TFW.Framework.Cross.Models;
+using TFW.Framework.EFCore.Helpers;
 
 namespace TFW.Framework.EFCore.Options
 {
@@ -30,7 +30,7 @@ namespace TFW.Framework.EFCore.Options
         {
             return new QueryFilter(QueryFilterConsts.SoftDeleteDefaultName,
                 isEnabled: true,
-                applyFilter: o => typeof(ISoftDeleteEntity).IsAssignableFrom(o));
+                applyFilter: o => o.IsSoftDeleteEntity());
         }
     }
 

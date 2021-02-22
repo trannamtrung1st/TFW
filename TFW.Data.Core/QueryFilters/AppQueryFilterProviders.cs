@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using TFW.Cross;
+using TFW.Cross.Entities;
+using TFW.Data.Core.Helpers;
 using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
@@ -15,7 +18,9 @@ namespace TFW.Data.Core.QueryFilters
     {
         public QueryFilter[] DefaultFilters => new[]
         {
-            QueryFilter.BuildDefaultSoftDelete()
+            QueryFilter.BuildDefaultSoftDelete(),
+            new QueryFilter(QueryFilterName.AnotherFilter1, applyFilter: o => o.IsAppUserEntity()),
+            new QueryFilter(QueryFilterName.AnotherFilter2, applyFilter: o => o.IsNoteEntity())
         };
     }
 
@@ -29,17 +34,57 @@ namespace TFW.Data.Core.QueryFilters
         #region Soft delete filter
         protected virtual bool ShouldAddSoftDeleteFilter(IMutableEntityType eType)
         {
-            return eType.IsSoftDeleteEntity();
+            return eType.ClrType?.IsSoftDeleteEntity() == true;
         }
 
         protected virtual Expression<Func<TEntity, bool>> CreateSoftDeleteFilter<TEntity>(
-            IFullAuditableDbContext dbContext) where TEntity : class
+            IFullAuditableDbContext dbContext) where TEntity : ISoftDeleteEntity
         {
             return (TEntity o) =>
-                (!dbContext.IsSoftDeleteEnabled() || !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
-                    ((ISoftDeleteEntity)o).IsDeleted == false);
+                !dbContext.IsSoftDeleteEnabled() || !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
+                    o.IsDeleted == false;
         }
         #endregion
-
     }
+
+    // [TODO] remove !!! This below section is for demonstration only
+    #region Another filter demonstration
+    /// <summary>
+    /// This will be add to query filter as an OR
+    /// </summary>
+    public class AnotherQueryFilterConfigProvider : IQueryFilterConfigProvider
+    {
+        public (Func<IMutableEntityType, bool>, string)[] Conditions => new (Func<IMutableEntityType, bool>, string)[]
+        {
+            (ShouldAddAnotherFilter1, nameof(CreateAnotherFilter1)),
+            (ShouldAddAnotherFilter2, nameof(CreateAnotherFilter2)),
+        };
+
+        protected virtual bool ShouldAddAnotherFilter1(IMutableEntityType eType)
+        {
+            return eType.ClrType?.IsAppUserEntity() == true;
+        }
+
+        protected virtual Expression<Func<TEntity, bool>> CreateAnotherFilter1<TEntity>(
+            IFullAuditableDbContext dbContext) where TEntity : AppUser
+        {
+            return (TEntity o) =>
+                !dbContext.IsFilterEnabledAndAppliedForEntity(QueryFilterName.AnotherFilter1, typeof(TEntity)) ||
+                    o.Id == "Never true";
+        }
+
+        protected virtual bool ShouldAddAnotherFilter2(IMutableEntityType eType)
+        {
+            return eType.ClrType?.IsNoteEntity() == true;
+        }
+
+        protected virtual Expression<Func<TEntity, bool>> CreateAnotherFilter2<TEntity>(
+            IFullAuditableDbContext dbContext) where TEntity : Note
+        {
+            return (TEntity o) =>
+                !dbContext.IsFilterEnabledAndAppliedForEntity(QueryFilterName.AnotherFilter2, typeof(TEntity)) ||
+                    o.CategoryName == "Hidden";
+        }
+    }
+    #endregion
 }

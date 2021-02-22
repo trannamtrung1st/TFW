@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using TFW.Framework.WebAPI.Helpers;
 
 namespace System.Web
 {
@@ -14,6 +13,16 @@ namespace System.Web
         internal static void Configure(IHttpContextAccessor contextAccessor)
         {
             _contextAccessor = contextAccessor;
+        }
+
+        public static T GetItem<T>(string key)
+        {
+            return Current.GetItem<T>(key);
+        }
+
+        public static T GetRequiredService<T>()
+        {
+            return Current.GetRequiredService<T>();
         }
     }
 }

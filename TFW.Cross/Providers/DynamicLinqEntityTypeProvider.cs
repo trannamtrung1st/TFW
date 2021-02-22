@@ -8,7 +8,7 @@ using TFW.Cross.Models;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.DI;
 
-namespace TFW.Cross.Commons
+namespace TFW.Cross.Providers
 {
     [SingletonService(ServiceType = typeof(IDynamicLinkCustomTypeProvider))]
     public class DynamicLinqEntityTypeProvider : DefaultDynamicLinqCustomTypeProvider
@@ -20,7 +20,7 @@ namespace TFW.Cross.Commons
         static DynamicLinqEntityTypeProvider()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            
+
             var entityTypes = ReflectionHelper.GetClassesOfNamespace(
                 typeof(AppUser).Namespace, assembly, includeSubns: true);
             var modelTypes = ReflectionHelper.GetClassesOfNamespace(

@@ -214,9 +214,9 @@ namespace TFW.Framework.EFCore.Helpers
             return prop.GetMaxLength() == null;
         }
 
-        public static bool IsSoftDeleteEntity(this IMutableEntityType entityType)
+        public static bool IsSoftDeleteEntity(this Type type)
         {
-            return typeof(ISoftDeleteEntity).IsAssignableFrom(entityType.ClrType);
+            return typeof(ISoftDeleteEntity).IsAssignableFrom(type);
         }
     }
 }

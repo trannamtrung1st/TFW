@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using TFW.Business.Services;
-using TFW.Cross.Models.Common;
+using TFW.Cross.Helpers;
 using TFW.Framework.DI;
 
 namespace TFW.WebAPI.Middlewares
@@ -22,7 +22,7 @@ namespace TFW.WebAPI.Middlewares
             var principal = context.User;
             var principalInfo = _identityService.MapToPrincipalInfo(principal);
 
-            PrincipalInfo.Current = principalInfo;
+            context.SetPrincipalInfo(principalInfo);
 
             await next(context);
         }

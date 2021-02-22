@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web;
+using TFW.Cross.Helpers;
 
 namespace TFW.Cross.Models.Common
 {
@@ -7,17 +9,19 @@ namespace TFW.Cross.Models.Common
         public string UserId { get; set; }
         public bool IsAuthenticated { get; set; } = false;
 
+        // Use this if the User of HttpContext could be changed
+        //public static PrincipalInfo Current => HttpContextProvider.Current.GetPrincipalInfo();
+
         [ThreadStatic]
         private static PrincipalInfo _current;
         public static PrincipalInfo Current
         {
             get
             {
-                return _current ?? new PrincipalInfo();
-            }
-            set
-            {
-                _current = value;
+                if (_current == null)
+                    _current = HttpContext.Current.GetPrincipalInfo();
+
+                return _current;
             }
         }
     }

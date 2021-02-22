@@ -7,6 +7,17 @@ using TFW.Framework.i18n;
 
 namespace TFW.Cross
 {
+    public static class QueryFilterName
+    {
+        public const string AnotherFilter1 = nameof(AnotherFilter1);
+        public const string AnotherFilter2 = nameof(AnotherFilter2);
+    }
+
+    public class RequestDataKey
+    {
+        public const string PrincipalInfo = nameof(PrincipalInfo);
+    }
+
     public static class QueryConsts
     {
         public const char SortAscPrefix = 'a';
