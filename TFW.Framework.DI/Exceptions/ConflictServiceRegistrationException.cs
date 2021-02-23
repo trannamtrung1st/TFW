@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.DI
+namespace TFW.Framework.DI.Exceptions
 {
     public class ConflictServiceRegistrationException : Exception
     {

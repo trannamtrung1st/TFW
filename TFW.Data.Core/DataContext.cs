@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Common;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
 using TFW.Framework.EFCore.Options;

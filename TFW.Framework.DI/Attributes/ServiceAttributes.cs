@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.DI
+namespace TFW.Framework.DI.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public abstract class ServiceAttribute : Attribute

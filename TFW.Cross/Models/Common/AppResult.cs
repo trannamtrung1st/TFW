@@ -20,7 +20,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.Success,
-                Message = mess ?? ResultCode.Success.DisplayName(),
+                Message = mess ?? ResultCode.Success.Display().Name,
                 Data = data,
             };
         }
@@ -30,7 +30,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.Fail,
-                Message = mess ?? ResultCode.Fail.DisplayName(),
+                Message = mess ?? ResultCode.Fail.Display().Name,
                 Data = data,
             };
         }
@@ -40,7 +40,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.UnknownError,
-                Message = mess ?? ResultCode.UnknownError.DisplayName(),
+                Message = mess ?? ResultCode.UnknownError.Display().Name,
                 Data = data,
             };
         }
@@ -50,7 +50,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.DependencyDeleteFail,
-                Message = mess ?? ResultCode.DependencyDeleteFail.DisplayName(),
+                Message = mess ?? ResultCode.DependencyDeleteFail.Display().Name,
                 Data = data,
             };
         }
@@ -60,7 +60,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.FailValidation,
-                Message = mess ?? ResultCode.FailValidation.DisplayName(),
+                Message = mess ?? ResultCode.FailValidation.Display().Name,
                 Data = data,
             };
         }
@@ -70,7 +70,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.NotFound,
-                Message = mess ?? ResultCode.NotFound.DisplayName(),
+                Message = mess ?? ResultCode.NotFound.Display().Name,
                 Data = data,
             };
         }
@@ -80,7 +80,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.Unsupported,
-                Message = mess ?? ResultCode.Unsupported.DisplayName(),
+                Message = mess ?? ResultCode.Unsupported.Display().Name,
                 Data = data,
             };
         }
@@ -90,7 +90,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = ResultCode.Unauthorized,
-                Message = mess ?? ResultCode.Unauthorized.DisplayName(),
+                Message = mess ?? ResultCode.Unauthorized.Display().Name,
                 Data = data,
             };
         }
@@ -100,7 +100,7 @@ namespace TFW.Cross.Models.Common
             return new AppResult
             {
                 Code = code,
-                Message = mess ?? code.DisplayName(),
+                Message = mess ?? code.Display().Name,
                 Data = data,
             };
         }

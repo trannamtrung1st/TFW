@@ -5,7 +5,7 @@ using System.Linq.Dynamic.Core;
 using System.Text;
 using TFW.Cross.Entities;
 using TFW.Data.Repositories;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore;
 using TFW.Framework.EFCore.Repository;
 

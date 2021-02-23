@@ -7,6 +7,23 @@ namespace TFW.Framework.i18n.Helpers
 {
     public static class DateTimeHelper
     {
+        public static int ToAge(this DateTime utcBirthday)
+        {
+            var utcNow = DateTime.UtcNow;
+            var timeSpan = utcNow - utcBirthday;
+            return (int)timeSpan.TotalDays / 365;
+        }
+
+        public static DateTime ToStartOfDay(this DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0, dt.Kind);
+        }
+
+        public static DateTime ToEndOfDay(this DateTime dt)
+        {
+            return new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59, dt.Kind);
+        }
+
         public static bool TryConvertToDateTime(this string str, string dateFormat, out DateTime dateTime,
             IFormatProvider formatProvider = null,
             DateTimeStyles dateTimeStyles = DateTimeStyles.None)

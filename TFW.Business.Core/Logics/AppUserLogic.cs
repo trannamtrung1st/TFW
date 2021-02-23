@@ -15,7 +15,7 @@ using TFW.Cross.Models.Exceptions;
 using TFW.Data.Repositories;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.Common.Helpers;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 
 namespace TFW.Business.Core.Logics
 {

@@ -8,7 +8,7 @@ using TFW.Business.Services;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 
 namespace TFW.Business.Core.Services
 {

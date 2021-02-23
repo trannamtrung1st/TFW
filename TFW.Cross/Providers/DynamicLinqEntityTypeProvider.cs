@@ -6,7 +6,7 @@ using System.Reflection;
 using TFW.Cross.Entities;
 using TFW.Cross.Models;
 using TFW.Framework.Common.Helpers;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 
 namespace TFW.Cross.Providers
 {

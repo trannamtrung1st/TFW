@@ -9,44 +9,86 @@ namespace TFW.Framework.Common.Helpers
 {
     public static class EnumHelper
     {
-        public static string Description(this Enum enumVal, bool fromDisplayAttribute = true)
+        public const string AttributeNotFoundMessage = "No attribute of specified type found on this member";
+
+        public static string Description(this Enum enumVal, bool throwOnNotFound = true)
         {
             var enumType = enumVal.GetType();
             var name = Enum.GetName(enumType, enumVal);
-            string desc;
 
-            if (fromDisplayAttribute)
-                desc = enumType.GetField(name).GetCustomAttributes(false)
-                    .OfType<DisplayAttribute>().SingleOrDefault()?.Description;
-            else desc = enumType.GetField(name).GetCustomAttributes(false)
-                .OfType<DescriptionAttribute>().SingleOrDefault()?.Description;
-
-            return desc;
+            return enumType.Description(name, throwOnNotFound);
         }
 
-        public static string DisplayName(this Enum enumVal, bool fromDisplayAttribute = true)
+        public static string Description(this Type enumType, string name, bool throwOnNotFound = true)
         {
-            var enumType = enumVal.GetType();
-            var name = Enum.GetName(enumType, enumVal);
-            string displayName;
+            var desc = enumType.GetField(name).GetCustomAttributes(false)
+                .OfType<DescriptionAttribute>().SingleOrDefault();
 
-            if (fromDisplayAttribute)
-                displayName = enumType.GetField(name).GetCustomAttributes(false)
-                    .OfType<DisplayAttribute>().SingleOrDefault()?.Name;
-            else displayName = enumType.GetField(name).GetCustomAttributes(false)
-                .OfType<DisplayNameAttribute>().SingleOrDefault()?.DisplayName;
+            if (desc == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
 
-            return displayName;
+            return desc?.Description;
         }
 
-        public static DisplayAttribute Display(this Enum enumVal)
+        public static string DisplayName(this Enum enumVal, bool throwOnNotFound = true)
         {
             var enumType = enumVal.GetType();
             var name = Enum.GetName(enumType, enumVal);
-            var displayNameAttr = enumType.GetField(name).GetCustomAttributes(false)
+
+            return enumType.DisplayName(name, throwOnNotFound);
+        }
+
+        public static string DisplayName(this Type enumType, string enumName, bool throwOnNotFound = true)
+        {
+            var displayNameAttr = enumType.GetField(enumName).GetCustomAttributes(false)
+                .OfType<DisplayNameAttribute>().SingleOrDefault();
+
+            if (displayNameAttr == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
+
+            return displayNameAttr?.DisplayName;
+        }
+
+        public static DisplayAttribute Display(this Enum enumVal, bool throwOnNotFound = true)
+        {
+            var enumType = enumVal.GetType();
+            var name = Enum.GetName(enumType, enumVal);
+
+            return enumType.Display(name, throwOnNotFound);
+        }
+
+        public static DisplayAttribute Display(this Type enumType, string name, bool throwOnNotFound = true)
+        {
+            var displayAttr = enumType.GetField(name).GetCustomAttributes(false)
                 .OfType<DisplayAttribute>().SingleOrDefault();
 
-            return displayNameAttr;
+            if (displayAttr == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
+
+            return displayAttr;
+        }
+
+        public static IEnumerable<Type> GetValues<Type>()
+        {
+            var type = typeof(Type);
+            var enumType = typeof(Enum);
+            var enums = type.GetFields().Where(f => f.FieldType.IsSubclassOf(enumType));
+            return enums.Select(f => (Type)f.GetValue(null));
+        }
+
+        public static (int, DisplayAttribute)[] ToDisplayList()
+        {
+            var type = typeof(Type);
+            var enumType = typeof(Enum);
+            var enums = type.GetFields().Where(f => f.FieldType.IsSubclassOf(enumType));
+
+            return enums.Select(o => ((int)o.GetRawConstantValue(), o.FieldType.Display(o.Name))).ToArray();
+        }
+
+        public static (int, string)[] ToDisplayNameList()
+        {
+            var type = typeof(Type);
+            var enumType = typeof(Enum);
+            var enums = type.GetFields().Where(f => f.FieldType.IsSubclassOf(enumType));
+
+            return enums.Select(o => ((int)o.GetRawConstantValue(), o.FieldType.DisplayName(o.Name))).ToArray();
         }
     }
 }

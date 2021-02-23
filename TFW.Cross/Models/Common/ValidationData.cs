@@ -52,7 +52,7 @@ namespace TFW.Cross.Models.Common
         {
             Details.Add(new AppResult
             {
-                Message = mess ?? code?.DisplayName(),
+                Message = mess ?? code?.Display().Name,
                 Data = data,
                 Code = code
             });

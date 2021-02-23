@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 using TFW.Framework.UoW;
 
 namespace TFW.Data.Core

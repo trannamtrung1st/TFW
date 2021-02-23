@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using TFW.Business.Services;
 using TFW.Cross.Helpers;
-using TFW.Framework.DI;
+using TFW.Framework.DI.Attributes;
 
 namespace TFW.WebAPI.Middlewares
 {
