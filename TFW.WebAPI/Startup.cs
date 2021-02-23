@@ -19,7 +19,6 @@ using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Helpers;
 using TFW.Cross.Models.Setting;
-using TFW.Data;
 using TFW.Data.Core;
 using TFW.Data.Core.Helpers;
 using TFW.Framework.AutoMapper;

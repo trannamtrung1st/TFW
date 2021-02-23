@@ -36,7 +36,7 @@ namespace TFW.WebAPI
             {
                 // Auto migration
                 var dbContext = serviceProvider.GetRequiredService<DbContext>();
-                var dbMigrator = host.Services.GetRequiredService<IDbMigrator>();
+                var dbMigrator = serviceProvider.GetRequiredService<IDbMigrator>();
             
                 dbMigrator.CreateOrMigrateDatabase(dbContext);
                 
