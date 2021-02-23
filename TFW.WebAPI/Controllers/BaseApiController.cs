@@ -12,9 +12,9 @@ namespace TFW.WebAPI.Controllers
 {
     public abstract class BaseApiController : ControllerBase
     {
-        protected readonly IAppUnitOfWork unitOfWork;
+        protected readonly IUnitOfWork unitOfWork;
 
-        public BaseApiController(IAppUnitOfWork unitOfWork)
+        public BaseApiController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }

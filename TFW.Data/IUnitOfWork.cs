@@ -5,7 +5,7 @@ using TFW.Framework.UoW;
 
 namespace TFW.Data
 {
-    public interface IAppUnitOfWork : IBaseUnitOfWork
+    public interface IUnitOfWork : IBaseUnitOfWork
     {
     }
 }

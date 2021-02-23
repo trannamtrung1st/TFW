@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TFW.Cross;
 using TFW.Cross.Entities;
-using TFW.Cross.Models.Common;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
@@ -98,7 +98,7 @@ namespace TFW.Data.Core
             if (entity is IAppAuditableEntity == false) return;
 
             var auditableEntity = entity as IAppAuditableEntity;
-            auditableEntity.CreatedUserId = PrincipalInfo.Current?.UserId;
+            auditableEntity.CreatedUserId = BusinessContext.Current?.PrincipalInfo?.UserId;
         }
 
         public override void PrepareModify(object entity)
@@ -113,7 +113,7 @@ namespace TFW.Data.Core
 
                 if (softDeleteEntity.IsDeleted)
                 {
-                    softDeleteEntity.DeletedUserId = PrincipalInfo.Current?.UserId;
+                    softDeleteEntity.DeletedUserId = BusinessContext.Current?.PrincipalInfo?.UserId;
                     isSoftDeleted = true;
                 }
             }
@@ -121,7 +121,7 @@ namespace TFW.Data.Core
             if (isSoftDeleted || entity is IAppAuditableEntity == false) return;
 
             var auditableEntity = entity as IAppAuditableEntity;
-            auditableEntity.LastModifiedUserId = PrincipalInfo.Current?.UserId;
+            auditableEntity.LastModifiedUserId = BusinessContext.Current?.PrincipalInfo?.UserId;
         }
     }
 }

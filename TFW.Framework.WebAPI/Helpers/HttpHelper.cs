@@ -12,11 +12,6 @@ namespace TFW.Framework.WebAPI.Helpers
 {
     public static class HttpHelper
     {
-        public static T GetRequiredService<T>(this HttpContext context)
-        {
-            return context.RequestServices.GetRequiredService<T>();
-        }
-
         public static T GetItem<T>(this HttpContext context, string key)
         {
             if (context?.Items.ContainsKey(key) != true)

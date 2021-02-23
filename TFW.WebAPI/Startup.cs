@@ -14,13 +14,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using TFW.Business.Helpers;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Helpers;
 using TFW.Cross.Models.Setting;
 using TFW.Data.Core;
-using TFW.Data.Core.Helpers;
+using TFW.Data.Helpers;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Configuration.Helpers;
@@ -29,6 +28,7 @@ using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
 using TFW.Framework.WebAPI;
 using TFW.Framework.WebAPI.Bindings;
+using TFW.WebAPI.Helpers;
 using TFW.WebAPI.Models;
 
 namespace TFW.WebAPI
@@ -66,9 +66,8 @@ namespace TFW.WebAPI
                     options.SuppressModelStateInvalidFilter = true;
                 })
                 .AddHttpContextAccessor()
-                .ConfigureCross()
-                .ConfigureData()
-                .ConfigureBusiness()
+                .AddHttpBusinessContextProvider()
+                .AddHttpUnitOfWorkProvider()
                 .ScanServices(GlobalResources.TempAssemblyList)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
@@ -190,6 +189,12 @@ namespace TFW.WebAPI
 
             // HttpContext
             app.ConfigureHttpContext();
+
+            // BusinessContext
+            app.ConfigureBusinessContext();
+
+            // UnitOfWork
+            app.ConfigureUnitOfWork();
 
             PrepareEnvironment(env);
 

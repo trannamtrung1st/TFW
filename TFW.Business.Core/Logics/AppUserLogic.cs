@@ -33,7 +33,7 @@ namespace TFW.Business.Core.Logics
             GetAppUserListRequestModel requestModel, Type projectionType = null)
         {
             #region Validation
-            var userInfo = PrincipalInfo.Current;
+            var userInfo = BusinessContext.Current?.PrincipalInfo;
             var validationData = new ValidationData();
 
             if (requestModel.page < 0 || requestModel.pageLimit <= 0)

@@ -20,7 +20,7 @@ namespace TFW.WebAPI.Controllers
     {
         private readonly IWebHostEnvironment _env;
 
-        public ErrorController(IAppUnitOfWork unitOfWork, IWebHostEnvironment env) : base(unitOfWork)
+        public ErrorController(IUnitOfWork unitOfWork, IWebHostEnvironment env) : base(unitOfWork)
         {
             _env = env;
         }

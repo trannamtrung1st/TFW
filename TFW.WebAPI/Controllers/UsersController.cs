@@ -19,7 +19,7 @@ namespace TFW.WebAPI.Controllers
     {
         private readonly IIdentityService _identityService;
 
-        public UsersController(IAppUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
         {
             _identityService = identityService;
         }

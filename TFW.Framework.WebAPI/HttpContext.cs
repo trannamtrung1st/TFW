@@ -14,15 +14,5 @@ namespace System.Web
         {
             _contextAccessor = contextAccessor;
         }
-
-        public static T GetItem<T>(string key)
-        {
-            return Current.GetItem<T>(key);
-        }
-
-        public static T GetRequiredService<T>()
-        {
-            return Current.GetRequiredService<T>();
-        }
     }
 }
