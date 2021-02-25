@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using TFW.Framework.Common.Helpers;
+using System.Reflection;
 using TFW.Framework.ConsoleApp;
 using TFW.Framework.ConsoleApp.Options;
 
-namespace TFW.ConsoleApp
+namespace TFW.Framework.Validations.Examples
 {
     class Program
     {
@@ -19,9 +17,7 @@ namespace TFW.ConsoleApp
                 }
             };
 
-            var assemblies = ReflectionHelper.GetAllAssemblies().ToArray();
-
-            consoleProgram.AddFromAssemblies(assemblies);
+            consoleProgram.AddFromAssemblies(Assembly.GetEntryAssembly());
 
             consoleProgram.Start();
         }

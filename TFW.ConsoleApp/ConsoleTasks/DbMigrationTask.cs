@@ -55,11 +55,15 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.Start();
             process.WaitForExit();
 
+            Console.Clear();
+
             return Task.CompletedTask;
         }
 
         public override async Task Start()
         {
+            Console.Clear();
+            
             var opt = XConsole.PromptLine(Description);
         
             switch (opt)
@@ -70,6 +74,8 @@ namespace TFW.ConsoleApp.ConsoleTasks
             }
             
             XConsole.PromptLine("\nPress enter to exit task");
+
+            Console.Clear();
         }
 
         public const string AddMigrationOpt = "1";
