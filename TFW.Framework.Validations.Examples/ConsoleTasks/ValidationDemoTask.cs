@@ -37,7 +37,18 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
             customer.Forename = XConsole.PromptLine("Forename: ");
 
             customer.Address = new Address();
+            customer.Address.AddressLines.Add("");
             customer.Address.Country = XConsole.PromptLine("Country: ");
+            customer.Address.ARandomGuy = new Customer
+            {
+                Address = new Address
+                {
+                    ARandomGuy = new Customer
+                    {
+                        Address = customer.Address
+                    }
+                }
+            };
 
             CustomerValidator validator = new CustomerValidator();
 

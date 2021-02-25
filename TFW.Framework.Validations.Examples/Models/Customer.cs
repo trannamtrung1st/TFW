@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Framework.Validations.Examples.Models
 {
-    public class Customer
+    public class Customer : Person
     {
         public int Id { get; set; }
         public string Surname { get; set; }
