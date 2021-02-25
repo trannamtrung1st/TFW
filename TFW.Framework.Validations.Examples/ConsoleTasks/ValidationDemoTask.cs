@@ -1,4 +1,5 @@
-﻿using FluentValidation.Results;
+﻿using FluentValidation;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,6 +28,17 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
             Console.Clear();
 
             Customer customer = new Customer();
+
+            int customerId = 0;
+            int.TryParse(XConsole.PromptLine("Id: "), out customerId);
+            customer.Id = customerId;
+
+            customer.Surname = XConsole.PromptLine("Surname: ");
+            customer.Forename = XConsole.PromptLine("Forename: ");
+
+            customer.Address = new Address();
+            customer.Address.Country = XConsole.PromptLine("Country: ");
+
             CustomerValidator validator = new CustomerValidator();
 
             ValidationResult result = validator.Validate(customer);
@@ -37,6 +49,26 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
                 {
                     Console.WriteLine("Property " + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
                 }
+            }
+
+            Console.WriteLine("---------------");
+
+            string allMessages = result.ToString("\n");
+            Console.WriteLine(allMessages);
+
+            try
+            {
+                Console.WriteLine("---------------");
+            
+                validator.Validate(customer, options => {
+                    options.ThrowOnFailures();
+                    options.IncludeRuleSets("MyRuleSets");
+                    options.IncludeProperties(x => x.Surname);
+                });
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
             }
 
             Console.ReadLine();
