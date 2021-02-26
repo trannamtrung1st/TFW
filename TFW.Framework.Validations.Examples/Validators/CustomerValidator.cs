@@ -13,16 +13,36 @@ namespace TFW.Framework.Validations.Examples.Validators
     {
         public CustomerValidator()
         {
+            Include(new PersonValidator());
+
             RuleFor(customer => customer.Surname).NotEmpty()
                 .NotEqual("TNT");
 
-            RuleFor(customer => customer.Id).GreaterThan(0).WithMessage("My message: {PropertyName} is failed");
+            RuleFor(customer => customer.Id).GreaterThan(0)
+                .WithErrorCode("CustomCode").WithMessage("My message: {PropertyName} (value: {PropertyValue}) is failed");
 
-            RuleFor(customer => customer.Address).NotNull();
+            RuleFor(customer => customer.Address).NotNull()
+                // default error code
+                .WithErrorCode("NotNullValidator").WithMessage((customer, address) => $"Hello address null")
+                .DependentRules(()=>
+                {
+                    RuleFor(customer => customer.Address.ARandomGuy)
+                        .Must(o => true)
+                        .WithSeverity(Severity.Warning)
+                        .WithState(o => 1001); // ResultCode enum ...
+                });
 
             RuleFor(customer => customer.Address)
                 .SetValidator(new AddressValidator(this))
                 .WhenNotValidated(this, customer => customer.Address);
+
+            When(o => o.Address != null, () =>
+            {
+                Console.WriteLine("Do some rule here");
+            }).Otherwise(() =>
+            {
+                Console.WriteLine("Do some rule here (otherwise)");
+            });
         }
     }
 }

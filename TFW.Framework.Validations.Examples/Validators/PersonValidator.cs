@@ -10,6 +10,10 @@ namespace TFW.Framework.Validations.Examples.Validators
     {
         public PersonValidator()
         {
+            RuleSet("RealName", () => {
+                RuleFor(person => person.FullName).MinimumLength(6);
+            });
+
             RuleFor(person => person.FullName).NotEmpty();
         }
     }

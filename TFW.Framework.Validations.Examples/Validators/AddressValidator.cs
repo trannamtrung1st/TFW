@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TFW.Framework.Validations.Examples.Models;
 using TFW.Framework.Validations.Fluent.Helpers;
 using TFW.Framework.Validations.Fluent.Validators;
@@ -21,7 +23,8 @@ namespace TFW.Framework.Validations.Examples.Validators
 
             RuleFor(address => address.AddressLines).NotEmpty();
 
-            RuleForEach(address => address.AddressLines).NotEmpty();
+            RuleForEach(address => address.AddressLines).NotEmpty()
+                .WhenAsync((address, token) => Task.FromResult(address.AddressLines.Count > 1));
 
             RuleFor(address => address.ARandomGuy)
                 .NotNull()

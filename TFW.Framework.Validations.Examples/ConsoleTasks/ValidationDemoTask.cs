@@ -35,6 +35,7 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
 
             customer.Surname = XConsole.PromptLine("Surname: ");
             customer.Forename = XConsole.PromptLine("Forename: ");
+            customer.FullName = customer.Surname + " " + customer.Forename;
 
             customer.Address = new Address();
             customer.Address.AddressLines.Add("");
@@ -50,9 +51,18 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
                 }
             };
 
+            ValidatorOptions.Global.DisplayNameResolver = (type, member, expression) => {
+                if (member != null)
+                {
+                    return member.Name + "Foo";
+                }
+                return null;
+            };
+
             CustomerValidator validator = new CustomerValidator();
 
-            ValidationResult result = validator.Validate(customer);
+            ValidationResult result = validator.Validate(customer, 
+                opt => opt.IncludeAllRuleSets());
 
             if (!result.IsValid)
             {
