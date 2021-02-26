@@ -52,25 +52,46 @@ namespace TFW.Framework.Common.Helpers
         }
 
         public static List<Assembly> GetAllAssemblies(string path = null,
-            string searchPattern = "*.dll", SearchOption searchOption = SearchOption.AllDirectories)
+            string searchPattern = "*.dll", IEnumerable<string> excludedDirPaths = null,
+            SearchOption searchOption = SearchOption.AllDirectories)
         {
             if (string.IsNullOrEmpty(path))
                 path = GetEntryAssemblyLocation();
 
+            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .ToDictionary(o => o.FullName);
+            
             List<Assembly> allAssemblies = new List<Assembly>();
             string folderPath = Path.GetDirectoryName(path);
-            var allDlls = Directory.GetFiles(folderPath, searchPattern, searchOption);
 
-            foreach (string dll in allDlls)
+            var excludedDirs = excludedDirPaths?.Select(path => new DirectoryInfo(path).FullName).ToArray() ?? new string[] { };
+
+            var targetAssemblies = Directory.EnumerateFiles(folderPath, searchPattern, searchOption)
+                .Where(file => !excludedDirs.Contains(Directory.GetParent(file)))
+                .Select(dll => new
+                {
+                    Dll = dll,
+                    Name = SafelyGetAssemblyName(dll)
+                }).Where(assObj => assObj.Name != null).ToArray();
+
+            foreach (var assObj in targetAssemblies)
             {
+                if (loadedAssemblies.ContainsKey(assObj.Name.FullName))
+                {
+                    allAssemblies.Add(loadedAssemblies[assObj.Name.FullName]);
+                    continue;
+                }
+
                 try
                 {
-                    var assembly = Assembly.Load(AssemblyName.GetAssemblyName(dll));
+                    var assembly = Assembly.Load(assObj.Name);
+
                     allAssemblies.Add(assembly);
                 }
                 catch (FileNotFoundException)
                 {
-                    var assembly = Assembly.LoadFile(dll);
+                    var assembly = Assembly.LoadFile(assObj.Dll);
+
                     allAssemblies.Add(assembly);
                 }
                 catch (FileLoadException) { }
@@ -88,6 +109,18 @@ namespace TFW.Framework.Common.Helpers
                 && o.IsInterface == isInterface);
 
             return types;
+        }
+
+        public static AssemblyName SafelyGetAssemblyName(string assFile)
+        {
+            try
+            {
+                return AssemblyName.GetAssemblyName(assFile);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static T CreateInstance<T>(this Type type) where T : class

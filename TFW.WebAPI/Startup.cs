@@ -56,7 +56,8 @@ namespace TFW.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             var connStr = Configuration.GetConnectionString(DataConsts.ConnStrKey);
-            GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies();
+            GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies(
+                excludedDirPaths: new[] { WebApiConsts.RuntimeBuildDirName });
 
             services.AddDbContext<DataContext>(options => options
                     .UseSqlServer(connStr)
