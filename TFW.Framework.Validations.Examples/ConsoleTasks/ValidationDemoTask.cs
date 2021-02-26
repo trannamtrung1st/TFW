@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using TFW.Framework.ConsoleApp;
@@ -10,6 +11,13 @@ using TFW.Framework.Validations.Examples.Validators;
 
 namespace TFW.Framework.Validations.Examples.ConsoleTasks
 {
+    /// <summary>
+    /// Resources:
+    /// 1. Custom: https://docs.fluentvalidation.net/en/latest/custom-validators.html
+    /// 2. Localization: https://docs.fluentvalidation.net/en/latest/localization.html
+    /// 3. Test: https://docs.fluentvalidation.net/en/latest/testing.html
+    /// </summary>
+
     public class ValidationDemoTask : DefaultConsoleTask
     {
         public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>
@@ -26,6 +34,8 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
         private Task SimpleValidation()
         {
             Console.Clear();
+
+            ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo(XConsole.PromptLine("Culture: "));
 
             Customer customer = new Customer();
 

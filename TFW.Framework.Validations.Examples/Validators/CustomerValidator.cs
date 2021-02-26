@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,10 +22,13 @@ namespace TFW.Framework.Validations.Examples.Validators
             RuleFor(customer => customer.Id).GreaterThan(0)
                 .WithErrorCode("CustomCode").WithMessage("My message: {PropertyName} (value: {PropertyValue}) is failed");
 
+            Transform(customer => customer.Id, id => id.ToString())
+                .Empty();
+
             RuleFor(customer => customer.Address).NotNull()
                 // default error code
                 .WithErrorCode("NotNullValidator").WithMessage((customer, address) => $"Hello address null")
-                .DependentRules(()=>
+                .DependentRules(() =>
                 {
                     RuleFor(customer => customer.Address.ARandomGuy)
                         .Must(o => true)
@@ -43,6 +47,16 @@ namespace TFW.Framework.Validations.Examples.Validators
             {
                 Console.WriteLine("Do some rule here (otherwise)");
             });
+        }
+
+        protected override bool PreValidate(ValidationContext<Customer> context, ValidationResult result)
+        {
+            if (context.InstanceToValidate == null)
+            {
+                result.Errors.Add(new ValidationFailure("", "Please ensure a model was supplied."));
+                return false;
+            }
+            return true;
         }
     }
 }
