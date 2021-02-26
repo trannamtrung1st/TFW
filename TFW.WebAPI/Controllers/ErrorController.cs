@@ -29,19 +29,22 @@ namespace TFW.WebAPI.Controllers
         public IActionResult HandleException()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            var ex = context.Error;
+            
+            if (ex == null) return BadRequest();
 
-            if (context.Error == null) return BadRequest();
-
-            var e = context.Error;
             // logging ...
+
             AppResult response;
 
-            if (e is AppException)
-                response = (e as AppException).Result;
+            if (ex is AppValidationException)
+                return FailValidation(ex as AppValidationException);
+            else if (ex is AppException)
+                response = (ex as AppException).Result;
             else
             {
                 if (_env.IsDevelopment())
-                    response = AppResult.Error(data: e);
+                    response = AppResult.Error(data: ex);
                 else response = AppResult.Error();
             }
 

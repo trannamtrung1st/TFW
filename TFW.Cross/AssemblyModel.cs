@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Cross
 {
-    public abstract class NamespaceModel
+    public abstract class AssemblyModel
     {
     }
 }

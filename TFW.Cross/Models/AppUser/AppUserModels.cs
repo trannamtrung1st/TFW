@@ -22,15 +22,20 @@ namespace TFW.Cross.Models.AppUser
             defaultField = FieldInfo;
         }
 
-        // filter
+        #region Filter options
         public string Id { get; set; }
         public string UserName { get; set; }
         public string Search { get; set; }
+        #endregion
 
-        // consts
+        #region Sorting constants
         public const string SortByUsername = "username";
         public const string DefaultSortBy = "a" + SortByUsername;
 
+        public static readonly string[] SortOptions = new[] { SortByUsername };
+        #endregion
+
+        #region Projection constants
         public const string FieldInfo = "info";
         public const string FieldNotes = "notes";
 
@@ -47,6 +52,7 @@ namespace TFW.Cross.Models.AppUser
                     $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
                 }
             };
+        #endregion
     }
 
     public class AppUserResponseModel

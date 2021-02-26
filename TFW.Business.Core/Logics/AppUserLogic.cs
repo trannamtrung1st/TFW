@@ -36,12 +36,7 @@ namespace TFW.Business.Core.Logics
             var userInfo = BusinessContext.Current?.PrincipalInfo;
             var validationData = new ValidationData();
 
-            if (requestModel.page < 0 || requestModel.pageLimit <= 0)
-                validationData.Fail(code: Cross.ResultCode.InvalidPagingRequest);
-
-            if (requestModel.GetFieldsArr() != null &&
-                requestModel.GetFieldsArr().Any(o => !DynamicQueryAppUserModel.Projections.ContainsKey(o)))
-                validationData.Fail(code: Cross.ResultCode.InvalidProjectionRequest);
+            // validation logic here
 
             if (!validationData.IsValid)
                 throw AppValidationException.From(validationData);

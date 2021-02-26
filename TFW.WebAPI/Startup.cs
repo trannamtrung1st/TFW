@@ -26,6 +26,7 @@ using TFW.Framework.Configuration.Helpers;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
+using TFW.Framework.Validations.Fluent;
 using TFW.Framework.WebAPI;
 using TFW.Framework.WebAPI.Bindings;
 using TFW.WebAPI.Helpers;
@@ -135,7 +136,8 @@ namespace TFW.WebAPI
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Insert(0, new QueryObjectModelBinderProvider());
-            }).AddNewtonsoftJson();
+            }).AddNewtonsoftJson()
+                .AddDefaultFluentValidation(new[] { typeof(Cross.AssemblyModel).Assembly });
 
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(c =>

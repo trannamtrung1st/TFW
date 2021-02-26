@@ -15,7 +15,7 @@ namespace TFW.Framework.Validations.Fluent
         {
             return mvcBuilder.AddFluentValidation(opt =>
             {
-                Configure(opt, assemblies, serviceLifetime);
+                ConfigureFluentValidationMvc(opt, assemblies, serviceLifetime);
             });
         }
 
@@ -24,11 +24,11 @@ namespace TFW.Framework.Validations.Fluent
         {
             return mvcBuilder.AddFluentValidation(opt =>
             {
-                Configure(opt, assemblies, serviceLifetime);
+                ConfigureFluentValidationMvc(opt, assemblies, serviceLifetime);
             });
         }
 
-        private static void Configure(FluentValidationMvcConfiguration opt, IEnumerable<Assembly> assemblies,
+        private static void ConfigureFluentValidationMvc(FluentValidationMvcConfiguration opt, IEnumerable<Assembly> assemblies,
             ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
             opt.RegisterValidatorsFromAssemblies(assemblies, lifetime: serviceLifetime);
