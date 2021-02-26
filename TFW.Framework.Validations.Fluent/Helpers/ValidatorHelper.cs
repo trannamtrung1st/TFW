@@ -14,5 +14,11 @@ namespace TFW.Framework.Validations.Fluent.Helpers
         {
             return builder.When((obj) => validator.AddValidated(objProvider(obj)), applyConditionTo);
         }
+
+        public static bool IsInvokedByMvc<T>(this ValidationContext<T> context)
+        {
+            return context.RootContextData?.ContainsKey(RootContextDataKey.InvokedByMvc) == true
+                && (bool)context.RootContextData[RootContextDataKey.InvokedByMvc] == true;
+        }
     }
 }

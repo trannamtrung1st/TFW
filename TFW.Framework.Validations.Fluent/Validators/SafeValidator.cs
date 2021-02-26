@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Framework.Validations.Fluent.Helpers;
 
 namespace TFW.Framework.Validations.Fluent.Validators
 {
@@ -27,6 +28,11 @@ namespace TFW.Framework.Validations.Fluent.Validators
         internal protected bool IsValidated(object obj)
         {
             return validatedObjects.Contains(obj);
+        }
+
+        protected IConditionBuilder WhenInvokedByMvc(Action action, bool isValue = true)
+        {
+            return When((obj, context) => context.IsInvokedByMvc() == isValue, action);
         }
     }
 }

@@ -36,9 +36,16 @@ namespace TFW.Framework.Validations.Examples.Validators
                         .WithState(o => 1001); // ResultCode enum ...
                 });
 
-            RuleFor(customer => customer.Address)
-                .SetValidator(new AddressValidator(this))
-                .WhenNotValidated(this, customer => customer.Address);
+            WhenInvokedByMvc(() =>
+            {
+                // do something
+            }).Otherwise(() =>
+            {
+                RuleFor(customer => customer.Address)
+                    .SetValidator(new AddressValidator(this))
+                    .WhenNotValidated(this, customer => customer.Address);
+            });
+
 
             When(o => o.Address != null, () =>
             {
