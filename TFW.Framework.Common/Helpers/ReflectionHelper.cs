@@ -51,23 +51,24 @@ namespace TFW.Framework.Common.Helpers
                     type.Namespace == nameSpace);
         }
 
-        public static List<Assembly> GetAllAssemblies(string path = null,
-            string searchPattern = "*.dll", IEnumerable<string> excludedDirPaths = null,
+        public static List<Assembly> GetAllAssemblies(string rootPath = null,
+            string searchPattern = "*.dll", IEnumerable<string> excludedRelativeDirPaths = null,
             SearchOption searchOption = SearchOption.AllDirectories)
         {
-            if (string.IsNullOrEmpty(path))
-                path = GetEntryAssemblyLocation();
+            if (string.IsNullOrEmpty(rootPath))
+                rootPath = GetEntryAssemblyLocation();
+            string rootFolderPath = Path.GetDirectoryName(rootPath);
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .ToDictionary(o => o.FullName);
             
             List<Assembly> allAssemblies = new List<Assembly>();
-            string folderPath = Path.GetDirectoryName(path);
 
-            var excludedDirs = excludedDirPaths?.Select(path => new DirectoryInfo(path).FullName).ToArray() ?? new string[] { };
+            var excludedDirs = excludedRelativeDirPaths?.Select(dirPath => new DirectoryInfo(
+                Path.Combine(Directory.GetParent(rootPath).FullName, dirPath))).ToArray() ?? new DirectoryInfo[] { };
 
-            var targetAssemblies = Directory.EnumerateFiles(folderPath, searchPattern, searchOption)
-                .Where(file => !excludedDirs.Contains(Directory.GetParent(file)))
+            var targetAssemblies = Directory.EnumerateFiles(rootFolderPath, searchPattern, searchOption)
+                .Where(file => !excludedDirs.Any(dir => Directory.GetParent(file).IsSubDirectoryOf(dir)))
                 .Select(dll => new
                 {
                     Dll = dll,

@@ -7,6 +7,6 @@ namespace TFW.WebAPI
 {
     public static class WebApiConsts
     {
-        public const string RuntimeBuildDirName = "runtimes";
+        public static readonly string[] ExcludedAssemblyDirs = new[] { "runtimes" };
     }
 }
