@@ -59,7 +59,7 @@ namespace TFW.Framework.UoW
 
         public bool IsFilterEnabledAndAppliedForEntity(string filterName, Type eType)
         {
-            return dbContext.IsFilterEnabledAndAppliedForEntity(filterName, eType);
+            return dbContext.IsFilterAppliedForEntity(filterName, eType);
         }
 
         public IQueryFilterUnitOfWork ReplaceOrAddFilter(params QueryFilter[] filters)

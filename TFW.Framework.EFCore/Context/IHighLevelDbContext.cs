@@ -17,7 +17,6 @@ namespace TFW.Framework.EFCore.Context
         IHighLevelDbContext ReplaceOrAddFilter(params QueryFilter[] filters);
         bool IsFilterEnabled(string filterName);
         bool IsFilterAppliedForEntity(string filterName, Type eType);
-        bool IsFilterEnabledAndAppliedForEntity(string filterName, Type eType);
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
         DbContextId ContextId { get; }
         int SaveChanges(bool acceptAllChangesOnSuccess);

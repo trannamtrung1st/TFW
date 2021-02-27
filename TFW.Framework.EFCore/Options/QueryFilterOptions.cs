@@ -75,13 +75,9 @@ namespace TFW.Framework.EFCore.Options
 
         public bool IsAppliedForEntity(string filterName, Type eType)
         {
-            return _filterMap.ContainsKey(filterName) && (_filterMap[filterName].ApplyFilter == null
-                || _filterMap[filterName].ApplyFilter(eType));
-        }
-
-        public bool IsEnabledAndAppliedForEntity(string filterName, Type eType)
-        {
-            return IsEnabled(filterName) && IsAppliedForEntity(filterName, eType);
+            return _filterMap.ContainsKey(filterName) && (_filterMap[filterName].IsEnabled
+                && (_filterMap[filterName].ApplyFilter == null
+                || _filterMap[filterName].ApplyFilter(eType)));
         }
     }
 }

@@ -40,8 +40,7 @@ namespace TFW.Data.Core.QueryFilters
         protected virtual Expression<Func<TEntity, bool>> CreateSoftDeleteFilter<TEntity>(
             IFullAuditableDbContext dbContext) where TEntity : ISoftDeleteEntity
         {
-            return (TEntity o) =>
-                !dbContext.IsSoftDeleteEnabled() || !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
+            return (TEntity o) => !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
                     o.IsDeleted == false;
         }
         #endregion
@@ -69,7 +68,7 @@ namespace TFW.Data.Core.QueryFilters
             IFullAuditableDbContext dbContext) where TEntity : AppUser
         {
             return (TEntity o) =>
-                !dbContext.IsFilterEnabledAndAppliedForEntity(QueryFilterName.AnotherFilter1, typeof(TEntity)) ||
+                !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter1, typeof(TEntity)) ||
                     o.Id == "Never true";
         }
 
@@ -82,7 +81,7 @@ namespace TFW.Data.Core.QueryFilters
             IFullAuditableDbContext dbContext) where TEntity : Note
         {
             return (TEntity o) =>
-                !dbContext.IsFilterEnabledAndAppliedForEntity(QueryFilterName.AnotherFilter2, typeof(TEntity)) ||
+                !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter2, typeof(TEntity)) ||
                     o.CategoryName == "Hidden";
         }
     }

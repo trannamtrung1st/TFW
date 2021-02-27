@@ -12,6 +12,8 @@ namespace TFW.Framework.EFCore.Repository
 {
     public partial interface IBaseRepository<E> where E : class
     {
+        bool IsFilterAppliedForEntity(string filterName);
+        bool IsSoftDeleteFilterAppliedForEntity();
         IQueryable<T> Limit<T>(IQueryable<T> query, int page, int pageLimit);
         Task<EntityEntry<E>> ReloadAsync(E entity);
         EntityEntry<E> Add(E entity);
@@ -46,6 +48,16 @@ namespace TFW.Framework.EFCore.Repository
         {
             this.dbContext = context;
             this.dbSet = context.Set<E>();
+        }
+
+        public bool IsFilterAppliedForEntity(string filterName)
+        {
+            return dbContext.IsFilterAppliedForEntity(filterName, typeof(E));
+        }
+
+        public bool IsSoftDeleteFilterAppliedForEntity()
+        {
+            return dbContext.IsSoftDeleteAppliedForEntity(typeof(E));
         }
 
         public virtual IQueryable<T> Limit<T>(IQueryable<T> query, int page, int pageLimit)

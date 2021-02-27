@@ -177,11 +177,6 @@ namespace TFW.Framework.EFCore.Context
         {
             return queryFilterOptions.IsAppliedForEntity(filterName, eType);
         }
-
-        public bool IsFilterEnabledAndAppliedForEntity(string filterName, Type eType)
-        {
-            return queryFilterOptions.IsEnabledAndAppliedForEntity(filterName, eType);
-        }
     }
 
     public abstract class BaseIdentityDbContext<TUser, TRole, TKey> : BaseIdentityDbContext<TUser, TRole, TKey,
