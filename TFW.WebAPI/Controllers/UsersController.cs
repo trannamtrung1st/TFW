@@ -13,7 +13,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : BaseApiController
     {
         public static class Endpoint

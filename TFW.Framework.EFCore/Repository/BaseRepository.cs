@@ -6,14 +6,16 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Context;
 
 namespace TFW.Framework.EFCore.Repository
 {
     public partial interface IBaseRepository<E> where E : class
     {
+        public IQueryable<T> FilterDeleted<T>(IQueryable<T> query) where T : ISoftDeleteEntity;
         bool IsFilterAppliedForEntity(string filterName);
-        bool IsSoftDeleteFilterAppliedForEntity();
+        bool IsSoftDeleteAppliedForEntity();
         IQueryable<T> Limit<T>(IQueryable<T> query, int page, int pageLimit);
         Task<EntityEntry<E>> ReloadAsync(E entity);
         EntityEntry<E> Add(E entity);
@@ -50,12 +52,27 @@ namespace TFW.Framework.EFCore.Repository
             this.dbSet = context.Set<E>();
         }
 
+        public IQueryable<T> FilterDeleted<T>(IQueryable<T> query) where T : ISoftDeleteEntity
+        {
+            if (IsSoftDeleteAppliedForEntity())
+            {
+                var clonedFilter = dbContext.GetClonedFilter(QueryFilterConsts.SoftDeleteDefaultName);
+
+                var oldFilter = clonedFilter.ApplyFilter;
+                clonedFilter.ApplyFilter = o => oldFilter(o) && o != typeof(T);
+
+                dbContext.ReplaceOrAddFilter(clonedFilter);
+            }
+
+            return query.Where(o => o.IsDeleted);
+        }
+
         public bool IsFilterAppliedForEntity(string filterName)
         {
             return dbContext.IsFilterAppliedForEntity(filterName, typeof(E));
         }
 
-        public bool IsSoftDeleteFilterAppliedForEntity()
+        public bool IsSoftDeleteAppliedForEntity()
         {
             return dbContext.IsSoftDeleteAppliedForEntity(typeof(E));
         }

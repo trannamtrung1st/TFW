@@ -35,22 +35,5 @@ namespace TFW.Data.Core.Repositories
             return query.Where(o => o.UserName.Contains(search)
                 || o.FullName.Contains(search));
         }
-
-        public IQueryable<AppUser> FilterDeleted(IQueryable<AppUser> query)
-        {
-            if (dbContext.IsFilterEnabledAndAppliedForEntity(
-                QueryFilterConsts.SoftDeleteDefaultName, typeof(AppUser)))
-            {
-                var clonedFilter = dbContext.GetClonedFilter(QueryFilterConsts.SoftDeleteDefaultName);
-
-                var oldFilter = clonedFilter.ApplyFilter;
-                clonedFilter.ApplyFilter = o => oldFilter(o) && o != typeof(AppUser);
-
-                dbContext.ReplaceOrAddFilter(clonedFilter);
-            }
-
-            return query.Where(o => o.IsDeleted);
-        }
-
     }
 }
