@@ -62,5 +62,14 @@ namespace TFW.Cross.Models.Common
             return this;
         }
 
+        public ValidationData Fail(params AppResult[] results)
+        {
+            Details.AddRange(results);
+
+            IsValid = false;
+
+            return this;
+        }
+
     }
 }

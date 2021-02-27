@@ -16,10 +16,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TFW.Cross;
 using TFW.Cross.Entities;
-using TFW.Cross.Helpers;
 using TFW.Cross.Models.Setting;
+using TFW.Data;
 using TFW.Data.Core;
-using TFW.Data.Helpers;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Configuration.Helpers;
@@ -27,9 +26,11 @@ using TFW.Framework.DI;
 using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
 using TFW.Framework.Validations.Fluent;
-using TFW.Framework.WebAPI;
-using TFW.Framework.WebAPI.Bindings;
-using TFW.WebAPI.Helpers;
+using TFW.Framework.Web;
+using TFW.Framework.Web.Bindings;
+using TFW.Framework.Web.Options;
+using TFW.WebAPI.Controllers;
+using TFW.WebAPI.Filters;
 using TFW.WebAPI.Models;
 
 namespace TFW.WebAPI
@@ -56,10 +57,21 @@ namespace TFW.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Common
             var connStr = Configuration.GetConnectionString(DataConsts.ConnStrKey);
+
             GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies(
                 excludedRelativeDirPaths: WebApiConsts.ExcludedAssemblyDirs);
+            #endregion
 
+            #region Framework options
+            var fwOptionsConfigurator = new FrameworkOptionsConfigurator();
+
+            fwOptionsConfigurator.ScanShouldSkipFilterTypes(
+                typeof(Startup).Assembly, new[] { typeof(BaseApiController).Namespace });
+            #endregion
+
+            #region Services
             services.AddDbContext<DataContext>(options => options
                     .UseSqlServer(connStr)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
@@ -74,8 +86,11 @@ namespace TFW.WebAPI
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestTimeZoneMiddleware()
+                .AddDefaultValidationResultProvider()
                 .ConfigureRequestTimeZoneDefault()
-                .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly });
+                .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
+                .ConfigureFrameworkOptions(fwOptionsConfigurator);
+            #endregion
 
             #region OAuth
             services.AddIdentityCore<AppUser>(options =>
@@ -133,12 +148,18 @@ namespace TFW.WebAPI
                 });
             #endregion
 
+            #region Mvc, Controllers
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Insert(0, new QueryObjectModelBinderProvider());
+
+                options.Filters.Add<AutoValidateActionFilter>();
+
             }).AddNewtonsoftJson()
                 .AddDefaultFluentValidation(new[] { typeof(Cross.AssemblyModel).Assembly });
+            #endregion
 
+            #region Swagger
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(c =>
             {
@@ -170,6 +191,7 @@ namespace TFW.WebAPI
                 }] = new string[] { };
                 c.AddSecurityRequirement(requirement);
             });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

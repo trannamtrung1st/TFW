@@ -38,7 +38,7 @@ namespace TFW.WebAPI.Controllers
             AppResult response;
 
             if (ex is AppValidationException)
-                return FailValidation(ex as AppValidationException);
+                return BadRequest((ex as AppValidationException).Result);
             else if (ex is AppException)
                 response = (ex as AppException).Result;
             else

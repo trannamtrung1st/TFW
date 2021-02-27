@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using TFW.Cross.Models.Common;
-using TFW.Cross.Models.Exceptions;
 using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
@@ -32,11 +31,6 @@ namespace TFW.WebAPI.Controllers
         protected string GetAuthorityLeftPart()
         {
             return new Uri(Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority);
-        }
-
-        protected IActionResult FailValidation(AppValidationException exception)
-        {
-            return BadRequest(exception.Result);
         }
 
         protected IActionResult Success(object data)

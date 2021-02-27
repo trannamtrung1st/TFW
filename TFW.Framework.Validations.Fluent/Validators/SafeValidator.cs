@@ -1,17 +1,28 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TFW.Framework.Validations.Fluent.Helpers;
+using TFW.Framework.Validations.Fluent.Providers;
 
 namespace TFW.Framework.Validations.Fluent.Validators
 {
     public abstract class SafeValidator<T> : AbstractValidator<T>
     {
         private readonly ISet<object> validatedObjects;
+        protected readonly IValidationResultProvider validationResultProvider;
 
         protected SafeValidator()
         {
+            validatedObjects = new HashSet<object>();
+        }
+
+        protected SafeValidator(IValidationResultProvider validationResultProvider)
+        {
+            this.validationResultProvider = validationResultProvider;
             validatedObjects = new HashSet<object>();
         }
 
@@ -49,6 +60,30 @@ namespace TFW.Framework.Validations.Fluent.Validators
 
                 type = type.BaseType;
             }
+        }
+
+        public override ValidationResult Validate(ValidationContext<T> context)
+        {
+            var result = base.Validate(context);
+
+            AddOrSkipValidationResult(context, result);
+
+            return result;
+        }
+
+        public override async Task<ValidationResult> ValidateAsync(ValidationContext<T> context, CancellationToken cancellation = default)
+        {
+            var result = await base.ValidateAsync(context, cancellation);
+
+            AddOrSkipValidationResult(context, result);
+
+            return result;
+        }
+
+        private void AddOrSkipValidationResult(ValidationContext<T> context, ValidationResult result)
+        {
+            if (!context.IsChildContext)
+                validationResultProvider?.Results.Add(result);
         }
     }
 }

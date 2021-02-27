@@ -25,7 +25,11 @@
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
     <ProjectReference Include="..\TFW.Framework.EFCore\TFW.Framework.EFCore.csproj" />
     <ProjectReference Include="..\TFW.Framework.Validations.ModelValidation\TFW.Framework.Validations.ModelValidation.csproj" />
-    <ProjectReference Include="..\TFW.Framework.WebAPI\TFW.Framework.WebAPI.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 

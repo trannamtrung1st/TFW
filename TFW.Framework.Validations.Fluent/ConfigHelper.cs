@@ -4,12 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using TFW.Framework.Validations.Fluent.Common;
+using TFW.Framework.Validations.Fluent.Providers;
 
 namespace TFW.Framework.Validations.Fluent
 {
     // ASP.NET Core: https://docs.fluentvalidation.net/en/latest/aspnet.html
     public static class ConfigHelper
     {
+        public static IServiceCollection AddDefaultValidationResultProvider(this IServiceCollection services)
+        {
+            return services.AddScoped<IValidationResultProvider, DefaultValidationResultProvider>();
+        }
+
         public static IMvcBuilder AddDefaultFluentValidation(this IMvcBuilder mvcBuilder, IEnumerable<Assembly> assemblies,
             ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
         {
@@ -36,6 +43,7 @@ namespace TFW.Framework.Validations.Fluent
             opt.ImplicitlyValidateChildProperties = true;
             opt.ImplicitlyValidateRootCollectionElements = false;
             opt.AutomaticValidationEnabled = true;
+            opt.ValidatorOptions.DisplayNameResolver = DisplayNameResolver.Resolve;
         }
     }
 }

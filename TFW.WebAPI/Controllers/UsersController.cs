@@ -7,7 +7,7 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.AppUser;
 using TFW.Data;
-using TFW.Framework.WebAPI.Bindings;
+using TFW.Framework.Web.Bindings;
 
 namespace TFW.WebAPI.Controllers
 {

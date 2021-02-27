@@ -20,9 +20,9 @@ namespace TFW.Cross.Providers
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            var entityTypes = ReflectionHelper.GetClassesOfNamespace(
+            var entityTypes = ReflectionHelper.GetTypesOfNamespace(
                 typeof(AppUser).Namespace, assembly, includeSubns: true);
-            var modelTypes = ReflectionHelper.GetClassesOfNamespace(
+            var modelTypes = ReflectionHelper.GetTypesOfNamespace(
                 typeof(NamespaceModel).Namespace, assembly, includeSubns: true);
 
             _entityTypes = entityTypes.Concat(modelTypes).ToHashSet();

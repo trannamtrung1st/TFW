@@ -42,7 +42,7 @@ namespace TFW.Framework.Common.Helpers
             return type.GetProperties(BindingFlags.Public);
         }
 
-        public static IEnumerable<Type> GetClassesOfNamespace(string nameSpace, Assembly assembly = null, bool includeSubns = false)
+        public static IEnumerable<Type> GetTypesOfNamespace(string nameSpace, Assembly assembly = null, bool includeSubns = false)
         {
             assembly = assembly ?? Assembly.GetEntryAssembly();
 
