@@ -13,9 +13,15 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : BaseApiController
     {
+        public static class Endpoint
+        {
+            public const string GetAppUserList = "";
+            public const string GetDeletedAppUserList = "deleted";
+        }
+
         private readonly IIdentityService _identityService;
 
         public UsersController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
@@ -23,7 +29,7 @@ namespace TFW.WebAPI.Controllers
             _identityService = identityService;
         }
 
-        [HttpGet("")]
+        [HttpGet(Endpoint.GetAppUserList)]
         public async Task<IActionResult> GetAppUserList([FromQuery][QueryObject] GetAppUserListRequestModel model)
         {
             var data = await _identityService.GetListAppUserAsync(model);
@@ -33,7 +39,7 @@ namespace TFW.WebAPI.Controllers
 
 
 #if DEBUG
-        [HttpGet("deleted")]
+        [HttpGet(Endpoint.GetDeletedAppUserList)]
         [AllowAnonymous]
         public async Task<IActionResult> GetDeletedAppUserList()
         {
