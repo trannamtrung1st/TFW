@@ -25,6 +25,8 @@ namespace TFW.Cross.Profiles
                 .ForMember(o => o.UtcOffsetInMinutes, opt => opt.MapFrom(o => o.BaseUtcOffset.TotalMinutes));
 
             CreateMap<CultureInfo, CultureOption>();
+
+            CreateMap<RegionInfo, CurrencyOption>();
         }
     }
 }

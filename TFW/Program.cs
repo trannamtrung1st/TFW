@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -66,8 +67,14 @@ namespace TFW
 
             //Console.WriteLine(TimeZoneHelper.GetFirstTimeZoneByUTCOffset(TimeSpan.FromMinutes(420)));
 
-            Console.WriteLine(typeof(List<>).GetNameWithoutGenericParameters());
-            Console.WriteLine(typeof(List<string>).GetNameWithoutGenericParameters());
+            //Console.WriteLine(typeof(List<>).GetNameWithoutGenericParameters());
+            //Console.WriteLine(typeof(List<string>).GetNameWithoutGenericParameters());
+
+            foreach (var region in CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+                .Select(o => o.LCID).Distinct().Select(o => new RegionInfo(o)))
+            {
+                Console.WriteLine(region.Name + " - " + region.CurrencySymbol + " - " + region.ISOCurrencySymbol);
+            }
         }
     }
 }

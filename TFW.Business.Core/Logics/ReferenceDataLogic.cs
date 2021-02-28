@@ -35,5 +35,13 @@ namespace TFW.Business.Core.Logics
 
             return Task.FromResult(cultureOptions);
         }
+
+        public Task<CurrencyOption[]> GetCurrencyOptionsAsync()
+        {
+            // [TODO] add caching
+            var currencyOptions = Settings.App.SupportedRegionInfos.MapTo<CurrencyOption>().ToArray();
+
+            return Task.FromResult(currencyOptions);
+        }
     }
 }

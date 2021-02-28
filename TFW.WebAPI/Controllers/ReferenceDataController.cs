@@ -19,6 +19,7 @@ namespace TFW.WebAPI.Controllers
         {
             public const string GetTimeZoneOptions = "time-zones";
             public const string GetCultureOptions = "cultures";
+            public const string GetCurrencyOptions = "currencies";
         }
 
         private readonly IReferenceDataService _referenceDataService;
@@ -40,6 +41,14 @@ namespace TFW.WebAPI.Controllers
         public async Task<IActionResult> GetCultureOptions()
         {
             var data = await _referenceDataService.GetCultureOptionsAsync();
+
+            return Success(data);
+        }
+
+        [HttpGet(Endpoint.GetCurrencyOptions)]
+        public async Task<IActionResult> GetCurrencyOptions()
+        {
+            var data = await _referenceDataService.GetCurrencyOptionsAsync();
 
             return Success(data);
         }

@@ -31,6 +31,22 @@ namespace TFW.Cross.Models.Setting
 
         private CultureInfo[] _supportedCultureInfos = new[] { CultureInfo.CurrentCulture };
         public CultureInfo[] SupportedCultureInfos => _supportedCultureInfos;
+
+        private string[] _supportedRegionNames;
+        public string[] SupportedRegionNames
+        {
+            get => _supportedRegionNames; set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                _supportedRegionNames = value;
+                _supportedRegionInfos = _supportedRegionNames.Select(o => new RegionInfo(o)).ToArray();
+            }
+        }
+
+        private RegionInfo[] _supportedRegionInfos = new[] { RegionInfo.CurrentRegion };
+        public RegionInfo[] SupportedRegionInfos => _supportedRegionInfos;
     }
 
     public class JwtSettings

@@ -10,5 +10,6 @@ namespace TFW.Business.Services
     {
         Task<TimeZoneOption[]> GetTimeZoneOptionsAsync();
         Task<CultureOption[]> GetCultureOptionsAsync();
+        Task<CurrencyOption[]> GetCurrencyOptionsAsync();
     }
 }

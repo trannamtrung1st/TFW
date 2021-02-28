@@ -29,5 +29,11 @@ namespace TFW.Business.Core.Services
             return _referenceDataLogic.GetCultureOptionsAsync();
         }
 
+        public Task<CurrencyOption[]> GetCurrencyOptionsAsync()
+        {
+            return _referenceDataLogic.GetCurrencyOptionsAsync();
+        }
+
+
     }
 }
