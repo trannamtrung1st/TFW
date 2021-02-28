@@ -9,5 +9,6 @@ namespace TFW.Business.Logics
     public interface IReferenceDataLogic
     {
         Task<TimeZoneOption[]> GetTimeZoneOptionsAsync();
+        Task<CultureOption[]> GetCultureOptionsAsync();
     }
 }

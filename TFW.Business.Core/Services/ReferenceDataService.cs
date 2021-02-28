@@ -23,5 +23,11 @@ namespace TFW.Business.Core.Services
         {
             return _referenceDataLogic.GetTimeZoneOptionsAsync();
         }
+
+        public Task<CultureOption[]> GetCultureOptionsAsync()
+        {
+            return _referenceDataLogic.GetCultureOptionsAsync();
+        }
+
     }
 }

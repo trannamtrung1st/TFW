@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 using TFW.Cross.Models.Common;
@@ -22,6 +23,8 @@ namespace TFW.Cross.Profiles
 
             CreateMap<TimeZoneInfo, TimeZoneOption>()
                 .ForMember(o => o.UtcOffsetInMinutes, opt => opt.MapFrom(o => o.BaseUtcOffset.TotalMinutes));
+
+            CreateMap<CultureInfo, CultureOption>();
         }
     }
 }

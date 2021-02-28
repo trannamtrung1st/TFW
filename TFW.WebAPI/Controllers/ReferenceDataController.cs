@@ -18,6 +18,7 @@ namespace TFW.WebAPI.Controllers
         public static class Endpoint
         {
             public const string GetTimeZoneOptions = "time-zones";
+            public const string GetCultureOptions = "cultures";
         }
 
         private readonly IReferenceDataService _referenceDataService;
@@ -27,11 +28,18 @@ namespace TFW.WebAPI.Controllers
             _referenceDataService = referenceDataService;
         }
 
-
         [HttpGet(Endpoint.GetTimeZoneOptions)]
         public async Task<IActionResult> GetTimeZoneOptions()
         {
             var data = await _referenceDataService.GetTimeZoneOptionsAsync();
+
+            return Success(data);
+        }
+
+        [HttpGet(Endpoint.GetCultureOptions)]
+        public async Task<IActionResult> GetCultureOptions()
+        {
+            var data = await _referenceDataService.GetCultureOptionsAsync();
 
             return Success(data);
         }

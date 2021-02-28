@@ -9,5 +9,6 @@ namespace TFW.Business.Services
     public interface IReferenceDataService
     {
         Task<TimeZoneOption[]> GetTimeZoneOptionsAsync();
+        Task<CultureOption[]> GetCultureOptionsAsync();
     }
 }

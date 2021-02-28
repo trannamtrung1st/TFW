@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using System.Text;
-using TFW.Framework.i18n;
 
 namespace TFW.Cross
 {
@@ -28,7 +25,7 @@ namespace TFW.Cross
     public static class ApiEndpoint
     {
         public const string UserApi = "api/users";
-        public const string ReferenceDataApi = "api/reference-data";
+        public const string ReferenceDataApi = "api/ref";
         public const string Error = "error";
     }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TFW.Business.Logics;
 using TFW.Cross.Models.Common;
+using TFW.Cross.Models.Setting;
 using TFW.Data.Core;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.DI.Attributes;
@@ -25,6 +26,14 @@ namespace TFW.Business.Core.Logics
             var timeZoneOptions = TimeZoneHelper.GetAllTimeZones().MapTo<TimeZoneOption>().ToArray();
 
             return Task.FromResult(timeZoneOptions);
+        }
+
+        public Task<CultureOption[]> GetCultureOptionsAsync()
+        {
+            // [TODO] add caching
+            var cultureOptions = Settings.App.SupportedCultureInfos.MapTo<CultureOption>().ToArray();
+
+            return Task.FromResult(cultureOptions);
         }
     }
 }

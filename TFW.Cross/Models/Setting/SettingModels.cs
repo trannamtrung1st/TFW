@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace TFW.Cross.Models.Setting
@@ -13,6 +15,22 @@ namespace TFW.Cross.Models.Setting
     public class AppSettings
     {
         public string Name { get; set; }
+
+        private string[] _supportedCultureNames;
+        public string[] SupportedCultureNames
+        {
+            get => _supportedCultureNames; set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+
+                _supportedCultureNames = value;
+                _supportedCultureInfos = _supportedCultureNames.Select(o => CultureInfo.GetCultureInfo(o)).ToArray();
+            }
+        }
+
+        private CultureInfo[] _supportedCultureInfos = new[] { CultureInfo.CurrentCulture };
+        public CultureInfo[] SupportedCultureInfos => _supportedCultureInfos;
     }
 
     public class JwtSettings
