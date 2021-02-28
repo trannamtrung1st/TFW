@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TFW.Business.Logics;
 using TFW.Cross.Models.Common;
+using TFW.Data.Core;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.i18n.Helpers;
@@ -14,7 +15,7 @@ namespace TFW.Business.Core.Logics
     [ScopedService(ServiceType = typeof(IReferenceDataLogic))]
     public class ReferenceDataLogic : BaseLogic, IReferenceDataLogic
     {
-        public ReferenceDataLogic() : base()
+        public ReferenceDataLogic(DataContext dbContext) : base(dbContext)
         {
         }
 

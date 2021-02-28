@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
 using TFW.Cross;
+using TFW.Data.Core;
 
 namespace TFW.Business.Logics
 {
@@ -9,9 +10,11 @@ namespace TFW.Business.Logics
     {
 
         protected readonly ParsingConfig defaultParsingConfig;
+        protected readonly DataContext dbContext;
 
-        public BaseLogic()
+        public BaseLogic(DataContext dbContext)
         {
+            this.dbContext = dbContext;
             this.defaultParsingConfig = new ParsingConfig
             {
                 CustomTypeProvider = GlobalResources.CustomTypeProvider

@@ -6,27 +6,26 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Business.Core.Queries;
 using TFW.Business.Logics;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
-using TFW.Data.Repositories;
+using TFW.Data.Core;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.DI.Attributes;
+using TFW.Framework.EFCore.Queries;
 
 namespace TFW.Business.Core.Logics
 {
     [ScopedService(ServiceType = typeof(IAppUserLogic))]
     public class AppUserLogic : BaseLogic, IAppUserLogic
     {
-        private readonly IAppUserRepository _appUserRepository;
-
-        public AppUserLogic(IAppUserRepository appUserRepository) : base()
+        public AppUserLogic(DataContext dbContext) : base(dbContext)
         {
-            _appUserRepository = appUserRepository;
         }
 
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
@@ -43,17 +42,17 @@ namespace TFW.Business.Core.Logics
             #endregion
 
             var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
-            IQueryable<AppUser> query = _appUserRepository.AsNoTracking();
+            IQueryable<AppUser> query = dbContext.Users.AsNoTracking();
 
             #region Filter
             if (queryModel.Id != null)
-                query = _appUserRepository.FilterById(query, queryModel.Id);
+                query = query.ById(queryModel.Id);
 
             if (queryModel.UserName != null)
-                query = _appUserRepository.FilterByUsername(query, queryModel.UserName);
+                query = query.ByUsername(queryModel.UserName);
 
             if (queryModel.Search != null)
-                query = _appUserRepository.FilterBySearch(query, queryModel.Search);
+                query = query.BySearch(queryModel.Search);
             #endregion
 
             var orgQuery = query;
@@ -84,7 +83,7 @@ namespace TFW.Business.Core.Logics
             #endregion
 
             if (queryModel.Page > 0)
-                query = _appUserRepository.Limit(query, queryModel.Page, queryModel.PageLimit);
+                query = query.Limit(queryModel.Page, queryModel.PageLimit);
 
             #region Projection
             var projectionArr = queryModel.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
@@ -109,10 +108,8 @@ namespace TFW.Business.Core.Logics
 
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync()
         {
-            var query = _appUserRepository.AsNoTracking();
-
-            var responseModels = await _appUserRepository.FilterDeleted(query)
-                .DefaultProjectTo<AppUserResponseModel>().ToArrayAsync();
+            var responseModels = await dbContext.QueryDeleted<AppUser>()
+                .AsNoTracking().DefaultProjectTo<AppUserResponseModel>().ToArrayAsync();
 
             var response = new GetListResponseModel<AppUserResponseModel>
             {

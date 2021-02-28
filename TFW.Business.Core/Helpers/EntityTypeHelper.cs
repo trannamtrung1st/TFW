@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
 
-namespace TFW.Data.Core.Helpers
+namespace TFW.Business.Core.Helpers
 {
-    public static class EntityConfigHelper
+    public static class EntityTypeHelper
     {
         public static bool IsNoteEntity(this Type type)
         {

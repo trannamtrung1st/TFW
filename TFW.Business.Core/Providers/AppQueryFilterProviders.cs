@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using TFW.Business.Core.Helpers;
 using TFW.Cross;
 using TFW.Cross.Entities;
-using TFW.Data.Core.Helpers;
 using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
 using TFW.Framework.EFCore.Options;
 using TFW.Framework.EFCore.Providers;
 
-namespace TFW.Data.Core.QueryFilters
+namespace TFW.Business.Core.Providers
 {
     public class AppQueryFilterProvider : IQueryFilterProvider
     {
@@ -40,7 +40,7 @@ namespace TFW.Data.Core.QueryFilters
         protected virtual Expression<Func<TEntity, bool>> CreateSoftDeleteFilter<TEntity>(
             IFullAuditableDbContext dbContext) where TEntity : ISoftDeleteEntity
         {
-            return (TEntity o) => !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
+            return (o) => !dbContext.IsSoftDeleteAppliedForEntity(typeof(TEntity)) ||
                     o.IsDeleted == false;
         }
         #endregion
@@ -67,7 +67,7 @@ namespace TFW.Data.Core.QueryFilters
         protected virtual Expression<Func<TEntity, bool>> CreateAnotherFilter1<TEntity>(
             IFullAuditableDbContext dbContext) where TEntity : AppUser
         {
-            return (TEntity o) =>
+            return (o) =>
                 !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter1, typeof(TEntity)) ||
                     o.Id == "Never true";
         }
@@ -80,7 +80,7 @@ namespace TFW.Data.Core.QueryFilters
         protected virtual Expression<Func<TEntity, bool>> CreateAnotherFilter2<TEntity>(
             IFullAuditableDbContext dbContext) where TEntity : Note
         {
-            return (TEntity o) =>
+            return (o) =>
                 !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter2, typeof(TEntity)) ||
                     o.CategoryName == "Hidden";
         }

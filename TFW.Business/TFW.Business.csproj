@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Cross\TFW.Cross.csproj" />
+    <ProjectReference Include="..\TFW.Data.Core\TFW.Data.Core.csproj" />
     <ProjectReference Include="..\TFW.Data\TFW.Data.csproj" />
     <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
   </ItemGroup>
