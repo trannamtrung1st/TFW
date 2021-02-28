@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Options;
 
 namespace TFW.Framework.EFCore.Context
@@ -137,45 +139,75 @@ namespace TFW.Framework.EFCore.Context
             return this.UpdateAsyncDefault(entity, patchAction);
         }
 
-        public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+        public virtual Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
             return this.BeginTransactionAsyncDefault(cancellationToken);
         }
 
-        public QueryFilter GetClonedFilter(string filterName)
+        public virtual QueryFilter GetClonedFilter(string filterName)
         {
             return queryFilterOptions.FilterMap[filterName].Clone();
         }
 
-        public IHighLevelDbContext EnableFilter(params string[] filterNames)
+        public virtual IHighLevelDbContext EnableFilter(params string[] filterNames)
         {
             queryFilterOptions.EnableFilter(filterNames);
 
             return this;
         }
 
-        public IHighLevelDbContext DisableFilter(params string[] filterNames)
+        public virtual IHighLevelDbContext DisableFilter(params string[] filterNames)
         {
             queryFilterOptions.DisableFilter(filterNames);
 
             return this;
         }
 
-        public IHighLevelDbContext ReplaceOrAddFilter(params QueryFilter[] filters)
+        public virtual IHighLevelDbContext ReplaceOrAddFilter(params QueryFilter[] filters)
         {
             queryFilterOptions.ReplaceOrAddFilter(filters);
 
             return this;
         }
 
-        public bool IsFilterEnabled(string filterName)
+        public virtual bool IsFilterEnabled(string filterName)
         {
             return queryFilterOptions.IsEnabled(filterName);
         }
 
-        public bool IsFilterAppliedForEntity(string filterName, Type eType)
+        public virtual bool IsFilterAppliedForEntity(string filterName, Type eType)
         {
             return queryFilterOptions.IsAppliedForEntity(filterName, eType);
+        }
+
+        public virtual IQueryable<T> QueryDeleted<T>() where T : class, ISoftDeleteEntity
+        {
+            return this.QueryDeletedDefault<T>();
+        }
+
+        public virtual Task<EntityEntry<E>> ReloadAsync<E>(E entity) where E : class
+        {
+            return this.ReloadAsyncDefault(entity);
+        }
+
+        public virtual EntityEntry<E> Remove<E>(E entity, bool isPhysical = false) where E : class
+        {
+            return this.RemoveDefault(entity, isPhysical);
+        }
+
+        public virtual void RemoveRange<E>(IEnumerable<E> list, bool isPhysical = false) where E : class
+        {
+            this.RemoveRangeDefault(list, isPhysical);
+        }
+
+        public virtual Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical = false) where E : class
+        {
+            return this.RemoveAsyncDefault<E>(key, isPhysical);
+        }
+
+        public virtual Task<int> SqlRemoveAllAsync(string tblName)
+        {
+            return this.SqlRemoveAllAsyncDefault(tblName);
         }
     }
 

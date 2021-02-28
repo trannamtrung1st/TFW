@@ -9,12 +9,76 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.Cross.Models;
+using TFW.Framework.EFCore.Queries;
 using TFW.Framework.i18n;
 
 namespace TFW.Framework.EFCore.Context
 {
     internal static class DbContextHelper
     {
+        public static IQueryable<T> QueryDeletedDefault<T>(this IFullAuditableDbContext dbContext) where T : class, ISoftDeleteEntity
+        {
+            var eType = typeof(T);
+
+            if (dbContext.IsSoftDeleteAppliedForEntity(eType))
+            {
+                var clonedFilter = dbContext.GetClonedFilter(QueryFilterConsts.SoftDeleteDefaultName);
+
+                var oldFilter = clonedFilter.ApplyFilter;
+                clonedFilter.ApplyFilter = o => oldFilter(o) && o != eType;
+
+                dbContext.ReplaceOrAddFilter(clonedFilter);
+            }
+
+            return dbContext.Set<T>().IsDeleted();
+        }
+
+        public static async Task<EntityEntry<E>> ReloadAsyncDefault<E>(this IFullAuditableDbContext dbContext, E entity) where E : class
+        {
+            var entry = dbContext.Entry(entity);
+
+            await entry.ReloadAsync();
+
+            return entry;
+        }
+
+        public static EntityEntry<E> RemoveDefault<E>(this IFullAuditableDbContext dbContext, E entity, bool isPhysical = false) where E : class
+        {
+            if (isPhysical)
+                return dbContext.Remove(entity);
+
+            return dbContext.SoftDelete(entity);
+        }
+
+        public static void RemoveRangeDefault<E>(this IFullAuditableDbContext dbContext, IEnumerable<E> list, bool isPhysical = false) where E : class
+        {
+            if (isPhysical)
+            {
+                dbContext.RemoveRange(list);
+                return;
+            }
+
+            dbContext.SoftDeleteRange(list);
+        }
+
+        public static async Task<EntityEntry<E>> RemoveAsyncDefault<E>(this IFullAuditableDbContext dbContext, object[] key, bool isPhysical = false) where E : class
+        {
+            var entity = await dbContext.FindAsync<E>(key);
+
+            if (entity == null)
+                throw new KeyNotFoundException();
+
+            if (isPhysical)
+                return dbContext.Remove(entity);
+
+            return dbContext.SoftDelete(entity);
+        }
+
+        public static Task<int> SqlRemoveAllAsyncDefault(this IFullAuditableDbContext dbContext, string tblName)
+        {
+            return dbContext.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM {tblName}");
+        }
+
         public static void AuditEntitiesDefault(this IFullAuditableDbContext dbContext)
         {
             var hasChanges = dbContext.ChangeTracker.HasChanges();

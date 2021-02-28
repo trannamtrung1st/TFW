@@ -55,6 +55,8 @@ namespace TFW.Framework.EFCore.Context
             where E : class;
         Task<EntityEntry<E>> UpdateAsync<E>(E entity, Func<E, Task> patchAction)
             where E : class;
+        Task<EntityEntry<E>> ReloadAsync<E>(E entity) where E : class;
+        Task<int> SqlRemoveAllAsync(string tblName);
     }
 
 }
