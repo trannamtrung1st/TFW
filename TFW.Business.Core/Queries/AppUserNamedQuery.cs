@@ -18,10 +18,10 @@ namespace TFW.Business.Core.Queries
             return query.Where(o => o.UserName == username);
         }
 
-        public static IQueryable<AppUser> BySearch(this IQueryable<AppUser> query, string search)
+        public static IQueryable<AppUser> BySearchTerm(this IQueryable<AppUser> query, string searchTerm)
         {
-            return query.Where(o => o.UserName.Contains(search)
-                || o.FullName.Contains(search));
+            return query.Where(o => o.UserName.Contains(searchTerm)
+                || o.FullName.Contains(searchTerm));
         }
     }
 }

@@ -7,28 +7,25 @@ namespace TFW.Cross.Models.Common
 {
     public abstract class PagingQueryModel
     {
-        public int Page { get; set; } = 1;
+        public int Page { get; set; } = QueryConsts.DefaultPage;
         public int PageLimit { get; set; } = QueryConsts.DefaultPageLimit;
     }
 
     public abstract class BaseDynamicQueryModel : PagingQueryModel
     {
         // projection
-        protected string defaultField;
+        protected abstract string[] DefaultFields { get; }
 
         protected string[] fields;
         public string[] Fields
         {
             get
             {
-                if (fields.IsNullOrEmpty() && defaultField != null)
-                    fields = new[] { defaultField };
-
-                return fields;
+                return fields ?? DefaultFields;
             }
             set
             {
-                fields = value;
+                fields = value.IsNullOrEmpty() ? DefaultFields : value;
             }
         }
 

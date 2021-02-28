@@ -51,8 +51,8 @@ namespace TFW.Business.Core.Logics
             if (queryModel.UserName != null)
                 query = query.ByUsername(queryModel.UserName);
 
-            if (queryModel.Search != null)
-                query = query.BySearch(queryModel.Search);
+            if (queryModel.SearchTerm != null)
+                query = query.BySearchTerm(queryModel.SearchTerm);
             #endregion
 
             var orgQuery = query;

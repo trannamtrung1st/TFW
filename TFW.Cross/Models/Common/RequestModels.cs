@@ -8,7 +8,7 @@ namespace TFW.Cross.Models.Common
     public abstract class BaseGetListRequestModel
     {
         public bool countTotal { get; set; }
-        public int page { get; set; } = 1;
+        public int page { get; set; } = QueryConsts.DefaultPage;
         public int pageLimit { get; set; } = QueryConsts.DefaultPageLimit;
 
         private string _sortBy;

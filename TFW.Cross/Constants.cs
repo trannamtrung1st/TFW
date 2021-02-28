@@ -19,6 +19,7 @@ namespace TFW.Cross
     public static class QueryConsts
     {
         public const char SortAscPrefix = 'a';
+        public const int DefaultPage = 1;
         public const int DefaultPageLimit = 100;
     }
 

@@ -12,20 +12,17 @@ namespace TFW.Cross.Models.AppUser
     {
         public string id { get; set; }
         public string userName { get; set; }
-        public string search { get; set; }
+        public string searchTerm { get; set; }
     }
 
     public class DynamicQueryAppUserModel : BaseDynamicQueryModel
     {
-        public DynamicQueryAppUserModel()
-        {
-            defaultField = FieldInfo;
-        }
+        protected override string[] DefaultFields => new[] { FieldInfo };
 
         #region Filter options
         public string Id { get; set; }
         public string UserName { get; set; }
-        public string Search { get; set; }
+        public string SearchTerm { get; set; }
         #endregion
 
         #region Sorting constants
