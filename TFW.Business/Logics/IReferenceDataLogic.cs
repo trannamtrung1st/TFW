@@ -8,8 +8,9 @@ namespace TFW.Business.Logics
 {
     public interface IReferenceDataLogic
     {
-        Task<TimeZoneOption[]> GetTimeZoneOptionsAsync();
-        Task<CultureOption[]> GetCultureOptionsAsync();
-        Task<CurrencyOption[]> GetCurrencyOptionsAsync();
+        Task<GetListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync();
+        Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync();
+        Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync();
+        Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync();
     }
 }

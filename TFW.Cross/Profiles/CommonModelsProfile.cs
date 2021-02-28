@@ -27,6 +27,8 @@ namespace TFW.Cross.Profiles
             CreateMap<CultureInfo, CultureOption>();
 
             CreateMap<RegionInfo, CurrencyOption>();
+
+            CreateMap<RegionInfo, RegionOption>();
         }
     }
 }

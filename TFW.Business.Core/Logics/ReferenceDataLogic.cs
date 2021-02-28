@@ -20,28 +20,61 @@ namespace TFW.Business.Core.Logics
         {
         }
 
-        public Task<TimeZoneOption[]> GetTimeZoneOptionsAsync()
+        public Task<GetListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync()
         {
             // [TODO] add caching
             var timeZoneOptions = TimeZoneHelper.GetAllTimeZones().MapTo<TimeZoneOption>().ToArray();
 
-            return Task.FromResult(timeZoneOptions);
+            var response = new GetListResponseModel<TimeZoneOption>()
+            {
+                List = timeZoneOptions,
+                TotalCount = timeZoneOptions.Length
+            };
+
+            return Task.FromResult(response);
         }
 
-        public Task<CultureOption[]> GetCultureOptionsAsync()
+        public Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync()
         {
             // [TODO] add caching
             var cultureOptions = Settings.App.SupportedCultureInfos.MapTo<CultureOption>().ToArray();
 
-            return Task.FromResult(cultureOptions);
+            var response = new GetListResponseModel<CultureOption>()
+            {
+                List = cultureOptions,
+                TotalCount = cultureOptions.Length
+            };
+
+            return Task.FromResult(response);
         }
 
-        public Task<CurrencyOption[]> GetCurrencyOptionsAsync()
+        public Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
         {
             // [TODO] add caching
             var currencyOptions = Settings.App.SupportedRegionInfos.MapTo<CurrencyOption>().ToArray();
 
-            return Task.FromResult(currencyOptions);
+            var response = new GetListResponseModel<CurrencyOption>()
+            {
+                List = currencyOptions,
+                TotalCount = currencyOptions.Length
+            };
+
+            return Task.FromResult(response);
         }
+
+        public Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync()
+        {
+            // [TODO] add caching
+            var countryOptions = CultureHelper.GetRegions().MapTo<RegionOption>().ToArray();
+
+            var response = new GetListResponseModel<RegionOption>()
+            {
+                List = countryOptions,
+                TotalCount = countryOptions.Length
+            };
+
+            return Task.FromResult(response);
+        }
+
     }
 }

@@ -19,21 +19,25 @@ namespace TFW.Business.Core.Services
             _referenceDataLogic = referenceDataLogic;
         }
 
-        public Task<TimeZoneOption[]> GetTimeZoneOptionsAsync()
+        public Task<GetListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync()
         {
             return _referenceDataLogic.GetTimeZoneOptionsAsync();
         }
 
-        public Task<CultureOption[]> GetCultureOptionsAsync()
+        public Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync()
         {
             return _referenceDataLogic.GetCultureOptionsAsync();
         }
 
-        public Task<CurrencyOption[]> GetCurrencyOptionsAsync()
+        public Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
         {
             return _referenceDataLogic.GetCurrencyOptionsAsync();
         }
 
+        public Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync()
+        {
+            return _referenceDataLogic.GetRegionOptionsAsync();
+        }
 
     }
 }
