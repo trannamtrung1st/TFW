@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 using TFW.Cross.Models.Common;
 using AU = TFW.Cross.Entities.AppUser;
@@ -17,7 +18,7 @@ namespace TFW.Cross.Models.AppUser
 
     public class DynamicQueryAppUserModel : BaseDynamicQueryModel
     {
-        protected override string[] DefaultFields => new[] { FieldInfo };
+        protected override string[] DefaultFields { get; } = new[] { FieldInfo };
 
         #region Filter options
         public string Id { get; set; }
@@ -29,14 +30,14 @@ namespace TFW.Cross.Models.AppUser
         public const string SortByUsername = "username";
         public const string DefaultSortBy = "a" + SortByUsername;
 
-        public static readonly string[] SortOptions = new[] { SortByUsername };
+        public static readonly IEnumerable<string> SortOptions = ImmutableArray.Create(SortByUsername);
         #endregion
 
         #region Projection constants
         public const string FieldInfo = "info";
         public const string FieldNotes = "notes";
 
-        public static readonly IDictionary<string, string> Projections =
+        public static readonly IReadOnlyDictionary<string, string> Projections =
             new Dictionary<string, string>()
             {
                 {
@@ -48,7 +49,7 @@ namespace TFW.Cross.Models.AppUser
                     $".Select(new {typeof(NoteResponseModel).FullName}" +
                     $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
                 }
-            };
+            }.ToImmutableDictionary();
         #endregion
     }
 

@@ -12,6 +12,9 @@ namespace System.Web
 
         internal static void Configure(IHttpContextAccessor contextAccessor)
         {
+            if (_contextAccessor != null)
+                throw new InvalidOperationException($"Already initialized {nameof(contextAccessor)}");
+
             _contextAccessor = contextAccessor;
         }
     }

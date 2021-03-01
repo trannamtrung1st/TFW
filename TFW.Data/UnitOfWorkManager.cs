@@ -13,6 +13,9 @@ namespace TFW.Data
 
         internal static void Configure(IUnitOfWorkProvider uowProvider)
         {
+            if (_uowProvider != null)
+                throw new ArgumentNullException($"Already initialized {nameof(uowProvider)}");
+
             _uowProvider = uowProvider;
         }
         #endregion

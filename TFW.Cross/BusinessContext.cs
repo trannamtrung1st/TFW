@@ -16,6 +16,9 @@ namespace TFW.Cross
 
         internal static void Configure(IBusinessContextProvider bizContextProvider)
         {
+            if (_bizContextProvider != null)
+                throw new ArgumentNullException($"Already initialized {nameof(bizContextProvider)}");
+
             _bizContextProvider = bizContextProvider;
         }
         #endregion

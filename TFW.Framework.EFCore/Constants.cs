@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace TFW.Framework.EFCore
@@ -11,6 +12,6 @@ namespace TFW.Framework.EFCore
 
     public static class SqlServerConsts
     {
-        public static readonly string[] TextColumnTypes = new[] { "text", "ntext" };
+        public static readonly IEnumerable<string> TextColumnTypes = ImmutableArray.Create("text", "ntext");
     }
 }

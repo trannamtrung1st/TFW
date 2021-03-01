@@ -36,7 +36,7 @@ namespace TFW.Framework.Web.Options
             };
         }
 
-        public void ScanShouldSkipFilterTypes(Assembly controllerAssembly, string[] controllerNs, bool includeSubns = true)
+        public void ScanShouldSkipFilterTypes(Assembly controllerAssembly, IEnumerable<string> controllerNs, bool includeSubns = true)
         {
             var types = controllerNs.SelectMany(ns => ReflectionHelper.GetTypesOfNamespace(
                     ns, controllerAssembly, includeSubns));

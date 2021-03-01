@@ -13,7 +13,7 @@ namespace TFW.Framework.i18n.Helpers
             return CultureInfo.GetCultures(type);
         }
 
-        public static RegionInfo[] GetRegions()
+        public static RegionInfo[] GetDistinctRegions()
         {
             var regions = GetCultures(CultureTypes.SpecificCultures & ~CultureTypes.NeutralCultures)
                 .Where(o => !o.IsNeutralCulture).Select(o => o.LCID)

@@ -65,7 +65,7 @@ namespace TFW.Business.Core.Logics
         public Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync()
         {
             // [TODO] add caching
-            var countryOptions = CultureHelper.GetRegions().MapTo<RegionOption>().ToArray();
+            var countryOptions = CultureHelper.GetDistinctRegions().MapTo<RegionOption>().ToArray();
 
             var response = new GetListResponseModel<RegionOption>()
             {

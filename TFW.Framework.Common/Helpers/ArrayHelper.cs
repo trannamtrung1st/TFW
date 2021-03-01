@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TFW.Framework.Common.Helpers
 {
     public static class ArrayHelper
     {
-        public static bool IsNullOrEmpty<T>(this T[] arr)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection)
         {
-            return arr == null || arr.Length == 0;
+            return collection == null || !collection.Any();
         }
 
-        public static bool IsNullOrEmpty(this object[] arr)
-        {
-            return arr == null || arr.Length == 0;
-        }
-
-        public static string ToCommaString(this object[] arr)
+        public static string ToCommaString(this IEnumerable<object> arr)
         {
             return string.Join(',', arr);
         }

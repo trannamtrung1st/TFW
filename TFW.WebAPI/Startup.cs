@@ -193,7 +193,7 @@ namespace TFW.WebAPI
                         Type = ReferenceType.SecurityScheme,
                         Id = JwtBearerDefaults.AuthenticationScheme
                     }
-                }] = new string[] { };
+                }] = Array.Empty<string>();
                 c.AddSecurityRequirement(requirement);
             });
             #endregion
@@ -209,7 +209,7 @@ namespace TFW.WebAPI
             {
                 cfg.AddMaps(_tempAssemblyList);
             });
-            GlobalMapper.Instance = mapConfig.CreateMapper();
+            GlobalMapper.Init(mapConfig.CreateMapper());
 
             // Dynamic Linq
             DynamicLinqEntityTypeProvider.DefaultParsingConfig = new ParsingConfig

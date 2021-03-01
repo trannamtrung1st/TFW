@@ -27,7 +27,7 @@ namespace TFW.Cross.Providers
 
         public override HashSet<Type> GetCustomTypes() => _entityTypes;
 
-        private static HashSet<Type> _entityTypes;
+        private static readonly HashSet<Type> _entityTypes;
 
         static DynamicLinqEntityTypeProvider()
         {

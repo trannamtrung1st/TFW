@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq.Expressions;
 using System.Text;
 using TFW.Business.Core.Helpers;
@@ -16,20 +17,19 @@ namespace TFW.Business.Core.Providers
 {
     public class AppQueryFilterProvider : IQueryFilterProvider
     {
-        public QueryFilter[] DefaultFilters => new[]
-        {
+        public IEnumerable<QueryFilter> DefaultFilters => ImmutableArray.Create(
             QueryFilter.BuildDefaultSoftDelete(),
             new QueryFilter(QueryFilterName.AnotherFilter1, applyFilter: o => o.IsAppUserEntity()),
             new QueryFilter(QueryFilterName.AnotherFilter2, applyFilter: o => o.IsNoteEntity())
-        };
+        );
     }
 
     public class AppQueryFilterConfigProvider : IQueryFilterConfigProvider
     {
-        public (Func<IMutableEntityType, bool>, string)[] Conditions => new (Func<IMutableEntityType, bool>, string)[]
-        {
-            (ShouldAddSoftDeleteFilter, nameof(CreateSoftDeleteFilter))
-        };
+        public IEnumerable<(Func<IMutableEntityType, bool>, string)> Conditions =>
+            ImmutableArray.Create<(Func<IMutableEntityType, bool>, string)>(
+                (ShouldAddSoftDeleteFilter, nameof(CreateSoftDeleteFilter))
+            );
 
         #region Soft delete filter
         protected virtual bool ShouldAddSoftDeleteFilter(IMutableEntityType eType)
@@ -53,11 +53,11 @@ namespace TFW.Business.Core.Providers
     /// </summary>
     public class AnotherQueryFilterConfigProvider : IQueryFilterConfigProvider
     {
-        public (Func<IMutableEntityType, bool>, string)[] Conditions => new (Func<IMutableEntityType, bool>, string)[]
-        {
-            (ShouldAddAnotherFilter1, nameof(CreateAnotherFilter1)),
-            (ShouldAddAnotherFilter2, nameof(CreateAnotherFilter2)),
-        };
+        public IEnumerable<(Func<IMutableEntityType, bool>, string)> Conditions =>
+            ImmutableArray.Create<(Func<IMutableEntityType, bool>, string)>(
+                (ShouldAddAnotherFilter1, nameof(CreateAnotherFilter1)),
+                (ShouldAddAnotherFilter2, nameof(CreateAnotherFilter2))
+            );
 
         protected virtual bool ShouldAddAnotherFilter1(IMutableEntityType eType)
         {

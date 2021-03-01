@@ -19,6 +19,7 @@ namespace TFW.WebAPI.Models
             {
                 if (_instance == null)
                     _instance = new ApiSettings();
+
                 return _instance;
             }
         }

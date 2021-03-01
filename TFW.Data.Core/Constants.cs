@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace TFW.Data.Core
@@ -18,14 +19,14 @@ namespace TFW.Data.Core
         public const int DefaultCodeLikeStringLength = 100;
         public const int DefaultDescriptionLikeStringLength = 2000;
 
-        public static readonly string[] CommonTitleLikeColumnEndWiths =
-            new[] { "Name", "Title", "Subject", "Caption", "Label", "Tag" };
+        public static readonly IEnumerable<string> CommonTitleLikeColumnEndWiths =
+            ImmutableArray.Create("Name", "Title", "Subject", "Caption", "Label", "Tag");
 
-        public static readonly string[] CommonCodeLikeColumnEndWiths =
-            new[] { "Code", "Key" };
+        public static readonly IEnumerable<string> CommonCodeLikeColumnEndWiths =
+            ImmutableArray.Create("Code", "Key");
 
-        public static readonly string[] CommonDescriptionLikeColumnEndWiths =
-            new[] { "Description", "Overview", "Overall" };
+        public static readonly IEnumerable<string> CommonDescriptionLikeColumnEndWiths =
+            ImmutableArray.Create("Description", "Overview", "Overall");
     }
 
 }
