@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
+using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Setting;
+using TFW.Cross.Providers;
 using TFW.Data;
 using TFW.Data.Core;
 using TFW.Framework.AutoMapper;
@@ -37,6 +40,8 @@ namespace TFW.WebAPI
 {
     public class Startup
     {
+        private static IEnumerable<Assembly> _tempAssemblyList;
+
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -60,7 +65,7 @@ namespace TFW.WebAPI
             #region Common
             var connStr = Configuration.GetConnectionString(DataConsts.ConnStrKey);
 
-            GlobalResources.TempAssemblyList = ReflectionHelper.GetAllAssemblies(
+            _tempAssemblyList = ReflectionHelper.GetAllAssemblies(
                 excludedRelativeDirPaths: WebApiConsts.ExcludedAssemblyDirs);
             #endregion
 
@@ -82,7 +87,7 @@ namespace TFW.WebAPI
                 .AddHttpContextAccessor()
                 .AddHttpBusinessContextProvider()
                 .AddHttpUnitOfWorkProvider()
-                .ScanServices(GlobalResources.TempAssemblyList)
+                .ScanServices(_tempAssemblyList)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestTimeZoneMiddleware()
@@ -202,12 +207,15 @@ namespace TFW.WebAPI
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(GlobalResources.TempAssemblyList);
+                cfg.AddMaps(_tempAssemblyList);
             });
             GlobalMapper.Instance = mapConfig.CreateMapper();
 
             // Dynamic Linq
-            GlobalResources.CustomTypeProvider = dynamicLinkCustomTypeProvider;
+            DynamicLinqEntityTypeProvider.DefaultParsingConfig = new ParsingConfig
+            {
+                CustomTypeProvider = dynamicLinkCustomTypeProvider
+            };
 
             // i18n
             Time.Providers.Default = Time.Providers.Utc;
@@ -282,8 +290,8 @@ namespace TFW.WebAPI
 
         private void OnApplicationStarted()
         {
-            // handle application started
-            GlobalResources.TempAssemblyList = null; // release temp list
+            // clear caching
+            _tempAssemblyList = null;
         }
     }
 }

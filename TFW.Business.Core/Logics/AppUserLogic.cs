@@ -13,6 +13,7 @@ using TFW.Cross.Entities;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
+using TFW.Cross.Providers;
 using TFW.Data.Core;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.Common.Helpers;
@@ -29,7 +30,7 @@ namespace TFW.Business.Core.Logics
         }
 
         public async Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
-            GetAppUserListRequestModel requestModel, Type projectionType = null)
+            GetAppUserListRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null)
         {
             #region Validation
             var userInfo = BusinessContext.Current?.PrincipalInfo;
@@ -90,7 +91,8 @@ namespace TFW.Business.Core.Logics
             var projectionStr = string.Join(',', projectionArr);
             if (projectionType == null) projectionType = typeof(AppUserResponseModel);
 
-            var projectedQuery = query.Select<AppUserResponseModel>(defaultParsingConfig,
+            var projectedQuery = query.Select<AppUserResponseModel>(
+                parsingConfig ?? DynamicLinqEntityTypeProvider.DefaultParsingConfig,
                 $"new {projectionType.FullName}({projectionStr})");
             #endregion
 
