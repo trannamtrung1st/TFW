@@ -1,21 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using TFW.Cross.Models.Common;
 using AU = TFW.Cross.Entities.AppUser;
 using N = TFW.Cross.Entities.Note;
 
 namespace TFW.Cross.Models.AppUser
 {
-    public class GetAppUserListRequestModel : BaseGetListRequestModel
-    {
-        public string id { get; set; }
-        public string userName { get; set; }
-        public string searchTerm { get; set; }
-    }
-
     public class DynamicQueryAppUserModel : BaseDynamicQueryModel
     {
         protected override string[] DefaultFields { get; } = new[] { FieldInfo };
@@ -51,35 +41,5 @@ namespace TFW.Cross.Models.AppUser
                 }
             }.ToImmutableDictionary();
         #endregion
-    }
-
-    public class AppUserResponseModel
-    {
-        [JsonProperty("fullName")]
-        public string FullName { get; set; }
-
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("username")]
-        public string UserName { get; set; }
-
-        [JsonProperty("notes")]
-        public IEnumerable<NoteResponseModel> Notes { get; set; }
-    }
-
-    public class NoteResponseModel
-    {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("categoryName")]
-        public string CategoryName { get; set; }
     }
 }
