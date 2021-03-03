@@ -1,20 +1,28 @@
 ﻿using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using TFW.Framework.Common.Helpers;
 
 namespace TFW.Cross.Models.Common
 {
-    public class AppResult
+    public class AppResult<T>
     {
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public string Message { get; set; }
 
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public object Data { get; set; }
+        public T Data { get; set; }
 
         [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
         public ResultCode? Code { get; set; }
 
+        [JsonExtensionData]
+        public IDictionary<string, object> Extra { get; set; } = new Dictionary<string, object>();
+    }
+
+    public class AppResult : AppResult<object>
+    {
         public static AppResult Success(object data = null, string mess = null)
         {
             return new AppResult

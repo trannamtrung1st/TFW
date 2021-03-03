@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TFW.Business.Services;
 using TFW.Cross;
+using TFW.Cross.Models.Common;
 using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
@@ -30,6 +33,7 @@ namespace TFW.WebAPI.Controllers
             _referenceDataService = referenceDataService;
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<TimeZoneOption>>))]
         [HttpGet(Endpoint.GetTimeZoneOptions)]
         public async Task<IActionResult> GetTimeZoneOptions()
         {
@@ -38,6 +42,7 @@ namespace TFW.WebAPI.Controllers
             return Success(data);
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CultureOption>>))]
         [HttpGet(Endpoint.GetCultureOptions)]
         public async Task<IActionResult> GetCultureOptions()
         {
@@ -46,6 +51,7 @@ namespace TFW.WebAPI.Controllers
             return Success(data);
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CurrencyOption>>))]
         [HttpGet(Endpoint.GetCurrencyOptions)]
         public async Task<IActionResult> GetCurrencyOptions()
         {
@@ -54,6 +60,7 @@ namespace TFW.WebAPI.Controllers
             return Success(data);
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<RegionOption>>))]
         [HttpGet(Endpoint.GetRegionOptions)]
         public async Task<IActionResult> GetRegionOptions()
         {

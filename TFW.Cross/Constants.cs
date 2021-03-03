@@ -89,6 +89,11 @@ namespace TFW.Cross
         #endregion
     }
 
+    public static class SecurityConsts
+    {
+        public const string OAuth2 = nameof(OAuth2);
+    }
+
     public static class EntityTableName
     {
         public const string AppUser = "AspNetUsers";

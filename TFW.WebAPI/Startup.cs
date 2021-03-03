@@ -176,6 +176,8 @@ namespace TFW.WebAPI
                     TermsOfService = new Uri("https://example.com/terms"),
                 });
 
+                c.OperationFilter<SwaggerSecurityOperationFilter>();
+
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
                     new OpenApiSecurityScheme
                     {

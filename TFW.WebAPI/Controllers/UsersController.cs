@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.AppUser;
+using TFW.Cross.Models.Common;
 using TFW.Data;
 using TFW.Framework.Web.Bindings;
 
@@ -13,7 +16,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         public static class Endpoint
@@ -29,6 +32,7 @@ namespace TFW.WebAPI.Controllers
             _identityService = identityService;
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<AppUserResponseModel>>))]
         [HttpGet(Endpoint.GetAppUserList)]
         public async Task<IActionResult> GetAppUserList([FromQuery][QueryObject] GetAppUserListRequestModel model)
         {
@@ -39,6 +43,7 @@ namespace TFW.WebAPI.Controllers
 
 
 #if DEBUG
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<AppUserResponseModel>>))]
         [HttpGet(Endpoint.GetDeletedAppUserList)]
         [AllowAnonymous]
         public async Task<IActionResult> GetDeletedAppUserList()

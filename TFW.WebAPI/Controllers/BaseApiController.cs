@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -9,6 +10,8 @@ using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
 {
+    [SwaggerResponse((int)HttpStatusCode.BadRequest, null, typeof(AppResult<ValidationData>))]
+    [SwaggerResponse((int)HttpStatusCode.InternalServerError, null, typeof(AppResult))]
     public abstract class BaseApiController : ControllerBase
     {
         protected readonly IUnitOfWork unitOfWork;
