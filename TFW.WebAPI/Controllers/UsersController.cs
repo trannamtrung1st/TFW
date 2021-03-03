@@ -41,7 +41,6 @@ namespace TFW.WebAPI.Controllers
             return Success(data);
         }
 
-
 #if DEBUG
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<AppUserResponseModel>>))]
         [HttpGet(Endpoint.GetDeletedAppUserList)]
@@ -53,6 +52,5 @@ namespace TFW.WebAPI.Controllers
             return Success(data);
         }
 #endif
-
     }
 }

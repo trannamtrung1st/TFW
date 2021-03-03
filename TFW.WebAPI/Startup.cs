@@ -28,6 +28,8 @@ using TFW.Framework.Configuration.Helpers;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
+using TFW.Framework.SimpleMail;
+using TFW.Framework.SimpleMail.Options;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Bindings;
@@ -92,6 +94,7 @@ namespace TFW.WebAPI
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
+                .AddSmtpService(Configuration.GetSection(nameof(SmtpOption)))
                 .ConfigureRequestTimeZoneDefault()
                 .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
                 .ConfigureFrameworkOptions(fwOptionsConfigurator);
