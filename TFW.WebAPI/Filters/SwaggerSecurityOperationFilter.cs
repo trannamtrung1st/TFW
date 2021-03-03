@@ -27,13 +27,21 @@ namespace TFW.WebAPI.Filters
                     .GetCustomAttributes(true)
                     .Where(filter).Distinct();
 
+            operationAttrs = operationAttrs.ToArray();
+
             if (operationAttrs.Any() && !operationAttrs.Any(o => allowAnonymousAttr.IsAssignableFrom(o.GetType())))
             {
                 var authAttrs = operationAttrs.Where(o => !allowAnonymousAttr.IsAssignableFrom(o.GetType()))
                     .Select(o => o as AuthorizeAttribute);
 
-                operation.Responses.Add($"{(int)HttpStatusCode.Unauthorized}", new OpenApiResponse { Description = nameof(HttpStatusCode.Unauthorized) });
-                operation.Responses.Add($"{(int)HttpStatusCode.Forbidden}", new OpenApiResponse { Description = nameof(HttpStatusCode.Forbidden) });
+                operation.Responses.Add($"{(int)HttpStatusCode.Unauthorized}", new OpenApiResponse
+                {
+                    Description = nameof(HttpStatusCode.Unauthorized)
+                });
+                operation.Responses.Add($"{(int)HttpStatusCode.Forbidden}", new OpenApiResponse
+                {
+                    Description = nameof(HttpStatusCode.Forbidden)
+                });
 
                 var oAuthScheme = new OpenApiSecurityScheme
                 {
