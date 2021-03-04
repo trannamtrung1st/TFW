@@ -14,8 +14,7 @@ using TFW.Data;
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.ReferenceDataApi)]
-    [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ReferenceDataController : BaseApiController
     {
         public static class Endpoint

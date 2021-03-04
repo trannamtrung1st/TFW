@@ -10,6 +10,7 @@ using TFW.Data;
 
 namespace TFW.WebAPI.Controllers
 {
+    [ApiController]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, null, typeof(AppResult<ValidationData>))]
     [SwaggerResponse((int)HttpStatusCode.InternalServerError, null, typeof(AppResult))]
     public abstract class BaseApiController : ControllerBase

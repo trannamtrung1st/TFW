@@ -15,7 +15,6 @@ using TFW.Data;
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.RoleApi)]
-    [ApiController]
     [Authorize]
     public class RolesController : BaseApiController
     {

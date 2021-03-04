@@ -15,7 +15,6 @@ namespace TFW.WebAPI.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route(ApiEndpoint.Error)]
-    [ApiController]
     public class ErrorController : BaseApiController
     {
         private readonly IWebHostEnvironment _env;

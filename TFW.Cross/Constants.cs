@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using TFW.Cross.Models.Setting;
 
 namespace TFW.Cross
 {
@@ -93,6 +95,24 @@ namespace TFW.Cross
     public static class SecurityConsts
     {
         public const string OAuth2 = nameof(OAuth2);
+
+        public static class GrantType
+        {
+            public const string Password = "password";
+            public const string RefreshToken = "refresh_token";
+        }
+
+        public static readonly TokenValidationParameters DefaultTokenParameters = new TokenValidationParameters()
+        {
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = Settings.Jwt.Issuer,
+            ValidAudience = Settings.Jwt.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.Default.GetBytes(Settings.Jwt.SecretKey)),
+            ClockSkew = TimeSpan.Zero
+        };
     }
 
     public static class RoleName

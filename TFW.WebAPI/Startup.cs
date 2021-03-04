@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TFW.Cross;
 using TFW.Cross.Entities;
@@ -130,17 +129,7 @@ namespace TFW.WebAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(jwtBearerOptions =>
                 {
-                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Settings.Jwt.Issuer,
-                        ValidAudience = Settings.Jwt.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.Default.GetBytes(Settings.Jwt.SecretKey)),
-                        ClockSkew = TimeSpan.Zero
-                    };
+                    jwtBearerOptions.TokenValidationParameters = SecurityConsts.DefaultTokenParameters;
                     //jwtBearerOptions.Events = new JwtBearerEvents
                     //{
                     //    OnMessageReceived = (context) =>
