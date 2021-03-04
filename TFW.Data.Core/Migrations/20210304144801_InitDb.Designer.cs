@@ -10,7 +10,7 @@ using TFW.Data.Core;
 namespace TFW.Data.Core.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210218165010_InitDb")]
+    [Migration("20210304144801_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,6 +137,15 @@ namespace TFW.Data.Core.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "Administrator",
+                            ConcurrencyStamp = "9b6ad1e6-3c08-42c3-ac82-7df4c7091324",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
                 });
 
             modelBuilder.Entity("TFW.Cross.Entities.AppUser", b =>
@@ -336,7 +345,7 @@ namespace TFW.Data.Core.Migrations
                     b.HasOne("TFW.Cross.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -345,7 +354,7 @@ namespace TFW.Data.Core.Migrations
                     b.HasOne("TFW.Cross.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -354,7 +363,7 @@ namespace TFW.Data.Core.Migrations
                     b.HasOne("TFW.Cross.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -363,7 +372,7 @@ namespace TFW.Data.Core.Migrations
                     b.HasOne("TFW.Cross.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -372,22 +381,24 @@ namespace TFW.Data.Core.Migrations
                     b.HasOne("TFW.Cross.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TFW.Cross.Entities.AppRole", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1");
+                        .HasForeignKey("RoleId1")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TFW.Cross.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TFW.Cross.Entities.AppUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TFW.Cross.Entities.Note", b =>

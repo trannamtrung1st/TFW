@@ -95,6 +95,11 @@ namespace TFW.Cross
         public const string OAuth2 = nameof(OAuth2);
     }
 
+    public static class RoleName
+    {
+        public const string Administrator = nameof(Administrator);
+    }
+
     public static class EntityTableName
     {
         public const string AppUser = "AspNetUsers";
