@@ -21,8 +21,8 @@ namespace TFW.WebAPI.Controllers
     {
         public static class Endpoint
         {
-            public const string GetAppUserList = "";
-            public const string GetDeletedAppUserList = "deleted";
+            public const string GetListAppUser = "";
+            public const string GetListDeletedAppUser = "deleted";
         }
 
         private readonly IIdentityService _identityService;
@@ -32,22 +32,22 @@ namespace TFW.WebAPI.Controllers
             _identityService = identityService;
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<AppUserResponseModel>>))]
-        [HttpGet(Endpoint.GetAppUserList)]
-        public async Task<IActionResult> GetAppUserList([FromQuery][QueryObject] GetAppUserListRequestModel model)
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
+        [HttpGet(Endpoint.GetListAppUser)]
+        public async Task<IActionResult> GetListAppUser([FromQuery][QueryObject] GetListAppUsersRequestModel model)
         {
-            var data = await _identityService.GetListAppUserAsync(model);
+            var data = await _identityService.GetListAppUsersAsync(model);
 
             return Success(data);
         }
 
 #if DEBUG
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<AppUserResponseModel>>))]
-        [HttpGet(Endpoint.GetDeletedAppUserList)]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
+        [HttpGet(Endpoint.GetListDeletedAppUser)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetDeletedAppUserList()
+        public async Task<IActionResult> GetListDeletedAppUser()
         {
-            var data = await _identityService.GetListDeletedAppUserAsync();
+            var data = await _identityService.GetListDeletedAppUsersAsync();
 
             return Success(data);
         }

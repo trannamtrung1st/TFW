@@ -29,8 +29,8 @@ namespace TFW.Business.Core.Logics
         {
         }
 
-        public async Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
-            GetAppUserListRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null)
+        public async Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListAsync(
+            GetListAppUsersRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null)
         {
             #region Validation
             var userInfo = BusinessContext.Current?.PrincipalInfo;
@@ -89,15 +89,15 @@ namespace TFW.Business.Core.Logics
             #region Projection
             var projectionArr = queryModel.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
             var projectionStr = string.Join(',', projectionArr);
-            if (projectionType == null) projectionType = typeof(AppUserResponseModel);
+            if (projectionType == null) projectionType = typeof(GetListAppUsersResponseModel);
 
-            var projectedQuery = query.Select<AppUserResponseModel>(
+            var projectedQuery = query.Select<GetListAppUsersResponseModel>(
                 parsingConfig ?? DynamicLinqEntityTypeProvider.DefaultParsingConfig,
                 $"new {projectionType.FullName}({projectionStr})");
             #endregion
 
             var responseModels = await projectedQuery.ToArrayAsync();
-            var response = new GetListResponseModel<AppUserResponseModel>
+            var response = new GetListResponseModel<GetListAppUsersResponseModel>
             {
                 List = responseModels,
             };
@@ -108,12 +108,12 @@ namespace TFW.Business.Core.Logics
             return response;
         }
 
-        public async Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync()
+        public async Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListDeletedAsync()
         {
             var responseModels = await dbContext.QueryDeleted<AppUser>()
-                .AsNoTracking().DefaultProjectTo<AppUserResponseModel>().ToArrayAsync();
+                .AsNoTracking().DefaultProjectTo<GetListAppUsersResponseModel>().ToArrayAsync();
 
-            var response = new GetListResponseModel<AppUserResponseModel>
+            var response = new GetListResponseModel<GetListAppUsersResponseModel>
             {
                 List = responseModels,
                 TotalCount = responseModels.Length

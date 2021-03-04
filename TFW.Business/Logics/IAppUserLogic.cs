@@ -11,10 +11,10 @@ namespace TFW.Business.Logics
 {
     public interface IAppUserLogic
     {
-        Task<GetListResponseModel<AppUserResponseModel>> GetListAsync(
-            GetAppUserListRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null);
+        Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListAsync(
+            GetListAppUsersRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null);
 
-        Task<GetListResponseModel<AppUserResponseModel>> GetListDeletedAppUserAsync();
+        Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListDeletedAsync();
 
         PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal);
     }

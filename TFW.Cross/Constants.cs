@@ -26,6 +26,7 @@ namespace TFW.Cross
     public static class ApiEndpoint
     {
         public const string UserApi = "api/users";
+        public const string RoleApi = "api/roles";
         public const string ReferenceDataApi = "api/ref";
         public const string Error = "error";
     }

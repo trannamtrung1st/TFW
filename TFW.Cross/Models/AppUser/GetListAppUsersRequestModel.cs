@@ -4,7 +4,7 @@ using TFW.Cross.Models.Common;
 
 namespace TFW.Cross.Models.AppUser
 {
-    public class GetAppUserListRequestModel : BaseGetListRequestModel
+    public class GetListAppUsersRequestModel : BaseGetListRequestModel
     {
         public string id { get; set; }
         public string userName { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TFW.Cross.Models.AppUser
 {
-    public class AppUserResponseModel
+    public class GetListAppUsersResponseModel
     {
         [JsonProperty("fullName")]
         public string FullName { get; set; }
