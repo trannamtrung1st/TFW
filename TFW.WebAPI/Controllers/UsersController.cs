@@ -23,6 +23,7 @@ namespace TFW.WebAPI.Controllers
             public const string GetListAppUser = "";
             public const string GetListDeletedAppUser = "deleted";
             public const string GetCurrentUserProfile = "profile";
+            public const string Register = "register";
         }
 
         private readonly IIdentityService _identityService;
@@ -48,6 +49,16 @@ namespace TFW.WebAPI.Controllers
             var data = await _identityService.GetUserProfileAsync(UserId);
 
             return Success(data);
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
+        [HttpPost(Endpoint.Register)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromForm] RegisterModel model)
+        {
+            await _identityService.RegisterAsync(model);
+
+            return NoContent();
         }
 
 #if DEBUG

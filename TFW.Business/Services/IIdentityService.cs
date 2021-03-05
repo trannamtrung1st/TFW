@@ -18,7 +18,9 @@ namespace TFW.Business.Services
         Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>();
 
         Task<UserProfileModel> GetUserProfileAsync(string userId);
-        
+
+        Task RegisterAsync(RegisterModel model);
+
         Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>();
 
         Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel);

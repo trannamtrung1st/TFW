@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -45,16 +46,17 @@ namespace TFW.WebAPI.Filters
 
                 var oAuthScheme = new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = SecurityConsts.OAuth2 }
-                };
-
-                operation.Security = new List<OpenApiSecurityRequirement>
-                {
-                    new OpenApiSecurityRequirement
+                    Reference = new OpenApiReference
                     {
-                        [ oAuthScheme ] = authAttrs.Select(o => o.Policy).ToArray()
+                        Type = ReferenceType.SecurityScheme,
+                        Id = JwtBearerDefaults.AuthenticationScheme
                     }
                 };
+
+                operation.Security.Add(new OpenApiSecurityRequirement
+                {
+                    [oAuthScheme] = authAttrs.Where(o => o.Policy != null).Select(o => o.Policy).ToArray()
+                });
             }
         }
     }

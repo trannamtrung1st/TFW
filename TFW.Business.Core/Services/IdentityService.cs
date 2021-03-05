@@ -157,6 +157,42 @@ namespace TFW.Business.Core.Services
             return userProfile;
         }
 
+        public async Task RegisterAsync(RegisterModel model)
+        {
+            #region Validation
+            var userInfo = BusinessContext.Current?.PrincipalInfo;
+            var validationData = new ValidationData();
+
+            // validation logic here
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            IdentityResult result;
+            using (var trans = dbContext.Database.BeginTransaction())
+            {
+                var appUser = new AppUser
+                {
+                    UserName = model.username,
+                    FullName = model.fullName,
+                    Email = model.email
+                };
+
+                result = await CreateUserWithRolesTransactionAsync(appUser, model.password);
+
+                if (result.Succeeded)
+                {
+                    trans.Commit();
+                    return;
+                }
+            }
+
+            foreach (var err in result.Errors)
+                validationData.Fail(err.Description, ResultCode.Identity_FailToRegisterUser, err);
+
+            throw validationData.BuildException();
+        }
         #endregion
 
         #region AppRole
@@ -221,8 +257,8 @@ namespace TFW.Business.Core.Services
             if (requestModel.scope != null)
             {
                 // demo only, real scenario: validate requested scopes first --> ... 
-                var scopes = requestModel.scope.Split(' ')
-                    .Select(scope => new Claim(SecurityConsts.ClaimType.AppScope, scope)).ToArray();
+                var scopes = requestModel.scope.Split(',')
+                    .Select(scope => new Claim(SecurityConsts.ClaimType.AppScope, scope.Trim())).ToArray();
 
                 identity.AddClaims(scopes);
             }
@@ -376,5 +412,28 @@ namespace TFW.Business.Core.Services
 
             return resp;
         }
+
+        private async Task<IdentityResult> CreateUserWithRolesTransactionAsync(AppUser appUser, string password,
+            IEnumerable<string> roles = null)
+        {
+            PrepareCreate(appUser);
+
+            var result = await _userManager.CreateAsync(appUser, password);
+
+            if (!result.Succeeded)
+                return result;
+
+            if (!roles.IsNullOrEmpty())
+                result = await _userManager.AddToRolesAsync(appUser, roles);
+
+            return result;
+        }
+
+        #region Preparation
+        private void PrepareCreate(AppUser appUser)
+        {
+            appUser.Id = Guid.NewGuid().ToString();
+        }
+        #endregion
     }
 }

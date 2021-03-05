@@ -41,55 +41,72 @@ namespace TFW.Cross
 
     public static class ResultCodeGroup
     {
-        public const int Common = 0;
+        public const int Common = 1;
 
-        public const int AppUser = 0;
+        public const int Identity = 1000;
     }
 
     public enum ResultCode
     {
         #region Common
         [Display(Name = "Unknown error")]
-        UnknownError = ResultCodeGroup.Common + 1,
+        UnknownError = ResultCodeGroup.Common,
 
         [Display(Name = "Success")]
-        Success = ResultCodeGroup.Common + 2,
+        Success = ResultCodeGroup.Common + 1,
 
         [Display(Name = "Fail")]
-        Fail = ResultCodeGroup.Common + 3,
+        Fail = ResultCodeGroup.Common + 2,
 
         [Display(Name = "Fail validation")]
-        FailValidation = ResultCodeGroup.Common + 4,
+        FailValidation = ResultCodeGroup.Common + 3,
 
         [Display(Name = "Not found")]
-        NotFound = ResultCodeGroup.Common + 5,
+        NotFound = ResultCodeGroup.Common + 4,
 
         [Display(Name = "Unsupported")]
-        Unsupported = ResultCodeGroup.Common + 6,
+        Unsupported = ResultCodeGroup.Common + 5,
 
         [Display(Name = "Can not delete because of dependencies")]
-        DependencyDeleteFail = ResultCodeGroup.Common + 7,
+        DependencyDeleteFail = ResultCodeGroup.Common + 6,
 
         [Display(Name = "Unauthorized")]
-        Unauthorized = ResultCodeGroup.Common + 8,
+        Unauthorized = ResultCodeGroup.Common + 7,
 
         [Display(Name = "Access denied")]
-        AccessDenied = ResultCodeGroup.Common + 9,
+        AccessDenied = ResultCodeGroup.Common + 8,
 
         [Display(Name = "Invalid paging request")]
-        InvalidPagingRequest = ResultCodeGroup.Common + 10,
+        InvalidPagingRequest = ResultCodeGroup.Common + 9,
 
         [Display(Name = "Invalid sorting request")]
-        InvalidSortingRequest = ResultCodeGroup.Common + 11,
+        InvalidSortingRequest = ResultCodeGroup.Common + 10,
 
         [Display(Name = "Invalid projection request")]
-        InvalidProjectionRequest = ResultCodeGroup.Common + 12,
+        InvalidProjectionRequest = ResultCodeGroup.Common + 11,
 
         [Display(Name = "Entity not found")]
-        EntityNotFound = ResultCodeGroup.Common + 13,
+        EntityNotFound = ResultCodeGroup.Common + 12,
         #endregion
 
-        #region AppUser
+        #region Identity
+        [Display(Name = "Invalid full name")]
+        Identity_InvalidFullName = ResultCodeGroup.Identity,
+
+        [Display(Name = "Invalid email address")]
+        Identity_InvalidEmail = ResultCodeGroup.Identity + 1,
+
+        [Display(Name = "Invalid username")]
+        Identity_InvalidUsername = ResultCodeGroup.Identity + 2,
+
+        [Display(Name = "Invalid password")]
+        Identity_InvalidPassword = ResultCodeGroup.Identity + 3,
+
+        [Display(Name = "Confirmation password does not match")]
+        Identity_ConfirmPasswordDoesNotMatch = ResultCodeGroup.Identity + 4,
+
+        [Display(Name = "Fail to register user")]
+        Identity_FailToRegisterUser = ResultCodeGroup.Identity + 5,
         #endregion
     }
 
