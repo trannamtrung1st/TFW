@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using TFW.Business.Services;
 using TFW.Cross;
@@ -30,6 +32,8 @@ namespace TFW.WebAPI.Controllers
         }
 
         #region OAuth
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(TokenResponseModel))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, null, typeof(OAuthErrorResponse))]
         [HttpPost(Endpoint.RequestToken)]
         [ShouldSkipFilter(typeof(AutoValidateActionFilter))]
         public async Task<IActionResult> RequestToken([FromForm] RequestTokenModel model)
