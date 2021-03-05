@@ -9,9 +9,6 @@ namespace TFW.WebAPI.Models
     {
         private ApiSettings() { }
 
-        public double TokenValidHours { get; set; }
-        public double RefreshTokenValidHours { get; set; }
-
         private static ApiSettings _instance;
         public static ApiSettings Instance
         {

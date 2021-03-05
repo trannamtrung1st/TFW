@@ -9,6 +9,8 @@ namespace TFW.Cross.Models.Setting
     public class AppSettings
     {
         public string Name { get; set; }
+        public int TokenExpiresInSeconds { get; set; }
+        public int RefreshTokenExpiresInSeconds { get; set; }
 
         private IEnumerable<string> _supportedCultureNames;
         public IEnumerable<string> SupportedCultureNames

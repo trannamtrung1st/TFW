@@ -54,9 +54,9 @@ namespace TFW.WebAPI.Controllers
 
                 return Ok(tokenResp);
             }
-            catch (AppException ex) when (ex.Result?.Code == ResultCode.Unauthorized)
+            catch (OAuthException ex)
             {
-                return Unauthorized(ex.Result);
+                return BadRequest(ex.ErrorResponse);
             }
         }
         #endregion

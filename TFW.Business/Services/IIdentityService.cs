@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace TFW.Business.Services
     public interface IIdentityService
     {
         Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListAppUsersAsync(
-            GetListAppUsersRequestModel requestModel);
+            GetListAppUsersRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null);
 
         Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListDeletedAppUsersAsync();
 

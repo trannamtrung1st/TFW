@@ -102,6 +102,11 @@ namespace TFW.Cross
             public const string RefreshToken = "refresh_token";
         }
 
+        public static class ClaimType
+        {
+            public const string AppScope = "appscope";
+        }
+
         public static readonly TokenValidationParameters DefaultTokenParameters = new TokenValidationParameters()
         {
             ValidateAudience = true,

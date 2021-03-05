@@ -16,8 +16,4 @@
     <ProjectReference Include="..\TFW.Framework.UoW\TFW.Framework.UoW.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>
