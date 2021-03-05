@@ -174,7 +174,6 @@ namespace TFW.Business.Core.Services
 
             switch (requestModel.grant_type)
             {
-                case null:
                 case SecurityConsts.GrantType.Password:
                     {
                         entity = await AuthenticateAsync(requestModel.username, requestModel.password);

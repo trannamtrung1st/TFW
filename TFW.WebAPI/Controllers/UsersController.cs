@@ -9,8 +9,6 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
-using TFW.Cross.Models.Exceptions;
-using TFW.Cross.Models.Identity;
 using TFW.Data;
 using TFW.Framework.Web.Bindings;
 
@@ -24,7 +22,6 @@ namespace TFW.WebAPI.Controllers
         {
             public const string GetListAppUser = "";
             public const string GetListDeletedAppUser = "deleted";
-            public const string RequestToken = "/oauth/token";
         }
 
         private readonly IIdentityService _identityService;
@@ -42,24 +39,6 @@ namespace TFW.WebAPI.Controllers
 
             return Success(data);
         }
-
-        #region OAuth
-        // [TODO] validate model
-        [HttpPost(Endpoint.RequestToken)]
-        public async Task<IActionResult> RequestToken([FromForm] RequestTokenModel model)
-        {
-            try
-            {
-                var tokenResp = await _identityService.ProvideTokenAsync(model);
-
-                return Ok(tokenResp);
-            }
-            catch (OAuthException ex)
-            {
-                return BadRequest(ex.ErrorResponse);
-            }
-        }
-        #endregion
 
 #if DEBUG
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
