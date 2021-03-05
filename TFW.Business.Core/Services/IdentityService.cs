@@ -193,8 +193,7 @@ namespace TFW.Business.Core.Services
                     }
             }
 
-            if (entity == null)
-                throw OAuthException.InvalidGrant();
+            if (entity == null) throw OAuthException.InvalidGrant();
 
             var identity =
                 await GetIdentityAsync(entity, JwtBearerDefaults.AuthenticationScheme);
