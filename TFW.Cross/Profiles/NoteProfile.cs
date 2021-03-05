@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Entities;
+using TFW.Cross.Models.Note;
 
 namespace TFW.Cross.Profiles
 {
@@ -10,7 +11,11 @@ namespace TFW.Cross.Profiles
     {
         public NoteProfile()
         {
-            CreateMap<Note, Models.AppUser.NoteResponseModel>();
+            CreateMap<Note, NoteSimpleModel>();
+
+            CreateMap<Note, NoteBaseModel>();
+
+            CreateMap<Note, NoteDetailModel>();
         }
     }
 }

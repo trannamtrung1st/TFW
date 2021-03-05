@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using TFW.Cross.Models.Common;
+using TFW.Cross.Models.Note;
 using AU = TFW.Cross.Entities.AppUser;
 using N = TFW.Cross.Entities.Note;
 
@@ -36,7 +37,7 @@ namespace TFW.Cross.Models.AppUser
                 },
                 {
                     FieldNotes, $"{nameof(AU.Notes)}" +
-                    $".Select(new {typeof(NoteResponseModel).FullName}" +
+                    $".Select(new {typeof(NoteBaseModel).FullName}" +
                     $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
                 }
             }.ToImmutableDictionary();

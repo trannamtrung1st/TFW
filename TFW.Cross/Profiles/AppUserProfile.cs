@@ -11,6 +11,12 @@ namespace TFW.Cross.Profiles
     {
         public AppUserProfile()
         {
+            CreateMap<AppUser, AppUserSimpleModel>();
+
+            CreateMap<AppUser, AppUserBaseModel>();
+
+            CreateMap<AppUser, AppUserDetailModel>();
+
             CreateMap<AppUser, GetListAppUsersResponseModel>();
 
             CreateMap<GetListAppUsersRequestModel, DynamicQueryAppUserModel>();

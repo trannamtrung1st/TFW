@@ -11,6 +11,12 @@ namespace TFW.Cross.Profiles
     {
         public AppRoleProfile()
         {
+            CreateMap<AppRole, RoleSimpleModel>();
+
+            CreateMap<AppRole, RoleBaseModel>();
+            
+            CreateMap<AppRole, RoleDetailModel>();
+            
             CreateMap<AppRole, GetListRolesResponseModel>();
         }
     }
