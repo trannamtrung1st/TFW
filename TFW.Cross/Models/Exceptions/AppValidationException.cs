@@ -19,5 +19,13 @@ namespace TFW.Cross.Models.Exceptions
         {
             return new AppValidationException(validationData);
         }
+
+        public static AppValidationException From(ResultCode resultCode, object data = null, string mess = null)
+        {
+            var validationData = new ValidationData()
+                .Fail(mess, resultCode, data);
+
+            return From(validationData);
+        }
     }
 }

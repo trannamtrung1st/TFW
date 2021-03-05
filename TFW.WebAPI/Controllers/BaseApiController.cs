@@ -5,8 +5,10 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Data;
+using TFW.Framework.Security.Helpers;
 
 namespace TFW.WebAPI.Controllers
 {
@@ -21,6 +23,10 @@ namespace TFW.WebAPI.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
+
+        protected string UserId => User.IdentityName();
+
+        protected PrincipalInfo Principal => BusinessContext.Current.PrincipalInfo;
 
         protected T Service<T>()
         {

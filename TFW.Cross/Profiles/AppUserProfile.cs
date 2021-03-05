@@ -19,6 +19,8 @@ namespace TFW.Cross.Profiles
 
             CreateMap<AppUser, GetListAppUsersResponseModel>();
 
+            CreateMap<AppUser, UserProfileModel>();
+
             CreateMap<GetListAppUsersRequestModel, DynamicQueryAppUserModel>();
             // Not necessary because of AutoMapper case insensitive
             //.ForMember(o => o.UserName, opt => opt.MapFrom(o => o.username))

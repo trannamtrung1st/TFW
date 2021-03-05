@@ -22,6 +22,7 @@ namespace TFW.WebAPI.Controllers
         {
             public const string GetListAppUser = "";
             public const string GetListDeletedAppUser = "deleted";
+            public const string GetCurrentUserProfile = "profile";
         }
 
         private readonly IIdentityService _identityService;
@@ -36,6 +37,15 @@ namespace TFW.WebAPI.Controllers
         public async Task<IActionResult> GetListAppUser([FromQuery][QueryObject] GetListAppUsersRequestModel model)
         {
             var data = await _identityService.GetListAppUsersAsync<GetListAppUsersResponseModel>(model);
+
+            return Success(data);
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<UserProfileModel>))]
+        [HttpGet(Endpoint.GetCurrentUserProfile)]
+        public async Task<IActionResult> GetCurrentUserProfile()
+        {
+            var data = await _identityService.GetUserProfileAsync(UserId);
 
             return Success(data);
         }

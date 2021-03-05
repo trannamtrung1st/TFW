@@ -54,7 +54,7 @@ namespace TFW.Business.Core.Services
             // validation logic here
 
             if (!validationData.IsValid)
-                throw AppValidationException.From(validationData);
+                throw validationData.BuildException();
             #endregion
 
             var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
@@ -92,7 +92,7 @@ namespace TFW.Business.Core.Services
                             }
                             break;
                         default:
-                            throw AppException.From(ResultCode.InvalidPagingRequest);
+                            throw AppValidationException.From(ResultCode.InvalidPagingRequest);
                     }
                 }
             }
@@ -135,6 +135,28 @@ namespace TFW.Business.Core.Services
 
             return response;
         }
+
+        public async Task<UserProfileModel> GetUserProfileAsync(string userId)
+        {
+            #region Validation
+            var userInfo = BusinessContext.Current?.PrincipalInfo;
+            var validationData = new ValidationData();
+
+            // validation logic here
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            var userProfile = await dbContext.Users.AsNoTracking()
+                .ById(userId).DefaultProjectTo<UserProfileModel>().FirstOrDefaultAsync();
+
+            if (userProfile == null)
+                throw validationData.Fail(code: ResultCode.EntityNotFound).BuildException();
+
+            return userProfile;
+        }
+
         #endregion
 
         #region AppRole
@@ -147,7 +169,7 @@ namespace TFW.Business.Core.Services
             // validation logic here
 
             if (!validationData.IsValid)
-                throw AppValidationException.From(validationData);
+                throw validationData.BuildException();
             #endregion
 
             var query = dbContext.Roles.AsNoTracking()

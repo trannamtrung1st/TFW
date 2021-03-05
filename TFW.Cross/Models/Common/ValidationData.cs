@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TFW.Cross.Models.Exceptions;
 using TFW.Framework.Common.Helpers;
 
 namespace TFW.Cross.Models.Common
@@ -69,6 +70,14 @@ namespace TFW.Cross.Models.Common
             IsValid = false;
 
             return this;
+        }
+
+        public AppValidationException BuildException()
+        {
+            if (IsValid)
+                throw new InvalidOperationException("This validation is valid");
+
+            return AppValidationException.From(this);
         }
 
     }
