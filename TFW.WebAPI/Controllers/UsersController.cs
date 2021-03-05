@@ -35,7 +35,7 @@ namespace TFW.WebAPI.Controllers
         [HttpGet(Endpoint.GetListAppUser)]
         public async Task<IActionResult> GetListAppUser([FromQuery][QueryObject] GetListAppUsersRequestModel model)
         {
-            var data = await _identityService.GetListAppUsersAsync(model);
+            var data = await _identityService.GetListAppUsersAsync<GetListAppUsersResponseModel>(model);
 
             return Success(data);
         }
@@ -46,7 +46,7 @@ namespace TFW.WebAPI.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetListDeletedAppUser()
         {
-            var data = await _identityService.GetListDeletedAppUsersAsync();
+            var data = await _identityService.GetListDeletedAppUsersAsync<GetListAppUsersResponseModel>();
 
             return Success(data);
         }

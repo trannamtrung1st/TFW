@@ -14,7 +14,6 @@ using TFW.Business.Core.Queries;
 using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Entities;
-using TFW.Cross.Models.AppRole;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
@@ -45,8 +44,8 @@ namespace TFW.Business.Core.Services
         }
 
         #region AppUser
-        public async Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListAppUsersAsync(
-            GetListAppUsersRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null)
+        public async Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
+            GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null)
         {
             #region Validation
             var userInfo = BusinessContext.Current?.PrincipalInfo;
@@ -105,15 +104,14 @@ namespace TFW.Business.Core.Services
             #region Projection
             var projectionArr = queryModel.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
             var projectionStr = string.Join(',', projectionArr);
-            if (projectionType == null) projectionType = typeof(GetListAppUsersResponseModel);
 
-            var projectedQuery = query.Select<GetListAppUsersResponseModel>(
+            var projectedQuery = query.Select<TModel>(
                 parsingConfig ?? DynamicLinqEntityTypeProvider.DefaultParsingConfig,
-                $"new {projectionType.FullName}({projectionStr})");
+                $"new {typeof(TModel).FullName}({projectionStr})");
             #endregion
 
             var responseModels = await projectedQuery.ToArrayAsync();
-            var response = new GetListResponseModel<GetListAppUsersResponseModel>
+            var response = new GetListResponseModel<TModel>
             {
                 List = responseModels,
             };
@@ -124,12 +122,12 @@ namespace TFW.Business.Core.Services
             return response;
         }
 
-        public async Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListDeletedAppUsersAsync()
+        public async Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>()
         {
             var responseModels = await dbContext.QueryDeleted<AppUser>()
-                   .AsNoTracking().DefaultProjectTo<GetListAppUsersResponseModel>().ToArrayAsync();
+                   .AsNoTracking().DefaultProjectTo<TModel>().ToArrayAsync();
 
-            var response = new GetListResponseModel<GetListAppUsersResponseModel>
+            var response = new GetListResponseModel<TModel>
             {
                 List = responseModels,
                 TotalCount = responseModels.Length
@@ -140,7 +138,7 @@ namespace TFW.Business.Core.Services
         #endregion
 
         #region AppRole
-        public async Task<GetListResponseModel<GetListRolesResponseModel>> GetListRolesAsync()
+        public async Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>()
         {
             #region Validation
             var userInfo = BusinessContext.Current?.PrincipalInfo;
@@ -155,9 +153,9 @@ namespace TFW.Business.Core.Services
             var query = dbContext.Roles.AsNoTracking()
                 .OrderBy(o => o.Name);
 
-            var responseModels = await query.DefaultProjectTo<GetListRolesResponseModel>().ToArrayAsync();
+            var responseModels = await query.DefaultProjectTo<TModel>().ToArrayAsync();
 
-            var response = new GetListResponseModel<GetListRolesResponseModel>
+            var response = new GetListResponseModel<TModel>
             {
                 List = responseModels,
                 TotalCount = await query.CountAsync()

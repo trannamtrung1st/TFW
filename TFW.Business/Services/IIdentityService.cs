@@ -4,7 +4,6 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Cross.Models.AppRole;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Identity;
@@ -13,12 +12,12 @@ namespace TFW.Business.Services
 {
     public interface IIdentityService
     {
-        Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListAppUsersAsync(
-            GetListAppUsersRequestModel requestModel, Type projectionType = null, ParsingConfig parsingConfig = null);
+        Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
+            GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null);
 
-        Task<GetListResponseModel<GetListAppUsersResponseModel>> GetListDeletedAppUsersAsync();
+        Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>();
 
-        Task<GetListResponseModel<GetListRolesResponseModel>> GetListRolesAsync();
+        Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>();
 
         Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel);
 

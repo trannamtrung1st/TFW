@@ -34,7 +34,7 @@ namespace TFW.WebAPI.Controllers
         [HttpGet(Endpoint.GetAllRoles)]
         public async Task<IActionResult> GetAllRoles()
         {
-            var data = await _identityService.GetListRolesAsync();
+            var data = await _identityService.GetListRolesAsync<GetListRolesResponseModel>();
 
             return Success(data);
         }
