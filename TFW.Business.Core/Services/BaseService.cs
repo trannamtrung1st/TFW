@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Data.Core;
 
-namespace TFW.Business.Services
+namespace TFW.Business.Core.Services
 {
     public abstract class BaseService
     {
