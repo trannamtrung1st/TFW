@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TFW.Cross.Models.Setting;
@@ -107,6 +108,12 @@ namespace TFW.Cross
 
         [Display(Name = "Fail to register user")]
         Identity_FailToRegisterUser = ResultCodeGroup.Identity + 5,
+
+        [Display(Name = "Fail to change user roles")]
+        Identity_FailToChangeUserRoles = ResultCodeGroup.Identity + 6,
+
+        [Display(Name = "Invalid change user roles request")]
+        Identity_InvalidChangeUserRolesRequest = ResultCodeGroup.Identity + 7,
         #endregion
     }
 
@@ -140,6 +147,8 @@ namespace TFW.Cross
 
     public static class RoleName
     {
+        public static IEnumerable<string> All = ImmutableArray.Create(Administrator);
+
         public const string Administrator = nameof(Administrator);
     }
 

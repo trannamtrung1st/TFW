@@ -193,6 +193,60 @@ namespace TFW.Business.Core.Services
 
             throw validationData.BuildException();
         }
+
+        public async Task AddUserRolesAsync(ChangeUserRolesBaseModel model)
+        {
+            #region Validation
+            var userInfo = BusinessContext.Current?.PrincipalInfo;
+            var validationData = new ValidationData();
+
+            // validation logic here
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            var appUser = await _userManager.FindByNameAsync(model.Username);
+
+            if (appUser == null)
+                throw AppValidationException.From(ResultCode.EntityNotFound);
+
+            var result = await _userManager.AddToRolesAsync(appUser, model.Roles);
+
+            if (result.Succeeded) return;
+
+            foreach (var err in result.Errors)
+                validationData.Fail(err.Description, ResultCode.Identity_FailToChangeUserRoles, err);
+
+            throw validationData.BuildException();
+        }
+
+        public async Task RemoveUserRolesAsync(ChangeUserRolesBaseModel model)
+        {
+            #region Validation
+            var userInfo = BusinessContext.Current?.PrincipalInfo;
+            var validationData = new ValidationData();
+
+            // validation logic here
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            var appUser = await _userManager.FindByNameAsync(model.Username);
+
+            if (appUser == null)
+                throw AppValidationException.From(ResultCode.EntityNotFound);
+
+            var result = await _userManager.RemoveFromRolesAsync(appUser, model.Roles);
+
+            if (result.Succeeded) return;
+
+            foreach (var err in result.Errors)
+                validationData.Fail(err.Description, ResultCode.Identity_FailToChangeUserRoles, err);
+
+            throw validationData.BuildException();
+        }
         #endregion
 
         #region AppRole

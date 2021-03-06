@@ -21,6 +21,10 @@ namespace TFW.Business.Services
 
         Task RegisterAsync(RegisterModel model);
 
+        Task AddUserRolesAsync(ChangeUserRolesBaseModel model);
+
+        Task RemoveUserRolesAsync(ChangeUserRolesBaseModel model);
+
         Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>();
 
         Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel);

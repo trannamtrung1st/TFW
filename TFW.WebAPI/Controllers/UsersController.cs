@@ -24,6 +24,8 @@ namespace TFW.WebAPI.Controllers
             public const string GetListDeletedAppUser = "deleted";
             public const string GetCurrentUserProfile = "profile";
             public const string Register = "register";
+            public const string AddUserRoles = "user-roles";
+            public const string RemoveUserRoles = "user-roles";
         }
 
         private readonly IIdentityService _identityService;
@@ -62,6 +64,24 @@ namespace TFW.WebAPI.Controllers
         }
 
 #if DEBUG
+        [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
+        [HttpPost(Endpoint.AddUserRoles)]
+        public async Task<IActionResult> AddUserRoles(ChangeUserRolesBaseModel model)
+        {
+            await _identityService.AddUserRolesAsync(model);
+
+            return NoContent();
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
+        [HttpDelete(Endpoint.RemoveUserRoles)]
+        public async Task<IActionResult> RemoveUserRoles(ChangeUserRolesBaseModel model)
+        {
+            await _identityService.RemoveUserRolesAsync(model);
+
+            return NoContent();
+        }
+
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
         [HttpGet(Endpoint.GetListDeletedAppUser)]
         [AllowAnonymous]
