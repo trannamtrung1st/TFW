@@ -106,7 +106,7 @@ namespace TFW.WebAPI
                 .ConfigureFrameworkOptions(fwOptionsConfigurator);
             #endregion
 
-            #region OAuth
+            #region Authentication
             services.AddIdentityCore<AppUser>(options =>
              {
                  options.SignIn.RequireConfirmedEmail = false;
@@ -150,6 +150,10 @@ namespace TFW.WebAPI
                     //    }
                     //};
                 });
+            #endregion
+
+            #region Authorization
+            services.AddAppAuthorization();
             #endregion
 
             #region Mvc, Controllers
@@ -272,13 +276,13 @@ namespace TFW.WebAPI
                 });
             });
 
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
             app.UseRequestDataExtraction();
 
             app.UseRequestTimeZone();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -11,11 +11,53 @@ using TFW.Framework.Web.Middlewares;
 using TFW.Framework.Web.Providers;
 using Microsoft.Extensions.Options;
 using TFW.Framework.Web.Handlers;
+using Microsoft.AspNetCore.Authorization;
+using TFW.Framework.Web.Requirements;
 
 namespace TFW.Framework.Web
 {
     public static class ConfigHelper
     {
+        public static AuthorizationOptions AddLogicGroup(this AuthorizationOptions opt)
+        {
+            opt.AddPolicy(LogicGroupRequirement.PolicyName, policy => policy.AddRequirements(new LogicGroupRequirement()));
+
+            return opt;
+        }
+
+        public static IServiceCollection AddLogicGroupAuthorizationHandler(this IServiceCollection services)
+        {
+            return services.AddScoped<IAuthorizationHandler, LogicGroupAuthorizationHandler>();
+        }
+
+        public static IServiceCollection AddAuthUserAuthorizationHandler(this IServiceCollection services)
+        {
+            return services.AddScoped<IAuthorizationHandler, AuthUserAuthorizationHandler>();
+        }
+
+        public static DynamicAuthorizationPolicyProviderOptions ConfigureAuthUserDynamicPolicy(
+            this DynamicAuthorizationPolicyProviderOptions opt, string policyName)
+        {
+            opt.Providers[policyName] = (paramList, builder) =>
+            {
+                var role = string.IsNullOrEmpty(paramList[0]) ? null : paramList[0];
+
+                if (paramList.Length == 1)
+                    builder.AddRequirements(new AuthUserRequirement(role));
+                else if (paramList.Length == 2)
+                    builder.AddRequirements(new AuthUserRequirement(role, paramList[1]));
+            };
+
+            return opt;
+        }
+
+        public static IServiceCollection AddDynamicAuthorizationPolicyProvider(this IServiceCollection services,
+            Action<DynamicAuthorizationPolicyProviderOptions> configAction)
+        {
+            return services.Configure(configAction)
+                .AddSingleton<IAuthorizationPolicyProvider, DynamicAuthorizationPolicyProvider>();
+        }
+
         public static IServiceCollection ConfigureFrameworkOptions(this IServiceCollection services,
             FrameworkOptionsConfigurator configurator)
         {

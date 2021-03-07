@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using TFW.Cross;
@@ -19,5 +20,7 @@ namespace TFW.WebAPI.Providers
     internal class HttpBusinessContext : BusinessContext
     {
         public override PrincipalInfo PrincipalInfo => HttpContext.Current.GetPrincipalInfo();
+
+        public override ClaimsPrincipal User => HttpContext.Current.User;
     }
 }

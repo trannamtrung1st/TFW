@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Providers;
@@ -9,6 +10,7 @@ namespace TFW.Cross
     public abstract class BusinessContext
     {
         public abstract PrincipalInfo PrincipalInfo { get; }
+        public abstract ClaimsPrincipal User { get; }
 
         #region static
         private static IBusinessContextProvider _bizContextProvider;

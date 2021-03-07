@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TFW.Cross;
 
 namespace TFW.WebAPI.Filters
 {
@@ -30,10 +29,9 @@ namespace TFW.WebAPI.Filters
 
             operationAttrs = operationAttrs.ToArray();
 
-            if (operationAttrs.Any() && !operationAttrs.Any(o => allowAnonymousAttr.IsAssignableFrom(o.GetType())))
+            if (operationAttrs.Any() && !operationAttrs.OfType<AllowAnonymousAttribute>().Any())
             {
-                var authAttrs = operationAttrs.Where(o => !allowAnonymousAttr.IsAssignableFrom(o.GetType()))
-                    .Select(o => o as AuthorizeAttribute);
+                var authAttrs = operationAttrs.OfType<AuthorizeAttribute>();
 
                 operation.Responses.Add($"{(int)HttpStatusCode.Unauthorized}", new OpenApiResponse
                 {

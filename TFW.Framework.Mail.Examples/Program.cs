@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using TFW.Framework.SimpleMail.Helpers;
@@ -12,15 +13,21 @@ namespace TFW.Framework.Mail.Examples
     {
         static void Main(string[] args)
         {
-            var options = Options.Create<SmtpOption>(new SmtpOption
-            {
-                Host = "smtp.gmail.com",
-                Port = 465,
-                UseSsl = true,
-                UserName = "...",
-                Password = "...",
-                QuitAfterSending = true
-            });
+            var services = new ServiceCollection();
+            services.AddOptions()
+                .Configure<SmtpOption>(opt =>
+                {
+                    opt.Host = "smtp.gmail.com";
+                    opt.Port = 465;
+                    opt.UseSsl = true;
+                    opt.UserName = "...";
+                    opt.Password = "...";
+                    opt.QuitAfterSending = true;
+                });
+
+            var provider = services.BuildServiceProvider();
+            
+            var optionSnapshot = provider.GetRequiredService<IOptionsSnapshot<SmtpOption>>();
 
             var message1 = new MimeMessage()
                 .AddFrom("Trung Tran", "...")
@@ -36,7 +43,8 @@ namespace TFW.Framework.Mail.Examples
                 .Subject("You will be OK? (twice)")
                 .Body(html: "<div style='color:green;font-weight:bold'>It's OK</div>");
 
-            ISmtpService smtpService = new SmtpService(options);
+            ISmtpService smtpService = new SmtpService(optionSnapshot);
+
             smtpService.SendMailAsync(message1, message2).Wait();
         }
     }

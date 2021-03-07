@@ -8,6 +8,20 @@ using TFW.Cross.Models.Setting;
 
 namespace TFW.Cross
 {
+    public static class Policy
+    {
+        public static class Name
+        {
+
+            public const string BackdoorUser = nameof(BackdoorUser);
+            public const string GuestRestriction = nameof(GuestRestriction);
+            public const string AdminOrOwner = nameof(AdminOrOwner);
+            public const string AuthUser = nameof(AuthUser);
+        }
+
+        public static readonly TimeSpan GuestRestrictionMustBefore = new TimeSpan(22, 0, 0);
+    }
+
     public static class QueryFilterName
     {
         public const string AnotherFilter1 = nameof(AnotherFilter1);

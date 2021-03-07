@@ -11,13 +11,18 @@ namespace TFW.Cross.Models.Exceptions
         {
             if (result == null)
                 throw new ArgumentNullException(nameof(result));
-        
+
             Result = result;
+        }
+
+        public static AppException From(AppResult appResult)
+        {
+            return new AppException(result: appResult);
         }
 
         public static AppException From(ResultCode code, object data = null, string mess = null)
         {
-            return new AppException(result: AppResult.OfCode(code, data, mess));
+            return From(AppResult.OfCode(code, data, mess));
         }
     }
 }

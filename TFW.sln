@@ -95,7 +95,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.SimpleMail", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Security", "Security", "{DC415033-62DE-46B3-A7E6-87AB8957082A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.Security", "TFW.Framework.Security\TFW.Framework.Security.csproj", "{2E742336-60E6-4C7E-A24F-CF71696CF212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.Security", "TFW.Framework.Security\TFW.Framework.Security.csproj", "{2E742336-60E6-4C7E-A24F-CF71696CF212}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,7 +29,7 @@ namespace TFW.WebAPI.Controllers
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var ex = context.Error;
-            
+
             if (ex == null) return BadRequest();
 
             // logging ...
@@ -38,6 +38,15 @@ namespace TFW.WebAPI.Controllers
 
             if (ex is AppValidationException)
                 return BadRequest((ex as AppValidationException).Result);
+            else if (ex is AuthorizationException)
+            {
+                var authEx = ex as AuthorizationException;
+
+                if (authEx.IsForbidden)
+                    return Forbid();
+
+                return Unauthorized();
+            }
             else if (ex is AppException)
                 response = (ex as AppException).Result;
             else
