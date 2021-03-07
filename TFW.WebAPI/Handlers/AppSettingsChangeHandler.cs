@@ -10,7 +10,7 @@ using TFW.Framework.Web.Handlers;
 namespace TFW.WebAPI.Handlers
 {
     [SingletonService(ServiceType = typeof(IOptionsChangeHandler<AppSettings>))]
-    public class AppSettingsChangeHandler : BaseOptionsChangeHandler<AppSettings>
+    public class AppSettingsChangeHandler : OptionsChangeHandler<AppSettings>
     {
         public AppSettingsChangeHandler(IConfiguration configuration) : base(configuration)
         {

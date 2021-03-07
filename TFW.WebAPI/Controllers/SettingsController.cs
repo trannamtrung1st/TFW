@@ -9,12 +9,12 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.Setting;
 using TFW.Data;
-using TFW.WebAPI.Attributes;
+using TFW.Framework.Web.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.RoleApi)]
-    [AppAuthorize(RoleName.Administrator)]
+    [Authorize(RoleName.Administrator)]
     public class SettingsController : BaseApiController
     {
         public static class Endpoint

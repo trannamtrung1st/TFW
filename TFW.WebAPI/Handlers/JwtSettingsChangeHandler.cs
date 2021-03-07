@@ -10,7 +10,7 @@ using TFW.Framework.Web.Handlers;
 namespace TFW.WebAPI.Handlers
 {
     [SingletonService(ServiceType = typeof(IOptionsChangeHandler<JwtSettings>))]
-    public class JwtSettingsChangeHandler : BaseOptionsChangeHandler<JwtSettings>
+    public class JwtSettingsChangeHandler : OptionsChangeHandler<JwtSettings>
     {
         public JwtSettingsChangeHandler(IConfiguration configuration) : base(configuration)
         {

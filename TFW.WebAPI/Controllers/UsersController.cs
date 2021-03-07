@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -10,13 +9,14 @@ using TFW.Cross;
 using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Data;
+using TFW.Framework.Web.Attributes;
 using TFW.Framework.Web.Bindings;
-using TFW.WebAPI.Attributes;
+using AllowAnonymous = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
-    [AppAuthorize]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         public static class Endpoint

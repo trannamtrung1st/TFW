@@ -10,12 +10,12 @@ using TFW.Cross;
 using TFW.Cross.Models.AppRole;
 using TFW.Cross.Models.Common;
 using TFW.Data;
-using TFW.WebAPI.Attributes;
+using TFW.Framework.Web.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.RoleApi)]
-    [AppAuthorize]
+    [Authorize]
     public class RolesController : BaseApiController
     {
         public static class Endpoint

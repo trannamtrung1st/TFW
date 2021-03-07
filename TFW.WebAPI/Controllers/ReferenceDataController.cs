@@ -9,12 +9,12 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Data;
-using TFW.WebAPI.Attributes;
+using TFW.Framework.Web.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.ReferenceDataApi)]
-    [AppAuthorize]
+    [Authorize]
     public class ReferenceDataController : BaseApiController
     {
         public static class Endpoint

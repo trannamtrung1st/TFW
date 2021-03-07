@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.Common.Helpers;
 
-namespace TFW.WebAPI.Attributes
+namespace TFW.Framework.Web.Attributes
 {
-    public class AppAuthorizeAttribute : Microsoft.AspNetCore.Authorization.AuthorizeAttribute
+    public class AuthorizeAttribute : Microsoft.AspNetCore.Authorization.AuthorizeAttribute
     {
-        public AppAuthorizeAttribute(params string[] roles)
+        public AuthorizeAttribute(params string[] roles)
         {
             if (!roles.IsNullOrEmpty())
                 Roles = string.Join(',', roles);

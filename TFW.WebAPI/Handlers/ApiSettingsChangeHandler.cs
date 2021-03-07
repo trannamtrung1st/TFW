@@ -11,7 +11,7 @@ using TFW.WebAPI.Models;
 namespace TFW.WebAPI.Handlers
 {
     [SingletonService(ServiceType = typeof(IOptionsChangeHandler<ApiSettings>))]
-    public class ApiSettingsChangeHandler : BaseOptionsChangeHandler<ApiSettings>
+    public class ApiSettingsChangeHandler : OptionsChangeHandler<ApiSettings>
     {
         public ApiSettingsChangeHandler(IConfiguration configuration) : base(configuration)
         {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,16 +9,13 @@ using TFW.Cross.Models.Common;
 using TFW.Framework.AutoMapper.Helpers;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.Validations.Fluent.Providers;
-using TFW.Framework.Web.Attributes;
+using TFW.Framework.Web.Handlers;
 using TFW.Framework.Web.Helpers;
 
 namespace TFW.WebAPI.Handlers
 {
-    public interface IAutoValidateFilterHandler
+    public interface IAutoValidateFilterHandler : IActionFilterHandler
     {
-        void OnActionExecuted(ActionExecutedContext context, object filter);
-        void OnActionExecuting(ActionExecutingContext context, object filter);
-        Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next, object filter);
     }
 
     [SingletonService(ServiceType = typeof(IAutoValidateFilterHandler))]
