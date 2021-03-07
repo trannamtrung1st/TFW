@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -11,11 +10,12 @@ using TFW.Cross;
 using TFW.Cross.Models.AppRole;
 using TFW.Cross.Models.Common;
 using TFW.Data;
+using TFW.WebAPI.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.RoleApi)]
-    [Authorize]
+    [AppAuthorize]
     public class RolesController : BaseApiController
     {
         public static class Endpoint

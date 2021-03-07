@@ -14,23 +14,23 @@ namespace TFW.Cross.Validators.Identity
         {
             RuleFor(model => model.username)
                 .NotEmpty().MinimumLength(5).MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidUsername);
+                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.password)
                 .NotEmpty().MinimumLength(6).MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidPassword);
+                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.confirmPassword)
                 .Equal(model => model.password).WithMessage("Confirmation password does not match")
-                .WithState(model => ResultCode.Identity_ConfirmPasswordDoesNotMatch);
+                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.fullName)
                 .NotEmpty().MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidFullName);
+                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.email)
                 .EmailAddress().MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidEmail);
+                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
         }
     }
 }

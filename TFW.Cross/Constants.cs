@@ -45,6 +45,8 @@ namespace TFW.Cross
         public const int Common = 1;
 
         public const int Identity = 1000;
+
+        public const int Setting = 2000;
     }
 
     public enum ResultCode
@@ -91,29 +93,21 @@ namespace TFW.Cross
         #endregion
 
         #region Identity
-        [Display(Name = "Invalid full name")]
-        Identity_InvalidFullName = ResultCodeGroup.Identity,
-
-        [Display(Name = "Invalid email address")]
-        Identity_InvalidEmail = ResultCodeGroup.Identity + 1,
-
-        [Display(Name = "Invalid username")]
-        Identity_InvalidUsername = ResultCodeGroup.Identity + 2,
-
-        [Display(Name = "Invalid password")]
-        Identity_InvalidPassword = ResultCodeGroup.Identity + 3,
-
-        [Display(Name = "Confirmation password does not match")]
-        Identity_ConfirmPasswordDoesNotMatch = ResultCodeGroup.Identity + 4,
+        [Display(Name = "Invalid register request")]
+        Identity_InvalidRegisterRequest = ResultCodeGroup.Identity,
 
         [Display(Name = "Fail to register user")]
-        Identity_FailToRegisterUser = ResultCodeGroup.Identity + 5,
+        Identity_FailToRegisterUser = ResultCodeGroup.Identity + 1,
 
         [Display(Name = "Fail to change user roles")]
-        Identity_FailToChangeUserRoles = ResultCodeGroup.Identity + 6,
+        Identity_FailToChangeUserRoles = ResultCodeGroup.Identity + 2,
 
         [Display(Name = "Invalid change user roles request")]
-        Identity_InvalidChangeUserRolesRequest = ResultCodeGroup.Identity + 7,
+        Identity_InvalidChangeUserRolesRequest = ResultCodeGroup.Identity + 3,
+        #endregion
+
+        #region Setting
+        Setting_InvalidChangeSmtpOptionRequest = ResultCodeGroup.Setting,
         #endregion
     }
 

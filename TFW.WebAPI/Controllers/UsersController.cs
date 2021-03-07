@@ -11,11 +11,12 @@ using TFW.Cross.Models.AppUser;
 using TFW.Cross.Models.Common;
 using TFW.Data;
 using TFW.Framework.Web.Bindings;
+using TFW.WebAPI.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
-    [Authorize]
+    [AppAuthorize]
     public class UsersController : BaseApiController
     {
         public static class Endpoint

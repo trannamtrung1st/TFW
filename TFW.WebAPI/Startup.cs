@@ -23,6 +23,7 @@ using TFW.Data;
 using TFW.Data.Core;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common.Helpers;
+using TFW.Framework.Configuration;
 using TFW.Framework.Configuration.Helpers;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
@@ -42,13 +43,17 @@ namespace TFW.WebAPI
     public class Startup
     {
         private static IEnumerable<Assembly> _tempAssemblyList;
+        private const string _defaultJsonFile = TFW.Framework.Configuration.CommonConsts.DefaultAppSettingsFile;
+        private readonly string _envJsonFile;
 
         public Startup(IWebHostEnvironment env)
         {
+            _envJsonFile = $"appsettings.{env.EnvironmentName}.json";
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddJsonFile(_defaultJsonFile, optional: true, reloadOnChange: true)
+                .AddJsonFile(_envJsonFile, optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
@@ -94,6 +99,7 @@ namespace TFW.WebAPI
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
                 .AddSmtpService(Configuration.GetSection(nameof(SmtpOption)))
+                .AddJsonConfigurationManager(_defaultJsonFile, _envJsonFile)
                 .ConfigureAppOptions(Configuration)
                 .ConfigureRequestTimeZoneDefault()
                 .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })

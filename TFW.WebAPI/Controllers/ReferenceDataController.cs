@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,12 @@ using TFW.Business.Services;
 using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Data;
+using TFW.WebAPI.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.ReferenceDataApi)]
-    [Authorize]
+    [AppAuthorize]
     public class ReferenceDataController : BaseApiController
     {
         public static class Endpoint
