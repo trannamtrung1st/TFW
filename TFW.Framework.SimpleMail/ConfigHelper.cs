@@ -13,7 +13,7 @@ namespace TFW.Framework.SimpleMail
         public static IServiceCollection AddSmtpService(this IServiceCollection services, IConfiguration smtpConfigSection)
         {
             return services.Configure<SmtpOption>(smtpConfigSection)
-                .AddSingleton<ISmtpService, SmtpService>();
+                .AddScoped<ISmtpService, SmtpService>();
         }
 
         public static IServiceCollection AddSmtpService(this IServiceCollection services, Action<SmtpOption> config)

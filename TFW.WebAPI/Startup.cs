@@ -94,6 +94,7 @@ namespace TFW.WebAPI
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
                 .AddSmtpService(Configuration.GetSection(nameof(SmtpOption)))
+                .ConfigureAppOptions(Configuration)
                 .ConfigureRequestTimeZoneDefault()
                 .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
                 .ConfigureFrameworkOptions(fwOptionsConfigurator);
@@ -198,6 +199,11 @@ namespace TFW.WebAPI
             IHostApplicationLifetime appLifetime,
             IDynamicLinkCustomTypeProvider dynamicLinkCustomTypeProvider)
         {
+            // Configurations
+            app.RegisterOptionsChangeHandlers(typeof(AppSettings),
+                typeof(JwtSettings),
+                typeof(ApiSettings));
+
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
             {

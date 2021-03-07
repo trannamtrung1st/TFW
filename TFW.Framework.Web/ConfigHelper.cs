@@ -9,6 +9,8 @@ using TFW.Framework.Web.Options;
 using TFW.Framework.Web.Bindings;
 using TFW.Framework.Web.Middlewares;
 using TFW.Framework.Web.Providers;
+using Microsoft.Extensions.Options;
+using TFW.Framework.Web.Handlers;
 
 namespace TFW.Framework.Web
 {
@@ -102,6 +104,29 @@ namespace TFW.Framework.Web
         public static IServiceCollection AddDefaultDateTimeModelBinder(this IServiceCollection services)
         {
             return services.AddSingleton(new DefaultDateTimeModelBinder());
+        }
+
+        public static IApplicationBuilder RegisterOptionsChangeHandlers(this IApplicationBuilder app, params Type[] optionTypes)
+        {
+            var provider = app.ApplicationServices;
+
+            foreach (var optType in optionTypes)
+            {
+                var optMonitorType = typeof(IOptionsMonitor<>).MakeGenericType(optType);
+                var optMonitor = provider.GetRequiredService(optMonitorType);
+
+                var paramType = typeof(Action<,>).MakeGenericType(optType, typeof(string));
+                var onChangeMethod = optMonitorType.GetMethod(nameof(IOptionsMonitor<object>.OnChange), new[] { paramType });
+
+                var handlerType = typeof(IOptionsChangeHandler<>).MakeGenericType(optType);
+                var handler = provider.GetRequiredService(handlerType);
+                var handlerProp = handlerType.GetProperty(nameof(IOptionsChangeHandler<object>.OnChangeAction));
+                var onChangeAction = handlerProp.GetGetMethod().Invoke(handler, null);
+
+                onChangeMethod.Invoke(optMonitor, new[] { onChangeAction });
+            }
+
+            return app;
         }
     }
 }

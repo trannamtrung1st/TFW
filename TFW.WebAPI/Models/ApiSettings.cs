@@ -7,8 +7,6 @@ namespace TFW.WebAPI.Models
 {
     public class ApiSettings
     {
-        private ApiSettings() { }
-
         private static ApiSettings _instance;
         public static ApiSettings Instance
         {

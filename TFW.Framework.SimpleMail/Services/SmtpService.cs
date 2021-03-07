@@ -19,7 +19,7 @@ namespace TFW.Framework.SimpleMail.Services
     {
         protected readonly SmtpOption defaultOption;
 
-        public SmtpService(IOptions<SmtpOption> defaultOption)
+        public SmtpService(IOptionsSnapshot<SmtpOption> defaultOption)
         {
             this.defaultOption = defaultOption.Value;
         }
