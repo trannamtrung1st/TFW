@@ -12,7 +12,7 @@ namespace TFW
 {
     public class TestConsoleApp : DefaultConsoleTask
     {
-        public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
+        public IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
         {
         };
 
@@ -20,7 +20,7 @@ namespace TFW
 
         public override string Description => "Test task description";
 
-        public override Task Start()
+        public override Task StartAsync()
         {
             return Task.CompletedTask;
         }

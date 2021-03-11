@@ -7,20 +7,18 @@ namespace TFW.Framework.ConsoleApp
 {
     public interface IConsoleTask
     {
-        IDictionary<string, Func<Task>> Tasks { get; }
         string Title { get; }
         string Description { get; }
 
-        Task Start();
+        Task StartAsync();
     }
 
     public abstract class DefaultConsoleTask : IConsoleTask
     {
-        public abstract IDictionary<string, Func<Task>> Tasks { get; }
         public abstract string Title { get; }
         public abstract string Description { get; }
 
-        public abstract Task Start();
+        public abstract Task StartAsync();
 
         public override string ToString()
         {

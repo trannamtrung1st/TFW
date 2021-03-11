@@ -9,7 +9,7 @@ namespace TFW.Framework.Validations.Examples
     {
         static void Main(string[] args)
         {
-            var consoleProgram = new DefaultConsoleProgram()
+            var consoleProgram = new OptionsProgram()
             {
                 Options = new ProgramOptions
                 {
@@ -17,10 +17,9 @@ namespace TFW.Framework.Validations.Examples
                 }
             };
 
-            consoleProgram.AddFromAssemblies(Assembly.GetEntryAssembly());
+            consoleProgram.Tasks.AddRange(ConfigHelper.FindFromAssemblies(Assembly.GetEntryAssembly()));
 
-            consoleProgram.Start();
+            consoleProgram.StartAsync().Wait();
         }
-
     }
 }

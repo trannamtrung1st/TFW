@@ -20,7 +20,7 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
 
     public class ValidationDemoTask : DefaultConsoleTask
     {
-        public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>
+        public IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>
         {
             { SimpleValidationOpt, SimpleValidation }
         };
@@ -108,7 +108,7 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
             return Task.CompletedTask;
         }
 
-        public override async Task Start()
+        public override async Task StartAsync()
         {
             Console.Clear();
 

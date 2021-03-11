@@ -9,4 +9,8 @@
     <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
 </Project>

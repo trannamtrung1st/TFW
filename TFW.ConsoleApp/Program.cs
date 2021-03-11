@@ -11,7 +11,7 @@ namespace TFW.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var consoleProgram = new DefaultConsoleProgram()
+            var consoleProgram = new OptionsProgram()
             {
                 Options = new ProgramOptions
                 {
@@ -21,9 +21,9 @@ namespace TFW.ConsoleApp
 
             var assemblies = ReflectionHelper.GetAllAssemblies().ToArray();
 
-            consoleProgram.AddFromAssemblies(assemblies);
+            consoleProgram.Tasks.AddRange(ConfigHelper.FindFromAssemblies(assemblies));
 
-            consoleProgram.Start();
+            consoleProgram.StartAsync().Wait();
         }
 
     }

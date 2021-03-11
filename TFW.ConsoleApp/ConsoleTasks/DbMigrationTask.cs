@@ -10,7 +10,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
 {
     public class DbMigrationTask : DefaultConsoleTask
     {
-        public override IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
+        public IDictionary<string, Func<Task>> Tasks => new Dictionary<string, Func<Task>>()
         {
             { $"{AddMigrationOpt}", AddMigration },
             { $"{UpdateDatabaseOpt}", UpdateDatabase },
@@ -128,7 +128,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
             return Task.CompletedTask;
         }
 
-        public override async Task Start()
+        public override async Task StartAsync()
         {
             Console.Clear();
 
