@@ -8,7 +8,7 @@ namespace TFW.Framework.Web.Options
 {
     public class RequestTimeZoneOptions
     {
-        public const string TimeZoneResponseHeaderName = "Content-TZ";
+        public const string DefaultResponseHeaderName = "Content-TZ";
         public const string DefaultOverrideFallbackQueryKey = "tzfb";
         public const string DefaultOverrideFallbackHeaderName = "Content-TZFallback";
         public const string DefaultOverrideFallbackCookieName = "_tzfb";
@@ -22,6 +22,7 @@ namespace TFW.Framework.Web.Options
         public bool ApplyCurrentTimeZoneToResponseHeaders { get; set; } = true;
         public bool AllowFallback { get; set; }
         public bool AllowOverrideFallback { get; set; } = true;
+        public string ResponseHeaderName { get; set; } = DefaultResponseHeaderName;
         public string OverrideFallbackQueryKey { get; set; } = DefaultOverrideFallbackQueryKey;
         public string OverrideFallbackHeaderName { get; set; } = DefaultOverrideFallbackHeaderName;
         public string OverrideFallbackCookieName { get; set; } = DefaultOverrideFallbackCookieName;

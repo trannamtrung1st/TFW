@@ -54,8 +54,7 @@ namespace TFW.Framework.Web.Middlewares
                 var headerValue = string.Join(';',
                     Time.ThreadTimeZone.Id, Time.ThreadTimeZone.DisplayName,
                     $"{Time.ThreadTimeZone.BaseUtcOffset.TotalMinutes}");
-                context.Response.Headers.Add(
-                    RequestTimeZoneOptions.TimeZoneResponseHeaderName, headerValue);
+                context.Response.Headers.Add(_options.ResponseHeaderName, headerValue);
             }
         }
 

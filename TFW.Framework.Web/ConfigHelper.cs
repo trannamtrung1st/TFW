@@ -125,6 +125,7 @@ namespace TFW.Framework.Web
                 opt.AllowOverrideFallback = true;
                 opt.ApplyCurrentTimeZoneToResponseHeaders = true;
                 opt.DefaultRequestTimeZone = TimeZoneInfo.Local;
+                opt.ResponseHeaderName = RequestTimeZoneOptions.DefaultResponseHeaderName;
                 opt.OverrideFallbackCookieName = RequestTimeZoneOptions.DefaultOverrideFallbackCookieName;
                 opt.OverrideFallbackHeaderName = RequestTimeZoneOptions.DefaultOverrideFallbackHeaderName;
                 opt.OverrideFallbackQueryKey = RequestTimeZoneOptions.DefaultOverrideFallbackQueryKey;
