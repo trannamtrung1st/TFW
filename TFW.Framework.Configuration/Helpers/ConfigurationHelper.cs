@@ -11,5 +11,13 @@ namespace TFW.Framework.Configuration.Helpers
         {
             return configuration.GetSection(key).Get<T>();
         }
+
+        public static bool TryParse<T>(this IConfiguration configuration, string key,
+            out T output, Predicate<T> predicate = null)
+        {
+            output = configuration.GetSection(key).Get<T>();
+            
+            return predicate?.Invoke(output) ?? true;
+        }
     }
 }

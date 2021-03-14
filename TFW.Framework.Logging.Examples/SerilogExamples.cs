@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyModel;
 using Serilog;
+using Serilog.Configuration;
 using Serilog.Context;
 using Serilog.Core;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Sinks.Async;
+using TFW.Framework.Configuration.Helpers;
 
 namespace TFW.Framework.Logging.Examples
 {
@@ -62,15 +67,52 @@ namespace TFW.Framework.Logging.Examples
 
     public static class SerilogExamples
     {
+        public static LoggerConfiguration CustomSink(
+        this LoggerSinkConfiguration writeto, LogEventLevel restricted = LogEventLevel.Verbose,
+            LoggingLevelSwitch logSwitch = null)
+        {
+            return writeto.Sink<CustomSink>(restrictedToMinimumLevel: restricted, levelSwitch: logSwitch);
+        }
+
+        public static LoggerConfiguration WithTestEnricher(
+        this LoggerEnrichmentConfiguration enrich)
+        {
+            if (enrich == null)
+                throw new ArgumentNullException(nameof(enrich));
+
+            return enrich.With<TestEnricher>();
+        }
+
         public static void Run()
         {
             Test.Log("Caller oke");
 
-            var levelSwitch = new LoggingLevelSwitch(initialMinimumLevel: LogEventLevel.Debug);
-
             SelfLog.Enable(Console.Out);
             SelfLog.WriteLine("This is a self log");
 
+#if true
+            var depContext = DependencyContext.Load(typeof(SerilogExamples).Assembly);
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
+            var serilogCfgSection = configuration.GetSection("Serilog");
+
+            var config = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration, sectionName: "Serilog", dependencyContext: depContext);
+
+            string enricherTransform;
+
+            if (serilogCfgSection.TryParse<string>("TransformTestEnricher", out enricherTransform, trans => trans != null))
+                config = config.Destructure.ByTransforming<TestEnricher>(o => enricherTransform);
+
+            Log.Logger = config.CreateLogger();
+#endif
+
+#if false
+            var levelSwitch = new LoggingLevelSwitch(initialMinimumLevel: LogEventLevel.Debug);
             var template = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {LoggerName} {ClientIp} {Message:lj}{Username:j}{NewLine}{Exception}";
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -79,12 +121,12 @@ namespace TFW.Framework.Logging.Examples
                 .Enrich.WithThreadId()
                 .Enrich.WithClientIp()
                 .Enrich.FromLogContext()
-                .Enrich.With<TestEnricher>()
-                .WriteTo.Sink<CustomSink>()
+                .Enrich.WithTestEnricher()
                 .Destructure.ByTransforming<TestEnricher>(o => "He is enricher")
 #if false
                 .Destructure.With<DestructorPolicy>()
 #endif
+                .WriteTo.CustomSink()
                 .WriteTo.Console(levelSwitch: levelSwitch, outputTemplate: template, formatProvider: CultureInfo.CurrentCulture)
                 .WriteTo.Async(cfg => cfg.File("logs/async.txt"), bufferSize: 1000, blockWhenFull: true, monitor: new MonitorConfiguration())
                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Hour, outputTemplate: template)
@@ -95,6 +137,7 @@ namespace TFW.Framework.Logging.Examples
                         .WriteTo.Console(outputTemplate: template))
 #endif
                 .CreateLogger();
+#endif
 
             using (LogContext.PushProperty("A", 1))
             {
@@ -113,7 +156,7 @@ namespace TFW.Framework.Logging.Examples
             var test = new TestEnricher();
             var enricherContext = Log.ForContext<TestEnricher>()
                 .ForContext("ContextVal", "OKEOKE");
-            enricherContext.Information("Connected to {Enricher} {SourceContext} {ContextVal}", test); // wrong use of property
+            enricherContext.Information("Connected to {@Enricher} {SourceContext} {ContextVal}", test); // wrong use of property
 
             var count = 456;
             Log.Information("Retrieved {Count} records", count);

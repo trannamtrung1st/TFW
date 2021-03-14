@@ -10,7 +10,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
     <ProjectReference Include="..\TFW.Framework.Logging.Serilog\TFW.Framework.Logging.Serilog.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
