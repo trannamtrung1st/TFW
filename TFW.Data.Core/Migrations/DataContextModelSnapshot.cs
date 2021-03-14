@@ -140,7 +140,7 @@ namespace TFW.Data.Core.Migrations
                         new
                         {
                             Id = "Administrator",
-                            ConcurrencyStamp = "9b6ad1e6-3c08-42c3-ac82-7df4c7091324",
+                            ConcurrencyStamp = "93df0fd2-532a-4f88-bbb5-97b38b560c4e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -168,7 +168,7 @@ namespace TFW.Data.Core.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
-                    b.Property<DateTime>("DeletedTime")
+                    b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedUserId")
@@ -189,7 +189,7 @@ namespace TFW.Data.Core.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastModifiedTime")
+                    b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedUserId")
@@ -251,19 +251,9 @@ namespace TFW.Data.Core.Migrations
                     b.Property<string>("RoleId")
                         .HasColumnType("varchar(100)");
 
-                    b.Property<string>("RoleId1")
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("varchar(100)");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("AspNetUserRoles");
                 });
@@ -290,7 +280,7 @@ namespace TFW.Data.Core.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(false);
 
-                    b.Property<DateTime>("LastModifiedTime")
+                    b.Property<DateTime?>("LastModifiedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedUserId")
@@ -318,7 +308,7 @@ namespace TFW.Data.Core.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
-                    b.Property<DateTime>("DeletedTime")
+                    b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedUserId")
@@ -376,27 +366,19 @@ namespace TFW.Data.Core.Migrations
 
             modelBuilder.Entity("TFW.Cross.Entities.AppUserRole", b =>
                 {
-                    b.HasOne("TFW.Cross.Entities.AppRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("TFW.Cross.Entities.AppRole", "Role")
                         .WithMany("UserRoles")
-                        .HasForeignKey("RoleId1")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("TFW.Cross.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_AppUserRole_AppRole_RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TFW.Cross.Entities.AppUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_AppUserRole_AppUser_UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TFW.Cross.Entities.Note", b =>

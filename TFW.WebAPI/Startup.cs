@@ -276,14 +276,14 @@ namespace TFW.WebAPI
                 });
             });
 
-            app.UseRequestDataExtraction();
-
             app.UseRequestTimeZone();
 
             app.UseAuthentication();
 
-            app.UseAuthorization();
+            app.UseRequestDataExtraction();
 
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

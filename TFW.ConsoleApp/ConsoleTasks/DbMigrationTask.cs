@@ -59,6 +59,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.Start();
             process.WaitForExit();
 
+            Console.ReadLine();
             Console.Clear();
 
             return Task.CompletedTask;
@@ -92,6 +93,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.Start();
             process.WaitForExit();
 
+            Console.ReadLine();
             Console.Clear();
 
             return Task.CompletedTask;
@@ -123,6 +125,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
             process.Start();
             process.WaitForExit();
 
+            Console.ReadLine();
             Console.Clear();
 
             return Task.CompletedTask;

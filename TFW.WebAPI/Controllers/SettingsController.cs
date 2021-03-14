@@ -13,7 +13,7 @@ using TFW.Framework.Web.Attributes;
 
 namespace TFW.WebAPI.Controllers
 {
-    [Route(ApiEndpoint.RoleApi)]
+    [Route(ApiEndpoint.SettingApi)]
     [Authorize(RoleName.Administrator)]
     public class SettingsController : BaseApiController
     {

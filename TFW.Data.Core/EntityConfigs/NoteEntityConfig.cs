@@ -22,13 +22,13 @@ namespace TFW.Data.Core.EntityConfigs
             builder.HasOne(e => e.CreatedUser)
                 .WithMany(e => e.Notes)
                 .HasForeignKey(e => e.CreatedUserId)
-                .OnDelete(DeleteBehavior.Restrict)
+                //.OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_Note_AppUser_CreatedUserId");
 
             builder.HasOne(e => e.Category)
                 .WithMany(e => e.Notes)
                 .HasForeignKey(e => e.CategoryName)
-                .OnDelete(DeleteBehavior.Restrict)
+                //.OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("FK_Note_Category_CategoryName");
         }
     }

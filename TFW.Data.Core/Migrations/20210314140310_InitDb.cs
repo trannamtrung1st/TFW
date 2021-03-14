@@ -42,9 +42,9 @@ namespace TFW.Data.Core.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    DeletedTime = table.Column<DateTime>(nullable: false),
+                    DeletedTime = table.Column<DateTime>(nullable: true),
                     DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     FullName = table.Column<string>(nullable: true)
@@ -59,7 +59,7 @@ namespace TFW.Data.Core.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(maxLength: 255, nullable: false),
-                    DeletedTime = table.Column<DateTime>(nullable: false),
+                    DeletedTime = table.Column<DateTime>(nullable: true),
                     DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true)
@@ -136,34 +136,20 @@ namespace TFW.Data.Core.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true),
-                    RoleId1 = table.Column<string>(nullable: true)
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK_AppUserRole_AppRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        name: "FK_AppUserRole_AppUser_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -197,7 +183,7 @@ namespace TFW.Data.Core.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: false),
+                    LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     Title = table.Column<string>(maxLength: 255, nullable: false),
                     Content = table.Column<string>(nullable: true),
@@ -223,7 +209,7 @@ namespace TFW.Data.Core.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "Administrator", "9b6ad1e6-3c08-42c3-ac82-7df4c7091324", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "Administrator", "93df0fd2-532a-4f88-bbb5-97b38b560c4e", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -251,16 +237,6 @@ namespace TFW.Data.Core.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId1",
-                table: "AspNetUserRoles",
-                column: "RoleId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId1",
-                table: "AspNetUserRoles",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",

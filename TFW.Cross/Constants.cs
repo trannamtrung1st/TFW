@@ -45,6 +45,7 @@ namespace TFW.Cross
         public const string Auth = "auth";
         public const string UserApi = "api/users";
         public const string RoleApi = "api/roles";
+        public const string SettingApi = "api/settings";
         public const string ReferenceDataApi = "api/ref";
         public const string Error = "error";
     }

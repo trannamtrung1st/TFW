@@ -10,9 +10,9 @@ namespace TFW.Cross.Entities
     {
         public DateTime CreatedTime { get; set; }
         public string CreatedUserId { get; set; }
-        public DateTime LastModifiedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
         public string LastModifiedUserId { get; set; }
-        public DateTime DeletedTime { get; set; }
+        public DateTime? DeletedTime { get; set; }
         public string DeletedUserId { get; set; }
         public bool IsDeleted { get; set; }
     }
