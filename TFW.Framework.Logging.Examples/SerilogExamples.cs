@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Serilog;
 using Serilog.Context;
@@ -12,6 +13,14 @@ using Serilog.Sinks.Async;
 
 namespace TFW.Framework.Logging.Examples
 {
+    public class CustomSink : ILogEventSink
+    {
+        public void Emit(LogEvent logEvent)
+        {
+            Console.WriteLine(logEvent);
+        }
+    }
+
     public class TestEnricher : ILogEventEnricher
     {
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
@@ -39,10 +48,24 @@ namespace TFW.Framework.Logging.Examples
         }
     }
 
+    public static class Test
+    {
+        public static void Log(object message,
+            [CallerMemberName] string memberName = "",
+            [CallerFilePath] string fileName = "",
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            // we'll just use a simple Console write for now    
+            Console.WriteLine("{0}({1}):{2} - {3}", fileName, lineNumber, memberName, message);
+        }
+    }
+
     public static class SerilogExamples
     {
         public static void Run()
         {
+            Test.Log("Caller oke");
+
             var levelSwitch = new LoggingLevelSwitch(initialMinimumLevel: LogEventLevel.Debug);
 
             SelfLog.Enable(Console.Out);
@@ -57,6 +80,7 @@ namespace TFW.Framework.Logging.Examples
                 .Enrich.WithClientIp()
                 .Enrich.FromLogContext()
                 .Enrich.With<TestEnricher>()
+                .WriteTo.Sink<CustomSink>()
                 .Destructure.ByTransforming<TestEnricher>(o => "He is enricher")
 #if false
                 .Destructure.With<DestructorPolicy>()
