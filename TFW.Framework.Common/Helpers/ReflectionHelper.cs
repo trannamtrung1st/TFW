@@ -86,13 +86,11 @@ namespace TFW.Framework.Common.Helpers
                 try
                 {
                     var assembly = Assembly.Load(assObj.Name);
-
                     allAssemblies.Add(assembly);
                 }
                 catch (FileNotFoundException)
                 {
                     var assembly = Assembly.LoadFile(assObj.Dll);
-
                     allAssemblies.Add(assembly);
                 }
                 catch (FileLoadException) { }

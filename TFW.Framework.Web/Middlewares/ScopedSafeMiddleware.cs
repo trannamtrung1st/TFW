@@ -11,14 +11,14 @@ namespace TFW.Framework.Web.Middlewares
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            await SafeCall(ForwardInvokeAsync, context);
+            await SafeCallAsync(ForwardInvokeAsync, context);
 
             await next(context);
 
-            await SafeCall(BackwardInvokeAsync, context);
+            await SafeCallAsync(BackwardInvokeAsync, context);
         }
 
-        protected virtual async Task SafeCall(Func<HttpContext, Task> func, HttpContext context)
+        protected virtual async Task SafeCallAsync(Func<HttpContext, Task> func, HttpContext context)
         {
             if (!_hasException)
             {
