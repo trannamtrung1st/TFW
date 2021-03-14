@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TFW.Framework.Logging.Serilog\TFW.Framework.Logging.Serilog.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enrichers\" />
+  </ItemGroup>
+
+</Project>
