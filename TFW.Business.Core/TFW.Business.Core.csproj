@@ -20,6 +20,7 @@
     <ProjectReference Include="..\TFW.Framework.AutoMapper\TFW.Framework.AutoMapper.csproj" />
     <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Logging.Serilog.Web\TFW.Framework.Logging.Serilog.Web.csproj" />
     <ProjectReference Include="..\TFW.Framework.Security\TFW.Framework.Security.csproj" />
     <ProjectReference Include="..\TFW.Framework.SimpleMail\TFW.Framework.SimpleMail.csproj" />
   </ItemGroup>

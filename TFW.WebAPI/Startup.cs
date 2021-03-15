@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Setting;
@@ -28,6 +30,8 @@ using TFW.Framework.Configuration.Helpers;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
+using TFW.Framework.Logging.Serilog.Web;
+using TFW.Framework.Logging.Serilog.Web.Options;
 using TFW.Framework.SimpleMail;
 using TFW.Framework.SimpleMail.Options;
 using TFW.Framework.Validations.Fluent;
@@ -45,6 +49,7 @@ namespace TFW.WebAPI
         private static IEnumerable<Assembly> _tempAssemblyList;
         private const string _defaultJsonFile = TFW.Framework.Configuration.CommonConsts.DefaultAppSettingsFile;
         private readonly string _envJsonFile;
+        private readonly RequestLoggingOptions _requestLoggingOptions;
 
         public Startup(IWebHostEnvironment env)
         {
@@ -61,6 +66,9 @@ namespace TFW.WebAPI
             Settings.App = Configuration.Parse<AppSettings>(nameof(AppSettings));
             Settings.Jwt = Configuration.Parse<JwtSettings>(nameof(JwtSettings));
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
+
+            _requestLoggingOptions = Configuration.GetSection(nameof(Serilog))
+                .Parse<RequestLoggingOptions>(nameof(RequestLoggingOptions));
         }
 
         public IConfiguration Configuration { get; }
@@ -246,6 +254,8 @@ namespace TFW.WebAPI
                 // configure dev settings
             }
 
+            app.UseDefaultSerilogRequestLogging(_requestLoggingOptions);
+
             app.UseExceptionHandler($"/{ApiEndpoint.Error}");
 
             app.UseStaticFiles();
@@ -283,7 +293,7 @@ namespace TFW.WebAPI
             app.UseRequestDataExtraction();
 
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

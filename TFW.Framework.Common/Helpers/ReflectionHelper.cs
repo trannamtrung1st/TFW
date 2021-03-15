@@ -10,6 +10,16 @@ namespace TFW.Framework.Common.Helpers
 {
     public static class ReflectionHelper
     {
+        public static T[] GetAllConstants<T>(this Type type)
+        {
+            var returnType = typeof(T);
+
+            return type.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == returnType)
+                .Select(x => (T)x.GetRawConstantValue())
+                .ToArray();
+        }
+
         public static MethodInfo GetInstanceMethod(this Type type, string methodName, bool isPublic = true,
             bool nonPublic = false)
         {
@@ -61,7 +71,7 @@ namespace TFW.Framework.Common.Helpers
 
             var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .ToDictionary(o => o.FullName);
-            
+
             List<Assembly> allAssemblies = new List<Assembly>();
 
             var excludedDirs = excludedRelativeDirPaths?.Select(dirPath => new DirectoryInfo(
