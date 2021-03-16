@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Serilog;
+using Serilog.Core;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Setting;
@@ -51,7 +51,8 @@ namespace TFW.WebAPI
         private readonly string _envJsonFile = Framework.Configuration.CommonConsts.AppSettings.DefaultEnv;
 
         private readonly RequestLoggingOptions _requestLoggingOptions;
-        private readonly IConfiguration _requestLoggingSection;
+        private readonly string _requestLoggingSection;
+        private Logger _requestLogger;
 
         public Startup(IWebHostEnvironment env)
         {
@@ -68,11 +69,12 @@ namespace TFW.WebAPI
             // App settings
             Settings.App = Configuration.Parse<AppSettings>(nameof(AppSettings));
             Settings.Jwt = Configuration.Parse<JwtSettings>(nameof(JwtSettings));
+            Settings.Serilog = Configuration.Parse<SerilogSettings>(nameof(Serilog));
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
 
             // Serilog
-            _requestLoggingSection = Configuration.GetSection($"{nameof(Serilog)}:{nameof(RequestLoggingOptions)}");
-            _requestLoggingOptions = _requestLoggingSection.Parse<RequestLoggingOptions>();
+            _requestLoggingSection = $"{nameof(Serilog)}:{nameof(RequestLoggingOptions)}";
+            _requestLoggingOptions = Configuration.Parse<RequestLoggingOptions>(_requestLoggingSection);
         }
 
         public IConfiguration Configuration { get; }
@@ -108,6 +110,7 @@ namespace TFW.WebAPI
                 .ScanServices(_tempAssemblyList)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
+                .AddRequestFeatureMiddleware()
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
                 .AddSmtpService(Configuration.GetSection(nameof(SmtpOption)))
@@ -259,15 +262,15 @@ namespace TFW.WebAPI
             }
 
             #region Serilog
-            ILogger requestLogger = null;
-
             if (!_requestLoggingOptions.UseDefaultLogger)
-                requestLogger = _requestLoggingSection.ParseLogger();
+                _requestLogger = Configuration.ParseLogger(_requestLoggingSection, app.ApplicationServices);
 
-            app.UseDefaultSerilogRequestLogging(_requestLoggingOptions, requestLogger);
+            app.UseDefaultSerilogRequestLogging(_requestLoggingOptions, _requestLogger);
             #endregion
 
             app.UseExceptionHandler($"/{ApiEndpoint.Error}");
+
+            app.UseRequestFeature();
 
             app.UseStaticFiles();
 
@@ -312,6 +315,7 @@ namespace TFW.WebAPI
 
             // app lifetime
             appLifetime.ApplicationStarted.Register(OnApplicationStarted);
+            appLifetime.ApplicationStopped.Register(OnApplicationStopped);
         }
 
         private void PrepareEnvironment(IWebHostEnvironment env)
@@ -323,6 +327,14 @@ namespace TFW.WebAPI
         {
             // clear caching
             _tempAssemblyList = null;
+        }
+
+        private void OnApplicationStopped()
+        {
+            using (_requestLogger)
+            {
+                Console.WriteLine("Cleaning resources ...");
+            };
         }
     }
 }

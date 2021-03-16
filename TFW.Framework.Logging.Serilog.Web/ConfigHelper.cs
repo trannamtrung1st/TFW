@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,10 +11,11 @@ namespace TFW.Framework.Logging.Serilog.Web
 {
     public static class ConfigHelper
     {
-        public static ILogger ParseLogger(this IConfiguration configuration, IServiceProvider provider = null)
+        public static Logger ParseLogger(this IConfiguration configuration,
+            string sectionName, IServiceProvider provider = null)
         {
             var loggerConfig = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration);
+                .ReadFrom.Configuration(configuration, sectionName);
 
             if (provider != null)
                 loggerConfig = loggerConfig.ReadFrom.Services(provider);
@@ -33,7 +35,8 @@ namespace TFW.Framework.Logging.Serilog.Web
                 options.MessageTemplate = frameworkOptions.MessageTemplate;
 
                 // Emit info-level events instead of the defaults
-                options.GetLevel = (httpContext, elapsed, ex) => frameworkOptions.GetLevel;
+                if (frameworkOptions.GetLevel != null)
+                    options.GetLevel = (httpContext, elapsed, ex) => frameworkOptions.GetLevel.Value;
 
                 // Attach additional properties to the request completion event
                 options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>

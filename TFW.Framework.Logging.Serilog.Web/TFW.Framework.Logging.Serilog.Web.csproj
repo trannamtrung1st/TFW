@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Destructors\" />
     <Folder Include="Enrichers\" />
   </ItemGroup>
 

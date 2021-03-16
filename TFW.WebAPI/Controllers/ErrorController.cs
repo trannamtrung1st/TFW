@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
+using TFW.Cross.Models.Setting;
 using TFW.Data;
+using TFW.Framework.Common.Helpers;
+using TFW.Framework.Web.Models;
 
 namespace TFW.WebAPI.Controllers
 {
@@ -25,14 +29,12 @@ namespace TFW.WebAPI.Controllers
         }
 
         [Route("")]
-        public IActionResult HandleException()
+        public async Task<IActionResult> HandleException()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var ex = context.Error;
 
             if (ex == null) return BadRequest();
-
-            // logging ...
 
             AppResult response;
 
@@ -56,7 +58,25 @@ namespace TFW.WebAPI.Controllers
                 else response = AppResult.Error();
             }
 
+            await LogErrorRequestAsync(ex);
+
             return Error(response);
+        }
+
+        private async Task LogErrorRequestAsync(Exception ex)
+        {
+            var originalRequest = HttpContext.Features.Get<SimpleHttpRequestFeature>();
+            object bodyInfo = "";
+
+            if (originalRequest.ContentLength > 0 &&
+                originalRequest.ContentLength <= Settings.Serilog.MaxBodyLengthForLogging)
+            {
+                var bodyRaw = await originalRequest.GetBody().ReadAsStringAsync();
+                bodyInfo = string.IsNullOrEmpty(bodyRaw) ? "" : $"\r\n---- Raw body ----\r\n{bodyRaw}\r\n";
+            }
+
+            Log.Error(ex, "500 Response\r\nRequest: {@Request}{Body}",
+                originalRequest, bodyInfo);
         }
     }
 }

@@ -7,5 +7,6 @@ namespace TFW.Cross.Models.Setting
     {
         public static AppSettings App { get; set; }
         public static JwtSettings Jwt { get; set; }
+        public static SerilogSettings Serilog { get; set; }
     }
 }

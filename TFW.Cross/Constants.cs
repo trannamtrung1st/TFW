@@ -8,13 +8,15 @@ using TFW.Cross.Models.Setting;
 
 namespace TFW.Cross
 {
-    public static class AppConsts
+    public static class LoggingConsts
     {
-        public static class Logging
+        public const string HostLevelLogFolder = "logs/host";
+        public const string HostLevelLogFile = "host.txt";
+        public const string HostLevelLogTemplate = "[{UtcTimestamp} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+        public static class Properties
         {
-            public const string HostLevelLogFolder = "logs/host";
-            public const string HostLevelLogFile = "host.txt";
-            public const string HostLevelLogTemplate = "[{UtcTimestamp} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+            public const string UserId = nameof(UserId);
         }
     }
 

@@ -74,11 +74,11 @@ namespace TFW.WebAPI
 
         private static LoggerConfiguration HostLevelLog(this LoggerSinkConfiguration writeTo)
         {
-            var template = AppConsts.Logging.HostLevelLogTemplate;
+            var template = LoggingConsts.HostLevelLogTemplate;
 #if DEBUG
             return writeTo.Console(restrictedToMinimumLevel: LogEventLevel.Information, outputTemplate: template);
 #else
-            return writeTo.File($"{AppConsts.Logging.HostLevelLogFolder}/{AppConsts.Logging.HostLevelLogFile}",
+            return writeTo.File($"{LoggingConsts.HostLevelLogFolder}/{LoggingConsts.HostLevelLogFile}",
                 rollingInterval: RollingInterval.Month,
                 restrictedToMinimumLevel: LogEventLevel.Information, outputTemplate: template);
 #endif

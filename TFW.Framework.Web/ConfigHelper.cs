@@ -74,6 +74,16 @@ namespace TFW.Framework.Web
             return app;
         }
 
+        public static IApplicationBuilder UseRequestFeature(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<RequestFeatureMiddleware>();
+        }
+
+        public static IServiceCollection AddRequestFeatureMiddleware(this IServiceCollection services)
+        {
+            return services.AddScoped<RequestFeatureMiddleware>();
+        }
+
         public static IApplicationBuilder UseRequestTimeZone(this IApplicationBuilder app)
         {
             return app.UseMiddleware<RequestTimeZoneMiddleware>();
