@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,9 +21,14 @@ namespace TFW.Framework.Web.Models
             Protocol = request.Protocol;
             QueryString = request.QueryString.Value;
             Scheme = request.Scheme;
+
+            if (request.HasFormContentType)
+                Form = new Dictionary<string, StringValues>(request.Form);
+
             _body = request.Body;
         }
 
+        public IDictionary<string, StringValues> Form { get; set; }
         public string QueryString { get; }
         public string Protocol { get; }
         public string Path { get; }
