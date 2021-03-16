@@ -10,7 +10,7 @@ namespace TFW.Framework.Configuration
     public static class ConfigHelper
     {
         public static IServiceCollection AddJsonConfigurationManager(this IServiceCollection services,
-            string jsonFile = CommonConsts.DefaultAppSettingsFile,
+            string jsonFile = CommonConsts.AppSettings.Default,
             string fallbackJsonFile = null,
             IJsonConfigurationManager customManager = null)
         {

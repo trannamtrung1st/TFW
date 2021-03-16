@@ -105,7 +105,7 @@ namespace TFW.Framework.Logging.Examples
 
             string enricherTransform;
 
-            if (serilogCfgSection.TryParse<string>("TransformTestEnricher", out enricherTransform, trans => trans != null))
+            if (serilogCfgSection.TryParse<string>(out enricherTransform, key: "TransformTestEnricher", trans => trans != null))
                 config = config.Destructure.ByTransforming<TestEnricher>(o => enricherTransform);
 
             Log.Logger = config.CreateLogger();

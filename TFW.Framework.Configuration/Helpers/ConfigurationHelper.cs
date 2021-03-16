@@ -7,16 +7,21 @@ namespace TFW.Framework.Configuration.Helpers
 {
     public static class ConfigurationHelper
     {
-        public static T Parse<T>(this IConfiguration configuration, string key)
+        public static T Parse<T>(this IConfiguration configuration, string key = null)
         {
-            return configuration.GetSection(key).Get<T>();
+            if (key != null)
+                return configuration.GetSection(key).Get<T>();
+
+            return configuration.Get<T>();
         }
 
-        public static bool TryParse<T>(this IConfiguration configuration, string key,
-            out T output, Predicate<T> predicate = null)
+        public static bool TryParse<T>(this IConfiguration configuration, out T output,
+            string key = null, Predicate<T> predicate = null)
         {
-            output = configuration.GetSection(key).Get<T>();
-            
+            if (key != null)
+                output = configuration.GetSection(key).Get<T>();
+            else output = configuration.Get<T>();
+
             return predicate?.Invoke(output) ?? true;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,25 @@ namespace TFW.Framework.Logging.Serilog.Web
 {
     public static class ConfigHelper
     {
+        public static ILogger ParseLogger(this IConfiguration configuration, IServiceProvider provider = null)
+        {
+            var loggerConfig = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration);
+
+            if (provider != null)
+                loggerConfig = loggerConfig.ReadFrom.Services(provider);
+
+            return loggerConfig.CreateLogger();
+        }
+
         public static IApplicationBuilder UseDefaultSerilogRequestLogging(this IApplicationBuilder app,
-            RequestLoggingOptions frameworkOptions)
+            RequestLoggingOptions frameworkOptions, ILogger logger = null)
         {
             return app.UseSerilogRequestLogging(options =>
             {
+                if (!frameworkOptions.UseDefaultLogger)
+                    options.Logger = logger;
+
                 // Customize the message template
                 options.MessageTemplate = frameworkOptions.MessageTemplate;
 

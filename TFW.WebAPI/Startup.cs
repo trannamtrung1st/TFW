@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Models.Setting;
@@ -45,13 +46,16 @@ namespace TFW.WebAPI
     public class Startup
     {
         private static IEnumerable<Assembly> _tempAssemblyList;
-        private const string _defaultJsonFile = TFW.Framework.Configuration.CommonConsts.DefaultAppSettingsFile;
-        private readonly string _envJsonFile;
+
+        private const string _defaultJsonFile = Framework.Configuration.CommonConsts.AppSettings.Default;
+        private readonly string _envJsonFile = Framework.Configuration.CommonConsts.AppSettings.DefaultEnv;
+
         private readonly RequestLoggingOptions _requestLoggingOptions;
+        private readonly IConfiguration _requestLoggingSection;
 
         public Startup(IWebHostEnvironment env)
         {
-            _envJsonFile = $"appsettings.{env.EnvironmentName}.json";
+            _envJsonFile = _envJsonFile.Replace(CommonConsts.AppSettings.EnvPlaceholder, env.EnvironmentName);
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -61,12 +65,14 @@ namespace TFW.WebAPI
 
             Configuration = builder.Build();
 
+            // App settings
             Settings.App = Configuration.Parse<AppSettings>(nameof(AppSettings));
             Settings.Jwt = Configuration.Parse<JwtSettings>(nameof(JwtSettings));
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
 
-            _requestLoggingOptions = Configuration.GetSection(nameof(Serilog))
-                .Parse<RequestLoggingOptions>(nameof(RequestLoggingOptions));
+            // Serilog
+            _requestLoggingSection = Configuration.GetSection($"{nameof(Serilog)}:{nameof(RequestLoggingOptions)}");
+            _requestLoggingOptions = _requestLoggingSection.Parse<RequestLoggingOptions>();
         }
 
         public IConfiguration Configuration { get; }
@@ -252,7 +258,14 @@ namespace TFW.WebAPI
                 // configure dev settings
             }
 
-            app.UseDefaultSerilogRequestLogging(_requestLoggingOptions);
+            #region Serilog
+            ILogger requestLogger = null;
+
+            if (!_requestLoggingOptions.UseDefaultLogger)
+                requestLogger = _requestLoggingSection.ParseLogger();
+
+            app.UseDefaultSerilogRequestLogging(_requestLoggingOptions, requestLogger);
+            #endregion
 
             app.UseExceptionHandler($"/{ApiEndpoint.Error}");
 

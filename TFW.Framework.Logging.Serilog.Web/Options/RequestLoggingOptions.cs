@@ -12,5 +12,6 @@ namespace TFW.Framework.Logging.Serilog.Web.Options
         public LogEventLevel GetLevel { get; set; } = LogEventLevel.Information;
         public IDictionary<string, string> EnrichHeaders { get; set; } = new Dictionary<string, string>();
         public bool IncludeHost { get; set; } = false;
+        public bool UseDefaultLogger { get; set; } = true;
     }
 }
