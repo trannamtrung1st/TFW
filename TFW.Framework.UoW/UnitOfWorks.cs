@@ -37,11 +37,11 @@ namespace TFW.Framework.UoW
         bool IsFilterEnabledAndAppliedForEntity(string filterName, Type eType);
     }
 
-    public interface IHighLevelUnitOfWork : IDisposable, IAsyncDisposable
+    public interface IDisposableUnitOfWork : IDisposable, IAsyncDisposable
     {
     }
 
-    public interface IBaseUnitOfWork : IHighLevelUnitOfWork, IDbUnitOfWork, IQueryFilterUnitOfWork
+    public interface IBaseUnitOfWork : IDisposableUnitOfWork, IDbUnitOfWork, IQueryFilterUnitOfWork
     {
     }
 }

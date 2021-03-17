@@ -41,9 +41,9 @@ namespace TFW.Framework.EFCore.Context
         }
 
         public BaseIdentityDbContext(DbContextOptions options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options)
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options)
         {
-            this.queryFilterOptions = queryFilterOptions.Value;
+            this.queryFilterOptions = queryFilterOptions?.Value ?? new QueryFilterOptions();
         }
 
         public virtual void AuditEntities()

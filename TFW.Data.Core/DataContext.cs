@@ -30,7 +30,8 @@ namespace TFW.Data.Core
         {
         }
 
-        public DataContext(DbContextOptions options, IOptionsSnapshot<QueryFilterOptions> queryFilterOptions) : base(options, queryFilterOptions)
+        public DataContext(DbContextOptions options,
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options, queryFilterOptions)
         {
         }
 
