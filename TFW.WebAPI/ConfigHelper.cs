@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using TFW.Cross;
 using TFW.Cross.Models.Setting;
 using TFW.Cross.Providers;
 using TFW.Cross.Requirements;
+using TFW.Data.Core;
 using TFW.Data.Providers;
+using TFW.Framework.Data;
+using TFW.Framework.Data.Options;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Options;
 using TFW.WebAPI.Handlers;
@@ -21,6 +26,57 @@ namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {
+        public static IServiceCollection AddAppDbContext(this IServiceCollection services, string connStr)
+        {
+            if (Settings.App.UseDbConnectionPool)
+            {
+                IDbConnectionPoolManager connectionPoolManager;
+
+                void Pool_RetryAddToPoolError(Exception ex, int tryCount)
+                {
+                    Log.Error(ex, "Failed {TryCount} time(s) in retrying add DbConnection to pool", tryCount);
+                }
+
+                services.AddSqlConnectionPoolManager(out connectionPoolManager, configAction: options =>
+                {
+                    options.WatchIntervalInMinutes = 1;
+                    options.RetryIntervalInSeconds = SqlConnectionPoolManagerOptions.DefaultRetryIntervalInSeconds;
+                    //options.WatchIntervalInMinutes = SqlConnectionPoolManagerOptions.DefaultWatchIntervalInMinutes;
+                    //options.RetryIntervalInSeconds = SqlConnectionPoolManagerOptions.DefaultRetryIntervalInSeconds;
+                }, initAction: async pool =>
+                {
+                    pool.RetryAddToPoolError += Pool_RetryAddToPoolError;
+
+                    await pool.InitDbConnectionAsync(new SqlConnectionPoolOptions
+                    {
+                        ConnectionString = connStr,
+                        LifetimeInMinutes = 1,
+                        //LifetimeInMinutes = SqlConnectionPoolOptions.DefaultLifetimeInMinutes,
+                        MaximumConnections = 100,
+                        MinimumConnections = 1
+                    }, DataConsts.ConnStrKey);
+                }).AddDbContext<DataContext>(async options =>
+                {
+                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+
+                    var pooledConn = await connectionPoolManager.GetDbConnectionAsync(DataConsts.ConnStrKey,
+                        createNonPooledConnIfExceedLimit: false);
+
+                    if (pooledConn != null)
+                        options.UseSqlServer(pooledConn);
+                    else options.UseSqlServer(connStr);
+                });
+            }
+            else
+            {
+                services.AddDbContext<DataContext>(options => options
+                    .UseSqlServer(connStr)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            }
+
+            return services;
+        }
+
         public static IServiceCollection AddAppAuthorization(this IServiceCollection services)
         {
             services.AddAuthorization(opt =>

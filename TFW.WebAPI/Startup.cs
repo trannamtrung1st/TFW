@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,9 +96,7 @@ namespace TFW.WebAPI
             #endregion
 
             #region Services
-            services.AddDbContext<DataContext>(options => options
-                    .UseSqlServer(connStr)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking))
+            services.AddAppDbContext(connStr)
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;

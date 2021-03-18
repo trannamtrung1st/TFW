@@ -420,7 +420,7 @@ namespace TFW.Business.Core.Services
                 Audience = audience,
                 Subject = identity,
                 IssuedAt = utcNow,
-                Expires = utcNow.AddSeconds(Settings.App.TokenExpiresInSeconds),
+                Expires = utcNow.AddSeconds(Settings.Jwt.TokenExpiresInSeconds),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 NotBefore = utcNow
@@ -434,7 +434,7 @@ namespace TFW.Business.Core.Services
             var resp = new TokenResponseModel();
             resp.AccessToken = tokenString;
             resp.TokenType = JwtBearerDefaults.AuthenticationScheme;
-            resp.ExpiresIn = Settings.App.TokenExpiresInSeconds;
+            resp.ExpiresIn = Settings.Jwt.TokenExpiresInSeconds;
 
             #region Refresh Token
             key = Encoding.Default.GetBytes(Settings.Jwt.SecretKey);
@@ -451,7 +451,7 @@ namespace TFW.Business.Core.Services
                 Audience = audience,
                 Subject = identity,
                 IssuedAt = utcNow,
-                Expires = utcNow.AddSeconds(Settings.App.RefreshTokenExpiresInSeconds),
+                Expires = utcNow.AddSeconds(Settings.Jwt.RefreshTokenExpiresInSeconds),
                 SigningCredentials = new SigningCredentials(
                     new SymmetricSecurityKey(key),
                     SecurityAlgorithms.HmacSha256Signature),
