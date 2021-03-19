@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -28,22 +29,26 @@ namespace TFW.Framework.EFCore.Context
         where TRoleClaim : IdentityRoleClaim<TKey>
         where TUserToken : IdentityUserToken<TKey>
     {
+        protected readonly DbConnection dbConnection;
         protected readonly QueryFilterOptions queryFilterOptions;
 
-        public BaseIdentityDbContext()
+        public BaseIdentityDbContext() : base()
         {
             queryFilterOptions = new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
-        public BaseIdentityDbContext(QueryFilterOptions queryFilterOptions)
+        public BaseIdentityDbContext(QueryFilterOptions queryFilterOptions) : base()
         {
             this.queryFilterOptions = queryFilterOptions ?? new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
         public BaseIdentityDbContext(DbContextOptions options,
             IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options)
         {
             this.queryFilterOptions = queryFilterOptions?.Value ?? new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
         public virtual void AuditEntities()

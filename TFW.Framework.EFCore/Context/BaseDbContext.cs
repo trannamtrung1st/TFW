@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -16,22 +17,26 @@ namespace TFW.Framework.EFCore.Context
 {
     public abstract class BaseDbContext : DbContext, IFullAuditableDbContext
     {
+        protected readonly DbConnection dbConnection;
         protected readonly QueryFilterOptions queryFilterOptions;
 
-        public BaseDbContext()
+        public BaseDbContext() : base()
         {
             queryFilterOptions = new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
-        public BaseDbContext(QueryFilterOptions queryFilterOptions)
+        public BaseDbContext(QueryFilterOptions queryFilterOptions) : base()
         {
             this.queryFilterOptions = queryFilterOptions ?? new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
         public BaseDbContext(DbContextOptions options,
             IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options)
         {
             this.queryFilterOptions = queryFilterOptions?.Value ?? new QueryFilterOptions();
+            dbConnection = Database.GetDbConnection();
         }
 
         public virtual void AuditEntities()

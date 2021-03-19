@@ -6,8 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TFW.Cross;
 using TFW.Cross.Entities;
+using TFW.Framework.Data;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Helpers;
@@ -22,17 +24,25 @@ namespace TFW.Data.Core
     public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
-        public DataContext()
+        private readonly IDbConnectionPoolManager _poolManager;
+        private bool disposedValue;
+
+        public DataContext(IDbConnectionPoolManager poolManager = null) : base()
         {
+            _poolManager = poolManager;
         }
 
-        public DataContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
+        public DataContext(QueryFilterOptions queryFilterOptions,
+            IDbConnectionPoolManager poolManager = null) : base(queryFilterOptions)
         {
+            _poolManager = poolManager;
         }
 
         public DataContext(DbContextOptions options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options, queryFilterOptions)
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null,
+            IDbConnectionPoolManager poolManager = null) : base(options, queryFilterOptions)
         {
+            _poolManager = poolManager;
         }
 
         public virtual DbSet<Note> Note { get; set; }
@@ -124,5 +134,37 @@ namespace TFW.Data.Core
             var auditableEntity = entity as IAppAuditableEntity;
             auditableEntity.LastModifiedUserId = BusinessContext.Current?.PrincipalInfo?.UserId;
         }
+
+        #region Dispose
+        public override void Dispose()
+        {
+            DisposeAsync(true).Wait();
+
+            base.Dispose();
+        }
+
+        public override async ValueTask DisposeAsync()
+        {
+            await DisposeAsync(true);
+
+            await base.DisposeAsync();
+        }
+
+        private Task DisposeAsync(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    if (_poolManager?.IsNullObject == false)
+                        _poolManager.TryReturnToPoolAsync(dbConnection);
+                }
+
+                disposedValue = true;
+            }
+
+            return Task.CompletedTask;
+        }
+        #endregion
     }
 }

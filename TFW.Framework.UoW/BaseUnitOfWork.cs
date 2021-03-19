@@ -104,7 +104,7 @@ namespace TFW.Framework.UoW
             }
         }
 
-        protected async Task DisposeAsync(bool disposing)
+        protected virtual async Task DisposeAsync(bool disposing)
         {
             if (!disposedValue)
             {

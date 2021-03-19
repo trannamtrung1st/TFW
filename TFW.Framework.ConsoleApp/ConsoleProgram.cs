@@ -7,17 +7,18 @@ using TFW.Framework.ConsoleApp.Options;
 
 namespace TFW.Framework.ConsoleApp
 {
+    public delegate void TaskErrorEventHandler(Exception ex, IConsoleTask consoleTask);
+
     public interface IConsoleProgram
     {
         Task StartAsync();
+        event TaskErrorEventHandler TaskError;
     }
 
     public class OptionsProgram : IConsoleProgram
     {
-        protected readonly List<IConsoleTask> taskList;
+        public event TaskErrorEventHandler TaskError;
         public virtual List<IConsoleTask> Tasks => taskList;
-
-        protected ProgramOptions options;
         public virtual ProgramOptions Options
         {
             get => options; set
@@ -28,6 +29,9 @@ namespace TFW.Framework.ConsoleApp
                 options = value;
             }
         }
+
+        protected ProgramOptions options;
+        protected readonly List<IConsoleTask> taskList;
 
         public OptionsProgram()
         {
@@ -53,7 +57,17 @@ namespace TFW.Framework.ConsoleApp
                 int optIdx;
 
                 if (int.TryParse(line, out optIdx) && optIdx <= taskList.Count)
-                    await taskList[optIdx - 1].StartAsync();
+                {
+                    var task = taskList[optIdx - 1];
+                    try
+                    {
+                        await task.StartAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        TaskError?.Invoke(ex, task);
+                    }
+                }
                 else Console.Clear();
             }
         }
