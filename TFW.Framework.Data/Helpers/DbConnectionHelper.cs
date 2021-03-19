@@ -8,6 +8,11 @@ namespace TFW.Framework.Data.Helpers
 {
     public static class DbConnectionHelper
     {
+        public static bool CanOpen(this DbConnection connection)
+        {
+            return !string.IsNullOrWhiteSpace(connection.ConnectionString);
+        }
+
         public static bool IsOpening(this DbConnection connection)
         {
             var connectionState = connection.State;

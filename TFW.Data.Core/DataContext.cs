@@ -157,7 +157,7 @@ namespace TFW.Data.Core
                 if (disposing)
                 {
                     if (_poolManager?.IsNullObject == false)
-                        return _poolManager.TryReturnToPoolAsync(dbConnection);
+                        _poolManager.TryReturnToPoolAsync(dbConnection);
                 }
 
                 disposedValue = true;

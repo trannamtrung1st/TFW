@@ -14,6 +14,7 @@ namespace TFW.Framework.Data
         public event TryReturnToPoolErrorEventHandler TryReturnToPoolError;
         public event WatcherThreadErrorEventHandler WatcherThreadError;
         public event NewConnectionErrorEventHandler NewConnectionError;
+        public event ReleaseConnectionErrorEventHandler ReleaseConnectionError;
 
         public void Dispose()
         {
@@ -24,12 +25,12 @@ namespace TFW.Framework.Data
             return default;
         }
 
-        public Task<DbConnection> GetDbConnectionAsync(string connStrKey)
+        public Task<DbConnection> GetDbConnectionAsync(string poolKey)
         {
             return default;
         }
 
-        public Task InitDbConnectionAsync(ConnectionPoolOptions options, string poolKey = null)
+        public Task<string> InitDbConnectionAsync(ConnectionPoolOptions options)
         {
             return default;
         }
@@ -44,7 +45,7 @@ namespace TFW.Framework.Data
             return default;
         }
 
-        public Task TryReturnToPoolAsync(DbConnection connection)
+        public Task<bool> TryReturnToPoolAsync(DbConnection connection)
         {
             return default;
         }

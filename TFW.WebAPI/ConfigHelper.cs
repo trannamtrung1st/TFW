@@ -27,12 +27,13 @@ namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {
-        public static IServiceCollection AddAppDbContext(this IServiceCollection services, string connStr)
+        public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+            var connStr = configuration.GetConnectionString(DataConsts.ConnStrKey);
+
             if (Settings.App.UseDbConnectionPool)
             {
-                IDbConnectionPoolManager connectionPoolManager;
-
+                #region Event handlers
                 void Pool_TryReturnToPoolError(Exception ex, int tryCount)
                 {
                     Log.Error(ex, "Failed {TryCount} time(s) in retrying add DbConnection to pool", tryCount);
@@ -45,8 +46,18 @@ namespace TFW.WebAPI
 
                 void Pool_NewConnectionError(Exception ex, string poolKey)
                 {
-                    Log.Error(ex, "Failure on create connection '{ConnStr}'", poolKey);
+                    Log.Error(ex, "Failure on create connection '{PoolKey}'", poolKey);
                 }
+
+                void Pool_ReleaseConnectionError(Exception ex, DbConnection dbConnection)
+                {
+                    Log.Error(ex, "Failure on disposing DbConnection of '{ConnStr}'", dbConnection.ConnectionString);
+                }
+                #endregion
+
+                IDbConnectionPoolManager connectionPoolManager;
+
+                var poolKeyMap = new Dictionary<string, string>();
 
                 services.AddSqlConnectionPoolManager(out connectionPoolManager, configAction: options =>
                 {
@@ -56,19 +67,23 @@ namespace TFW.WebAPI
                     pool.TryReturnToPoolError += Pool_TryReturnToPoolError;
                     pool.NewConnectionError += Pool_NewConnectionError;
                     pool.WatcherThreadError += Pool_WatcherThreadError;
+                    pool.ReleaseConnectionError += Pool_ReleaseConnectionError;
 
-                    await pool.InitDbConnectionAsync(new ConnectionPoolOptions
+                    var poolKey = await pool.InitDbConnectionAsync(new ConnectionPoolOptions
                     {
                         ConnectionString = connStr,
                         LifetimeInMinutes = ConnectionPoolOptions.DefaultLifetimeInMinutes,
                         MaximumRetryWhenFailure = ConnectionPoolOptions.DefaultMaximumRetryWhenFailure,
                         RetryIntervalInSeconds = ConnectionPoolOptions.DefaultRetryIntervalInSeconds,
-                        MaximumConnections = 100,
-                        MinimumConnections = 1
-                    }, DataConsts.ConnStrKey);
+                        MaximumConnections = 300,
+                        MinimumConnections = 10
+                    });
+
+                    poolKeyMap[DataConsts.ConnStrKey] = poolKey;
+
                 }).AddDbContext<DataContext>(async builder =>
                 {
-                    var pooledConn = await connectionPoolManager.GetDbConnectionAsync(DataConsts.ConnStrKey);
+                    var pooledConn = await connectionPoolManager.GetDbConnectionAsync(poolKeyMap[DataConsts.ConnStrKey]);
 
                     builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 

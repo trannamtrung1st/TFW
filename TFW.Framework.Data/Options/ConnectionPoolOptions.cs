@@ -45,7 +45,7 @@ namespace TFW.Framework.Data.Options
             }
         }
 
-        internal ConnectionPoolOptions DeepClone()
+        internal ConnectionPoolOptions Snapshot()
         {
             return new ConnectionPoolOptions
             {

@@ -23,8 +23,14 @@ namespace TFW.ConsoleApp
 
             consoleProgram.Tasks.AddRange(ConfigHelper.FindFromAssemblies(assemblies));
 
+            consoleProgram.TaskError += ConsoleProgram_TaskError;
+
             consoleProgram.StartAsync().Wait();
         }
 
+        private static void ConsoleProgram_TaskError(Exception ex, IConsoleTask consoleTask)
+        {
+            Console.WriteLine(ex);
+        }
     }
 }

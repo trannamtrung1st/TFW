@@ -18,5 +18,6 @@ namespace TFW.Framework.Data.Wrappers
 
         public DbConnection DbConnection => _conn;
         public string PoolKey => _poolKey;
+        public bool IsInPool { get; set; } = false;
     }
 }

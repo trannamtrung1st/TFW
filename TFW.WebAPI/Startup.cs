@@ -82,8 +82,6 @@ namespace TFW.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             #region Common
-            var connStr = Configuration.GetConnectionString(DataConsts.ConnStrKey);
-
             _tempAssemblyList = ReflectionHelper.GetAllAssemblies(
                 excludedRelativeDirPaths: WebApiConsts.ExcludedAssemblyDirs);
             #endregion
@@ -96,7 +94,7 @@ namespace TFW.WebAPI
             #endregion
 
             #region Services
-            services.AddAppDbContext(connStr)
+            services.AddAppDbContext(Configuration)
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
