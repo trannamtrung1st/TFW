@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.Data.Helpers;
+using TFW.Framework.Data.Models;
 using TFW.Framework.Data.Options;
 using TFW.Framework.Data.Wrappers;
 
@@ -19,11 +20,15 @@ namespace TFW.Framework.Data
     /// </summary>
     public class SqlConnectionPoolManager : IDbConnectionPoolManager
     {
-        public event RetryAddToPoolErrorEventHandler RetryAddToPoolError;
+        public bool IsNullObject => false;
 
-        private readonly ConcurrentDictionary<string, ConcurrentQueue<SqlPooledDbConnectionWrapper>> _pools;
-        private readonly ConcurrentDictionary<Guid, (SqlPooledDbConnectionWrapper, DateTime)> _connCreatedTimes;
-        private readonly ConcurrentDictionary<string, SqlConnectionPoolOptions> _poolOptions;
+        public event TryReturnToPoolErrorEventHandler TryReturnToPoolError;
+        public event WatcherThreadErrorEventHandler WatcherThreadError;
+        public event NewConnectionErrorEventHandler NewConnectionError;
+
+        private readonly ConcurrentDictionary<string, ConcurrentQueue<PooledDbConnectionWrapper>> _pools;
+        private readonly ConcurrentDictionary<Guid, ConnectionInfo> _connInfos;
+        private readonly ConcurrentDictionary<string, ConnectionPoolOptions> _poolOptions;
         private readonly object _poolsLock;
         private bool disposedValue;
         private Thread _watcherThread;
@@ -31,26 +36,25 @@ namespace TFW.Framework.Data
 
         public SqlConnectionPoolManager(SqlConnectionPoolManagerOptions options)
         {
-            _pools = new ConcurrentDictionary<string, ConcurrentQueue<SqlPooledDbConnectionWrapper>>();
-            _connCreatedTimes = new ConcurrentDictionary<Guid, (SqlPooledDbConnectionWrapper, DateTime)>();
-            _poolOptions = new ConcurrentDictionary<string, SqlConnectionPoolOptions>();
+            _pools = new ConcurrentDictionary<string, ConcurrentQueue<PooledDbConnectionWrapper>>();
+            _connInfos = new ConcurrentDictionary<Guid, ConnectionInfo>();
+            _poolOptions = new ConcurrentDictionary<string, ConnectionPoolOptions>();
             _poolsLock = new object();
             _options = options;
-            SqlConnection.ClearAllPools();
         }
 
         public SqlConnectionPoolManager() : this(new SqlConnectionPoolManagerOptions())
         {
         }
 
-        public Task<DbConnection> GetDbConnectionAsync(string poolKey, bool createNonPooledConnIfExceedLimit = false)
+        public Task<DbConnection> GetDbConnectionAsync(string poolKey)
         {
             if (disposedValue) throw new ObjectDisposedException(nameof(SqlConnectionPoolManager));
 
             if (!_poolOptions.ContainsKey(poolKey)) throw new KeyNotFoundException();
 
             var connections = _pools[poolKey];
-            SqlPooledDbConnectionWrapper availableConn = null;
+            PooledDbConnectionWrapper availableConn = null;
 
             do
             {
@@ -59,15 +63,10 @@ namespace TFW.Framework.Data
             }
             while (availableConn?.DbConnection.State != ConnectionState.Open);
 
-            DbConnection conn = availableConn?.DbConnection;
-
-            if (availableConn?.DbConnection.State != ConnectionState.Open && createNonPooledConnIfExceedLimit)
-                conn = new SqlConnection(_poolOptions[poolKey].ConnectionString);
-
-            return Task.FromResult(conn);
+            return Task.FromResult(availableConn?.DbConnection);
         }
 
-        public async Task InitDbConnectionAsync(SqlConnectionPoolOptions options, string poolKey = null)
+        public async Task InitDbConnectionAsync(ConnectionPoolOptions options, string poolKey = null)
         {
             if (disposedValue) throw new ObjectDisposedException(nameof(SqlConnectionPoolManager));
 
@@ -99,7 +98,7 @@ namespace TFW.Framework.Data
             try
             {
                 _poolOptions[poolKey] = options.DeepClone();
-                _pools[poolKey] = new ConcurrentQueue<SqlPooledDbConnectionWrapper>();
+                _pools[poolKey] = new ConcurrentQueue<PooledDbConnectionWrapper>();
 
                 for (var i = 0; i < options.MinimumConnections; i++)
                     SetupNewConnection(poolKey);
@@ -107,7 +106,7 @@ namespace TFW.Framework.Data
                 // Create watcher
                 if (_watcherThread == null)
                 {
-                    _watcherThread = new Thread(new ThreadStart(async () => await Watch()))
+                    _watcherThread = new Thread(new ThreadStart(Watch))
                     {
                         IsBackground = true
                     };
@@ -133,7 +132,7 @@ namespace TFW.Framework.Data
             foreach (var wrapper in _pools[poolKey])
             {
                 tasks.Add(wrapper.DbConnection.DisposeAsync().AsTask());
-                _connCreatedTimes.Remove(wrapper.DbConnection.ClientConnectionId, out _);
+                _connInfos.Remove((wrapper.DbConnection as SqlConnection).ClientConnectionId, out _);
             }
 
             await Task.WhenAll(tasks);
@@ -163,21 +162,33 @@ namespace TFW.Framework.Data
                 if (_pools[poolKey].Count >= _poolOptions[poolKey].MaximumConnections)
                     return false;
 
-                var dbConn = new SqlConnection(_poolOptions[poolKey].ConnectionString);
-                var wrapper = new SqlPooledDbConnectionWrapper(dbConn, poolKey);
+                try
+                {
+                    var dbConn = new SqlConnection(_poolOptions[poolKey].ConnectionString);
+                    var wrapper = new PooledDbConnectionWrapper(dbConn, poolKey);
 
-                dbConn.StateChange += async (sender, e) => await DbConn_StateChange(sender, e, wrapper);
+                    dbConn.StateChange += async (sender, e) => await DbConn_StateChange(sender, e, wrapper);
 
-                wrapper.DbConnection.Open();
+                    wrapper.DbConnection.Open();
 
-                _pools[wrapper.PoolKey].Enqueue(wrapper);
-                _connCreatedTimes[wrapper.DbConnection.ClientConnectionId] = (wrapper, DateTime.UtcNow);
+                    _pools[wrapper.PoolKey].Enqueue(wrapper);
+                    _connInfos[(wrapper.DbConnection as SqlConnection).ClientConnectionId] = new ConnectionInfo()
+                    {
+                        CreatedTime = DateTime.UtcNow,
+                        Wrapper = wrapper
+                    };
+                }
+                catch (Exception ex)
+                {
+                    NewConnectionError?.Invoke(ex, poolKey);
+                    throw ex;
+                }
 
                 return true;
             }
         }
 
-        private async Task DbConn_StateChange(object sender, StateChangeEventArgs e, SqlPooledDbConnectionWrapper wrapper)
+        private async Task DbConn_StateChange(object sender, StateChangeEventArgs e, PooledDbConnectionWrapper wrapper)
         {
             var connectionState = e.CurrentState;
 
@@ -185,84 +196,108 @@ namespace TFW.Framework.Data
                 && connectionState != ConnectionState.Broken)
                 || HasExceededLifetime(wrapper)) return;
 
-            await RetryAddToPoolAsync(wrapper);
+            await TryReturnToPoolAsync(wrapper);
         }
 
-        public Task RetryAddToPoolAsync(DbConnection connection)
+        public Task TryReturnToPoolAsync(DbConnection connection)
         {
             if (connection is SqlConnection == false) throw new InvalidOperationException("Unsupported connection");
 
-            var wrapper = _connCreatedTimes[(connection as SqlConnection).ClientConnectionId].Item1;
+            var sqlConn = connection as SqlConnection;
 
-            return RetryAddToPoolAsync(wrapper);
+            if (!_connInfos.ContainsKey(sqlConn.ClientConnectionId)) return Task.CompletedTask;
+
+            var wrapper = _connInfos[sqlConn.ClientConnectionId].Wrapper;
+
+            return TryReturnToPoolAsync(wrapper);
         }
 
-        private Task RetryAddToPoolAsync(SqlPooledDbConnectionWrapper wrapper)
+        private Task TryReturnToPoolAsync(PooledDbConnectionWrapper wrapper)
         {
             if (disposedValue) return Task.CompletedTask;
 
             return Task.Run(() =>
             {
-                for (var i = 0; i < _poolOptions[wrapper.PoolKey].MaximumRetryWhenFailure; i++)
+                var poolOption = _poolOptions[wrapper.PoolKey];
+
+                TryAction((retryCount) =>
                 {
                     try
                     {
                         lock (_poolsLock)
                         {
-                            if (HasExceededLifetime(wrapper)) return;
+                            if (HasExceededLifetime(wrapper)) return true;
 
-                            if (_pools[wrapper.PoolKey].Count < _poolOptions[wrapper.PoolKey].MaximumConnections)
+                            if (_pools[wrapper.PoolKey].Count < poolOption.MaximumConnections)
                             {
-                                wrapper.DbConnection.Open();
+                                if (!wrapper.DbConnection.IsOpening())
+                                    wrapper.DbConnection.Open();
 
                                 _pools[wrapper.PoolKey].Enqueue(wrapper);
-                                _connCreatedTimes[wrapper.DbConnection.ClientConnectionId] = (wrapper, DateTime.UtcNow);
-
-                                return;
+                                _connInfos[(wrapper.DbConnection as SqlConnection).ClientConnectionId] = new ConnectionInfo
+                                {
+                                    Wrapper = wrapper,
+                                    CreatedTime = DateTime.UtcNow
+                                };
                             }
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
-                        RetryAddToPoolError?.Invoke(ex, i + 1);
+                        TryReturnToPoolError?.Invoke(ex, retryCount);
+                        return false;
                     }
-
-                    Thread.Sleep(TimeSpan.FromSeconds(_options.RetryIntervalInSeconds));
-                }
+                }, poolOption);
             });
         }
 
-        private bool HasExceededLifetime(SqlPooledDbConnectionWrapper wrapper)
+        private bool HasExceededLifetime(PooledDbConnectionWrapper wrapper)
         {
-            var createdTime = _connCreatedTimes[wrapper.DbConnection.ClientConnectionId].Item2;
+            var createdTime = _connInfos[(wrapper.DbConnection as SqlConnection).ClientConnectionId].CreatedTime;
 
             var lifeTime = (DateTime.UtcNow - createdTime).TotalMinutes;
 
             return (lifeTime >= _poolOptions[wrapper.PoolKey].LifetimeInMinutes);
         }
 
-        private async Task Watch()
+        private void Watch()
         {
             Thread.Sleep(TimeSpan.FromMinutes(_options.WatchIntervalInMinutes));
 
-            var tasks = new List<Task>();
-
-            foreach (var key in _poolOptions.Keys)
+            foreach (var poolKey in _poolOptions.Keys)
             {
-                var pool = _pools[key];
-                lock (_poolsLock)
-                {
-                    SqlPooledDbConnectionWrapper currentConn, firstConn = null;
-                    if (pool.TryDequeue(out currentConn))
-                    {
-                        firstConn = currentConn;
+                var pool = _pools[poolKey];
+                var poolOption = _poolOptions[poolKey];
+                PooledDbConnectionWrapper currentConn, firstConn = null;
+                var disposes = new List<DbConnection>();
+                var opens = new List<PooledDbConnectionWrapper>();
 
+                if (pool.TryDequeue(out currentConn))
+                {
+                    firstConn = currentConn;
+
+                    lock (_poolsLock)
+                    {
                         do
                         {
                             if (HasExceededLifetime(currentConn) && !currentConn.DbConnection.IsOpening())
                             {
-                                tasks.Add(currentConn.DbConnection.DisposeAsync().AsTask());
-                                _connCreatedTimes.Remove(currentConn.DbConnection.ClientConnectionId, out _);
+                                if (pool.Count > poolOption.MinimumConnections)
+                                {
+                                    disposes.Add(currentConn.DbConnection);
+                                    _connInfos.Remove((currentConn.DbConnection as SqlConnection).ClientConnectionId, out _);
+                                }
+                                else
+                                {
+                                    opens.Add(currentConn);
+                                    _connInfos[(currentConn.DbConnection as SqlConnection).ClientConnectionId] = new ConnectionInfo
+                                    {
+                                        Wrapper = currentConn,
+                                        CreatedTime = DateTime.UtcNow
+                                    };
+                                }
                             }
                             else pool.Enqueue(currentConn);
 
@@ -271,15 +306,84 @@ namespace TFW.Framework.Data
                         while (currentConn != firstConn);
                     }
                 }
+
+                foreach (var needDisposeConn in disposes)
+                {
+                    try
+                    {
+                        needDisposeConn.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        WatcherThreadError?.Invoke(ex, currentConn.DbConnection);
+                    }
+                }
+
+                foreach (var needOpenConn in opens)
+                {
+                    var success = TryAction((retryCount) =>
+                    {
+                        try
+                        {
+                            lock (_poolsLock)
+                            {
+                                if (pool.Count < poolOption.MaximumConnections)
+                                {
+                                    needOpenConn.DbConnection.Open();
+                                    pool.Enqueue(needOpenConn);
+                                }
+                            }
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            WatcherThreadError?.Invoke(ex, currentConn.DbConnection);
+                            return false;
+                        }
+                    }, poolOption);
+
+                    if (!success)
+                        _connInfos.Remove((currentConn.DbConnection as SqlConnection).ClientConnectionId, out _);
+                }
+
+                while (pool.Count < poolOption.MinimumConnections)
+                    TryAction((retryCount) =>
+                    {
+                        try
+                        {
+                            SetupNewConnection(poolKey);
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            return false;
+                        }
+                    }, poolOption);
+            }
+        }
+
+        private bool TryAction(Func<int, bool> action, ConnectionPoolOptions options)
+        {
+            if (action == null) throw new ArgumentNullException(nameof(action));
+
+            for (var i = 0; i < options.MaximumRetryWhenFailure; i++)
+            {
+                // 'action' must handle exceptions explicitly
+                var success = action(i + 1);
+
+                if (success) return true;
+
+                Thread.Sleep(TimeSpan.FromSeconds(options.RetryIntervalInSeconds));
             }
 
-            await Task.WhenAll(tasks);
+            return false;
         }
 
         #region Dispose
-        public ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
-            return new ValueTask(DisposeAsync(true));
+            await DisposeAsync(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual async Task DisposeAsync(bool disposing)

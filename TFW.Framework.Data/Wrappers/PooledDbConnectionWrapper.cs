@@ -1,30 +1,22 @@
-﻿using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Text;
 
 namespace TFW.Framework.Data.Wrappers
 {
-    internal class PooledDbConnectionWrapper<TConnection> where TConnection : DbConnection
+    internal class PooledDbConnectionWrapper
     {
-        private readonly TConnection _conn;
-        private readonly string _poolKey;
+        protected readonly DbConnection _conn;
+        protected readonly string _poolKey;
 
-        public PooledDbConnectionWrapper(TConnection conn, string poolKey)
+        public PooledDbConnectionWrapper(DbConnection conn, string poolKey)
         {
             _conn = conn;
             _poolKey = poolKey;
         }
 
-        public TConnection DbConnection => _conn;
+        public DbConnection DbConnection => _conn;
         public string PoolKey => _poolKey;
-    }
-
-    internal class SqlPooledDbConnectionWrapper : PooledDbConnectionWrapper<SqlConnection>
-    {
-        public SqlPooledDbConnectionWrapper(SqlConnection conn, string poolKey) : base(conn, poolKey)
-        {
-        }
     }
 }

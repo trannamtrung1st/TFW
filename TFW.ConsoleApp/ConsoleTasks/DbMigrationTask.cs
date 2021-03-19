@@ -120,7 +120,10 @@ namespace TFW.ConsoleApp.ConsoleTasks
             startInfo.WorkingDirectory = solutionFolder;
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "cmd.exe";
+            
             startInfo.Arguments = $"/C dotnet ef database drop --project={destPrj} --startup-project={startupPrj}";
+            Console.WriteLine(startInfo.Arguments);
+
             process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();

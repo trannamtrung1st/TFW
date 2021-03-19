@@ -34,10 +34,10 @@ namespace TFW.Framework.EFCore.Factory
 
         protected abstract TDbContext CreateCore(DbContextOptions<TDbContext> options = null);
 
-
-        public ValueTask DisposeAsync()
+        public async ValueTask DisposeAsync()
         {
-            return new ValueTask(DisposeAsync(true));
+            await DisposeAsync(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual async Task DisposeAsync(bool disposing)

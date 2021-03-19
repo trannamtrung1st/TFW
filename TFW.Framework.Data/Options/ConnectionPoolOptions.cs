@@ -5,11 +5,13 @@ using System.Text;
 namespace TFW.Framework.Data.Options
 {
     // No effect when changing after initialized
-    public class SqlConnectionPoolOptions
+    public class ConnectionPoolOptions
     {
         public const int DefaultLifetimeInMinutes = 60;
         public const int DefaultMaximumRetryWhenFailure = 3;
         public const int MaximumRetryAllowed = 10;
+        public const int MaxAllowedRetryIntervalInSeconds = 20;
+        public const int DefaultRetryIntervalInSeconds = 5;
 
         public string ConnectionString { get; set; }
         public int LifetimeInMinutes { get; set; } = DefaultLifetimeInMinutes;
@@ -31,9 +33,21 @@ namespace TFW.Framework.Data.Options
             }
         }
 
-        internal SqlConnectionPoolOptions DeepClone()
+        private int _retryIntervalInSeconds = DefaultRetryIntervalInSeconds;
+        public int RetryIntervalInSeconds
         {
-            return new SqlConnectionPoolOptions
+            get => _retryIntervalInSeconds; set
+            {
+                if (value <= 0 || value > MaxAllowedRetryIntervalInSeconds)
+                    throw new ArgumentException(nameof(RetryIntervalInSeconds));
+
+                _retryIntervalInSeconds = value;
+            }
+        }
+
+        internal ConnectionPoolOptions DeepClone()
+        {
+            return new ConnectionPoolOptions
             {
                 ConnectionString = ConnectionString,
                 LifetimeInMinutes = LifetimeInMinutes,

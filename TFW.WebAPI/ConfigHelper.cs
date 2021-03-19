@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using TFW.Cross;
 using TFW.Cross.Models.Setting;
 using TFW.Cross.Providers;
@@ -32,46 +33,56 @@ namespace TFW.WebAPI
             {
                 IDbConnectionPoolManager connectionPoolManager;
 
-                void Pool_RetryAddToPoolError(Exception ex, int tryCount)
+                void Pool_TryReturnToPoolError(Exception ex, int tryCount)
                 {
                     Log.Error(ex, "Failed {TryCount} time(s) in retrying add DbConnection to pool", tryCount);
                 }
 
+                void Pool_WatcherThreadError(Exception ex, DbConnection dbConnection)
+                {
+                    Log.Error(ex, "Failure on watcher thread with DbConnection of '{ConnStr}'", dbConnection.ConnectionString);
+                }
+
+                void Pool_NewConnectionError(Exception ex, string poolKey)
+                {
+                    Log.Error(ex, "Failure on create connection '{ConnStr}'", poolKey);
+                }
+
                 services.AddSqlConnectionPoolManager(out connectionPoolManager, configAction: options =>
                 {
-                    options.WatchIntervalInMinutes = 1;
-                    options.RetryIntervalInSeconds = SqlConnectionPoolManagerOptions.DefaultRetryIntervalInSeconds;
-                    //options.WatchIntervalInMinutes = SqlConnectionPoolManagerOptions.DefaultWatchIntervalInMinutes;
-                    //options.RetryIntervalInSeconds = SqlConnectionPoolManagerOptions.DefaultRetryIntervalInSeconds;
+                    options.WatchIntervalInMinutes = SqlConnectionPoolManagerOptions.DefaultWatchIntervalInMinutes;
                 }, initAction: async pool =>
                 {
-                    pool.RetryAddToPoolError += Pool_RetryAddToPoolError;
+                    pool.TryReturnToPoolError += Pool_TryReturnToPoolError;
+                    pool.NewConnectionError += Pool_NewConnectionError;
+                    pool.WatcherThreadError += Pool_WatcherThreadError;
 
-                    await pool.InitDbConnectionAsync(new SqlConnectionPoolOptions
+                    await pool.InitDbConnectionAsync(new ConnectionPoolOptions
                     {
                         ConnectionString = connStr,
-                        LifetimeInMinutes = 1,
-                        //LifetimeInMinutes = SqlConnectionPoolOptions.DefaultLifetimeInMinutes,
+                        LifetimeInMinutes = ConnectionPoolOptions.DefaultLifetimeInMinutes,
+                        MaximumRetryWhenFailure = ConnectionPoolOptions.DefaultMaximumRetryWhenFailure,
+                        RetryIntervalInSeconds = ConnectionPoolOptions.DefaultRetryIntervalInSeconds,
                         MaximumConnections = 100,
                         MinimumConnections = 1
                     }, DataConsts.ConnStrKey);
-                }).AddDbContext<DataContext>(async options =>
+                }).AddDbContext<DataContext>(async builder =>
                 {
-                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    var pooledConn = await connectionPoolManager.GetDbConnectionAsync(DataConsts.ConnStrKey);
 
-                    var pooledConn = await connectionPoolManager.GetDbConnectionAsync(DataConsts.ConnStrKey,
-                        createNonPooledConnIfExceedLimit: false);
+                    builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 
                     if (pooledConn != null)
-                        options.UseSqlServer(pooledConn);
-                    else options.UseSqlServer(connStr);
+                        builder.UseSqlServer(pooledConn);
+                    else builder.UseSqlServer(connStr);
                 });
             }
             else
             {
-                services.AddDbContext<DataContext>(options => options
-                    .UseSqlServer(connStr)
-                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+                services.AddNullConnectionPoolManager()
+                    .AddDbContext<DataContext>(options => options
+                        .UseSqlServer(connStr)
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             }
 
             return services;
