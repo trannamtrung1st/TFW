@@ -9,6 +9,7 @@ namespace TFW.Data.Core
     {
         public const string ConnStrVarName = "conn_str";
         public const string ConnStrKey = nameof(DataContext);
+        public const string EnvConnStrKey = "TFWConnectionString";
     }
 
     public static class EntityConfigConsts

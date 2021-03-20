@@ -23,6 +23,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
+    },
+    "TFW.WebAPI (Release)": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "TFWConnectionString": "Server=localhost;Database=TFW;Trusted_Connection=False;User Id=sa;Password=123456;MultipleActiveResultSets=true"
+      }
     }
   }
 }

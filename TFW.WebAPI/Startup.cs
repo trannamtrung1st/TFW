@@ -51,12 +51,14 @@ namespace TFW.WebAPI
         private readonly string _envJsonFile = Framework.Configuration.CommonConsts.AppSettings.DefaultEnv;
 
         private readonly RequestLoggingOptions _requestLoggingOptions;
+        private readonly IWebHostEnvironment _env;
         private readonly string _requestLoggingSection;
         private Logger _requestLogger;
 
         public Startup(IWebHostEnvironment env)
         {
             _envJsonFile = _envJsonFile.Replace(CommonConsts.AppSettings.EnvPlaceholder, env.EnvironmentName);
+            _env = env;
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -95,7 +97,7 @@ namespace TFW.WebAPI
             #endregion
 
             #region Services
-            services.AddAppDbContext(Configuration)
+            services.AddAppDbContext(Configuration, _env)
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
@@ -331,10 +333,9 @@ namespace TFW.WebAPI
 
         private void OnApplicationStopped()
         {
-            using (_requestLogger)
-            {
-                Console.WriteLine("Cleaning resources ...");
-            };
+            Console.WriteLine("Cleaning resources ...");
+
+            if (_requestLogger != null) _requestLogger.Dispose();
         }
     }
 }
