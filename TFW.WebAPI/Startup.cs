@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Reflection;
@@ -210,6 +211,10 @@ namespace TFW.WebAPI
                     }
                 }] = Array.Empty<string>();
                 c.AddSecurityRequirement(requirement);
+
+                var filePath = Path.Combine(System.AppContext.BaseDirectory,
+                    $"{typeof(Startup).Assembly.GetName().Name}.xml");
+                c.IncludeXmlComments(filePath);
             });
             #endregion
         }

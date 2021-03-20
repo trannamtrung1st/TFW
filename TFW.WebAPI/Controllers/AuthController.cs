@@ -32,6 +32,10 @@ namespace TFW.WebAPI.Controllers
         }
 
         #region OAuth
+        /// <summary>
+        /// OAuth2 Token endpoint 
+        /// </summary>
+        /// <param name="model">OAuth2 Grant request model</param>
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(TokenResponseModel))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, null, typeof(OAuthErrorResponse))]
         [HttpPost(Endpoint.RequestToken)]
