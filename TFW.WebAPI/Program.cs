@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -12,7 +13,7 @@ using TFW.Framework.EFCore.Migration;
 
 namespace TFW.WebAPI
 {
-    public static class Program
+    public class Program
     {
         public static int Main(string[] args)
         {
@@ -45,7 +46,15 @@ namespace TFW.WebAPI
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            // Automatically call AddUserSecrets
             Host.CreateDefaultBuilder(args)
+                //.ConfigureAppConfiguration((hostContext, builder) =>
+                //{
+                //    if (hostContext.HostingEnvironment.IsDevelopment())
+                //    {
+                //        builder.AddUserSecrets<Program>();
+                //    }
+                //})
                 .UseSerilog((context, services, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration, sectionName: nameof(Serilog))
                     .ReadFrom.Services(services))
@@ -71,14 +80,17 @@ namespace TFW.WebAPI
                 dbContext.SaveChanges();
             }
         }
+    }
 
-        private static LoggerConfiguration HostLevelLog(this LoggerSinkConfiguration writeTo)
+    static class ProgramExtensions
+    {
+        public static LoggerConfiguration HostLevelLog(this LoggerSinkConfiguration writeTo)
         {
-            var template = LoggingConsts.HostLevelLogTemplate;
+            var template = ConfigConsts.Logging.HostLevelLogTemplate;
 #if DEBUG
             return writeTo.Console(restrictedToMinimumLevel: LogEventLevel.Information, outputTemplate: template);
 #else
-            return writeTo.File($"{LoggingConsts.HostLevelLogFolder}/{LoggingConsts.HostLevelLogFile}",
+            return writeTo.File($"{ConfigConsts.Logging.HostLevelLogFolder}/{ConfigConsts.Logging.HostLevelLogFile}",
                 rollingInterval: RollingInterval.Month,
                 restrictedToMinimumLevel: LogEventLevel.Information, outputTemplate: template);
 #endif

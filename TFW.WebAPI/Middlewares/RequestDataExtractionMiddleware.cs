@@ -30,7 +30,7 @@ namespace TFW.WebAPI.Middlewares
             context.SetPrincipalInfo(principalInfo);
 
             if (principalInfo.UserId != null)
-                _diagnosticContext.Set(LoggingConsts.Properties.UserId, principalInfo.UserId);
+                _diagnosticContext.Set(ConfigConsts.Logging.Properties.UserId, principalInfo.UserId);
 
             await next(context);
         }

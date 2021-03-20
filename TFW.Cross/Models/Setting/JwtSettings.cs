@@ -2,6 +2,8 @@
 {
     public class JwtSettings
     {
+        public const string ConfigKey = nameof(JwtSettings) + ":" + nameof(SecretKey);
+
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public string SecretKey { get; set; }

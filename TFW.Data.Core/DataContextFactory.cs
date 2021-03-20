@@ -34,7 +34,7 @@ namespace TFW.Data.Core
         //public DataContext CreateDbContext(string[] args)
         //{
         //    var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-        //    optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.ConnStrVarName));
+        //    optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable(DataConsts.ConnStrKey));
         //    return new DataContext(optionsBuilder.Options);
         //}
     }

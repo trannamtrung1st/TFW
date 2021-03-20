@@ -52,7 +52,6 @@ namespace TFW.WebAPI
 
         private readonly RequestLoggingOptions _requestLoggingOptions;
         private readonly IWebHostEnvironment _env;
-        private readonly string _requestLoggingSection;
         private Logger _requestLogger;
 
         public Startup(IWebHostEnvironment env)
@@ -66,6 +65,9 @@ namespace TFW.WebAPI
                 .AddJsonFile(_envJsonFile, optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
+            if (env.IsDevelopment())
+                builder.AddUserSecrets<Program>(optional: true, reloadOnChange: true);
+
             Configuration = builder.Build();
 
             // App settings
@@ -75,11 +77,15 @@ namespace TFW.WebAPI
             Configuration.Bind(nameof(ApiSettings), ApiSettings.Instance);
 
             // Serilog
-            _requestLoggingSection = $"{nameof(Serilog)}:{nameof(RequestLoggingOptions)}";
-            _requestLoggingOptions = Configuration.Parse<RequestLoggingOptions>(_requestLoggingSection);
+            _requestLoggingOptions = Configuration.Parse<RequestLoggingOptions>(
+                ConfigConsts.Logging.RequestLoggingOptionsKey);
+
+            // Mail
+            _smtpOptionSection = Configuration.GetSection(nameof(SmtpOption));
         }
 
         public IConfiguration Configuration { get; }
+        private readonly IConfigurationSection _smtpOptionSection;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -97,7 +103,10 @@ namespace TFW.WebAPI
             #endregion
 
             #region Services
-            services.AddAppDbContext(Configuration, _env)
+            ISecretsManager secretsManager;
+
+            services.AddDefaultSecretsManager(_env, Configuration, out secretsManager)
+                .AddAppDbContext(secretsManager)
                 .Configure<ApiBehaviorOptions>(options =>
                 {
                     options.SuppressModelStateInvalidFilter = true;
@@ -111,7 +120,11 @@ namespace TFW.WebAPI
                 .AddRequestFeatureMiddleware()
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
-                .AddSmtpService(Configuration.GetSection(nameof(SmtpOption)))
+                .AddSmtpService(opt =>
+                {
+                    _smtpOptionSection.Bind(opt);
+                    opt.Password = secretsManager.Get(ConfigConsts.Mail.PasswordKey);
+                })
                 .AddJsonConfigurationManager(_defaultJsonFile, _envJsonFile)
                 .ConfigureAppOptions(Configuration)
                 .ConfigureRequestTimeZoneDefault()
@@ -224,8 +237,13 @@ namespace TFW.WebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             IHostApplicationLifetime appLifetime,
-            IDynamicLinkCustomTypeProvider dynamicLinkCustomTypeProvider)
+            IDynamicLinkCustomTypeProvider dynamicLinkCustomTypeProvider,
+            ISecretsManager secretsManager)
         {
+            // Secrets
+            Settings.SecretsManager = secretsManager;
+            Settings.Jwt.SecretKey = secretsManager.Get(JwtSettings.ConfigKey);
+
             // Configurations
             app.RegisterOptionsChangeHandlers(typeof(AppSettings),
                 typeof(JwtSettings),
@@ -265,7 +283,8 @@ namespace TFW.WebAPI
 
             #region Serilog
             if (!_requestLoggingOptions.UseDefaultLogger)
-                _requestLogger = Configuration.ParseLogger(_requestLoggingSection, app.ApplicationServices);
+                _requestLogger = Configuration.ParseLogger(
+                    ConfigConsts.Logging.RequestLoggingOptionsKey, app.ApplicationServices);
 
             app.UseDefaultSerilogRequestLogging(_requestLoggingOptions, _requestLogger);
             #endregion

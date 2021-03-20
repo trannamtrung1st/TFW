@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -16,6 +14,7 @@ using TFW.Cross.Providers;
 using TFW.Cross.Requirements;
 using TFW.Data.Core;
 using TFW.Data.Providers;
+using TFW.Framework.Configuration;
 using TFW.Framework.Data;
 using TFW.Framework.Data.Options;
 using TFW.Framework.Data.SqlServer;
@@ -30,19 +29,9 @@ namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {
-        public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration,
-            IWebHostEnvironment env)
+        public static IServiceCollection AddAppDbContext(this IServiceCollection services, ISecretsManager secretsManager)
         {
-            string connStr;
-
-            if (!env.IsProduction())
-            {
-                connStr = configuration.GetConnectionString(DataConsts.ConnStrKey);
-            }
-            else
-            {
-                connStr = Environment.GetEnvironmentVariable(DataConsts.EnvConnStrKey, EnvironmentVariableTarget.User);
-            }
+            string connStr = secretsManager.Get(DataConsts.ConnStrKey);
 
             if (connStr is null) throw new ArgumentNullException(nameof(connStr));
 

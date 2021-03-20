@@ -5,18 +5,28 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TFW.Cross.Models.Setting;
+using TFW.Framework.Logging.Serilog.Web.Options;
 
 namespace TFW.Cross
 {
-    public static class LoggingConsts
+    public static class ConfigConsts
     {
-        public const string HostLevelLogFolder = "logs/host";
-        public const string HostLevelLogFile = "host.txt";
-        public const string HostLevelLogTemplate = "[{UtcTimestamp} {Level:u3}] {Message:lj}{NewLine}{Exception}";
-
-        public static class Properties
+        public static class Mail
         {
-            public const string UserId = nameof(UserId);
+            public const string PasswordKey = "Mail:Password";
+        }
+
+        public static class Logging
+        {
+            public const string RequestLoggingOptionsKey = nameof(Serilog) + ":" + nameof(RequestLoggingOptions);
+            public const string HostLevelLogFolder = "logs/host";
+            public const string HostLevelLogFile = "host.txt";
+            public const string HostLevelLogTemplate = "[{UtcTimestamp} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+            public static class Properties
+            {
+                public const string UserId = nameof(UserId);
+            }
         }
     }
 
