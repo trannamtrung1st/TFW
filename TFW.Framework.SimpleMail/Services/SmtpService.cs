@@ -12,21 +12,29 @@ namespace TFW.Framework.SimpleMail.Services
     public interface ISmtpService
     {
         Task SendMailAsync(params MimeMessage[] messages);
+        Task SendMailAsync(string optionsName, params MimeMessage[] messages);
         Task SendMailAsync(SmtpOption option, params MimeMessage[] messages);
     }
 
     public class SmtpService : ISmtpService
     {
-        protected readonly SmtpOption defaultOption;
+        protected readonly IOptionsSnapshot<SmtpOption> optionSnapshot;
 
-        public SmtpService(IOptionsSnapshot<SmtpOption> defaultOption)
+        public SmtpService(IOptionsSnapshot<SmtpOption> optionSnapshot)
         {
-            this.defaultOption = defaultOption.Value;
+            this.optionSnapshot = optionSnapshot;
         }
 
         public Task SendMailAsync(params MimeMessage[] messages)
         {
-            return SendMailAsync(defaultOption, messages);
+            return SendMailAsync(optionSnapshot.Value, messages);
+        }
+
+        public Task SendMailAsync(string optionsName, params MimeMessage[] messages)
+        {
+            var option = optionSnapshot.Get(optionsName);
+
+            return SendMailAsync(option, messages);
         }
 
         public async Task SendMailAsync(SmtpOption option, params MimeMessage[] messages)
