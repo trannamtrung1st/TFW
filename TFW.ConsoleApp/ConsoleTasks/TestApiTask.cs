@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.ConsoleApp;
+using TFW.Framework.Http.Helpers;
 
 namespace TFW.ConsoleApp.ConsoleTasks
 {
@@ -37,29 +40,51 @@ namespace TFW.ConsoleApp.ConsoleTasks
             if (!int.TryParse(numberStr, out numberRequest))
                 numberRequest = DefaultNumOfRequest;
 
+            var loopStr = XConsole.PromptLine("Number of loop: ");
+            int totalLoop;
+            if (!int.TryParse(loopStr, out totalLoop))
+                totalLoop = DefaultNumOfLoop;
+
             using var httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(apiUrl)
             };
 
-            var tasks = new List<Task>();
-
-            var sw = Stopwatch.StartNew();
-
-            for (var i = 0; i < numberRequest; i++)
+            for (var loop = 0; loop < totalLoop; loop++)
             {
-                var postTask = httpClient.PostAsync("/auth/token", new FormUrlEncodedContent(
-                    new List<KeyValuePair<string, string>>
+                var sw = Stopwatch.StartNew();
+
+                var tokenResp = await httpClient.PostAsFormAsync("/auth/token", new Dictionary<string, string>
+                {
+                    { "grant_type", "password" },
+                    { "username", "admin" },
+                    { "password", "123123" },
+                });
+
+                var token = await tokenResp.Content.ReadFromJsonAsync<JObject>();
+                var tokenString = token.Value<string>("access_token");
+
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", tokenString);
+
+                for (var count = 0; count < 3; count++)
+                {
+                    var tasks = new List<Task>();
+
+                    for (var i = 0; i < numberRequest / 3; i++)
                     {
-                    }));
+                        var requestTask = httpClient.GetAsync("/api/ref/time-zones");
+                        tasks.Add(requestTask);
+                    }
 
-                tasks.Add(postTask);
+                    await Task.WhenAll(tasks);
+                }
+
+                sw.Stop();
+                Console.WriteLine("Total: {0}", sw.ElapsedMilliseconds);
+                Console.WriteLine("... 2s ...", sw.ElapsedMilliseconds);
+                Thread.Sleep(2000);
             }
-
-            await Task.WhenAll(tasks);
-
-            sw.Stop();
-            Console.WriteLine("Total: {0}", sw.ElapsedMilliseconds);
 
             Console.ReadLine();
             Console.Clear();
@@ -81,6 +106,7 @@ namespace TFW.ConsoleApp.ConsoleTasks
 
         public const string TestApiOpt = "1";
         private const string DefaultApiUrl = "https://localhost:44337";
-        private const int DefaultNumOfRequest = 200;
+        private const int DefaultNumOfRequest = 1200;
+        private const int DefaultNumOfLoop = 7;
     }
 }

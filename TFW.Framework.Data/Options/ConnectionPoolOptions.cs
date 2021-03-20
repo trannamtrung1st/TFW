@@ -15,8 +15,8 @@ namespace TFW.Framework.Data.Options
 
         public string ConnectionString { get; set; }
         public int LifetimeInMinutes { get; set; } = DefaultLifetimeInMinutes;
-        public int MaximumConnections { get; set; }
-        public int MinimumConnections { get; set; }
+        public int MaxPoolSize { get; set; }
+        public int MinPoolSize { get; set; }
 
         private int _maximumRetryWhenFailure = DefaultMaximumRetryWhenFailure;
         public int MaximumRetryWhenFailure
@@ -51,9 +51,9 @@ namespace TFW.Framework.Data.Options
             {
                 ConnectionString = ConnectionString,
                 LifetimeInMinutes = LifetimeInMinutes,
-                MaximumConnections = MaximumConnections,
+                MaxPoolSize = MaxPoolSize,
                 MaximumRetryWhenFailure = MaximumRetryWhenFailure,
-                MinimumConnections = MinimumConnections
+                MinPoolSize = MinPoolSize
             };
         }
     }

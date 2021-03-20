@@ -16,6 +16,7 @@ using TFW.Data.Core;
 using TFW.Data.Providers;
 using TFW.Framework.Data;
 using TFW.Framework.Data.Options;
+using TFW.Framework.Data.SqlServer;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Options;
 using TFW.WebAPI.Handlers;
@@ -69,14 +70,16 @@ namespace TFW.WebAPI
                     pool.WatcherThreadError += Pool_WatcherThreadError;
                     pool.ReleaseConnectionError += Pool_ReleaseConnectionError;
 
+                    var poolSize = SqlConnectionHelper.ReadPoolSize(connStr);
+
                     var poolKey = await pool.InitDbConnectionAsync(new ConnectionPoolOptions
                     {
                         ConnectionString = connStr,
                         LifetimeInMinutes = ConnectionPoolOptions.DefaultLifetimeInMinutes,
                         MaximumRetryWhenFailure = ConnectionPoolOptions.DefaultMaximumRetryWhenFailure,
                         RetryIntervalInSeconds = ConnectionPoolOptions.DefaultRetryIntervalInSeconds,
-                        MaximumConnections = 300,
-                        MinimumConnections = 10
+                        MaxPoolSize = poolSize.maxPoolSize,
+                        MinPoolSize = poolSize.minPoolSize
                     });
 
                     poolKeyMap[DataConsts.ConnStrKey] = poolKey;

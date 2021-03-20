@@ -17,6 +17,7 @@ namespace TFW.Framework.Data
 {
     /// <summary>
     /// NOTE: Microsoft SqlConnection already has pooling mechanism
+    /// This is for learning purpose only
     /// </summary>
     public class SqlConnectionPoolManager : IDbConnectionPoolManager
     {
@@ -34,8 +35,6 @@ namespace TFW.Framework.Data
         private bool disposedValue;
         private Thread _watcherThread;
         private readonly SqlConnectionPoolManagerOptions _options;
-
-        private const string PasswordSegmentStart = "Password";
 
         public SqlConnectionPoolManager(SqlConnectionPoolManagerOptions options)
         {
@@ -87,11 +86,11 @@ namespace TFW.Framework.Data
             if (string.IsNullOrWhiteSpace(options.ConnectionString))
                 throw new ArgumentException(nameof(options.ConnectionString));
 
-            if (options.MaximumConnections < 1)
-                throw new ArgumentException(nameof(options.MaximumConnections));
+            if (options.MaxPoolSize < 1)
+                throw new ArgumentException(nameof(options.MaxPoolSize));
 
-            if (options.MinimumConnections < 0 || options.MinimumConnections > options.MaximumConnections)
-                throw new ArgumentException(nameof(options.MinimumConnections));
+            if (options.MinPoolSize < 0 || options.MinPoolSize > options.MaxPoolSize)
+                throw new ArgumentException(nameof(options.MinPoolSize));
 
             if (options.MaximumRetryWhenFailure < 0)
                 throw new ArgumentException(nameof(options.MaximumRetryWhenFailure));
@@ -105,7 +104,7 @@ namespace TFW.Framework.Data
                 _poolOptions[poolKey] = options.Snapshot();
                 _pools[poolKey] = new ConcurrentQueue<PooledDbConnectionWrapper>();
 
-                for (var i = 0; i < options.MinimumConnections; i++)
+                for (var i = 0; i < options.MinPoolSize; i++)
                     SetupNewConnection(poolKey);
 
                 // Create watcher
@@ -388,7 +387,7 @@ namespace TFW.Framework.Data
         private string GetPoolKeyFromConnStr(string connStr)
         {
             var parts = connStr.Split(';').Where(part =>
-                !part.StartsWith(PasswordSegmentStart)).ToArray();
+                !part.Trim().StartsWith(SqlConnectionConsts.Options.Password)).ToArray();
 
             return string.Join(';', parts);
         }
@@ -401,19 +400,19 @@ namespace TFW.Framework.Data
         private bool HasFullOfConnections(ConcurrentQueue<PooledDbConnectionWrapper> pool,
             ConnectionPoolOptions poolOption)
         {
-            return (pool.Count >= poolOption.MaximumConnections);
+            return (pool.Count >= poolOption.MaxPoolSize);
         }
 
         private bool IsLackOfConnections(ConcurrentQueue<PooledDbConnectionWrapper> pool,
             ConnectionPoolOptions poolOption)
         {
-            return (pool.Count < poolOption.MinimumConnections);
+            return (pool.Count < poolOption.MinPoolSize);
         }
 
         private bool HasRedundantConnections(ConcurrentQueue<PooledDbConnectionWrapper> pool,
             ConnectionPoolOptions poolOption)
         {
-            return (pool.Count > poolOption.MinimumConnections);
+            return (pool.Count > poolOption.MinPoolSize);
         }
 
         private bool RetryAction(Func<int, bool> action, ConnectionPoolOptions options)
