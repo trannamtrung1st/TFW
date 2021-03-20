@@ -44,6 +44,8 @@ namespace TFW.WebAPI
                 connStr = Environment.GetEnvironmentVariable(DataConsts.EnvConnStrKey, EnvironmentVariableTarget.User);
             }
 
+            if (connStr is null) throw new ArgumentNullException(nameof(connStr));
+
             if (Settings.App.UseDbConnectionPool)
             {
                 #region Event handlers
