@@ -11,6 +11,11 @@ namespace TFW.Cross
 {
     public static class ConfigConsts
     {
+        public static class CommandLine
+        {
+            public const string WindowsCmd = "cmd.exe";
+        }
+
         public static class Mail
         {
             public const string PasswordKey = "Mail:Password";

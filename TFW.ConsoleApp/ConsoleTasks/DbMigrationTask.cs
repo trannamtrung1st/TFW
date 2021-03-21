@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,13 +50,10 @@ namespace TFW.ConsoleApp.ConsoleTasks
             if (string.IsNullOrWhiteSpace(startupPrj))
                 startupPrj = DefaultStartupProject;
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WorkingDirectory = solutionFolder;
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C dotnet ef migrations add {migrationName} --project={destPrj} --startup-project={startupPrj}";
-            process.StartInfo = startInfo;
+            Process process = new Process().Build(fileName: "cmd.exe",
+                arguments: $"/C dotnet ef migrations add {migrationName} --project={destPrj} --startup-project={startupPrj}",
+                workingDir: solutionFolder);
+
             process.Start();
             process.WaitForExit();
 
@@ -83,13 +81,10 @@ namespace TFW.ConsoleApp.ConsoleTasks
             if (string.IsNullOrWhiteSpace(startupPrj))
                 startupPrj = DefaultStartupProject;
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WorkingDirectory = solutionFolder;
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = $"/C dotnet ef database update {migrationName} --project={destPrj} --startup-project={startupPrj}";
-            process.StartInfo = startInfo;
+            Process process = new Process().Build(fileName: "cmd.exe",
+                arguments: $"/C dotnet ef database update {migrationName} --project={destPrj} --startup-project={startupPrj}",
+                workingDir: solutionFolder);
+
             process.Start();
             process.WaitForExit();
 
@@ -115,16 +110,10 @@ namespace TFW.ConsoleApp.ConsoleTasks
             if (string.IsNullOrWhiteSpace(startupPrj))
                 startupPrj = DefaultStartupProject;
 
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WorkingDirectory = solutionFolder;
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            
-            startInfo.Arguments = $"/C dotnet ef database drop --project={destPrj} --startup-project={startupPrj}";
-            Console.WriteLine(startInfo.Arguments);
+            Process process = new Process().Build(fileName: "cmd.exe",
+                arguments: $"/C dotnet ef database drop --project={destPrj} --startup-project={startupPrj}",
+                workingDir: solutionFolder);
 
-            process.StartInfo = startInfo;
             process.Start();
             process.WaitForExit();
 

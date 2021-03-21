@@ -3,7 +3,10 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.Configuration.Helpers;
 
 namespace TFW.Framework.Configuration
@@ -11,13 +14,18 @@ namespace TFW.Framework.Configuration
     public interface ISecretsManager
     {
         T Get<T>(string key = null, string prodKey = null,
-           IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine);
+           IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
         string Get(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine);
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+        Task SetAsync(string key, string value, string prodKey = null, string project = null, string workingDir = "",
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+        Task RemoveAsync(string key, string prodKey = null, string project = null, string workingDir = "",
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
     }
 
     public class SecretsManager : ISecretsManager
     {
+        public string CmdLineProgram { get; set; }
         public IConfiguration DefaultConfiguration { get; set; }
 
         private IHostEnvironment _env;
@@ -33,8 +41,10 @@ namespace TFW.Framework.Configuration
             }
         }
 
+        public SecretsManager() { }
+
         public T Get<T>(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
         {
             if (!Env.IsProduction())
             {
@@ -51,7 +61,7 @@ namespace TFW.Framework.Configuration
         }
 
         public string Get(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Machine)
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
         {
             if (!Env.IsProduction())
             {
@@ -60,6 +70,58 @@ namespace TFW.Framework.Configuration
             else
             {
                 return Environment.GetEnvironmentVariable(prodKey ?? key, target);
+            }
+        }
+
+        public Task SetAsync(string key, string value, string prodKey = null, string project = null, string workingDir = "",
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+        {
+            if (CmdLineProgram == null) throw new InvalidOperationException($"{nameof(CmdLineProgram)} has not been set");
+
+            if (!Env.IsProduction())
+            {
+                var projectSetting = project != null ? $"--project {project}" : "";
+
+                var process = new Process().Build(
+                    CmdLineProgram, arguments: $"/C dotnet user-secrets set \"{key}\" \"{value}\" {projectSetting}",
+                    workingDir: workingDir);
+
+                return Task.Run(() =>
+                {
+                    process.Start();
+                    process.WaitForExit();
+                });
+            }
+            else
+            {
+                Environment.SetEnvironmentVariable(prodKey ?? key, value, target);
+                return Task.CompletedTask;
+            }
+        }
+
+        public Task RemoveAsync(string key, string prodKey = null, string project = null, string workingDir = "",
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+        {
+            if (CmdLineProgram == null) throw new InvalidOperationException($"{nameof(CmdLineProgram)} has not been set");
+
+            if (!Env.IsProduction())
+            {
+                var projectSetting = project != null ? $"--project {project}" : "";
+
+                var process = new Process().Build(
+                    CmdLineProgram, arguments: $"/C dotnet user-secrets remove \"{key}\" {projectSetting}",
+                    workingDir: workingDir);
+
+                return Task.Run(() =>
+                {
+                    process.Start();
+                    process.WaitForExit();
+                });
+            }
+            else
+            {
+                Environment.SetEnvironmentVariable(prodKey ?? key, null, target);
+                return Task.CompletedTask;
             }
         }
     }

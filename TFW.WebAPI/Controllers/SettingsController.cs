@@ -32,9 +32,9 @@ namespace TFW.WebAPI.Controllers
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
         [HttpPatch(Endpoint.ChangeSmtpOption)]
-        public IActionResult ChangeSmtpOption(ChangeSmtpOptionModel model)
+        public async Task<IActionResult> ChangeSmtpOption(ChangeSmtpOptionModel model)
         {
-            _settingService.ChangeSmtpOption(model);
+            await _settingService.ChangeSmtpOptionAsync(model);
 
             return NoContent();
         }

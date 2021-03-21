@@ -12,12 +12,14 @@ namespace TFW.Framework.Configuration
     public static class ConfigHelper
     {
         public static IServiceCollection AddDefaultSecretsManager(this IServiceCollection services,
-            IHostEnvironment env, IConfiguration configuration, out ISecretsManager secretsManager)
+            IHostEnvironment env, IConfiguration configuration,
+            string cmdLineProgram, out ISecretsManager secretsManager)
         {
             secretsManager = new SecretsManager()
             {
                 DefaultConfiguration = configuration,
-                Env = env
+                Env = env,
+                CmdLineProgram = cmdLineProgram
             };
 
             return services.AddSingleton(secretsManager);

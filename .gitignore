@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /WPF/WPFApp/Medias/
+TFW.WebAPI/logs/

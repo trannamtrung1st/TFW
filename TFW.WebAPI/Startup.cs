@@ -105,7 +105,8 @@ namespace TFW.WebAPI
             #region Services
             ISecretsManager secretsManager;
 
-            services.AddDefaultSecretsManager(_env, Configuration, out secretsManager)
+            services.AddDefaultSecretsManager(_env, Configuration,
+                    ConfigConsts.CommandLine.WindowsCmd, out secretsManager)
                 .AddAppDbContext(secretsManager)
                 .Configure<ApiBehaviorOptions>(options =>
                 {
