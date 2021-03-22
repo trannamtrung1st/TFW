@@ -19,8 +19,7 @@ namespace TFW.Business.Core.Providers
     {
         public IEnumerable<QueryFilter> DefaultFilters => ImmutableArray.Create(
             QueryFilter.BuildDefaultSoftDelete(),
-            new QueryFilter(QueryFilterName.AnotherFilter1, applyFilter: o => o.IsAppUserEntity()),
-            new QueryFilter(QueryFilterName.AnotherFilter2, applyFilter: o => o.IsNoteEntity())
+            new QueryFilter(QueryFilterName.AnotherFilter1, applyFilter: o => o.IsAppUserEntity())
         );
     }
 
@@ -55,8 +54,7 @@ namespace TFW.Business.Core.Providers
     {
         public IEnumerable<(Func<IMutableEntityType, bool>, string)> Conditions =>
             ImmutableArray.Create<(Func<IMutableEntityType, bool>, string)>(
-                (ShouldAddAnotherFilter1, nameof(CreateAnotherFilter1)),
-                (ShouldAddAnotherFilter2, nameof(CreateAnotherFilter2))
+                (ShouldAddAnotherFilter1, nameof(CreateAnotherFilter1))
             );
 
         protected virtual bool ShouldAddAnotherFilter1(IMutableEntityType eType)
@@ -70,19 +68,6 @@ namespace TFW.Business.Core.Providers
             return (o) =>
                 !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter1, typeof(TEntity)) ||
                     o.Id == "Never true";
-        }
-
-        protected virtual bool ShouldAddAnotherFilter2(IMutableEntityType eType)
-        {
-            return eType.ClrType?.IsNoteEntity() == true;
-        }
-
-        protected virtual Expression<Func<TEntity, bool>> CreateAnotherFilter2<TEntity>(
-            IFullAuditableDbContext dbContext) where TEntity : Note
-        {
-            return (o) =>
-                !dbContext.IsFilterAppliedForEntity(QueryFilterName.AnotherFilter2, typeof(TEntity)) ||
-                    o.CategoryName == "Hidden";
         }
     }
     #endregion

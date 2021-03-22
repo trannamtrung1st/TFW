@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using TFW.Cross.Models.Note;
+﻿using System.Collections.Generic;
 
 namespace TFW.Cross.Models.AppUser
 {
     public class AppUserDetailModel : AppUserBaseModel
     {
-        [JsonProperty("notes")]
-        public IEnumerable<NoteBaseModel> Notes { get; set; }
     }
 }

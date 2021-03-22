@@ -4,6 +4,12 @@ using System.Text;
 
 namespace TFW.Framework.Data
 {
+    public static class SqlServerColumnType
+    {
+        public const string ntext = nameof(ntext);
+        public const string text = nameof(text);
+    }
+
     public static class SqlConnectionConsts
     {
         public static class Options

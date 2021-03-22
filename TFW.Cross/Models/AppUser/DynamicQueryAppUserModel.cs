@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using TFW.Cross.Models.Common;
-using TFW.Cross.Models.Note;
 using AU = TFW.Cross.Entities.AppUser;
-using N = TFW.Cross.Entities.Note;
 
 namespace TFW.Cross.Models.AppUser
 {
@@ -26,7 +24,6 @@ namespace TFW.Cross.Models.AppUser
 
         #region Projection constants
         public const string FieldInfo = "info";
-        public const string FieldNotes = "notes";
 
         public static readonly IReadOnlyDictionary<string, string> Projections =
             new Dictionary<string, string>()
@@ -35,11 +32,6 @@ namespace TFW.Cross.Models.AppUser
                     FieldInfo, $"{nameof(AU.Id)},{nameof(AU.UserName)},{nameof(AU.Email)}," +
                     $"{nameof(AU.FullName)}"
                 },
-                {
-                    FieldNotes, $"{nameof(AU.Notes)}" +
-                    $".Select(new {typeof(NoteBaseModel).FullName}" +
-                    $"({nameof(N.Title)},{nameof(N.CategoryName)})).ToList() as {nameof(AU.Notes)}"
-                }
             }.ToImmutableDictionary();
         #endregion
     }

@@ -55,18 +55,15 @@ namespace TFW.Data.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NoteCategory",
+                name: "Tag",
                 columns: table => new
                 {
-                    Name = table.Column<string>(maxLength: 255, nullable: false),
-                    DeletedTime = table.Column<DateTime>(nullable: true),
-                    DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
+                    Label = table.Column<string>(unicode: false, maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NoteCategory", x => x.Name);
+                    table.PrimaryKey("PK_Tag", x => x.Label);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,40 +173,102 @@ namespace TFW.Data.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Note",
+                name: "PostCategory",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    DeletedTime = table.Column<DateTime>(nullable: true),
+                    DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: false),
                     CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
                     LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
-                    Content = table.Column<string>(nullable: true),
+                    Order = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    ParentCategory = table.Column<string>(nullable: true),
+                    Level = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostCategory", x => x.Name);
+                    table.ForeignKey(
+                        name: "FK_PostCategory_AppUser_CreatedUserId",
+                        column: x => x.CreatedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PostCategory_ParentCategory",
+                        column: x => x.ParentCategory,
+                        principalTable: "PostCategory",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Post",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeletedTime = table.Column<DateTime>(nullable: true),
+                    DeletedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    LastModifiedTime = table.Column<DateTime>(nullable: true),
+                    LastModifiedUserId = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
+                    Title = table.Column<string>(maxLength: 255, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    PostContent = table.Column<string>(type: "ntext", nullable: true),
                     CategoryName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Note", x => x.Id);
+                    table.PrimaryKey("PK_Post", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Note_Category_CategoryName",
+                        name: "FK_Post_PostCategory_CategoryName",
                         column: x => x.CategoryName,
-                        principalTable: "NoteCategory",
+                        principalTable: "PostCategory",
                         principalColumn: "Name",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Note_AppUser_CreatedUserId",
+                        name: "FK_Post_AppUser_CreatedUserId",
                         column: x => x.CreatedUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TagOfPost",
+                columns: table => new
+                {
+                    TagLabel = table.Column<string>(nullable: false),
+                    PostId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagOfPost", x => new { x.PostId, x.TagLabel });
+                    table.ForeignKey(
+                        name: "FK_TagOfPost_Post_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Post",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TagOfPost_Tag_TagLabel",
+                        column: x => x.TagLabel,
+                        principalTable: "Tag",
+                        principalColumn: "Label",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "Administrator", "93df0fd2-532a-4f88-bbb5-97b38b560c4e", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "Administrator", "0721c2ab-1867-4480-9de2-a438f150763a", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -251,14 +310,29 @@ namespace TFW.Data.Core.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Note_CategoryName",
-                table: "Note",
+                name: "IX_Post_CategoryName",
+                table: "Post",
                 column: "CategoryName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Note_CreatedUserId",
-                table: "Note",
+                name: "IX_Post_CreatedUserId",
+                table: "Post",
                 column: "CreatedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostCategory_CreatedUserId",
+                table: "PostCategory",
+                column: "CreatedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PostCategory_ParentCategory",
+                table: "PostCategory",
+                column: "ParentCategory");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagOfPost_TagLabel",
+                table: "TagOfPost",
+                column: "TagLabel");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -279,13 +353,19 @@ namespace TFW.Data.Core.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Note");
+                name: "TagOfPost");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "NoteCategory");
+                name: "Post");
+
+            migrationBuilder.DropTable(
+                name: "Tag");
+
+            migrationBuilder.DropTable(
+                name: "PostCategory");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

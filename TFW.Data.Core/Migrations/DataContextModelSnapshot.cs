@@ -140,7 +140,7 @@ namespace TFW.Data.Core.Migrations
                         new
                         {
                             Id = "Administrator",
-                            ConcurrencyStamp = "93df0fd2-532a-4f88-bbb5-97b38b560c4e",
+                            ConcurrencyStamp = "0721c2ab-1867-4480-9de2-a438f150763a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -258,7 +258,7 @@ namespace TFW.Data.Core.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("TFW.Cross.Entities.Note", b =>
+            modelBuilder.Entity("TFW.Cross.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,10 +268,6 @@ namespace TFW.Data.Core.Migrations
                     b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)")
-                        .IsUnicode(true);
-
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
 
@@ -279,34 +275,6 @@ namespace TFW.Data.Core.Migrations
                         .HasColumnType("varchar(100)")
                         .HasMaxLength(100)
                         .IsUnicode(false);
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedUserId")
-                        .HasColumnType("varchar(100)")
-                        .HasMaxLength(100)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryName");
-
-                    b.HasIndex("CreatedUserId");
-
-                    b.ToTable("Note");
-                });
-
-            modelBuilder.Entity("TFW.Cross.Entities.NoteCategory", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
 
                     b.Property<DateTime?>("DeletedTime")
                         .HasColumnType("datetime2");
@@ -323,9 +291,114 @@ namespace TFW.Data.Core.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<string>("PostContent")
+                        .HasColumnType("ntext");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryName");
+
+                    b.HasIndex("CreatedUserId");
+
+                    b.ToTable("Post");
+                });
+
+            modelBuilder.Entity("TFW.Cross.Entities.PostCategory", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedUserId")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ParentCategory")
+                        .HasColumnType("nvarchar(255)");
+
                     b.HasKey("Name");
 
-                    b.ToTable("NoteCategory");
+                    b.HasIndex("CreatedUserId");
+
+                    b.HasIndex("ParentCategory");
+
+                    b.ToTable("PostCategory");
+                });
+
+            modelBuilder.Entity("TFW.Cross.Entities.Tag", b =>
+                {
+                    b.Property<string>("Label")
+                        .HasColumnType("varchar(100)")
+                        .HasMaxLength(100)
+                        .IsUnicode(false);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
+
+                    b.HasKey("Label");
+
+                    b.ToTable("Tag");
+                });
+
+            modelBuilder.Entity("TFW.Cross.Entities.TagOfPost", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TagLabel")
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("PostId", "TagLabel");
+
+                    b.HasIndex("TagLabel");
+
+                    b.ToTable("TagOfPost");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -381,19 +454,51 @@ namespace TFW.Data.Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TFW.Cross.Entities.Note", b =>
+            modelBuilder.Entity("TFW.Cross.Entities.Post", b =>
                 {
-                    b.HasOne("TFW.Cross.Entities.NoteCategory", "Category")
-                        .WithMany("Notes")
+                    b.HasOne("TFW.Cross.Entities.PostCategory", "Category")
+                        .WithMany("Posts")
                         .HasForeignKey("CategoryName")
-                        .HasConstraintName("FK_Note_Category_CategoryName")
+                        .HasConstraintName("FK_Post_PostCategory_CategoryName")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TFW.Cross.Entities.AppUser", "CreatedUser")
-                        .WithMany("Notes")
+                    b.HasOne("TFW.Cross.Entities.AppUser", "Creator")
+                        .WithMany("CreatedPosts")
                         .HasForeignKey("CreatedUserId")
-                        .HasConstraintName("FK_Note_AppUser_CreatedUserId")
+                        .HasConstraintName("FK_Post_AppUser_CreatedUserId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TFW.Cross.Entities.PostCategory", b =>
+                {
+                    b.HasOne("TFW.Cross.Entities.AppUser", "Creator")
+                        .WithMany("CreatedCategories")
+                        .HasForeignKey("CreatedUserId")
+                        .HasConstraintName("FK_PostCategory_AppUser_CreatedUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TFW.Cross.Entities.PostCategory", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentCategory")
+                        .HasConstraintName("FK_PostCategory_ParentCategory")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TFW.Cross.Entities.TagOfPost", b =>
+                {
+                    b.HasOne("TFW.Cross.Entities.Post", "Post")
+                        .WithMany("TagOfPosts")
+                        .HasForeignKey("PostId")
+                        .HasConstraintName("FK_TagOfPost_Post_PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TFW.Cross.Entities.Tag", "Tag")
+                        .WithMany("TagOfPosts")
+                        .HasForeignKey("TagLabel")
+                        .HasConstraintName("FK_TagOfPost_Tag_TagLabel")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

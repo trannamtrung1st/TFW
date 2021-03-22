@@ -45,8 +45,10 @@ namespace TFW.Data.Core
             _poolManager = poolManager;
         }
 
-        public virtual DbSet<Note> Note { get; set; }
-        public virtual DbSet<NoteCategory> NoteCategory { get; set; }
+        public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<PostCategory> PostCategory { get; set; }
+        public virtual DbSet<Tag> Tag { get; set; }
+        public virtual DbSet<TagOfPost> TagOfPost { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

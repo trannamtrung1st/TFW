@@ -22,12 +22,14 @@ namespace TFW.Cross.Entities
         public AppUser()
         {
             UserRoles = new List<AppUserRole>();
-            Notes = new List<Note>();
+            CreatedCategories = new List<PostCategory>();
+            CreatedPosts = new List<Post>();
         }
 
         public string FullName { get; set; }
 
         public virtual IList<AppUserRole> UserRoles { get; set; }
-        public virtual IList<Note> Notes { get; set; }
+        public virtual IList<PostCategory> CreatedCategories { get; set; }
+        public virtual IList<Post> CreatedPosts { get; set; }
     }
 }

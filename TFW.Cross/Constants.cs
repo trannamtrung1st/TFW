@@ -193,8 +193,6 @@ namespace TFW.Cross
         public const string AppUser = "AspNetUsers";
         public const string AppRole = "AspNetRoles";
         public const string AppUserRole = "AspNetUserRoles";
-        public const string Note = nameof(Entities.Note);
-        public const string NoteCategory = nameof(Entities.NoteCategory);
     }
 
 }
