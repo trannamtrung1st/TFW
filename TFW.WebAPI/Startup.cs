@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Linq.Dynamic.Core.CustomTypeProviders;
 using System.Reflection;
@@ -128,6 +129,16 @@ namespace TFW.WebAPI
                 })
                 .AddJsonConfigurationManager(_defaultJsonFile, _envJsonFile)
                 .ConfigureAppOptions(Configuration)
+                .Configure<RequestLocalizationOptions>(options =>
+                {
+                    var supportedCultures = Settings.App.SupportedCultureNames.ToArray();
+                    options.SetDefaultCulture(supportedCultures[0])
+                        .AddSupportedCultures(supportedCultures)
+                        .AddSupportedUICultures(supportedCultures);
+                    options.FallBackToParentCultures = true;
+                    options.FallBackToParentUICultures = true;
+                    //options.RequestCultureProviders = ...
+                })
                 .ConfigureRequestTimeZoneDefault()
                 .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
                 .ConfigureFrameworkOptions(fwOptionsConfigurator);
@@ -183,7 +194,9 @@ namespace TFW.WebAPI
             services.AddAppAuthorization();
             #endregion
 
-            #region Mvc, Controllers
+            #region Mvc, Controllers, i18n
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             services.AddControllers(options =>
             {
                 options.ModelBinderProviders.Insert(0, new QueryObjectModelBinderProvider());
@@ -191,7 +204,17 @@ namespace TFW.WebAPI
                 options.Filters.Add<AutoValidateActionFilter>();
 
             }).AddNewtonsoftJson()
-                .AddDefaultFluentValidation(new[] { typeof(Cross.AssemblyModel).Assembly });
+                .AddDefaultFluentValidation(new[] { typeof(Cross.AssemblyModel).Assembly })
+                .AddViewLocalization(options =>
+                {
+                    //options.ResourcesPath = "...";
+                })
+                .AddDataAnnotationsLocalization(options =>
+                {
+                    //options.DataAnnotationLocalizerProvider = (type, factory) =>
+                    //    factory.Create(typeof(SharedResource));
+                });
+
             #endregion
 
             #region Swagger
@@ -207,6 +230,7 @@ namespace TFW.WebAPI
                 });
 
                 c.OperationFilter<SwaggerSecurityOperationFilter>();
+                c.OperationFilter<SwaggerGlobalHeaderOperationFilter>();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
                     new OpenApiSecurityScheme
@@ -297,6 +321,8 @@ namespace TFW.WebAPI
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
+
+            app.UseRequestLocalization();
 
             app.UseRouting();
 
