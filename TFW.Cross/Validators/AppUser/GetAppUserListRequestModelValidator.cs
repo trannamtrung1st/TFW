@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ using TFW.Framework.Validations.Fluent.Validators;
 
 namespace TFW.Cross.Validators.AppUser
 {
-    public class GetAppUserListRequestModelValidator : SafeValidator<GetListAppUsersRequestModel>
+    public class GetAppUserListRequestModelValidator : LocalizedSafeValidator<GetListAppUsersRequestModel, GetAppUserListRequestModelValidator>
     {
         public GetAppUserListRequestModelValidator(IValidationResultProvider validationResultProvider,
-            IServiceProvider serviceProvider) : base(validationResultProvider)
+            IServiceProvider serviceProvider, 
+            IStringLocalizer<GetAppUserListRequestModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             IncludeBaseValidators(serviceProvider);
 

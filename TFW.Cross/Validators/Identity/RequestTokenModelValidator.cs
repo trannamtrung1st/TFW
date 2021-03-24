@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +10,10 @@ using TFW.Framework.Validations.Fluent.Validators;
 
 namespace TFW.Cross.Validators.Identity
 {
-    public class RequestTokenModelValidator : SafeValidator<RequestTokenModel>
+    public class RequestTokenModelValidator : LocalizedSafeValidator<RequestTokenModel, RequestTokenModelValidator>
     {
-        public RequestTokenModelValidator(IValidationResultProvider validationResultProvider)
-            : base(validationResultProvider)
+        public RequestTokenModelValidator(IValidationResultProvider validationResultProvider,
+            IStringLocalizer<RequestTokenModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             CascadeMode = CascadeMode.Stop;
 

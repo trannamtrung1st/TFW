@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,10 @@ using TFW.Framework.Validations.Fluent.Validators;
 
 namespace TFW.Cross.Validators.Setting
 {
-    public class ChangeSmtpOptionModelValidator : SafeValidator<ChangeSmtpOptionModel>
+    public class ChangeSmtpOptionModelValidator : LocalizedSafeValidator<ChangeSmtpOptionModel, ChangeSmtpOptionModelValidator>
     {
-        public ChangeSmtpOptionModelValidator(IValidationResultProvider validationResultProvider) : base(validationResultProvider)
+        public ChangeSmtpOptionModelValidator(IValidationResultProvider validationResultProvider,
+            IStringLocalizer<ChangeSmtpOptionModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             RuleFor(model => model.UserName).NotEmpty()
                 .WithState(model => ResultCode.Setting_InvalidChangeSmtpOptionRequest);

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,15 @@ using TFW.Framework.Validations.Fluent.Validators;
 
 namespace TFW.Cross.Validators.Identity
 {
-    public class RegisterModelValidator : SafeValidator<RegisterModel>
+    public class RegisterModelValidator : LocalizedSafeValidator<RegisterModel, RegisterModelValidator>
     {
-        public RegisterModelValidator(IValidationResultProvider validationResultProvider) : base(validationResultProvider)
+        public static class Message
+        {
+            public const string ConfirmPasswordDoesNotMatch = nameof(ConfirmPasswordDoesNotMatch);
+        }
+
+        public RegisterModelValidator(IValidationResultProvider validationResultProvider,
+            IStringLocalizer<RegisterModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             RuleFor(model => model.username)
                 .NotEmpty().MinimumLength(5).MaximumLength(100)
@@ -21,7 +28,7 @@ namespace TFW.Cross.Validators.Identity
                 .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.confirmPassword)
-                .Equal(model => model.password).WithMessage("Confirmation password does not match")
+                .Equal(model => model.password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
                 .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
 
             RuleFor(model => model.fullName)
