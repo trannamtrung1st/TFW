@@ -34,11 +34,14 @@ namespace TFW.WebAPI
             return services.Configure<HeaderClientTimeZoneProviderOptions>(opt =>
             {
                 opt.HeaderName = HeaderClientTimeZoneProviderOptions.DefaultHeaderName;
-            })
-                .ConfigureRequestTimeZoneDefault(opt =>
-                {
-                    opt.AddHeaderClient();
-                });
+            }).Configure<HeaderTimeZoneProviderOptions>(opt =>
+            {
+                opt.HeaderName = HeaderTimeZoneProviderOptions.DefaultHeaderName;
+            }).ConfigureRequestTimeZoneDefault(opt =>
+            {
+                // First detection will be used
+                opt.AddHeader().AddHeaderClient();
+            });
         }
 
         public static IServiceCollection AddAppDbContext(this IServiceCollection services, ISecretsManager secretsManager)

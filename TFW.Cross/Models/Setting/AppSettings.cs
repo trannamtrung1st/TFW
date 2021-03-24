@@ -57,6 +57,6 @@ namespace TFW.Cross.Models.Setting
     public class SwaggerSettings
     {
         public bool AddSwaggerAcceptLanguageHeader { get; set; }
-        public bool AddSwaggerClientTimeZoneHeader { get; set; }
+        public bool AddSwaggerTimeZoneHeader { get; set; }
     }
 }

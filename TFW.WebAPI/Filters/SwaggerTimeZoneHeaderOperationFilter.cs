@@ -10,13 +10,16 @@ using TFW.Framework.Web.Options;
 
 namespace TFW.WebAPI.Filters
 {
-    public class SwaggerClientTimeZoneHeaderOperationFilter : IOperationFilter
+    public class SwaggerTimeZoneHeaderOperationFilter : IOperationFilter
     {
-        private readonly HeaderClientTimeZoneProviderOptions _options;
+        private readonly HeaderClientTimeZoneProviderOptions _headerClientOptions;
+        private readonly HeaderTimeZoneProviderOptions _headerOptions;
 
-        public SwaggerClientTimeZoneHeaderOperationFilter(IOptions<HeaderClientTimeZoneProviderOptions> options)
+        public SwaggerTimeZoneHeaderOperationFilter(IOptions<HeaderClientTimeZoneProviderOptions> headerClientOptions,
+            IOptions<HeaderTimeZoneProviderOptions> headerOptions)
         {
-            _options = options.Value;
+            _headerClientOptions = headerClientOptions.Value;
+            _headerOptions = headerOptions.Value;
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -26,7 +29,7 @@ namespace TFW.WebAPI.Filters
 
             operation.Parameters.Add(new OpenApiParameter
             {
-                Name = _options.HeaderName,
+                Name = _headerClientOptions.HeaderName,
                 In = ParameterLocation.Header,
                 Schema = new OpenApiSchema
                 {
@@ -34,6 +37,18 @@ namespace TFW.WebAPI.Filters
                 },
                 Description = "TimeZoneOffset: the difference of dates, in minutes, " +
                     "between client local time zone and UTC time zone",
+                Required = false
+            });
+
+            operation.Parameters.Add(new OpenApiParameter
+            {
+                Name = _headerOptions.HeaderName,
+                In = ParameterLocation.Header,
+                Schema = new OpenApiSchema
+                {
+                    Type = DataType.String.Name()
+                },
+                Description = "Send a TimeZoneId supported by the application",
                 Required = false
             });
         }

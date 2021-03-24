@@ -235,8 +235,8 @@ namespace TFW.WebAPI
                 if (Settings.App.Swagger.AddSwaggerAcceptLanguageHeader)
                     c.OperationFilter<SwaggerGlobalHeaderOperationFilter>();
 
-                if (Settings.App.Swagger.AddSwaggerClientTimeZoneHeader)
-                    c.OperationFilter<SwaggerClientTimeZoneHeaderOperationFilter>();
+                if (Settings.App.Swagger.AddSwaggerTimeZoneHeader)
+                    c.OperationFilter<SwaggerTimeZoneHeaderOperationFilter>();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
                     new OpenApiSecurityScheme
