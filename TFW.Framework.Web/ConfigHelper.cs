@@ -95,43 +95,12 @@ namespace TFW.Framework.Web
         }
 
         public static IServiceCollection ConfigureRequestTimeZoneDefault(this IServiceCollection services,
-            Action<RequestTimeZoneOptions> requestTimeZoneExtraConfig = null,
-            bool addQuery = true, bool addHeader = true, bool addCookie = true,
-            Action<QueryTimeZoneProviderOptions> queryExtraConfig = null,
-            Action<HeaderTimeZoneProviderOptions> headerExtraConfig = null,
-            Action<CookieTimeZoneProviderOptions> cookieExtraConfig = null)
+            Action<RequestTimeZoneOptions> requestTimeZoneExtraConfig = null)
         {
-            if (addQuery)
-                services.Configure<QueryTimeZoneProviderOptions>(opt =>
-                {
-                    // default
-                    opt.QueryKey = QueryTimeZoneProviderOptions.DefaultQueryKey;
-
-                    queryExtraConfig?.Invoke(opt);
-                });
-
-            if (addHeader)
-                services.Configure<HeaderTimeZoneProviderOptions>(opt =>
-                {
-                    // default
-                    opt.HeaderName = HeaderTimeZoneProviderOptions.DefaultHeaderName;
-
-                    headerExtraConfig?.Invoke(opt);
-                });
-
-            if (addCookie)
-                services.Configure<CookieTimeZoneProviderOptions>(opt =>
-                {
-                    // default
-                    opt.CookieName = CookieTimeZoneProviderOptions.DefaultCookieName;
-
-                    cookieExtraConfig?.Invoke(opt);
-                });
-
             return services.Configure<RequestTimeZoneOptions>(opt =>
             {
                 // default
-                opt.AllowFallback = false;
+                opt.AllowFallback = true;
                 opt.AllowOverrideFallback = true;
                 opt.ApplyCurrentTimeZoneToResponseHeaders = true;
                 opt.DefaultRequestTimeZone = TimeZoneInfo.Local;
@@ -142,16 +111,37 @@ namespace TFW.Framework.Web
                 opt.SupportedTimeZones = TimeZoneHelper.GetAllTimeZones().ToList();
 
                 requestTimeZoneExtraConfig?.Invoke(opt);
-
-                if (addQuery)
-                    opt.AddProvider(new QueryTimeZoneProvider());
-
-                if (addHeader)
-                    opt.AddProvider(new HeaderTimeZoneProvider());
-
-                if (addCookie)
-                    opt.AddProvider(new CookieTimeZoneProvider());
             });
+        }
+
+        public static RequestTimeZoneOptions AddQuery(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new QueryTimeZoneProvider());
+        }
+
+        public static RequestTimeZoneOptions AddQueryClient(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new QueryClientTimeZoneProvider());
+        }
+
+        public static RequestTimeZoneOptions AddCookie(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new CookieTimeZoneProvider());
+        }
+
+        public static RequestTimeZoneOptions AddCookieClient(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new CookieClientTimeZoneProvider());
+        }
+
+        public static RequestTimeZoneOptions AddHeader(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new HeaderTimeZoneProvider());
+        }
+
+        public static RequestTimeZoneOptions AddHeaderClient(this RequestTimeZoneOptions options)
+        {
+            return options.AddProvider(new HeaderClientTimeZoneProvider());
         }
 
         public static IServiceCollection AddDefaultDateTimeModelBinder(this IServiceCollection services)

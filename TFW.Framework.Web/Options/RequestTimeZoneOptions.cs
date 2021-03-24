@@ -20,7 +20,7 @@ namespace TFW.Framework.Web.Options
         }
 
         public bool ApplyCurrentTimeZoneToResponseHeaders { get; set; } = true;
-        public bool AllowFallback { get; set; }
+        public bool AllowFallback { get; set; } = true;
         public bool AllowOverrideFallback { get; set; } = true;
         public string ResponseHeaderName { get; set; } = DefaultResponseHeaderName;
         public string OverrideFallbackQueryKey { get; set; } = DefaultOverrideFallbackQueryKey;

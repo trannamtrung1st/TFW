@@ -29,6 +29,18 @@ namespace TFW.WebAPI
 {
     public static class ConfigHelper
     {
+        public static IServiceCollection ConfigureAppRequestTimeZone(this IServiceCollection services)
+        {
+            return services.Configure<HeaderClientTimeZoneProviderOptions>(opt =>
+            {
+                opt.HeaderName = HeaderClientTimeZoneProviderOptions.DefaultHeaderName;
+            })
+                .ConfigureRequestTimeZoneDefault(opt =>
+                {
+                    opt.AddHeaderClient();
+                });
+        }
+
         public static IServiceCollection AddAppDbContext(this IServiceCollection services, ISecretsManager secretsManager)
         {
             string connStr = secretsManager.Get(DataConsts.ConnStrKey);

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TFW.Framework.Common.Helpers;
 
 namespace TFW.WebAPI.Filters
 {
@@ -33,7 +34,7 @@ namespace TFW.WebAPI.Filters
                 In = ParameterLocation.Header,
                 Schema = new OpenApiSchema
                 {
-                    Type = nameof(String),
+                    Type = DataType.String.Name(),
                     Enum = acceptLanguages
                 },
                 Description = "Accept Language",

@@ -12,17 +12,28 @@ namespace TFW.Framework.i18n
         public static DateTimeKind Kind => Providers.Default.Kind;
         public static DateTime Normalize(DateTime dateTime) => Providers.Default.Normalize(dateTime);
 
-        [ThreadStatic]
-        private static TimeZoneInfo _threadTimeZone = TimeZoneInfo.Local;
+        //[ThreadStatic] // ThreadStatic does not maintain value between Tasks
+        //private static TimeZoneInfo _threadTimeZone = TimeZoneInfo.Local;
+        //public static TimeZoneInfo ThreadTimeZone
+        //{
+        //    get => _threadTimeZone;
+        //    set
+        //    {
+        //        if (value == null)
+        //            throw new ArgumentNullException(nameof(value));
+
+        //        _threadTimeZone = value;
+        //    }
+        //}
+
+        public static IThreadTimeZoneProvider ThreadTimeZoneProvider { get; set; }
         public static TimeZoneInfo ThreadTimeZone
         {
-            get => _threadTimeZone;
+            get => ThreadTimeZoneProvider?.TimeZone;
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-
-                _threadTimeZone = value;
+                if (ThreadTimeZoneProvider != null)
+                    ThreadTimeZoneProvider.TimeZone = value;
             }
         }
 
@@ -56,6 +67,5 @@ namespace TFW.Framework.i18n
                 _default = Utc;
             }
         }
-
     }
 }

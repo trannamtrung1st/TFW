@@ -30,7 +30,7 @@ namespace TFW.Cross.Models.AppUser
             {
                 {
                     FieldInfo, $"{nameof(AU.Id)},{nameof(AU.UserName)},{nameof(AU.Email)}," +
-                    $"{nameof(AU.FullName)}"
+                    $"{nameof(AU.FullName)},{nameof(AU.CreatedTime)}"
                 },
             }.ToImmutableDictionary();
         #endregion

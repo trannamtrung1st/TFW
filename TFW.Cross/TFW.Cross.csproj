@@ -25,6 +25,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Validators\AppUser\ChangeUserRolesBaseModelValidator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ChangeUserRolesBaseModelValidator.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Validators\Identity\RegisterModelValidator.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RegisterModelValidator.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\Validators\AppUser\ChangeUserRolesBaseModelValidator.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ChangeUserRolesBaseModelValidator.Designer.cs</LastGenOutput>

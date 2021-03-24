@@ -60,6 +60,19 @@ namespace TFW.Framework.i18n.Helpers
             return TimeZoneInfo.ConvertTime(dateTime, destTimeZone);
         }
 
+        public static DateTime ToTimeZone(this DateTime dateTime, TimeZoneInfo srcTimeZone, TimeZoneInfo destTimeZone)
+        {
+            return TimeZoneInfo.ConvertTime(dateTime, srcTimeZone, destTimeZone);
+        }
+
+        public static DateTime ToTimeZone(this DateTime dateTime, string srcTimeZoneId, string destTimeZoneId)
+        {
+            TimeZoneInfo destTimeZone = TimeZoneInfo.FindSystemTimeZoneById(destTimeZoneId);
+            TimeZoneInfo srcTimeZone = TimeZoneInfo.FindSystemTimeZoneById(srcTimeZoneId);
+
+            return TimeZoneInfo.ConvertTime(dateTime, srcTimeZone, destTimeZone);
+        }
+
         public static DateTime ToTimeZoneFromUtc(this DateTime utcDate, string timeZoneId)
         {
             TimeZoneInfo sourceTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);

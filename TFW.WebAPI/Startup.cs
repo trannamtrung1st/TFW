@@ -41,6 +41,7 @@ using TFW.Framework.Web.Options;
 using TFW.WebAPI.Controllers;
 using TFW.WebAPI.Filters;
 using TFW.WebAPI.Models;
+using TFW.WebAPI.Providers;
 
 namespace TFW.WebAPI
 {
@@ -139,7 +140,7 @@ namespace TFW.WebAPI
                     options.FallBackToParentUICultures = true;
                     //options.RequestCultureProviders = ...
                 })
-                .ConfigureRequestTimeZoneDefault()
+                .ConfigureAppRequestTimeZone()
                 .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
                 .ConfigureFrameworkOptions(fwOptionsConfigurator);
             #endregion
@@ -230,7 +231,12 @@ namespace TFW.WebAPI
                 });
 
                 c.OperationFilter<SwaggerSecurityOperationFilter>();
-                c.OperationFilter<SwaggerGlobalHeaderOperationFilter>();
+
+                if (Settings.App.Swagger.AddSwaggerAcceptLanguageHeader)
+                    c.OperationFilter<SwaggerGlobalHeaderOperationFilter>();
+
+                if (Settings.App.Swagger.AddSwaggerClientTimeZoneHeader)
+                    c.OperationFilter<SwaggerClientTimeZoneHeaderOperationFilter>();
 
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
                     new OpenApiSecurityScheme
@@ -289,6 +295,7 @@ namespace TFW.WebAPI
 
             // i18n
             Time.Providers.Default = Time.Providers.Utc;
+            Time.ThreadTimeZoneProvider = new HttpThreadTimeZoneProvider();
 
             // HttpContext
             app.ConfigureHttpContext();

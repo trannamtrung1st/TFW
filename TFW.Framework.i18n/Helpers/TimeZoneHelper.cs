@@ -17,13 +17,13 @@ namespace TFW.Framework.i18n.Helpers
             try
             {
                 timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-                
+
                 return true;
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine(e);
-                
+
                 timeZoneInfo = null;
 
                 return false;
@@ -47,7 +47,8 @@ namespace TFW.Framework.i18n.Helpers
                 })
                 .Where(o => o.DiffMinutes >= 0 == isPositive)
                 .OrderBy(o => o.DiffMinutes)
-                .First().TimeZoneInfo;
+                .Select(o => o.TimeZoneInfo)
+                .FirstOrDefault();
         }
     }
 }

@@ -90,5 +90,10 @@ namespace TFW.Framework.Common.Helpers
 
             return enums.Select(o => ((int)o.GetRawConstantValue(), o.FieldType.DisplayName(o.Name))).ToArray();
         }
+
+        public static string Name(this Enum enumVal)
+        {
+            return Enum.GetName(enumVal.GetType(), enumVal);
+        }
     }
 }
