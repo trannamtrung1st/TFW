@@ -34,7 +34,7 @@ namespace TFW.WebAPI.Filters
                 In = ParameterLocation.Header,
                 Schema = new OpenApiSchema
                 {
-                    Type = DataType.String.Name(),
+                    Type = DataType.String.ToStringF(),
                     Enum = acceptLanguages
                 },
                 Description = "Accept Language",
