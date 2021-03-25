@@ -4,7 +4,7 @@ namespace TFW.Framework.Web.Options
 {
     public class HeaderTimeZoneProviderOptions
     {
-        public const string DefaultHeaderName = "Content-TZ";
+        public const string DefaultHeaderName = "Content-Timezone";
 
         private string _headerName = DefaultHeaderName;
         public string HeaderName

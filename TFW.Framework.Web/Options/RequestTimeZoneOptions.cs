@@ -8,9 +8,9 @@ namespace TFW.Framework.Web.Options
 {
     public class RequestTimeZoneOptions
     {
-        public const string DefaultResponseHeaderName = "Content-TZ";
+        public const string DefaultResponseHeaderName = "Content-Timezone";
         public const string DefaultOverrideFallbackQueryKey = "tzfb";
-        public const string DefaultOverrideFallbackHeaderName = "Content-TZFallback";
+        public const string DefaultOverrideFallbackHeaderName = "Content-Timezone-Fallback";
         public const string DefaultOverrideFallbackCookieName = "_tzfb";
 
         public RequestTimeZoneOptions()

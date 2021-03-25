@@ -95,5 +95,15 @@ namespace TFW.Framework.Common.Helpers
         {
             return Enum.GetName(enumVal.GetType(), enumVal);
         }
+
+        public static string ToStringF(this Enum enumVal)
+        {
+            return enumVal.ToString("F");
+        }
+
+        public static string ToStringG(this Enum enumVal)
+        {
+            return enumVal.ToString("G");
+        }
     }
 }
