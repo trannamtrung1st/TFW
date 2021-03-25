@@ -24,39 +24,4 @@ namespace TFW.Framework.DI.Attributes
             return new ServiceDescriptor(serviceType, type, Lifetime);
         }
     }
-
-    public class ProviderServiceAttribute : ServiceAttribute
-    {
-        public ProviderServiceAttribute(ServiceLifetime lifetime) : base(lifetime)
-        {
-        }
-
-        public override ServiceDescriptor BuildServiceDescriptor(Type type)
-        {
-            var serviceType = ServiceType ?? type;
-
-            return new ServiceDescriptor(serviceType, o => o.GetRequiredService(type), Lifetime);
-        }
-    }
-
-    public class ScopedServiceAttribute : ServiceAttribute
-    {
-        public ScopedServiceAttribute() : base(ServiceLifetime.Scoped)
-        {
-        }
-    }
-
-    public class TransientServiceAttribute : ServiceAttribute
-    {
-        public TransientServiceAttribute() : base(ServiceLifetime.Transient)
-        {
-        }
-    }
-
-    public class SingletonServiceAttribute : ServiceAttribute
-    {
-        public SingletonServiceAttribute() : base(ServiceLifetime.Singleton)
-        {
-        }
-    }
 }
