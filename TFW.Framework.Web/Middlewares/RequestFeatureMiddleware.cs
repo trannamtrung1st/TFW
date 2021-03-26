@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TFW.Framework.Web.Models;
+using TFW.Framework.Web.Features;
 
 namespace TFW.Framework.Web.Middlewares
 {
     public class RequestFeatureMiddleware : CalledOncePerScopedMiddeware
     {
-        private SimpleHttpRequestFeature _originalRequest;
+        private ISimpleHttpRequestFeature _originalRequest;
 
         protected override async Task InvokeCoreAsync(HttpContext context, RequestDelegate next)
         {
