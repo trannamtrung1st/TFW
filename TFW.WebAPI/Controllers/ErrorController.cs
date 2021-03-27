@@ -13,7 +13,7 @@ using TFW.Cross.Models.Exceptions;
 using TFW.Cross.Models.Setting;
 using TFW.Data;
 using TFW.Framework.Common.Helpers;
-using TFW.Framework.Web.Models;
+using TFW.Framework.Web.Features;
 
 namespace TFW.WebAPI.Controllers
 {
@@ -65,7 +65,7 @@ namespace TFW.WebAPI.Controllers
 
         private async Task LogErrorRequestAsync(Exception ex)
         {
-            var originalRequest = HttpContext.Features.Get<SimpleHttpRequestFeature>();
+            var originalRequest = HttpContext.Features.Get<ISimpleHttpRequestFeature>();
             object bodyInfo = "";
 
             if (originalRequest.ContentLength > 0 &&

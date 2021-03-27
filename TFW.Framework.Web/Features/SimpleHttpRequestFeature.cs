@@ -6,9 +6,25 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TFW.Framework.Web.Models
+namespace TFW.Framework.Web.Features
 {
-    public class SimpleHttpRequestFeature
+    public interface ISimpleHttpRequestFeature
+    {
+        public IDictionary<string, StringValues> Form { get; set; }
+        public string QueryString { get; }
+        public string Protocol { get; }
+        public string Path { get; }
+        public string Method { get; }
+        public bool IsHttps { get; }
+        public string Host { get; }
+        public string ContentType { get; }
+        public long? ContentLength { get; }
+        public string Scheme { get; }
+
+        public Stream GetBody();
+    }
+
+    public class SimpleHttpRequestFeature : ISimpleHttpRequestFeature
     {
         public SimpleHttpRequestFeature(HttpRequest request)
         {
