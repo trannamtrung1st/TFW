@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,9 +10,22 @@ using TFW.Framework.DI.Exceptions;
 
 namespace TFW.Framework.DI
 {
+
     public static class ConfigHelper
     {
-        public static IServiceCollection ScanServices(this IServiceCollection services, IEnumerable<Assembly> assemblies)
+        public static IServiceCollection AddServiceInjector(this IServiceCollection services,
+            IEnumerable<Assembly> assemblies, out IServiceInjector injector)
+        {
+            var concreteInjector = new ServiceInjector();
+            injector = concreteInjector;
+
+            concreteInjector.Register(assemblies);
+
+            return services.AddSingleton(injector);
+        }
+
+        public static IServiceCollection ScanServices(this IServiceCollection services, IEnumerable<Assembly> assemblies,
+            IServiceInjector serviceInjector = null)
         {
             var serviceTypes = assemblies.SelectMany(o => o.GetTypes()).Select(o => new
             {
@@ -25,35 +37,27 @@ namespace TFW.Framework.DI
             {
                 foreach (var attr in typeObj.Attributes)
                 {
-                    var serviceDescriptor = attr.BuildServiceDescriptor(typeObj.Type);
+                    var useServiceInjector = serviceInjector?.RegisteredTypes.Contains(typeObj.Type) == true;
+                    var serviceDescriptor = attr.BuildServiceDescriptor(typeObj.Type, useServiceInjector);
 
-                    // Check is service already register from difference implementation => throw exception
-                    var isAlreadyDifferenceImplementation = services.Any(
-                        x =>
-                            x.ServiceType.FullName == serviceDescriptor.ServiceType.FullName &&
-                            x.ImplementationType != serviceDescriptor.ImplementationType);
+                    var isAlreadyRegistered = services.Any(
+                        x => x.ServiceType.FullName == serviceDescriptor.ServiceType.FullName);
 
-                    if (isAlreadyDifferenceImplementation)
+                    if (isAlreadyRegistered)
                     {
-                        var implementationRegister =
-                            services.Single(x => x.ServiceType.FullName == serviceDescriptor.ServiceType.FullName)
-                                .ImplementationType;
+                        if (attr.ThrowIfExists)
+                            throw new ServiceRegistrationException(
+                                $"This descriptor {serviceDescriptor.ImplementationType} must be the only " +
+                                $"registration for {serviceDescriptor.ServiceType.FullName}");
 
-                        throw new ConflictServiceRegistrationException(
-                            $"Conflict register, ${serviceDescriptor.ImplementationType} try to register for {serviceDescriptor.ServiceType.FullName}. It already register by {implementationRegister.FullName} before.");
+                        if (attr.Replace)
+                            services = services.Replace(serviceDescriptor);
+                        else services.Add(serviceDescriptor);
                     }
-
-                    // Check is service already register from same implementation => remove existing,
-                    // replace by new one life time cycle
-                    var isAlreadySameImplementation = services.Any(
-                        x =>
-                            x.ServiceType.FullName == serviceDescriptor.ServiceType.FullName &&
-                            x.ImplementationType == serviceDescriptor.ImplementationType);
-
-                    if (isAlreadySameImplementation)
-                        services = services.Replace(serviceDescriptor);
                     else
+                    {
                         services.Add(serviceDescriptor);
+                    }
                 }
             }
 

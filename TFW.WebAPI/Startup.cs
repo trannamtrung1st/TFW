@@ -106,6 +106,7 @@ namespace TFW.WebAPI
 
             #region Services
             ISecretsManager secretsManager;
+            IServiceInjector serviceInjector;
 
             services.AddDefaultSecretsManager(_env, Configuration,
                     ConfigConsts.CommandLine.WindowsCmd, out secretsManager)
@@ -117,7 +118,8 @@ namespace TFW.WebAPI
                 .AddHttpContextAccessor()
                 .AddHttpBusinessContextProvider()
                 .AddHttpUnitOfWorkProvider()
-                .ScanServices(_tempAssemblyList)
+                .AddServiceInjector(_tempAssemblyList, out serviceInjector)
+                .ScanServices(_tempAssemblyList, serviceInjector)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestFeatureMiddleware()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TFW.Framework.DI.Attributes
@@ -17,11 +18,19 @@ namespace TFW.Framework.DI.Attributes
 
         public Type ServiceType { get; set; }
 
-        public virtual ServiceDescriptor BuildServiceDescriptor(Type type)
+        // true: replace/ false: add new
+        public bool Replace { get; set; }
+
+        public bool ThrowIfExists { get; set; }
+
+        internal virtual ServiceDescriptor BuildServiceDescriptor(Type type, bool useServiceInjector)
         {
             var serviceType = ServiceType ?? type;
 
-            return new ServiceDescriptor(serviceType, type, Lifetime);
+            if (!useServiceInjector)
+                return new ServiceDescriptor(serviceType, type, Lifetime);
+
+            return new ServiceDescriptor(serviceType, DIHelper.BuildInjectedFactory(type), Lifetime);
         }
     }
 }

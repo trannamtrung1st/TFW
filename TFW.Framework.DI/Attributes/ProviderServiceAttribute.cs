@@ -9,11 +9,16 @@ namespace TFW.Framework.DI.Attributes
         {
         }
 
-        public override ServiceDescriptor BuildServiceDescriptor(Type type)
+        internal override ServiceDescriptor BuildServiceDescriptor(Type type, bool useServiceInjector)
         {
             var serviceType = ServiceType ?? type;
 
-            return new ServiceDescriptor(serviceType, o => o.GetRequiredService(type), Lifetime);
+            if (!useServiceInjector)
+                return new ServiceDescriptor(serviceType, provider => provider.GetRequiredService(type), Lifetime);
+
+            if (serviceType == type) throw new InvalidOperationException("Loop detected");
+
+            return new ServiceDescriptor(serviceType, DIHelper.BuildInjectedFactory(type, true), Lifetime);
         }
     }
 }
