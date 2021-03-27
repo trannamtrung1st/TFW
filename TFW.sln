@@ -115,9 +115,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.Common.Exampl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Firebase", "Firebase", "{5A878947-18CD-4D60-8F56-6DA13157A00A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.Firebase.Messaging", "TFW.Framework.Firebase.Messaging\TFW.Framework.Firebase.Messaging.csproj", "{AA637C1C-77EB-4DAB-B70A-B072EB185E89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.Firebase.Messaging", "TFW.Framework.Firebase.Messaging\TFW.Framework.Firebase.Messaging.csproj", "{AA637C1C-77EB-4DAB-B70A-B072EB185E89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.Firebase.Examples", "TFW.Framework.Firebase.Examples\TFW.Framework.Firebase.Examples.csproj", "{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.Firebase.Examples", "TFW.Framework.Firebase.Examples\TFW.Framework.Firebase.Examples.csproj", "{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.DI.Examples", "TFW.Framework.DI.Examples\TFW.Framework.DI.Examples.csproj", "{67ABA02B-DF63-4D6B-B250-3040063A6FDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -261,6 +263,10 @@ Global
 		{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67ABA02B-DF63-4D6B-B250-3040063A6FDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67ABA02B-DF63-4D6B-B250-3040063A6FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67ABA02B-DF63-4D6B-B250-3040063A6FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67ABA02B-DF63-4D6B-B250-3040063A6FDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -320,6 +326,7 @@ Global
 		{5A878947-18CD-4D60-8F56-6DA13157A00A} = {6A322B02-8C6C-45ED-8F0B-982B1C7B139A}
 		{AA637C1C-77EB-4DAB-B70A-B072EB185E89} = {5A878947-18CD-4D60-8F56-6DA13157A00A}
 		{C6C9ACDD-6AE4-40DC-A344-747CF5B17FFD} = {5A878947-18CD-4D60-8F56-6DA13157A00A}
+		{67ABA02B-DF63-4D6B-B250-3040063A6FDE} = {6B5E99EE-45FB-4046-95C0-44A57E9CF7F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7026D7F0-4EB7-4B18-A4FE-81D32724A9DF}
