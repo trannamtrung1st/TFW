@@ -16,7 +16,7 @@ namespace TFW.Framework.DI
 
     internal struct InjectedTypeInfo
     {
-        public (MethodInfo Setter, Type Type)[] PropertySetters { get; set; }
+        public (MethodInfo Setter, Type Type, bool Required)[] PropertySetters { get; set; }
     }
 
     internal class ServiceInjector : IServiceInjector
@@ -40,7 +40,12 @@ namespace TFW.Framework.DI
 
                 var injectableProps = allProps.Where(prop =>
                         prop.IsDefined(typeof(InjectAttribute), false) && prop.SetMethod != null)
-                            .Select(prop => (prop.SetMethod, prop.PropertyType)).ToArray();
+                            .Select(prop =>
+                            (
+                                prop.SetMethod,
+                                prop.PropertyType,
+                                prop.GetCustomAttribute<InjectAttribute>(false).Required
+                            )).ToArray();
 
                 if (injectableProps.Length > 0)
                 {
@@ -67,7 +72,10 @@ namespace TFW.Framework.DI
 
                 foreach (var p in info.PropertySetters)
                 {
-                    p.Setter.Invoke(obj, new[] { serviceProvider.GetRequiredService(p.Type) });
+                    p.Setter.Invoke(obj, new[]
+                    {
+                        p.Required? serviceProvider.GetRequiredService(p.Type) : serviceProvider.GetService(p.Type)
+                    });
                 }
             }
         }
