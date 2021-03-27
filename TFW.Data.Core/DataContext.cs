@@ -24,25 +24,21 @@ namespace TFW.Data.Core
     public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, string, IdentityUserClaim<string>,
         AppUserRole, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
     {
-        private readonly IDbConnectionPoolManager _poolManager;
+        [Inject(Required = false)]
+        public IDbConnectionPoolManager PoolManager { get; set; }
         private bool disposedValue;
 
-        public DataContext(IDbConnectionPoolManager poolManager = null) : base()
+        public DataContext() : base()
         {
-            _poolManager = poolManager;
         }
 
-        public DataContext(QueryFilterOptions queryFilterOptions,
-            IDbConnectionPoolManager poolManager = null) : base(queryFilterOptions)
+        public DataContext(QueryFilterOptions queryFilterOptions) : base(queryFilterOptions)
         {
-            _poolManager = poolManager;
         }
 
         public DataContext(DbContextOptions options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null,
-            IDbConnectionPoolManager poolManager = null) : base(options, queryFilterOptions)
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options, queryFilterOptions)
         {
-            _poolManager = poolManager;
         }
 
         public virtual DbSet<Post> Post { get; set; }
@@ -158,8 +154,8 @@ namespace TFW.Data.Core
             {
                 if (disposing)
                 {
-                    if (_poolManager?.IsNullObject == false)
-                        _poolManager.TryReturnToPoolAsync(dbConnection);
+                    if (PoolManager?.IsNullObject == false)
+                        PoolManager.TryReturnToPoolAsync(dbConnection);
                 }
 
                 disposedValue = true;

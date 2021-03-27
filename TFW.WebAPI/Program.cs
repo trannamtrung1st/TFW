@@ -61,6 +61,11 @@ namespace TFW.WebAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).UseDefaultServiceProvider((context, options) =>
+                {
+                    // disable on PROD to boost performance
+                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                    options.ValidateOnBuild = true;
                 });
 
         public static void PrepareApplication(IHost host)

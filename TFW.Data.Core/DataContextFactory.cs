@@ -13,22 +13,25 @@ namespace TFW.Data.Core
     [ScopedService(ServiceType = typeof(IDbContextFactory<DataContext>))]
     public class DataContextFactory : DbContextFactory<DataContext> //, IDesignTimeDbContextFactory<DataContext>
     {
+        [Inject(Required = false)]
+        public IDbConnectionPoolManager PoolManager { get; set; }
+
         private readonly IOptionsSnapshot<QueryFilterOptions> _queryFilters;
-        private readonly IDbConnectionPoolManager _poolManager;
 
         public DataContextFactory(DbContextOptions<DataContext> options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilters,
-            IDbConnectionPoolManager poolManager) : base(options)
+            IOptionsSnapshot<QueryFilterOptions> queryFilters) : base(options)
         {
             _queryFilters = queryFilters;
-            _poolManager = poolManager;
         }
 
         protected override DataContext CreateCore(DbContextOptions<DataContext> overrideOptions = null)
         {
             overrideOptions = overrideOptions ?? options;
 
-            return new DataContext(overrideOptions, _queryFilters, _poolManager);
+            return new DataContext(overrideOptions, _queryFilters)
+            {
+                PoolManager = PoolManager
+            };
         }
 
         //public DataContext CreateDbContext(string[] args)
