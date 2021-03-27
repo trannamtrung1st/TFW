@@ -11,6 +11,7 @@ namespace TFW.Framework.DI.Examples
 
     }
 
+    [TransientService]
     class Service
     {
         [Inject]
@@ -33,7 +34,7 @@ namespace TFW.Framework.DI.Examples
     {
         static void Main(string[] args)
         {
-            Autofac(100000);
+            TFWPropertyInjection(100000);
         }
 
         static void ServiceProvider(int loop)
@@ -60,10 +61,11 @@ namespace TFW.Framework.DI.Examples
 
         static void TFWPropertyInjection(int loop)
         {
+            IServiceInjector serviceInjector;
             var services = new ServiceCollection()
-                .AddServiceInjector(new[] { typeof(Program).Assembly })
+                .AddServiceInjector(new[] { typeof(Program).Assembly }, out serviceInjector)
                 .AddTransient<Logger>()
-                .AddTransient(DIHelper.BuildInjectedFactory<Service>());
+                .ScanServices(new[] { typeof(Program).Assembly }, serviceInjector);
 
             var container = services.BuildServiceProvider();
 
