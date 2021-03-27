@@ -6,6 +6,14 @@ using TFW.Framework.DI.Attributes;
 
 namespace TFW.Framework.DI.Examples
 {
+    class TestDispose : IDisposable
+    {
+        public void Dispose()
+        {
+            Console.WriteLine("Dispose");
+        }
+    }
+
     class Logger
     {
 
@@ -34,7 +42,22 @@ namespace TFW.Framework.DI.Examples
     {
         static void Main(string[] args)
         {
-            TFWPropertyInjection(100000);
+            TestDispose();
+        }
+
+        static void TestDispose()
+        {
+            var services = new ServiceCollection()
+                .AddSingleton(new TestDispose());
+
+            using var container = services.BuildServiceProvider();
+
+            using (var scope = container.CreateScope())
+            {
+                var test = scope.ServiceProvider.GetRequiredService<TestDispose>();
+                var test2 = scope.ServiceProvider.GetRequiredService<TestDispose>();
+            }
+            Console.WriteLine("Finish test");
         }
 
         static void ServiceProvider(int loop)

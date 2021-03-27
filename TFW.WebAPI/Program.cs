@@ -46,8 +46,8 @@ namespace TFW.WebAPI
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            // Automatically call AddUserSecrets
             Host.CreateDefaultBuilder(args)
+                // Automatically call AddUserSecrets
                 //.ConfigureAppConfiguration((hostContext, builder) =>
                 //{
                 //    if (hostContext.HostingEnvironment.IsDevelopment())
@@ -61,12 +61,14 @@ namespace TFW.WebAPI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                }).UseDefaultServiceProvider((context, options) =>
-                {
-                    // disable on PROD to boost performance
-                    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
-                    options.ValidateOnBuild = true;
                 });
+                // Automatically perform Validation on Developement
+                //.UseDefaultServiceProvider((context, options) =>
+                //{
+                //    // disable on PROD to boost performance
+                //    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
+                //    options.ValidateOnBuild = true;
+                //});
 
         public static void PrepareApplication(IHost host)
         {
