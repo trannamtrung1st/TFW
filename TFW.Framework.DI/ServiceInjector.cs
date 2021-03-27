@@ -19,7 +19,7 @@ namespace TFW.Framework.DI
         public (MethodInfo Setter, Type Type, bool Required)[] PropertySetters { get; set; }
     }
 
-    internal class ServiceInjector : IServiceInjector
+    public class ServiceInjector : IServiceInjector
     {
         private readonly IDictionary<Type, InjectedTypeInfo> _mappings;
 
@@ -65,16 +65,15 @@ namespace TFW.Framework.DI
             if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
             var type = obj.GetType();
+            InjectedTypeInfo typeInfo;
 
-            if (_mappings.ContainsKey(type))
+            if (_mappings.TryGetValue(type, out typeInfo))
             {
-                var info = _mappings[type];
-
-                foreach (var p in info.PropertySetters)
+                foreach (var p in typeInfo.PropertySetters)
                 {
                     p.Setter.Invoke(obj, new[]
                     {
-                        p.Required? serviceProvider.GetRequiredService(p.Type) : serviceProvider.GetService(p.Type)
+                        p.Required ? serviceProvider.GetRequiredService(p.Type) : serviceProvider.GetService(p.Type)
                     });
                 }
             }

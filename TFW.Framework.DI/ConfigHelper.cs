@@ -24,6 +24,12 @@ namespace TFW.Framework.DI
             return services.AddSingleton(injector);
         }
 
+        public static IServiceCollection AddServiceInjector(this IServiceCollection services,
+            IEnumerable<Assembly> assemblies)
+        {
+            return services.AddServiceInjector(assemblies, out _);
+        }
+
         public static IServiceCollection ScanServices(this IServiceCollection services, IEnumerable<Assembly> assemblies,
             IServiceInjector serviceInjector = null)
         {
