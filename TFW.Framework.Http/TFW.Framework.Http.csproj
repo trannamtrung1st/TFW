@@ -8,10 +8,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contents\" />
   </ItemGroup>
 
 </Project>
