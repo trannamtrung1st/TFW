@@ -8,14 +8,16 @@ namespace TFW.Framework.DI.Examples
 {
     class DIWithNetCore
     {
-        class Earth
+        interface IEarth
         {
+        }
 
+        class Earth : IEarth
+        {
         }
 
         class Children
         {
-
         }
 
         class Parent
@@ -32,9 +34,11 @@ namespace TFW.Framework.DI.Examples
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.AddSingleton<Earth>()
+            // a list of ServiceDescriptors
+            services.AddSingleton<IEarth, Earth>()
                 .AddTransient<Children>()
                 .AddScoped<Parent>()
+                .Replace(new ServiceDescriptor(typeof(IEarth), new Earth()))
                 .TryAddScoped(provider =>
                 {
                     var child = provider.GetRequiredService<Children>();
@@ -47,6 +51,16 @@ namespace TFW.Framework.DI.Examples
                 ValidateOnBuild = true,
                 ValidateScopes = true
             });
+
+            // resolve from root
+            IEarth earth = serviceProvider.GetService<IEarth>();
+            IEnumerable<IEarth> earths = serviceProvider.GetServices<IEarth>();
+
+            using var scope = serviceProvider.CreateScope();
+
+            // resolve from scope
+            Children children = scope.ServiceProvider.GetRequiredService<Children>();
+            Parent parent = scope.ServiceProvider.GetRequiredService<Parent>();
         }
     }
 }

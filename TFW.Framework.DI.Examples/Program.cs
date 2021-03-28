@@ -48,7 +48,91 @@ namespace TFW.Framework.DI.Examples
     {
         static void Main(string[] args)
         {
-            ServiceProvider(100);
+            Issues();
+        }
+
+        class DbContext
+        {
+        }
+
+        class Parent
+        {
+            private Children _chidren;
+            public Parent(Children children)
+            {
+                _chidren = children;
+            }
+
+            public string Id { get; set; } = Guid.NewGuid().ToString();
+        }
+
+        class Children
+        {
+            private readonly IServiceProvider _serviceProvider;
+            private Parent Parent => _serviceProvider.GetRequiredService<Parent>();
+            public Children(IServiceProvider serviceProvider)
+            {
+                _serviceProvider = serviceProvider;
+            }
+
+            public string Id { get; set; } = Guid.NewGuid().ToString();
+        }
+
+        class SingletonService : IDisposable
+        {
+            public string Id { get; set; } = Guid.NewGuid().ToString();
+
+            private bool _disposed;
+            public void Dispose()
+            {
+                if (_disposed) throw new Exception("Already disposed");
+
+                _disposed = true;
+            }
+        }
+
+        static void Issues()
+        {
+            var services = new ServiceCollection()
+                   .AddSingleton(new SingletonService());
+
+            using var container = services.BuildServiceProvider();
+
+            using (var scope = container.CreateScope())
+            {
+                var singleton = scope.ServiceProvider.GetRequiredService<SingletonService>();
+            }
+
+            using (var scope = container.CreateScope())
+            {
+                var singleton = scope.ServiceProvider.GetRequiredService<SingletonService>();
+                Console.WriteLine(singleton.Id);
+            }
+        }
+
+        static void Lifetimes()
+        {
+            var services = new ServiceCollection()
+                   .AddTransient<Parent>()
+                   .AddScoped<Children>()
+                   .AddSingleton<SingletonService>();
+
+            using var container = services.BuildServiceProvider();
+
+            for (var i = 0; i < 3; i++)
+                using (var scope = container.CreateScope())
+                {
+                    Console.WriteLine($"Scope {i + 1}");
+
+                    for (var j = 0; j < 2; j++)
+                    {
+                        var transient = scope.ServiceProvider.GetRequiredService<Parent>();
+                        var scoped = scope.ServiceProvider.GetRequiredService<Children>();
+                        var single = scope.ServiceProvider.GetRequiredService<SingletonService>();
+
+                        Console.WriteLine($"Request {j + 1}: {transient.Id} - {scoped.Id} - {single.Id}");
+                    }
+                }
         }
 
         static void TestKeyed()
