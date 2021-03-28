@@ -29,16 +29,11 @@ namespace TFW.Framework.DI
         {
             if (_service != null) return (_service, false);
 
-            (Type KeyedType, Type Type, Func<IServiceProvider, object> Factory, bool UseServiceProvider) typeInfo;
+            (Type KeyedType, Type Type, Func<IServiceProvider, object> Factory) typeInfo;
 
             if (!info.Types.TryGetValue(args, out typeInfo))
                 if (!required) return default;
                 else throw new KeyNotFoundException();
-
-            if (typeInfo.UseServiceProvider)
-                if (required)
-                    return (provider.GetRequiredService(typeInfo.Type), false);
-                else return (provider.GetService(typeInfo.Type), false);
 
             if (typeInfo.Factory != null)
                 return (typeInfo.Factory(provider), true);

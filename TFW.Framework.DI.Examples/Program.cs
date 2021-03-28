@@ -48,7 +48,7 @@ namespace TFW.Framework.DI.Examples
     {
         static void Main(string[] args)
         {
-            Autofac(100000);
+            ServiceProvider(100);
         }
 
         static void TestKeyed()
@@ -118,8 +118,12 @@ namespace TFW.Framework.DI.Examples
                 .AddKeyedServiceManager(out manager)
                 .AddTransient<Logger>()
                 .ScanServices(new[] { typeof(Program).Assembly }, serviceInjector)
-                .SetKeyed<IDisposable, TestDispose>(manager, 1, factory: DIHelper.BuildInjectedFactory<TestDispose>(), lifetime: ServiceLifetime.Transient)
-                .SetKeyed<IDisposable, Dispose2>(manager, 2, factory: DIHelper.BuildInjectedFactory<Dispose2>(), lifetime: ServiceLifetime.Transient);
+                .SetKeyed<IDisposable, TestDispose>(manager, 1,
+                    factory: DIHelper.BuildInjectedFactory<TestDispose>(),
+                    lifetime: ServiceLifetime.Transient)
+                .SetKeyed<IDisposable, Dispose2>(manager, 2,
+                    factory: DIHelper.BuildInjectedFactory<Dispose2>(),
+                    lifetime: ServiceLifetime.Transient);
 
             var container = services.BuildServiceProvider();
 

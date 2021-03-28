@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Events;
 using TFW.Cross;
+using TFW.Data.Core;
 using TFW.Framework.EFCore.Migration;
 
 namespace TFW.WebAPI
@@ -58,17 +57,17 @@ namespace TFW.WebAPI
                 .UseSerilog((context, services, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration, sectionName: nameof(Serilog))
                     .ReadFrom.Services(services))
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
                 // Automatically perform Validation on Developement
                 //.UseDefaultServiceProvider((context, options) =>
                 //{
                 //    // disable on PROD to boost performance
                 //    options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 //    options.ValidateOnBuild = true;
-                //});
+                //})
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
 
         public static void PrepareApplication(IHost host)
         {
@@ -79,7 +78,7 @@ namespace TFW.WebAPI
             if (env.IsDevelopment())
             {
                 // Auto migration
-                var dbContext = serviceProvider.GetRequiredService<DbContext>();
+                var dbContext = serviceProvider.GetRequiredService<DataContext>();
                 var dbMigrator = serviceProvider.GetRequiredService<IDbMigrator>();
 
                 dbMigrator.CreateOrMigrateDatabase(dbContext);

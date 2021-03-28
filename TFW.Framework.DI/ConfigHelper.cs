@@ -24,21 +24,19 @@ namespace TFW.Framework.DI
 
         public static IServiceCollection SetKeyed<ServiceType, ImplType>(this IServiceCollection services,
             IKeyedServiceManager manager, object key, Func<IServiceProvider, ImplType> factory = null,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped, bool useServiceProvider = false) where ImplType : ServiceType
+            ServiceLifetime lifetime = ServiceLifetime.Scoped) where ImplType : ServiceType
         {
             Func<IServiceProvider, object> finalFactory = null;
 
             if (factory != null) finalFactory = (provider) => factory(provider);
 
-            return services.SetKeyed(manager, typeof(ServiceType), typeof(ImplType), key, finalFactory,
-                lifetime, useServiceProvider);
+            return services.SetKeyed(manager, typeof(ServiceType), typeof(ImplType), key, finalFactory, lifetime);
         }
 
         public static IServiceCollection SetKeyed(this IServiceCollection services,
             IKeyedServiceManager manager,
             Type serviceType, Type implType, object key, Func<IServiceProvider, object> factory = null,
-            ServiceLifetime lifetime = ServiceLifetime.Scoped,
-            bool useServiceProvider = false)
+            ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             if (!serviceType.IsAssignableFrom(implType))
                 throw new InvalidOperationException("ServiceType is not assignable from ImplType");
@@ -50,11 +48,11 @@ namespace TFW.Framework.DI
                 {
                     CachedObjectFactory = new Dictionary<Type, ObjectFactory>(),
                     ServiceLifetime = lifetime,
-                    Types = new Dictionary<object, (Type, Type, Func<IServiceProvider, object>, bool)>()
+                    Types = new Dictionary<object, (Type, Type, Func<IServiceProvider, object>)>()
                 };
 
             var info = manager.ServiceTypes[serviceType];
-            info.Types[key] = (keyedType, implType, factory, useServiceProvider);
+            info.Types[key] = (keyedType, implType, factory);
             info.CachedObjectFactory[implType] = ActivatorUtilities.CreateFactory(implType, new Type[] { });
 
             switch (lifetime)
