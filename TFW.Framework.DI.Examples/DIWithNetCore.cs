@@ -35,7 +35,12 @@ namespace TFW.Framework.DI.Examples
             services.AddSingleton<Earth>()
                 .AddTransient<Children>()
                 .AddScoped<Parent>()
-                .TryAddScoped<Parent>();
+                .TryAddScoped(provider =>
+                {
+                    var child = provider.GetRequiredService<Children>();
+                    var parent = new Parent(child);
+                    return parent;
+                });
 
             IServiceProvider serviceProvider = services.BuildServiceProvider(new ServiceProviderOptions
             {

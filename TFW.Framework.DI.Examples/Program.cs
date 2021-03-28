@@ -10,7 +10,13 @@ namespace TFW.Framework.DI.Examples
     {
         public void Dispose()
         {
-            Console.WriteLine("Dispose");
+        }
+    }
+
+    class Dispose2 : IDisposable
+    {
+        public void Dispose()
+        {
         }
     }
 
@@ -42,7 +48,27 @@ namespace TFW.Framework.DI.Examples
     {
         static void Main(string[] args)
         {
-            TestDispose();
+            Autofac(100000);
+        }
+
+        static void TestKeyed()
+        {
+            IKeyedServiceManager manager;
+
+            var services = new ServiceCollection()
+                .AddKeyedServiceManager(out manager)
+                .AddSingleton<TestDispose>()
+                .SetKeyed<IDisposable, TestDispose>(manager, 1, factory: provider => new TestDispose())
+                .SetKeyed<IDisposable, Dispose2>(manager, 2);
+
+            using var container = services.BuildServiceProvider();
+
+            using (var scope = container.CreateScope())
+            {
+                var test = scope.ServiceProvider.GetRequiredService<IDisposable>(1);
+                var test2 = scope.ServiceProvider.GetRequiredService<IDisposable>(2);
+            }
+            Console.WriteLine("Finish test");
         }
 
         static void TestDispose()
@@ -85,10 +111,15 @@ namespace TFW.Framework.DI.Examples
         static void TFWPropertyInjection(int loop)
         {
             IServiceInjector serviceInjector;
+            IKeyedServiceManager manager;
+
             var services = new ServiceCollection()
                 .AddServiceInjector(new[] { typeof(Program).Assembly }, out serviceInjector)
+                .AddKeyedServiceManager(out manager)
                 .AddTransient<Logger>()
-                .ScanServices(new[] { typeof(Program).Assembly }, serviceInjector);
+                .ScanServices(new[] { typeof(Program).Assembly }, serviceInjector)
+                .SetKeyed<IDisposable, TestDispose>(manager, 1, factory: DIHelper.BuildInjectedFactory<TestDispose>(), lifetime: ServiceLifetime.Transient)
+                .SetKeyed<IDisposable, Dispose2>(manager, 2, factory: DIHelper.BuildInjectedFactory<Dispose2>(), lifetime: ServiceLifetime.Transient);
 
             var container = services.BuildServiceProvider();
 
@@ -99,7 +130,8 @@ namespace TFW.Framework.DI.Examples
             var provider = scope.ServiceProvider;
             for (var i = 0; i < loop; i++)
             {
-                var test = provider.GetRequiredService<Service>();
+                var test = provider.GetRequiredService<IDisposable>(1);
+                var test2 = provider.GetRequiredService<IDisposable>(2);
             }
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);
@@ -114,6 +146,8 @@ namespace TFW.Framework.DI.Examples
             builder.RegisterInstance<IServiceInjector>(injector);
             builder.RegisterType<Logger>();
             builder.RegisterType<Service>().PropertiesAutowired();
+            builder.RegisterType<TestDispose>().Keyed<IDisposable>(1).PropertiesAutowired();
+            builder.RegisterType<Dispose2>().Keyed<IDisposable>(2).PropertiesAutowired();
             var container = builder.Build();
 
             Console.WriteLine(nameof(Autofac));
@@ -122,7 +156,8 @@ namespace TFW.Framework.DI.Examples
 
             for (var i = 0; i < loop; i++)
             {
-                var test = scope.Resolve<Service>();
+                var test = scope.ResolveKeyed<IDisposable>(1);
+                var test2 = scope.ResolveKeyed<IDisposable>(2);
             }
             sw.Stop();
             Console.WriteLine(sw.ElapsedMilliseconds);

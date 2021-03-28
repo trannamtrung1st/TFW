@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,65 @@ namespace TFW.Framework.DI
 
     public static class ConfigHelper
     {
+        public static IServiceCollection AddKeyedServiceManager(this IServiceCollection services,
+            out IKeyedServiceManager manager)
+        {
+            manager = new KeyedServiceManager();
+
+            return services.AddSingleton(manager);
+        }
+
+        public static IServiceCollection SetKeyed<ServiceType, ImplType>(this IServiceCollection services,
+            IKeyedServiceManager manager, object key, Func<IServiceProvider, ImplType> factory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped, bool useServiceProvider = false) where ImplType : ServiceType
+        {
+            Func<IServiceProvider, object> finalFactory = null;
+
+            if (factory != null) finalFactory = (provider) => factory(provider);
+
+            return services.SetKeyed(manager, typeof(ServiceType), typeof(ImplType), key, finalFactory,
+                lifetime, useServiceProvider);
+        }
+
+        public static IServiceCollection SetKeyed(this IServiceCollection services,
+            IKeyedServiceManager manager,
+            Type serviceType, Type implType, object key, Func<IServiceProvider, object> factory = null,
+            ServiceLifetime lifetime = ServiceLifetime.Scoped,
+            bool useServiceProvider = false)
+        {
+            if (!serviceType.IsAssignableFrom(implType))
+                throw new InvalidOperationException("ServiceType is not assignable from ImplType");
+
+            var keyedType = typeof(KeyedService<>).MakeGenericType(implType);
+
+            if (!manager.ServiceTypes.ContainsKey(serviceType))
+                manager.ServiceTypes[serviceType] = new KeyedServiceInfo
+                {
+                    CachedObjectFactory = new Dictionary<Type, ObjectFactory>(),
+                    ServiceLifetime = lifetime,
+                    Types = new Dictionary<object, (Type, Type, Func<IServiceProvider, object>, bool)>()
+                };
+
+            var info = manager.ServiceTypes[serviceType];
+            info.Types[key] = (keyedType, implType, factory, useServiceProvider);
+            info.CachedObjectFactory[implType] = ActivatorUtilities.CreateFactory(implType, new Type[] { });
+
+            switch (lifetime)
+            {
+                case ServiceLifetime.Scoped:
+                    services.AddScoped(keyedType);
+                    break;
+                case ServiceLifetime.Transient:
+                    services.AddTransient(keyedType);
+                    break;
+                case ServiceLifetime.Singleton:
+                    services.AddSingleton(keyedType);
+                    break;
+            }
+
+            return services;
+        }
+
         public static IServiceCollection AddServiceInjector(this IServiceCollection services,
             IEnumerable<Assembly> assemblies, out IServiceInjector injector)
         {
