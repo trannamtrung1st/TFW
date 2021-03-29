@@ -1,4 +1,6 @@
-﻿<section class="mb-5">
+﻿@inherits ComponentBase
+
+<section class="mb-5">
     <h1>Binding</h1>
 
     <input type="text" name="myName" @bind="MyName" />
@@ -6,5 +8,5 @@
         My name is: @MyName
     </p>
 
-    <input type="number" name="incrementAmount" @bind="AppState.IncrementAmount"/>
+    <input type="number" name="incrementAmount" @bind="AppState.IncrementAmount" />
 </section>

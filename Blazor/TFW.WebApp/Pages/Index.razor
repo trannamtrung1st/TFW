@@ -1,11 +1,21 @@
 ﻿@page "/"
+@inject ApplicationState AppState
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your new app. @AppState.IncrementAmount
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 <Counter />
 
 <Binding />
+
+@code
+{ 
+    protected override Task OnInitializedAsync()
+    {
+        AppState.PropertyChanged += (sender, e) => this.StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

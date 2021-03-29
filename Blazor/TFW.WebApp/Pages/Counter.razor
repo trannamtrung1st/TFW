@@ -1,5 +1,5 @@
 ﻿@page "/counter"
-@inject AppState AppState
+@inject ApplicationState AppState
 
 <section class="mb-5">
     <h1>Counter</h1>
@@ -16,5 +16,6 @@
     private void IncrementCount()
     {
         currentCount += AppState.IncrementAmount;
+        AppState.IncrementAmount = currentCount;
     }
 }
