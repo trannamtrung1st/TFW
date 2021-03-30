@@ -12,12 +12,32 @@
 		// https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
         $(document).ready(function () {
             var myCommands = elFinder.prototype._options.commands;
+            myCommands.push('authorize');
+            var contextMenuFiles = elFinder.prototype._options.contextmenu.cwd;
+            contextMenuFiles.push('authorize');
+            var contextMenuNavbars = elFinder.prototype._options.contextmenu.navbar;
+            contextMenuNavbars.push('authorize');
+
             var disabled = ['callback', 'chmod', 'editor', 'netmount', 'ping', 'zipdl', 'help']; // Not yet implemented commands in elFinder.NetCore
             elFinder.prototype.i18.en.messages.TextArea = "Edit";
+            elFinder.prototype.i18.en.messages.cmdauthorize = "Authorize";
 
             $.each(disabled, function (i, cmd) {
                 (idx = $.inArray(cmd, myCommands)) !== -1 && myCommands.splice(idx, 1);
             });
+
+            elFinder.prototype.commands.authorize = function () {
+                this.exec = function (hashes) {
+                    alert('Authorize');
+                }
+                this.getstate = function () {
+                    var sel = this.files(sel);
+
+                    const anyFile = sel.findIndex(e => e.mime != 'directory') > -1;
+
+                    return !this._disabled && !anyFile ? 0 : -1;
+                }
+            }
 
             var options = {
                 url: '/el-finder/file-system/connector', // Default (Local File System)
@@ -43,9 +63,21 @@
                         ['search']
                     ]
                 },
+                handlers: {
+                    contextmenu: function (event, elfinderInstance) {
+                        const selected = elfinderInstance.selected();
+                        console.log(event.data);
+                        console.log(event.data.selected); 
+                    }
+                },
+                contextmenu: {
+                    files: contextMenuFiles,
+                    navbar: contextMenuNavbars
+                }
                 //onlyMimes: ["image", "text/plain"] // Get files of requested mime types only
                 //lang: 'vi', // Change language
             };
+
             $('#elfinder').elfinder(options).elfinder('instance');
         });
     </script>
