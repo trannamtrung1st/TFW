@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.ConsoleApp;
@@ -70,11 +72,14 @@ namespace TFW
             //Console.WriteLine(typeof(List<>).GetNameWithoutGenericParameters());
             //Console.WriteLine(typeof(List<string>).GetNameWithoutGenericParameters());
 
-            foreach (var region in CultureInfo.GetCultures(CultureTypes.SpecificCultures)
-                .Select(o => o.LCID).Distinct().Select(o => new RegionInfo(o)))
-            {
-                Console.WriteLine(region.Name + " - " + region.CurrencySymbol + " - " + region.ISOCurrencySymbol);
-            }
+            //foreach (var region in CultureInfo.GetCultures(CultureTypes.SpecificCultures)
+            //    .Select(o => o.LCID).Distinct().Select(o => new RegionInfo(o)))
+            //{
+            //    Console.WriteLine(region.Name + " - " + region.CurrencySymbol + " - " + region.ISOCurrencySymbol);
+            //}
+
+            var fileInfo = new FileInfo(@"C:\Users\trann\Desktop\test\test.txt");
+            fileInfo.MoveTo(@"C:\Users\trann\Desktop\test\2.txt", true);
         }
     }
 }
