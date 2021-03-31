@@ -53,7 +53,7 @@ namespace TFW.Framework.FileManager.Examples.Controllers
                 ThumbnailSize = 256
             };
 
-            root.AddItemAttribute("ReadWrite/Prohibited/test\\asd/", new ItemAttribute()
+            root.AddItemAttribute(Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\asd/"), new ItemAttribute()
             {
                 Write = false,
                 Locked = true,

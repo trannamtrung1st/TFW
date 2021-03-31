@@ -1,3 +1,4 @@
+using elFinder.NetCore.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,7 +32,7 @@ namespace TFW.Framework.FileManager.Examples
             }
 
             path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
-            return Path.Combine(basePath, path);
+            return PathHelper.GetFullPathNormalized(Path.Combine(basePath, path));
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
