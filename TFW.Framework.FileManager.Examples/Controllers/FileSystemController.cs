@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using elFinder.NetCore;
 using elFinder.NetCore.Drivers.FileSystem;
@@ -36,12 +37,36 @@ namespace TFW.Framework.FileManager.Examples.Controllers
                 $"{uri.Scheme}://{uri.Authority}/upload/",
                 $"{uri.Scheme}://{uri.Authority}/el-finder/file-system/thumb/")
             {
+                StartDirectory = "test",
                 //IsReadOnly = !User.IsInRole("Administrators")
                 IsReadOnly = false, // Can be readonly according to user's membership permission
                 IsLocked = false, // If locked, files and directories cannot be deleted, renamed or moved
                 Alias = "Files", // Beautiful name given to the root/home folder
                 //MaxUploadSizeInKb = 2048, // Limit imposed to user uploaded file <= 2048 KB
-                //LockedFolders = new List<string>(new string[] { "Folder1" })
+                DefaultAttribute = new ItemAttribute
+                {
+                    Locked = true,
+                    Read = false,
+                    Write = false
+                },
+                ItemAttributes = new HashSet<NamedItemAttribute>()
+                {
+                    new NamedItemAttribute("ReadOnly")
+                    {
+                        Write = false,
+                        Locked = true,
+                    },
+                    new NamedItemAttribute("test")
+                    {
+                        Write = false,
+                        Locked = true,
+                    },
+                    new NamedItemAttribute("Locked")
+                    {
+                        Write = true,
+                        Locked = true
+                    }
+                },
                 ThumbnailSize = 256
             };
 
