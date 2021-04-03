@@ -19,12 +19,15 @@ namespace TFW.Framework.DI.WebExamples.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly IProductRepository _productRepository;
+        private readonly IAppSettings _appSettings;
 
         public ProductController(DataContext dataContext,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IAppSettings appSettings)
         {
             _dataContext = dataContext;
             _productRepository = productRepository;
+            _appSettings = appSettings;
         }
 
         [HttpGet("")]

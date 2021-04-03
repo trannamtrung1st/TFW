@@ -18,6 +18,16 @@ using TFW.Framework.DI.WebExamples.Repositories;
 
 namespace TFW.Framework.DI.WebExamples
 {
+    public interface IAppSettings
+    {
+        public string AppName { get; }
+    }
+
+    public class AppSettings : IAppSettings
+    {
+        public string AppName { get; set; }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -33,8 +43,11 @@ namespace TFW.Framework.DI.WebExamples
             services.AddDbContext<DataContext>(options =>
                 options.UseInMemoryDatabase("DependencyInjection"));
 
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+
             services.AddTransient<IProductBuilder, MyProductBuilder>()
-                .AddScoped<IProductRepository, ProductRepository>();
+                .AddScoped<IProductRepository, ProductRepository>()
+                .AddSingleton<IAppSettings>(appSettings);
 
             services.AddControllers();
 
