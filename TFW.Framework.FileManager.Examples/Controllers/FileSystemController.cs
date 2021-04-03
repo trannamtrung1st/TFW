@@ -5,6 +5,7 @@ using elFinder.NetCore;
 using elFinder.NetCore.Drivers.FileSystem;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using TFW.Framework.Web.Filters;
 
 namespace TFW.Framework.FileManager.Examples.Controllers
 {
@@ -12,6 +13,7 @@ namespace TFW.Framework.FileManager.Examples.Controllers
     public class FileSystemController : Controller
     {
         [Route("connector")]
+        [UseSystemJsonOutput]
         public async Task<IActionResult> Connector()
         {
             var connector = GetConnector();
@@ -19,6 +21,7 @@ namespace TFW.Framework.FileManager.Examples.Controllers
         }
 
         [Route("thumb/{hash}")]
+        [UseSystemJsonOutput]
         public async Task<IActionResult> Thumbs(string hash)
         {
             var connector = GetConnector();
@@ -49,16 +52,17 @@ namespace TFW.Framework.FileManager.Examples.Controllers
                 //    Read = false,
                 //    Write = false
                 //},
-                ItemAttributes = new HashSet<SpecificItemAttribute>(),
-                ThumbnailSize = 256
+                ItemAttributes = new HashSet<SpecificItemAttribute>()
+                {
+                    new SpecificItemAttribute(Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\asd/"))
+                    {
+                        Write = false,
+                        Locked = true,
+                        Read = false
+                    }
+                },
+                ThumbnailSize = 128
             };
-
-            root.AddItemAttribute(Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\asd/"), new ItemAttribute()
-            {
-                Write = false,
-                Locked = true,
-                Read = false
-            });
 
             driver.AddRoot(root);
 

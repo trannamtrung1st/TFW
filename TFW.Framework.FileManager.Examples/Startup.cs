@@ -1,7 +1,6 @@
 using elFinder.NetCore.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace TFW.Framework.FileManager.Examples
@@ -38,7 +39,14 @@ namespace TFW.Framework.FileManager.Examples
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(opt =>
+                {
+                    var serializerOpt = opt.JsonSerializerOptions;
+                    serializerOpt.AllowTrailingCommas = true;
+                    serializerOpt.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                })
+                .AddNewtonsoftJson();
 
             services.AddRazorPages();
         }

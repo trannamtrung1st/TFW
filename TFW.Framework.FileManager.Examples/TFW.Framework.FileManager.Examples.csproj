@@ -6,10 +6,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Framework.elFinder\TFW.Framework.elFinder.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\upload\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.13" />
   </ItemGroup>
 
 </Project>
