@@ -16,7 +16,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.RoleApi)]
     [Authorize]
-    public class RolesController : BaseApiController
+    public class RoleController : BaseApiController
     {
         public static class Endpoint
         {
@@ -25,7 +25,7 @@ namespace TFW.WebAPI.Controllers
 
         private readonly IIdentityService _identityService;
 
-        public RolesController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
+        public RoleController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
         {
             _identityService = identityService;
         }

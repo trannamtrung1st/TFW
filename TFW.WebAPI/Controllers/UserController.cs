@@ -17,7 +17,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.UserApi)]
     [Authorize]
-    public class UsersController : BaseApiController
+    public class UserController : BaseApiController
     {
         public static class Endpoint
         {
@@ -31,7 +31,7 @@ namespace TFW.WebAPI.Controllers
 
         private readonly IIdentityService _identityService;
 
-        public UsersController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
+        public UserController(IUnitOfWork unitOfWork, IIdentityService identityService) : base(unitOfWork)
         {
             _identityService = identityService;
         }

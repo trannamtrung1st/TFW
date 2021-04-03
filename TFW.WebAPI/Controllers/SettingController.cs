@@ -15,7 +15,7 @@ namespace TFW.WebAPI.Controllers
 {
     [Route(ApiEndpoint.SettingApi)]
     [Authorize(RoleName.Administrator)]
-    public class SettingsController : BaseApiController
+    public class SettingController : BaseApiController
     {
         public static class Endpoint
         {
@@ -25,7 +25,7 @@ namespace TFW.WebAPI.Controllers
 
         private readonly ISettingService _settingService;
 
-        public SettingsController(IUnitOfWork unitOfWork, ISettingService settingService) : base(unitOfWork)
+        public SettingController(IUnitOfWork unitOfWork, ISettingService settingService) : base(unitOfWork)
         {
             _settingService = settingService;
         }
