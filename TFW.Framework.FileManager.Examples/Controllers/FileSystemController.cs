@@ -37,7 +37,7 @@ namespace TFW.Framework.FileManager.Examples.Controllers
                 $"{uri.Scheme}://{uri.Authority}/upload/",
                 $"{uri.Scheme}://{uri.Authority}/el-finder/file-system/thumb/")
             {
-                StartDirectory = "ReadWrite/Prohibited/test\\asd/",
+                StartDirectory = Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\"),
                 //IsReadOnly = !User.IsInRole("Administrators")
                 IsReadOnly = false, // Can be readonly according to user's membership permission
                 IsLocked = false, // If locked, files and directories cannot be deleted, renamed or moved
