@@ -1,3 +1,5 @@
+using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,11 +11,18 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.WebApp.Shared;
 
 namespace TFW.WebApp
 {
     public class ApplicationState : INotifyPropertyChanged
     {
+        private ISyncLocalStorageService _localStorage;
+        public ApplicationState(ISyncLocalStorageService localStorage)
+        {
+            _localStorage = localStorage;
+        }
+
         private int incrementAmount;
         public int IncrementAmount
         {
@@ -25,6 +34,12 @@ namespace TFW.WebApp
                     NotifyPropertyChanged();
                 }
             }
+        }
+
+        public bool CollapseNavMenu
+        {
+            get => _localStorage.GetItem<bool>(nameof(CollapseNavMenu));
+            set => _localStorage.SetItem(nameof(CollapseNavMenu), value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -43,8 +58,10 @@ namespace TFW.WebApp
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddSingleton<ApplicationState>();
+            builder.Services.AddScoped<ApplicationState>();
+            builder.Services.AddScoped<NavMenu.ComponentState>();
 
             await builder.Build().RunAsync();
         }
