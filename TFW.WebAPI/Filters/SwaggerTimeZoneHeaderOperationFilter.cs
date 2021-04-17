@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -43,18 +42,13 @@ namespace TFW.WebAPI.Filters
                 Required = false
             });
 
-
-            var supportedTzs = _requestTzOptions.SupportedTimeZones.Select(
-                o => new OpenApiString(o.Id) as IOpenApiAny).ToList();
-
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = _headerOptions.HeaderName,
                 In = ParameterLocation.Header,
                 Schema = new OpenApiSchema
                 {
-                    Type = DataType.String.ToStringF(),
-                    Enum = supportedTzs
+                    Type = DataType.String.ToStringF()
                 },
                 Description = "Send a TimeZoneId supported by the application",
                 Required = false
