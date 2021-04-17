@@ -1,76 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using elFinder.NetCore;
-using elFinder.NetCore.Drivers.FileSystem;
-using Microsoft.AspNetCore.Http.Extensions;
+using elFinder.Net.AspNetCore.Extensions;
+using elFinder.Net.AspNetCore.Helper;
+using elFinder.Net.Core;
 using Microsoft.AspNetCore.Mvc;
-using TFW.Framework.Web.Filters;
 
 namespace TFW.Framework.FileManager.Examples.Controllers
 {
-    [Route("el-finder/file-system")]
-    public class FileSystemController : Controller
+    [Route("api/files")]
+    public class FilesController : Controller
     {
+        private readonly IConnector _connector;
+        private readonly IEnumerable<IVolume> _volumes;
+
+        public FilesController(IConnector connector,
+            IEnumerable<IVolume> volumes)
+        {
+            _connector = connector;
+            _volumes = volumes;
+        }
+
         [Route("connector")]
-        [UseSystemJsonOutput]
         public async Task<IActionResult> Connector()
         {
-            var connector = GetConnector();
-            return await connector.ProcessAsync(Request);
+            SetupConnector();
+            var cmd = ConnectorHelper.ParseCommand(Request);
+            var conResult = await _connector.ProcessAsync(cmd);
+            var actionResult = conResult.ToActionResult();
+            return actionResult;
         }
 
-        [Route("thumb/{hash}")]
-        [UseSystemJsonOutput]
-        public async Task<IActionResult> Thumbs(string hash)
+        [Route("thumb/{target}")]
+        public async Task<IActionResult> Thumb(string target)
         {
-            var connector = GetConnector();
-            return await connector.GetThumbnailAsync(HttpContext.Request, HttpContext.Response, hash);
+            SetupConnector();
+            var thumb = await _connector.GetThumbAsync(target);
+            var actionResult = ConnectorHelper.GetThumbResult(thumb);
+            return actionResult;
         }
 
-        private Connector GetConnector()
+        private void SetupConnector()
         {
-            var driver = new FileSystemDriver();
-
-            string absoluteUrl = UriHelper.BuildAbsolute(Request.Scheme, Request.Host);
-            var uri = new Uri(absoluteUrl);
-
-            var root = new RootVolume(
-                Startup.MapPath("~/upload"),
-                $"{uri.Scheme}://{uri.Authority}/upload/",
-                $"{uri.Scheme}://{uri.Authority}/el-finder/file-system/thumb/")
+            foreach (var volume in _volumes)
             {
-                StartDirectory = Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\"),
-                //IsReadOnly = !User.IsInRole("Administrators")
-                IsReadOnly = false, // Can be readonly according to user's membership permission
-                IsLocked = false, // If locked, files and directories cannot be deleted, renamed or moved
-                Alias = "Files", // Beautiful name given to the root/home folder
-                //MaxUploadSizeInKb = 2048, // Limit imposed to user uploaded file <= 2048 KB
-                //DefaultAttribute = new ItemAttribute
-                //{
-                //    Locked = true,
-                //    Read = false,
-                //    Write = false
-                //},
-                ItemAttributes = new HashSet<SpecificItemAttribute>()
+                volume.ItemAttributes = new HashSet<SpecificItemAttribute>()
                 {
-                    new SpecificItemAttribute(Startup.MapPath("~/upload/ReadWrite/Prohibited/test\\asd/"))
+                    new SpecificItemAttribute($"{volume.RootDirectory}{volume.DirectorySeparatorChar}init")
                     {
-                        Write = false,
-                        Locked = true,
-                        Read = false
+                        Locked = true, Read = true, Write = false
+                    },
+                    new SpecificItemAttribute($"{volume.RootDirectory}{volume.DirectorySeparatorChar}halo.txt")
+                    {
+                        Locked = true, Read = true, Write = false
                     }
-                },
-                ThumbnailSize = 128
-            };
-
-            driver.AddRoot(root);
-
-            return new Connector(driver)
-            {
-                // This allows support for the "onlyMimes" option on the client.
-                MimeDetect = MimeDetectOption.Internal
-            };
+                };
+                _connector.AddVolume(volume);
+                volume.Driver.AddVolume(volume);
+            }
         }
     }
 }

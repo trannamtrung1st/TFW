@@ -1,6 +1,10 @@
-using elFinder.NetCore.Helpers;
+using elFinder.Net.AspNetCore.Extensions;
+using elFinder.Net.Core;
+using elFinder.Net.Drivers.FileSystem.Extensions;
+using elFinder.Net.Drivers.FileSystem.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,20 +12,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using System.Threading.Tasks;
+using TFW.Framework.FileManager.Examples.Volumes;
 
 namespace TFW.Framework.FileManager.Examples
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            WebRootPath = env.WebRootPath;
         }
-
-        public IConfiguration Configuration { get; }
 
         public static string WebRootPath { get; private set; }
 
@@ -33,28 +35,62 @@ namespace TFW.Framework.FileManager.Examples
             }
 
             path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
-            return PathHelper.GetFullPathNormalized(Path.Combine(basePath, path));
+            return PathHelper.GetFullPath(basePath, path);
         }
+
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddJsonOptions(opt =>
+            #region elFinder
+            services.AddElFinderAspNetCore(connector => connector.MimeDetect = MimeDetectOption.Internal)
+                .AddFileSystemDriver();
+
+            services.AddTransient<IVolume>(provider =>
+            {
+                var driver = provider.GetRequiredService<IDriver>();
+                var volume = new Volume1(driver,
+                    MapPath("~/upload"), $"/upload/", $"/api/files/thumb/")
                 {
-                    var serializerOpt = opt.JsonSerializerOptions;
-                    serializerOpt.AllowTrailingCommas = true;
-                    serializerOpt.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-                })
-                .AddNewtonsoftJson();
+                    StartDirectory = MapPath("~/upload/start"),
+                    Name = "Volume 1",
+                    ThumbnailDirectory = PathHelper.GetFullPath("./thumb")
+                };
+                return volume;
+            });
+
+            services.AddTransient<IVolume>(provider =>
+            {
+                var driver = provider.GetRequiredService<IDriver>();
+                var volume = new Volume2(driver,
+                    MapPath("~/upload-2"), $"/upload-2/", $"/api/files/thumb/")
+                {
+                    StartDirectory = MapPath("~/upload-2/start"),
+                    Name = "Volume 2"
+                };
+                return volume;
+            });
+            #endregion
+
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
 
             services.AddRazorPages();
+            services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IEnumerable<IVolume> volumes)
         {
-            WebRootPath = env.WebRootPath;
+            // elFinder
+            var setupTasks = volumes.Select(async volume => await volume.Driver.SetupVolumeAsync(volume)).ToArray();
+            Task.WaitAll(setupTasks);
 
             if (env.IsDevelopment())
             {
@@ -68,16 +104,14 @@ namespace TFW.Framework.FileManager.Examples
             }
 
             app.UseHttpsRedirection();
+            app.UseResponseCompression();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-
                 endpoints.MapControllers();
             });
         }

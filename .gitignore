@@ -341,3 +341,4 @@ healthchecksdb
 /WPF/WPFApp/Medias/
 TFW.WebAPI/logs/
 TFW.Framework.FileManager.Examples/wwwroot/upload/
+TFW.Framework.FileManager.Examples/wwwroot/upload-2/
