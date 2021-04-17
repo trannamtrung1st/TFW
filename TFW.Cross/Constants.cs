@@ -11,6 +11,11 @@ namespace TFW.Cross
 {
     public static class ConfigConsts
     {
+        public static class i18n
+        {
+            public const string ResourcePath = "Resources";
+        }
+
         public static class CommandLine
         {
             public const string WindowsCmd = "cmd.exe";

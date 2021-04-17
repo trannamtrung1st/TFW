@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Framework.Configuration
 {
-    public static class CommonConsts
+    public static class ConfigFiles
     {
         public static class AppSettings
         {

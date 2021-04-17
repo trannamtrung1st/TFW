@@ -31,7 +31,7 @@ namespace TFW.Framework.Configuration
         }
 
         public static IServiceCollection AddJsonConfigurationManager(this IServiceCollection services,
-            string jsonFile = CommonConsts.AppSettings.Default,
+            string jsonFile = ConfigFiles.AppSettings.Default,
             string fallbackJsonFile = null,
             IJsonConfigurationManager customManager = null)
         {

@@ -19,11 +19,11 @@ namespace TFW.Framework.Web.Options
         }
     }
 
-    public class FrameworkOptionsConfigurator
+    public class FrameworkOptionsBuilder
     {
         public IDictionary<object, Type[]> ShouldSkipFilterTypesMap { get; }
 
-        public FrameworkOptionsConfigurator()
+        public FrameworkOptionsBuilder()
         {
             ShouldSkipFilterTypesMap = new Dictionary<object, Type[]>();
         }

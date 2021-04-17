@@ -59,9 +59,9 @@ namespace TFW.Framework.Web
         }
 
         public static IServiceCollection ConfigureFrameworkOptions(this IServiceCollection services,
-            FrameworkOptionsConfigurator configurator)
+            FrameworkOptionsBuilder builder)
         {
-            var original = configurator.Build();
+            var original = builder.Build();
 
             return services.Configure<FrameworkOptions>(opt => opt.CopyFrom(original));
         }

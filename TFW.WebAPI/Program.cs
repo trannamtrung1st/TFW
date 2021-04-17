@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -8,12 +9,16 @@ using Serilog.Configuration;
 using Serilog.Events;
 using TFW.Cross;
 using TFW.Data.Core;
+using TFW.Framework.Configuration;
 using TFW.Framework.EFCore.Migration;
 
 namespace TFW.WebAPI
 {
     public class Program
     {
+        public const string DefaultJsonFile = ConfigFiles.AppSettings.Default;
+        public static string EnvJsonFile { get; private set; } = ConfigFiles.AppSettings.DefaultEnv;
+
         public static int Main(string[] args)
         {
             using var hostLogger = new LoggerConfiguration()
@@ -46,14 +51,25 @@ namespace TFW.WebAPI
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                // Automatically call AddUserSecrets
-                //.ConfigureAppConfiguration((hostContext, builder) =>
-                //{
-                //    if (hostContext.HostingEnvironment.IsDevelopment())
-                //    {
-                //        builder.AddUserSecrets<Program>();
-                //    }
-                //})
+                .ConfigureAppConfiguration((hostContext, builder) =>
+                {
+                    var env = hostContext.HostingEnvironment;
+                    EnvJsonFile = EnvJsonFile.Replace(ConfigFiles.AppSettings.EnvPlaceholder, env.EnvironmentName);
+
+                    /*
+                     * Default config sources:
+                     * 1. Chained
+                     * 2. Json: appsettings, appsettings.{env}, secrets
+                     * 3. Environment variables
+                     * 4. Command line
+                     */
+
+                    // Automatically call AddUserSecrets
+                    //if (hostContext.HostingEnvironment.IsDevelopment())
+                    //{
+                    //    builder.AddUserSecrets<Program>(optional: true, reloadOnChange: true);
+                    //}
+                })
                 .UseSerilog((context, services, configuration) => configuration
                     .ReadFrom.Configuration(context.Configuration, sectionName: nameof(Serilog))
                     .ReadFrom.Services(services))
