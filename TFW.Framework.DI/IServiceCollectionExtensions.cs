@@ -11,8 +11,7 @@ using TFW.Framework.DI.Exceptions;
 
 namespace TFW.Framework.DI
 {
-
-    public static class ConfigHelper
+    public static class IServiceCollectionExtensions
     {
         public static IServiceCollection AddKeyedServiceManager(this IServiceCollection services,
             out IKeyedServiceManager manager)
