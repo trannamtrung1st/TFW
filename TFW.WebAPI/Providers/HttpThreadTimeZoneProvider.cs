@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using TFW.Framework.i18n;
+using TFW.Framework.i18n.TimeZone;
 using TFW.Framework.Web.Features;
 
 namespace TFW.WebAPI.Providers

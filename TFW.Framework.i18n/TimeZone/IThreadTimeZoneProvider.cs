@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.i18n
+namespace TFW.Framework.i18n.TimeZone
 {
     public interface IThreadTimeZoneProvider
     {

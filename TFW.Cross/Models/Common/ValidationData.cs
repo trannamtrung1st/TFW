@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TFW.Cross.Models.Exceptions;
-using TFW.Framework.Common.Extensions;
 
 namespace TFW.Cross.Models.Common
 {
@@ -49,14 +49,9 @@ namespace TFW.Cross.Models.Common
             IsValid = true;
         }
 
-        public ValidationData Fail(string mess = null, ResultCode? code = null, object data = null)
+        public ValidationData Fail(string mess = null, ResultCode? code = null, object data = null, IStringLocalizer localizer = null)
         {
-            Details.Add(new AppResult
-            {
-                Message = mess ?? code?.Display().Name,
-                Data = data,
-                Code = code
-            });
+            Details.Add(AppResult.OfCode(code, data, mess, localizer));
 
             IsValid = false;
 

@@ -189,7 +189,7 @@ namespace TFW.Business.Core.Services
             }
 
             foreach (var err in result.Errors)
-                validationData.Fail(err.Description, ResultCode.Identity_FailToRegisterUser, err);
+                validationData.Fail(code: ResultCode.Identity_FailToRegisterUser, data: err);
 
             throw validationData.BuildException();
         }
@@ -216,7 +216,7 @@ namespace TFW.Business.Core.Services
             if (result.Succeeded) return;
 
             foreach (var err in result.Errors)
-                validationData.Fail(err.Description, ResultCode.Identity_FailToChangeUserRoles, err);
+                validationData.Fail(code: ResultCode.Identity_FailToChangeUserRoles, data: err);
 
             throw validationData.BuildException();
         }
@@ -243,7 +243,7 @@ namespace TFW.Business.Core.Services
             if (result.Succeeded) return;
 
             foreach (var err in result.Errors)
-                validationData.Fail(err.Description, ResultCode.Identity_FailToChangeUserRoles, err);
+                validationData.Fail(code: ResultCode.Identity_FailToChangeUserRoles, data: err);
 
             throw validationData.BuildException();
         }

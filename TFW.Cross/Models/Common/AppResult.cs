@@ -24,6 +24,8 @@ namespace TFW.Cross.Models.Common
 
     public class AppResult : AppResult<object>
     {
+        public AppResult() { }
+
         public static AppResult Success(object data = null, string mess = null, IStringLocalizer localizer = null)
         {
             localizer ??= BusinessContext.Current.ResultCodeLocalizer;
@@ -112,13 +114,13 @@ namespace TFW.Cross.Models.Common
             };
         }
 
-        public static AppResult OfCode(ResultCode code, object data = null, string mess = null, IStringLocalizer localizer = null)
+        public static AppResult OfCode(ResultCode? code, object data = null, string mess = null, IStringLocalizer localizer = null)
         {
             localizer ??= BusinessContext.Current.ResultCodeLocalizer;
             return new AppResult
             {
                 Code = code,
-                Message = mess ?? localizer[code.Display().Name],
+                Message = mess ?? (code != null ? localizer[code.Display().Name] : null),
                 Data = data,
             };
         }
