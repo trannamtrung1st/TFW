@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.i18n;
-using TFW.Framework.i18n.Helpers;
+using TFW.Framework.i18n.Extensions;
 
 namespace TFW.Framework.Web.Bindings
 {

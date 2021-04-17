@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Cross.Requirements;
-using TFW.Framework.Security.Helpers;
+using TFW.Framework.Security.Extensions;
 
 namespace TFW.WebAPI.Handlers
 {

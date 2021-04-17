@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Framework.Common.Helpers;
-using TFW.Framework.Configuration.Helpers;
+using TFW.Framework.Common.Extensions;
+using TFW.Framework.Configuration.Extensions;
 
 namespace TFW.Framework.Configuration
 {

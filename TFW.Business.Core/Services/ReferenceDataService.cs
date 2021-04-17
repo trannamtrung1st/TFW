@@ -7,7 +7,7 @@ using TFW.Business.Services;
 using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Setting;
 using TFW.Data.Core;
-using TFW.Framework.AutoMapper.Helpers;
+using TFW.Framework.AutoMapper;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.i18n.Helpers;
 

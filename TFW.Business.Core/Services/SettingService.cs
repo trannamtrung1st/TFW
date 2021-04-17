@@ -8,10 +8,9 @@ using TFW.Cross;
 using TFW.Cross.Models.Setting;
 using TFW.Data.Core;
 using TFW.Framework.Configuration;
-using TFW.Framework.Configuration.Helpers;
-using TFW.Framework.Configuration.Services;
+using TFW.Framework.Configuration.Extensions;
 using TFW.Framework.DI.Attributes;
-using TFW.Framework.SimpleMail.Options;
+using TFW.Framework.SimpleMail;
 
 namespace TFW.Business.Core.Services
 {

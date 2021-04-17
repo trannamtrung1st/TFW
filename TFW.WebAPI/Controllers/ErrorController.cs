@@ -12,7 +12,7 @@ using TFW.Cross.Models.Common;
 using TFW.Cross.Models.Exceptions;
 using TFW.Cross.Models.Setting;
 using TFW.Data;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.Common.Extensions;
 using TFW.Framework.Web.Features;
 
 namespace TFW.WebAPI.Controllers

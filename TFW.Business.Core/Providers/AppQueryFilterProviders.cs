@@ -9,7 +9,7 @@ using TFW.Cross;
 using TFW.Cross.Entities;
 using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Context;
-using TFW.Framework.EFCore.Helpers;
+using TFW.Framework.EFCore.Extensions;
 using TFW.Framework.EFCore.Options;
 using TFW.Framework.EFCore.Providers;
 

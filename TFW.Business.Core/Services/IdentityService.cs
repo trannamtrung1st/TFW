@@ -21,11 +21,11 @@ using TFW.Cross.Models.Identity;
 using TFW.Cross.Models.Setting;
 using TFW.Cross.Providers;
 using TFW.Data.Core;
-using TFW.Framework.AutoMapper.Helpers;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.AutoMapper;
+using TFW.Framework.Common.Extensions;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Queries;
-using TFW.Framework.Security.Helpers;
+using TFW.Framework.Security.Extensions;
 
 namespace TFW.Business.Core.Services
 {

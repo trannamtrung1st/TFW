@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Framework.Common.Extensions;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.ConsoleApp;
 

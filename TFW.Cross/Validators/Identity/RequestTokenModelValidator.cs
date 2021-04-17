@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using TFW.Cross.Models.Exceptions;
 using TFW.Cross.Models.Identity;
-using TFW.Framework.Validations.Fluent.Providers;
-using TFW.Framework.Validations.Fluent.Validators;
+using TFW.Framework.Validations.Fluent;
 
 namespace TFW.Cross.Validators.Identity
 {

@@ -14,7 +14,7 @@ using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Sinks.Async;
-using TFW.Framework.Configuration.Helpers;
+using TFW.Framework.Configuration.Extensions;
 
 namespace TFW.Framework.Logging.Examples
 {

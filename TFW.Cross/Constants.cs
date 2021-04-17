@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TFW.Cross.Models.Setting;
-using TFW.Framework.Logging.Serilog.Web.Options;
+using TFW.Framework.Logging.Serilog.Web;
 
 namespace TFW.Cross
 {

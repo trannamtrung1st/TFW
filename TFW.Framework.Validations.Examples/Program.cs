@@ -17,7 +17,7 @@ namespace TFW.Framework.Validations.Examples
                 }
             };
 
-            consoleProgram.Tasks.AddRange(ConfigHelper.FindFromAssemblies(Assembly.GetEntryAssembly()));
+            consoleProgram.Tasks.AddRange(ConsoleTaskHelper.FindFromAssemblies(Assembly.GetEntryAssembly()));
 
             consoleProgram.StartAsync().Wait();
         }

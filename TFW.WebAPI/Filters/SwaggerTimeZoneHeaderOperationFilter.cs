@@ -4,7 +4,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.Common.Extensions;
 using TFW.Framework.Web.Options;
 
 namespace TFW.WebAPI.Filters

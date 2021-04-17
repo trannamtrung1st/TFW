@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TFW.Framework.Validations.Examples.Models;
-using TFW.Framework.Validations.Fluent.Helpers;
-using TFW.Framework.Validations.Fluent.Validators;
+using TFW.Framework.Validations.Fluent;
+using TFW.Framework.Validations.Fluent.Extensions;
 
 namespace TFW.Framework.Validations.Examples.Validators
 {

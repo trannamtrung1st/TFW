@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.Common.Extensions;
 
 namespace TFW.Framework.Common.Examples
 {

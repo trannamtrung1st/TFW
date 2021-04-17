@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
-using TFW.Framework.SimpleMail.Helpers;
-using TFW.Framework.SimpleMail.Models;
-using TFW.Framework.SimpleMail.Options;
-using TFW.Framework.SimpleMail.Services;
+using TFW.Framework.SimpleMail;
+using TFW.Framework.SimpleMail.Extensions;
 
 namespace TFW.Framework.Mail.Examples
 {

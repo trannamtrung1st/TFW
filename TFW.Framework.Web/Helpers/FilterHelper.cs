@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TFW.Framework.Web.Attributes;
 using TFW.Framework.Web.Options;
 
 namespace TFW.Framework.Web.Helpers
 {
     public static class FilterHelper
     {
-        public static bool ShouldSkip(this object filter, ActionExecutingContext context)
+        public static bool ShouldSkip(object filter, ActionExecutingContext context)
         {
             var options = context.HttpContext.RequestServices
                 .GetRequiredService<IOptions<FrameworkOptions>>().Value;
@@ -30,7 +29,7 @@ namespace TFW.Framework.Web.Helpers
                 && options.ShouldSkipFilterTypesMap[controllerType].Contains(filterType));
         }
 
-        public static bool ShouldSkip(this object filter, ActionExecutedContext context)
+        public static bool ShouldSkip(object filter, ActionExecutedContext context)
         {
             var options = context.HttpContext.RequestServices
                 .GetRequiredService<IOptions<FrameworkOptions>>().Value;

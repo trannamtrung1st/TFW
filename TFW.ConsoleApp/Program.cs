@@ -21,7 +21,7 @@ namespace TFW.ConsoleApp
 
             var assemblies = ReflectionHelper.GetAllAssemblies().ToArray();
 
-            consoleProgram.Tasks.AddRange(ConfigHelper.FindFromAssemblies(assemblies));
+            consoleProgram.Tasks.AddRange(ConsoleTaskHelper.FindFromAssemblies(assemblies));
 
             consoleProgram.TaskError += ConsoleProgram_TaskError;
 

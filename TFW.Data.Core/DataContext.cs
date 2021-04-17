@@ -12,7 +12,7 @@ using TFW.Cross.Entities;
 using TFW.Framework.Data;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
-using TFW.Framework.EFCore.Helpers;
+using TFW.Framework.EFCore.Extensions;
 using TFW.Framework.EFCore.Options;
 
 namespace TFW.Data.Core

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
 using TFW.Framework.DI.Attributes;
+using TFW.Framework.DI.Extensions;
 
 namespace TFW.Framework.DI.Examples
 {

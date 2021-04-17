@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TFW.Cross.Requirements;
 using TFW.Framework.i18n;
-using TFW.Framework.i18n.Helpers;
+using TFW.Framework.i18n.Extensions;
 
 namespace TFW.WebAPI.Handlers
 {

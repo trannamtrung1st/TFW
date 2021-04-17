@@ -10,7 +10,7 @@ using TFW.Cross;
 using TFW.Cross.Models.Exceptions;
 using TFW.Cross.Models.Identity;
 using TFW.Data;
-using TFW.Framework.Validations.Fluent.Providers;
+using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web.Attributes;
 using TFW.WebAPI.Filters;
 

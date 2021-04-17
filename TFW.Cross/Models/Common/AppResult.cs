@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.Common.Extensions;
 
 namespace TFW.Cross.Models.Common
 {

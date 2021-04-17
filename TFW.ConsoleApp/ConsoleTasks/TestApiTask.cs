@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.ConsoleApp;
-using TFW.Framework.Http.Helpers;
+using TFW.Framework.Http.Extensions;
 
 namespace TFW.ConsoleApp.ConsoleTasks
 {

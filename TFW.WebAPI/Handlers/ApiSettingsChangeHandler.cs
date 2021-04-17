@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TFW.Framework.AutoMapper.Helpers;
+using TFW.Framework.AutoMapper;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.Web.Handlers;
 using TFW.WebAPI.Models;

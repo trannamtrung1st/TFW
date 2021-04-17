@@ -8,7 +8,7 @@ using System.Net;
 using TFW.Cross;
 using TFW.Cross.Models.Common;
 using TFW.Data;
-using TFW.Framework.Security.Helpers;
+using TFW.Framework.Security.Extensions;
 
 namespace TFW.WebAPI.Controllers
 {

@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Cross.Models.Common;
-using TFW.Framework.AutoMapper.Helpers;
+using TFW.Framework.AutoMapper;
 using TFW.Framework.DI.Attributes;
-using TFW.Framework.Validations.Fluent.Providers;
+using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web.Handlers;
 using TFW.Framework.Web.Helpers;
 
@@ -27,7 +27,7 @@ namespace TFW.WebAPI.Handlers
 
         public void OnActionExecuting(ActionExecutingContext context, object filter)
         {
-            if (context.ModelState.IsValid || filter.ShouldSkip(context)) return;
+            if (context.ModelState.IsValid || FilterHelper.ShouldSkip(filter, context)) return;
 
             var resultProvider = context.HttpContext.RequestServices.GetRequiredService<IValidationResultProvider>();
 

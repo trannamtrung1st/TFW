@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TFW.Framework.i18n;
-using TFW.Framework.i18n.Helpers;
+using TFW.Framework.i18n.Extensions;
 
 namespace TFW.Cross.Models.AppUser
 {

@@ -1,78 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
+using TFW.Framework.Common.Extensions;
 
 namespace TFW.Framework.Common.Helpers
 {
     public static class EnumHelper
     {
-        public const string AttributeNotFoundMessage = "No attribute of specified type found on this member";
-
-        public static string Description(this Enum enumVal, bool throwOnNotFound = true)
-        {
-            var enumType = enumVal.GetType();
-            var name = Enum.GetName(enumType, enumVal);
-
-            return enumType.Description(name, throwOnNotFound);
-        }
-
-        public static string Description(this Type enumType, string name, bool throwOnNotFound = true)
-        {
-            var desc = enumType.GetField(name).GetCustomAttributes(false)
-                .OfType<DescriptionAttribute>().SingleOrDefault();
-
-            if (desc == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
-
-            return desc?.Description;
-        }
-
-        public static string DisplayName(this Enum enumVal, bool throwOnNotFound = true)
-        {
-            var enumType = enumVal.GetType();
-            var name = Enum.GetName(enumType, enumVal);
-
-            return enumType.DisplayName(name, throwOnNotFound);
-        }
-
-        public static string DisplayName(this Type enumType, string enumName, bool throwOnNotFound = true)
-        {
-            var displayNameAttr = enumType.GetField(enumName).GetCustomAttributes(false)
-                .OfType<DisplayNameAttribute>().SingleOrDefault();
-
-            if (displayNameAttr == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
-
-            return displayNameAttr?.DisplayName;
-        }
-
-        public static DisplayAttribute Display(this Enum enumVal, bool throwOnNotFound = true)
-        {
-            var enumType = enumVal.GetType();
-            var name = Enum.GetName(enumType, enumVal);
-
-            return enumType.Display(name, throwOnNotFound);
-        }
-
-        public static DisplayAttribute Display(this Type enumType, string name, bool throwOnNotFound = true)
-        {
-            var displayAttr = enumType.GetField(name).GetCustomAttributes(false)
-                .OfType<DisplayAttribute>().SingleOrDefault();
-
-            if (displayAttr == null && throwOnNotFound) throw new InvalidOperationException(AttributeNotFoundMessage);
-
-            return displayAttr;
-        }
-
-        public static IEnumerable<Type> GetValues<Type>()
-        {
-            var type = typeof(Type);
-            var enumType = typeof(Enum);
-            var enums = type.GetFields().Where(f => f.FieldType.IsSubclassOf(enumType));
-            return enums.Select(f => (Type)f.GetValue(null));
-        }
-
         public static (int, DisplayAttribute)[] ToDisplayList()
         {
             var type = typeof(Type);
@@ -91,19 +26,12 @@ namespace TFW.Framework.Common.Helpers
             return enums.Select(o => ((int)o.GetRawConstantValue(), o.FieldType.DisplayName(o.Name))).ToArray();
         }
 
-        public static string Name(this Enum enumVal)
+        public static IEnumerable<Type> GetValues<Type>()
         {
-            return Enum.GetName(enumVal.GetType(), enumVal);
-        }
-
-        public static string ToStringF(this Enum enumVal)
-        {
-            return enumVal.ToString("F");
-        }
-
-        public static string ToStringG(this Enum enumVal)
-        {
-            return enumVal.ToString("G");
+            var type = typeof(Type);
+            var enumType = typeof(Enum);
+            var enums = type.GetFields().Where(f => f.FieldType.IsSubclassOf(enumType));
+            return enums.Select(f => (Type)f.GetValue(null));
         }
     }
 }

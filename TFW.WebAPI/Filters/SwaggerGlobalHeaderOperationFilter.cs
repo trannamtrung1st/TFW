@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TFW.Framework.Common.Helpers;
+using TFW.Framework.Common.Extensions;
 
 namespace TFW.WebAPI.Filters
 {
