@@ -27,6 +27,7 @@ using TFW.Framework.Data;
 using TFW.Framework.Data.Options;
 using TFW.Framework.Data.SqlServer;
 using TFW.Framework.EFCore;
+using TFW.Framework.i18n;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Bindings;
@@ -243,6 +244,11 @@ namespace TFW.WebAPI
 
         public static IServiceCollection AddWebFrameworks(this IServiceCollection services)
         {
+#if false
+            services.ScanInMemoryResources(TempAssemblyList)
+                .AddInMemoryLocalizer();
+#endif
+
             services.AddLocalization(options => options.ResourcesPath = ConfigConsts.i18n.ResourcePath);
 
             services.AddControllers(options =>

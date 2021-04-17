@@ -8,6 +8,15 @@ using TFW.Framework.Validations.Fluent;
 
 namespace TFW.Cross.Validators.Identity
 {
+    internal static class RegisterModelRuleBuilderExtensions
+    {
+        public static IRuleBuilderOptions<RegisterModel, T> InvalidState<T>(this
+            IRuleBuilderOptions<RegisterModel, T> builder)
+        {
+            return builder.WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+        }
+    }
+
     public class RegisterModelValidator : LocalizedSafeValidator<RegisterModel, RegisterModelValidator>
     {
         public static class Message
@@ -19,24 +28,25 @@ namespace TFW.Cross.Validators.Identity
             IStringLocalizer<RegisterModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             RuleFor(model => model.username)
-                .NotEmpty().MinimumLength(5).MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+                .NotEmpty().InvalidState()
+                .Length(5, 100).InvalidState();
 
             RuleFor(model => model.password)
-                .NotEmpty().MinimumLength(6).MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+                .NotEmpty().InvalidState()
+                .MinimumLength(6).InvalidState()
+                .MaximumLength(100).InvalidState();
 
             RuleFor(model => model.confirmPassword)
                 .Equal(model => model.password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
-                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+                .InvalidState();
 
             RuleFor(model => model.fullName)
-                .NotEmpty().MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+                .NotEmpty().InvalidState()
+                .MaximumLength(100).InvalidState();
 
             RuleFor(model => model.email)
-                .EmailAddress().MaximumLength(100)
-                .WithState(model => ResultCode.Identity_InvalidRegisterRequest);
+                .EmailAddress().InvalidState()
+                .MaximumLength(100).InvalidState();
         }
     }
 }

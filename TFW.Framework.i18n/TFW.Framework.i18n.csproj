@@ -7,11 +7,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.12" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="3.1.12" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.12" />
     <PackageReference Include="NodaTime" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Localization\" />
+    <ProjectReference Include="..\TFW.Framework.Common\TFW.Framework.Common.csproj" />
   </ItemGroup>
 
 </Project>

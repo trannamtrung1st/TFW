@@ -26,7 +26,7 @@ namespace TFW.WebAPI.Filters
                 operation.Parameters = new List<OpenApiParameter>();
 
             var acceptLanguages = _localizationOptions.SupportedUICultures.Select(
-                o => new OpenApiString(o.TwoLetterISOLanguageName) as IOpenApiAny).ToList();
+                o => new OpenApiString(o.Name) as IOpenApiAny).ToList();
 
             operation.Parameters.Add(new OpenApiParameter
             {
