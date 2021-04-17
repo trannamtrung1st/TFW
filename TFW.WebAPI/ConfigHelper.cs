@@ -317,14 +317,24 @@ namespace TFW.WebAPI
 
         public static IServiceCollection ConfigureAppOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)))
-                .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)))
-                .Configure<ApiSettings>(configuration.GetSection(nameof(ApiSettings)))
-                .Configure<ApiBehaviorOptions>(options =>
-                {
-                    options.SuppressModelStateInvalidFilter = true;
-                })
-                .Configure<RequestLocalizationOptions>(options =>
+            return services.ConfigureSettings(configuration)
+                .ConfigureInternationalization()
+                .ConfigureApi()
+                .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
+                .ConfigureFrameworkOptions(FrameworkOptionsBuilder);
+        }
+
+        public static IServiceCollection ConfigureApi(this IServiceCollection services)
+        {
+            return services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+        }
+
+        public static IServiceCollection ConfigureInternationalization(this IServiceCollection services)
+        {
+            return services.Configure<RequestLocalizationOptions>(options =>
                 {
                     var supportedCultures = Settings.App.SupportedCultureNames.ToArray();
                     options.SetDefaultCulture(supportedCultures[0])
@@ -334,9 +344,7 @@ namespace TFW.WebAPI
                     options.FallBackToParentUICultures = true;
                     //options.RequestCultureProviders = ...
                 })
-                .ConfigureAppRequestTimeZone()
-                .ConfigureGlobalQueryFilter(new[] { typeof(DataContext).Assembly })
-                .ConfigureFrameworkOptions(FrameworkOptionsBuilder);
+                .ConfigureAppRequestTimeZone();
         }
 
         public static IServiceCollection ConfigureAppRequestTimeZone(this IServiceCollection services)
@@ -352,6 +360,13 @@ namespace TFW.WebAPI
                 // First detection will be used
                 opt.AddHeader().AddHeaderClient();
             });
+        }
+
+        public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)))
+                .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)))
+                .Configure<ApiSettings>(configuration.GetSection(nameof(ApiSettings)));
         }
 
         public static IApplicationBuilder UseRequestDataExtraction(this IApplicationBuilder app)
