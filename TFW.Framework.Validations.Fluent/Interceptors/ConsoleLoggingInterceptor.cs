@@ -14,11 +14,25 @@ namespace TFW.Framework.Validations.Fluent.Interceptors
         {
         }
 
+        public ValidationResult AfterAspNetValidation(ActionContext actionContext, IValidationContext validationContext, ValidationResult result)
+        {
+            Console.WriteLine("After ASP.NET validation");
+
+            return result;
+        }
+
         public ValidationResult AfterMvcValidation(ControllerContext controllerContext, IValidationContext commonContext, ValidationResult result)
         {
             Console.WriteLine("After MVC validation");
 
             return result;
+        }
+
+        public IValidationContext BeforeAspNetValidation(ActionContext actionContext, IValidationContext commonContext)
+        {
+            Console.WriteLine("Before ASP.NET validation");
+
+            return commonContext;
         }
 
         public IValidationContext BeforeMvcValidation(ControllerContext controllerContext, IValidationContext commonContext)
