@@ -48,4 +48,17 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\TFW\Cross\Validators\AppUser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\TFW\Cross\Validators\Identity\RegisterModelValidator.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\TFW\Cross\Validators\Identity\RegisterModelValidator.vi.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

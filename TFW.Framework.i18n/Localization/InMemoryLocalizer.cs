@@ -20,9 +20,9 @@ namespace TFW.Framework.i18n.Localization
             _options = options.Value;
         }
 
-        public LocalizedString this[string name] => GetValue(name);
+        public LocalizedString this[string name] => GetString(name);
 
-        public LocalizedString this[string name, params object[] arguments] => GetValue(name, arguments);
+        public LocalizedString this[string name, params object[] arguments] => GetString(name, arguments);
 
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
@@ -50,22 +50,10 @@ namespace TFW.Framework.i18n.Localization
 
         public IStringLocalizer WithCulture(CultureInfo culture)
         {
-            IDictionary<string, IDictionary<string, string>> typedResources;
-            IDictionary<string, string> resources = null;
-
-            if (_options.Resources.TryGetValue(_contextType, out typedResources))
-            {
-                if (!typedResources.TryGetValue(culture.Name, out resources)
-                    && !typedResources.TryGetValue(culture.TwoLetterISOLanguageName, out resources))
-                    typedResources.TryGetValue(string.Empty, out resources);
-            }
-
-            if (resources == null) return null;
-
-            return new SpecificCultureInMemoryLocalizer<T>(culture, resources);
+            throw new NotSupportedException();
         }
 
-        private LocalizedString GetValue(string name, params object[] args)
+        private LocalizedString GetString(string name, params object[] args)
         {
             var currentUiCulture = CultureInfo.CurrentUICulture.Name;
             var currentUiLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;

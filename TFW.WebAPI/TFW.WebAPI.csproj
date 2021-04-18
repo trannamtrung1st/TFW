@@ -33,6 +33,7 @@
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
     <ProjectReference Include="..\TFW.Framework.Data\TFW.Framework.Data.csproj" />
     <ProjectReference Include="..\TFW.Framework.EFCore\TFW.Framework.EFCore.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Localization.Json\TFW.Framework.Localization.Json.csproj" />
     <ProjectReference Include="..\TFW.Framework.SimpleMail\TFW.Framework.SimpleMail.csproj" />
     <ProjectReference Include="..\TFW.Framework.Validations.ModelValidation\TFW.Framework.Validations.ModelValidation.csproj" />
     <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />

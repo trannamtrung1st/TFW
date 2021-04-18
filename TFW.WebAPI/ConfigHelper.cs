@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System;
@@ -28,6 +30,7 @@ using TFW.Framework.Data.Options;
 using TFW.Framework.Data.SqlServer;
 using TFW.Framework.EFCore;
 using TFW.Framework.i18n;
+using TFW.Framework.Localization.Json;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Bindings;
@@ -247,6 +250,16 @@ namespace TFW.WebAPI
 #if false
             services.ScanInMemoryResources(TempAssemblyList)
                 .AddInMemoryLocalizer();
+#endif
+
+#if false
+            services.Configure<JsonLocalizerOptions>(options =>
+            {
+                options.CacheEntryConfiguration = (entry) => entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+                options.ResourcesPath = ConfigConsts.i18n.ResourcePath;
+                options.BasePath = AppDomain.CurrentDomain.BaseDirectory;
+                options.Cache = new MemoryCache(Options.Create(new MemoryCacheOptions()));
+            }).AddJsonLocalizer();
 #endif
 
             services.AddLocalization(options => options.ResourcesPath = ConfigConsts.i18n.ResourcePath);
