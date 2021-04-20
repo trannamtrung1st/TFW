@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -36,7 +37,7 @@ namespace TFW.Business.Core.Services
             var smtpOption = _configurationRoot.Parse<SmtpOption>(nameof(SmtpOption));
 
             smtpOption.UserName = model.UserName;
-            config[nameof(SmtpOption)] = smtpOption;
+            config[nameof(SmtpOption)] = JToken.FromObject(smtpOption);
 
             _configurationManager.SaveConfig(config);
 

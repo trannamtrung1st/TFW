@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace TFW.Framework.Configuration
     public interface IJsonConfigurationManager
     {
         T ParseCurrent<T>();
-        IDictionary<string, object> ParseCurrent();
+        JObject ParseCurrent();
         void SaveConfig(object config, Formatting formatting = Formatting.Indented);
     }
 
@@ -42,9 +43,9 @@ namespace TFW.Framework.Configuration
             return obj;
         }
 
-        public IDictionary<string, object> ParseCurrent()
+        public JObject ParseCurrent()
         {
-            return ParseCurrent<IDictionary<string, object>>();
+            return ParseCurrent<JObject>();
         }
 
         public void SaveConfig(object config, Formatting formatting = Formatting.Indented)
