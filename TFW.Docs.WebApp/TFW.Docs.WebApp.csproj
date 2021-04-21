@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
+  </ItemGroup>
+
+</Project>

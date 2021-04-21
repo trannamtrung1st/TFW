@@ -59,7 +59,7 @@ namespace TFW.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigHelper.Setup();
+            StartupConfig.Setup();
 
             ISecretsManager secretsManager;
             IServiceInjector serviceInjector;
@@ -72,8 +72,8 @@ namespace TFW.WebAPI
                 .AddHttpContextAccessor()
                 .AddHttpBusinessContextProvider()
                 .AddHttpUnitOfWorkProvider()
-                .AddServiceInjector(ConfigHelper.TempAssemblyList, out serviceInjector)
-                .ScanServices(ConfigHelper.TempAssemblyList, serviceInjector)
+                .AddServiceInjector(StartupConfig.TempAssemblyList, out serviceInjector)
+                .ScanServices(StartupConfig.TempAssemblyList, serviceInjector)
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestFeatureMiddleware()
@@ -110,7 +110,7 @@ namespace TFW.WebAPI
             // AutoMapper
             var mapConfig = new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(ConfigHelper.TempAssemblyList);
+                cfg.AddMaps(StartupConfig.TempAssemblyList);
             });
             GlobalMapper.Init(mapConfig.CreateMapper());
 
@@ -211,7 +211,7 @@ namespace TFW.WebAPI
 
         private void OnApplicationStarted()
         {
-            ConfigHelper.Clean();
+            StartupConfig.Clean();
         }
 
         private void OnApplicationStopped()

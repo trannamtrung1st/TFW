@@ -13,7 +13,7 @@ namespace TFW.Cross
     {
         public static class i18n
         {
-            public const string ResourcePath = "Resources";
+            public const string ResourcesPath = "Resources";
         }
 
         public static class CommandLine
