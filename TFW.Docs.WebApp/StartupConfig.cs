@@ -44,7 +44,10 @@ namespace TFW.Docs.WebApp
         {
             services.AddLocalization(options => options.ResourcesPath = ConfigConsts.i18n.ResourcesPath);
 
-            services.AddRazorPages()
+            services.AddRazorPages(options =>
+            {
+                //options.Conventions.AddPageRoute();
+            })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 

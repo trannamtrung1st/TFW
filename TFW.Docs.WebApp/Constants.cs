@@ -24,4 +24,21 @@ namespace TFW.Docs.WebApp
             public const string ResourcesPath = "Resources";
         }
     }
+
+    public static class Routing
+    {
+        public static class Page
+        {
+            public const string Index = "/";
+
+            public static class Post
+            {
+                public const string Index = "/post";
+            }
+        }
+
+        public static class Api
+        {
+        }
+    }
 }
