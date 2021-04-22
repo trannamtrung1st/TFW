@@ -16,7 +16,7 @@ namespace TFW.Framework.EFCore.Extensions
 {
     public static class EntityConfigExtensions
     {
-        public static EntityTypeBuilder<T> ConfigureAuditableEntity<T>(this EntityTypeBuilder<T> builder,
+        public static EntityTypeBuilder<T> ConfigureAuditableEntityWithStringKey<T>(this EntityTypeBuilder<T> builder,
             int? userKeyStringLength = null,
             bool isUnicode = false) where T : class
         {

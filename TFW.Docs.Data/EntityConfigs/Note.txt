@@ -1,0 +1,4 @@
+﻿- DateTime should be stored in UTC and should never be stored with Date component only.
+Because: 01-01-2020 in VN can be different from US if we don't know exactly the time of it.
+
+- Price or money value should be in decimal (to keep the precision).
