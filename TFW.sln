@@ -153,7 +153,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Cross", "TFW.Docs.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.WebApp", "TFW.Docs.WebApp\TFW.Docs.WebApp.csproj", "{A3F2C5F1-9DBD-419E-8C93-556381D79A92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Docs.Data", "TFW.Docs.Data\TFW.Docs.Data.csproj", "{4758E0BD-C2EA-480E-8A21-C23527B76F82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Data", "TFW.Docs.Data\TFW.Docs.Data.csproj", "{4758E0BD-C2EA-480E-8A21-C23527B76F82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

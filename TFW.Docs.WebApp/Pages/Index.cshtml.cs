@@ -13,10 +13,6 @@ namespace TFW.Docs.WebApp.Pages
         {
         }
 
-        public string Title => Localizer[ResourceKeys.Title];
-
-        public string Description => Localizer[ResourceKeys.Description];
-
         public void OnGet()
         {
         }
