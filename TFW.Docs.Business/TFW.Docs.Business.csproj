@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
+    <ProjectReference Include="..\TFW.Docs.Data\TFW.Docs.Data.csproj" />
+    <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
+  </ItemGroup>
+
+</Project>

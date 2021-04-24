@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Dynamic.Core;
 using System.Text;
+using TFW.Docs.Cross.Models.Setting;
 
 namespace TFW.Docs.Cross
 {
@@ -10,6 +13,22 @@ namespace TFW.Docs.Cross
         public static class CommandLine
         {
             public const string WindowsCmd = "cmd.exe";
+        }
+
+    }
+
+    public static class DynamicLinq
+    {
+        private static ParsingConfig _defaultParsingConfig;
+        public static ParsingConfig DefaultParsingConfig
+        {
+            get => _defaultParsingConfig; set
+            {
+                if (_defaultParsingConfig != null)
+                    throw new InvalidOperationException($"Already initialized {nameof(DefaultParsingConfig)}");
+
+                _defaultParsingConfig = value;
+            }
         }
     }
 
@@ -130,6 +149,39 @@ namespace TFW.Docs.Cross
         public const char SortAscPrefix = 'a';
         public const int DefaultPage = 1;
         public const int DefaultPageLimit = 100;
+    }
+
+    public static class SecurityConsts
+    {
+        public const string OAuth2 = nameof(OAuth2);
+
+        public static class GrantType
+        {
+            public const string Password = "password";
+            public const string RefreshToken = "refresh_token";
+        }
+
+        public static class ClaimType
+        {
+            public const string AppScope = "appscope";
+        }
+
+        public static readonly TokenValidationParameters DefaultTokenParameters;
+
+        static SecurityConsts()
+        {
+            var jwtSettings = Settings.Get<JwtSettings>();
+            DefaultTokenParameters = new TokenValidationParameters()
+            {
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(jwtSettings.SecretKey)),
+                ClockSkew = TimeSpan.Zero
+            };
+        }
     }
 
 }

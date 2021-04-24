@@ -7,13 +7,12 @@ using System.Linq;
 using System.Text;
 using TFW.Docs.Cross.Entities;
 using TFW.Docs.Cross.Providers;
-using TFW.Docs.Data;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Extensions;
 using TFW.Framework.EFCore.Options;
 
-namespace TFW.Data.Core
+namespace TFW.Docs.Data
 {
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(DbContext))]
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IFullAuditableDbContext))]
