@@ -5,6 +5,14 @@ using System.Text;
 
 namespace TFW.Docs.Cross
 {
+    public static class ConfigConsts
+    {
+        public static class CommandLine
+        {
+            public const string WindowsCmd = "cmd.exe";
+        }
+    }
+
     public static class RoleName
     {
         public static IEnumerable<string> All = new[] { Administrator };
