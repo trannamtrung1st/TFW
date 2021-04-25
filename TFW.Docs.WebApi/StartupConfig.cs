@@ -31,6 +31,7 @@ using TFW.Docs.WebApi.Middlewares;
 using TFW.Docs.WebApi.Providers;
 using TFW.Docs.WebApi.Controllers;
 using TFW.Docs.Data;
+using Microsoft.AspNetCore.Authentication;
 
 namespace TFW.Docs.WebApi
 {
@@ -104,6 +105,7 @@ namespace TFW.Docs.WebApi
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddClientAuthentication()
                 .AddJwtBearer(jwtBearerOptions =>
                 {
                     jwtBearerOptions.TokenValidationParameters = SecurityConsts.DefaultTokenParameters;
@@ -122,6 +124,12 @@ namespace TFW.Docs.WebApi
                 });
 
             return services;
+        }
+
+        public static AuthenticationBuilder AddClientAuthentication(this AuthenticationBuilder builder)
+        {
+            return builder.AddScheme<BasicAuthenticationOptions, AppClientAuthenticationHandler>(
+                SecurityConsts.ClientAuthenticationScheme, options => { });
         }
 
         public static IServiceCollection AddAppAuthorization(this IServiceCollection services)

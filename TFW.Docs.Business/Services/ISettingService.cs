@@ -8,6 +8,7 @@ namespace TFW.Docs.Business.Services
 {
     public interface ISettingService
     {
+        Task<bool> GetInitStatusAsync();
         Task ChangeSmtpOptionAsync(ChangeSmtpOptionModel model);
         void ReloadConfiguration();
     }

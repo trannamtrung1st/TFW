@@ -21,7 +21,7 @@ namespace TFW.Docs.Cross.Validators.Identity
             RuleFor(request => request.grant_type).NotEmpty()
                 .WithState(request => invalidRequest);
 
-            When(request => request.grant_type == SecurityConsts.GrantType.Password, () =>
+            When(request => request.grant_type == SecurityConsts.GrantTypes.Password, () =>
             {
                 RuleFor(request => request.username).NotEmpty()
                     .WithState(request => invalidRequest);
@@ -30,7 +30,7 @@ namespace TFW.Docs.Cross.Validators.Identity
                     .WithState(request => invalidRequest);
             });
 
-            When(request => request.grant_type == SecurityConsts.GrantType.RefreshToken, () =>
+            When(request => request.grant_type == SecurityConsts.GrantTypes.RefreshToken, () =>
             {
                 RuleFor(request => request.refresh_token).NotEmpty()
                     .WithState(request => invalidRequest);

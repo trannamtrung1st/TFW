@@ -346,18 +346,41 @@ namespace TFW.Docs.Business.Core.Services
         #endregion
 
         #region OAuth
+        public Task<ClientInfo> AuthenticateClientAsync(string clientId, string clientSecret)
+        {
+            var clientInfo = AppClients.Known.FirstOrDefault(client => client.ClientId == clientId &&
+                (client.Type == ClientType.Public || client.ClientSecret == clientSecret));
+
+            return Task.FromResult(clientInfo);
+        }
+
+        public ClaimsPrincipal MapToClaimsPrincipal(ClientInfo clientInfo)
+        {
+            var identity = new ClaimsIdentity(SecurityConsts.ClientAuthenticationScheme);
+
+            identity.AddClaims(new[]
+            {
+                new Claim(identity.NameClaimType, clientInfo.ClientId),
+                new Claim(ClaimTypes.GivenName, clientInfo.Name),
+                new Claim(SecurityConsts.ClaimTypes.ClientType, clientInfo.Type.ToStringF())
+            });
+
+            var principal = new ClaimsPrincipal(identity);
+            return principal;
+        }
+
         public async Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel)
         {
             AppUser entity = null;
 
             switch (requestModel.grant_type)
             {
-                case SecurityConsts.GrantType.Password:
+                case SecurityConsts.GrantTypes.Password:
                     {
                         entity = await AuthenticateAsync(requestModel.username, requestModel.password);
                     }
                     break;
-                case SecurityConsts.GrantType.RefreshToken:
+                case SecurityConsts.GrantTypes.RefreshToken:
                     {
                         var validResult = ValidateRefreshToken(requestModel.refresh_token);
 
@@ -380,7 +403,7 @@ namespace TFW.Docs.Business.Core.Services
             {
                 // demo only, real scenario: validate requested scopes first --> ... 
                 var scopes = requestModel.scope.Split(',')
-                    .Select(scope => new Claim(SecurityConsts.ClaimType.AppScope, scope.Trim())).ToArray();
+                    .Select(scope => new Claim(SecurityConsts.ClaimTypes.AppScope, scope.Trim())).ToArray();
 
                 identity.AddClaims(scopes);
             }

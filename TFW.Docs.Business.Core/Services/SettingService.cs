@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json.Linq;
 using System;
@@ -34,6 +35,11 @@ namespace TFW.Docs.Business.Core.Services
             _configurationManager = configurationManager;
             _secretsManager = secretsManager;
             _configurationRoot = configuration as IConfigurationRoot;
+        }
+
+        public Task<bool> GetInitStatusAsync()
+        {
+            return dbContext.Users.AnyAsync();
         }
 
         public async Task ChangeSmtpOptionAsync(ChangeSmtpOptionModel model)

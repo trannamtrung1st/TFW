@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Dynamic.Core;
 using System.Text;
+using TFW.Docs.Cross.Models.Identity;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Framework.Logging.Serilog.Web;
 
@@ -186,16 +187,18 @@ namespace TFW.Docs.Cross
     public static class SecurityConsts
     {
         public const string OAuth2 = nameof(OAuth2);
+        public const string ClientAuthenticationScheme = "Client";
 
-        public static class GrantType
+        public static class GrantTypes
         {
             public const string Password = "password";
             public const string RefreshToken = "refresh_token";
         }
 
-        public static class ClaimType
+        public static class ClaimTypes
         {
             public const string AppScope = "appscope";
+            public const string ClientType = "clienttype";
         }
 
         public static readonly TokenValidationParameters DefaultTokenParameters;
@@ -214,6 +217,28 @@ namespace TFW.Docs.Cross
                 ClockSkew = TimeSpan.Zero
             };
         }
+    }
+
+    public enum ClientType
+    {
+        Confidential = 1,
+        Public = 2
+    }
+
+    public static class AppClients
+    {
+        public static readonly ClientInfo TFWDocsWebApp = new ClientInfo
+        {
+            ClientId = "tfw-docs-web-app",
+            ClientSecret = "ASIDOI291sad90-1248asd@!IASD1239azxitnq0707",
+            Name = "TFW.Docs Web Application",
+            Type = ClientType.Confidential
+        };
+
+        public static readonly IEnumerable<ClientInfo> Known = new[]
+        {
+            TFWDocsWebApp
+        };
     }
 
     public class RequestDataKey
@@ -295,6 +320,7 @@ namespace TFW.Docs.Cross
                 public const string Route = "api/settings";
                 public const string ChangeSmtpOption = "smtp";
                 public const string ReloadConfiguration = "reload";
+                public const string InitStatus = "init-status";
             }
 
             public static class Reference

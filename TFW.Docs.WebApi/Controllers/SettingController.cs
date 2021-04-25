@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TFW.Docs.Business;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
+using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Docs.Cross.Providers;
 using TFW.Framework.Web.Attributes;
@@ -27,6 +28,15 @@ namespace TFW.Docs.WebApi.Controllers
             ISettingService settingService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _settingService = settingService;
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<bool>))]
+        [HttpGet(Routing.Controller.Setting.InitStatus)]
+        public async Task<IActionResult> GetInitStatus()
+        {
+            var status = await _settingService.GetInitStatusAsync();
+
+            return Success(status);
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]

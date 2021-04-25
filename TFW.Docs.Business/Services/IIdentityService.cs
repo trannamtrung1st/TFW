@@ -12,6 +12,10 @@ namespace TFW.Docs.Business.Services
 {
     public interface IIdentityService
     {
+        Task<ClientInfo> AuthenticateClientAsync(string clientId, string clientSecret);
+
+        ClaimsPrincipal MapToClaimsPrincipal(ClientInfo clientInfo);
+
         Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
             GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null);
 

@@ -40,7 +40,6 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(data);
         }
 
-
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<int>))]
         [HttpGet(Routing.Controller.User.GetTotalUserCount)]
         public async Task<IActionResult> GetTotalUserCount()
