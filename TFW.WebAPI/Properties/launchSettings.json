@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51098/",
-      "sslPort": 44337
+      "applicationUrl": "http://localhost:57979/",
+      "sslPort": 44352
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -28,8 +28,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production",
-        "TFWConnectionString": "Server=localhost;Database=TFW;Trusted_Connection=False;User Id=sa;Password=123456;MultipleActiveResultSets=true"
+        "TFWConnectionString": "Server=localhost;Database=TFW;Trusted_Connection=False;User Id=sa;Password=123456;MultipleActiveResultSets=true",
+        "ASPNETCORE_ENVIRONMENT": "Production"
       }
     }
   }

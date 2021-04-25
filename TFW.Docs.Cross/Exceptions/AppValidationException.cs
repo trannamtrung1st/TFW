@@ -26,8 +26,8 @@ namespace TFW.Docs.Cross.Exceptions
 
         public static AppValidationException From(IStringLocalizer localizer, ResultCode resultCode, object data = null, string mess = null)
         {
-            var validationData = new ValidationData()
-                .Fail(localizer, mess, resultCode, data);
+            var validationData = new ValidationData(localizer)
+                .Fail(mess, resultCode, data);
 
             return From(localizer, validationData);
         }

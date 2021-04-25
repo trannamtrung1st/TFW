@@ -8,7 +8,7 @@ namespace TFW.Docs.Business.Core.Queries
 {
     public static class AppUserNamedQuery
     {
-        public static IQueryable<AppUser> ById(this IQueryable<AppUser> query, string id)
+        public static IQueryable<AppUser> ById(this IQueryable<AppUser> query, int id)
         {
             return query.Where(o => o.Id == id);
         }

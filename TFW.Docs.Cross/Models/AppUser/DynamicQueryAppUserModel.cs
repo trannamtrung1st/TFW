@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using TFW.Docs.Cross.Models.Common;
 using AU = TFW.Docs.Cross.Entities.AppUser;
 
@@ -10,7 +9,7 @@ namespace TFW.Docs.Cross.Models.AppUser
         protected override string[] DefaultFields { get; } = new[] { FieldInfo };
 
         #region Filter options
-        public string Id { get; set; }
+        public int? Id { get; set; }
         public string UserName { get; set; }
         public string SearchTerm { get; set; }
         #endregion
@@ -19,7 +18,7 @@ namespace TFW.Docs.Cross.Models.AppUser
         public const string SortByUsername = "username";
         public const string DefaultSortBy = "a" + SortByUsername;
 
-        public static readonly IEnumerable<string> SortOptions = ImmutableArray.Create(SortByUsername);
+        public static readonly IEnumerable<string> SortOptions = new[] { SortByUsername };
         #endregion
 
         #region Projection constants
@@ -32,7 +31,7 @@ namespace TFW.Docs.Cross.Models.AppUser
                     FieldInfo, $"{nameof(AU.Id)},{nameof(AU.UserName)},{nameof(AU.Email)}," +
                     $"{nameof(AU.FullName)},{nameof(AU.CreatedTime)}"
                 },
-            }.ToImmutableDictionary();
+            };
         #endregion
     }
 }

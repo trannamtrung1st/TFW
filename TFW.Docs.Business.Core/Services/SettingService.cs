@@ -1,19 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Localization;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Business.Services;
-using TFW.Cross;
-using TFW.Cross.Models.Setting;
+using TFW.Docs.Business.Services;
+using TFW.Docs.Cross;
+using TFW.Docs.Cross.Models.Setting;
+using TFW.Docs.Cross.Providers;
 using TFW.Docs.Data;
 using TFW.Framework.Configuration;
 using TFW.Framework.Configuration.Extensions;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.SimpleMail;
 
-namespace TFW.Business.Core.Services
+namespace TFW.Docs.Business.Core.Services
 {
     [ScopedService(ServiceType = typeof(ISettingService))]
     public class SettingService : BaseService, ISettingService
@@ -22,9 +24,9 @@ namespace TFW.Business.Core.Services
         private readonly ISecretsManager _secretsManager;
         private readonly IConfigurationRoot _configurationRoot;
 
-        public SettingService(DataContext dbContext,
-            IJsonConfigurationManager configurationManager,
-            ISecretsManager secretsManager, IConfiguration configuration) : base(dbContext)
+        public SettingService(DataContext dbContext, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider, IJsonConfigurationManager configurationManager,
+            ISecretsManager secretsManager, IConfiguration configuration) : base(dbContext, resultLocalizer, contextProvider)
         {
             _configurationManager = configurationManager;
             _secretsManager = secretsManager;

@@ -50,12 +50,12 @@ namespace TFW.Docs.Business.Core.Services
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
             var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
@@ -63,7 +63,7 @@ namespace TFW.Docs.Business.Core.Services
 
             #region Filter
             if (queryModel.Id != null)
-                query = query.ById(queryModel.Id);
+                query = query.ById(queryModel.Id.Value);
 
             if (queryModel.UserName != null)
                 query = query.ByUsername(queryModel.UserName);
@@ -137,24 +137,23 @@ namespace TFW.Docs.Business.Core.Services
             return response;
         }
 
-        public async Task<UserProfileModel> GetUserProfileAsync(string userId)
+        public async Task<UserProfileModel> GetUserProfileAsync(int userId)
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
             var userProfile = await dbContext.Users.AsNoTracking()
                 .ById(userId).DefaultProjectTo<UserProfileModel>().FirstOrDefaultAsync();
 
             if (userProfile == null)
-                throw validationData.Fail(resultLocalizer, code: ResultCode.EntityNotFound)
-                    .BuildException(resultLocalizer);
+                throw validationData.Fail(code: ResultCode.EntityNotFound).BuildException();
 
             return userProfile;
         }
@@ -163,12 +162,12 @@ namespace TFW.Docs.Business.Core.Services
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
             IdentityResult result;
@@ -191,21 +190,21 @@ namespace TFW.Docs.Business.Core.Services
             }
 
             foreach (var err in result.Errors)
-                validationData.Fail(resultLocalizer, code: ResultCode.Identity_FailToRegisterUser, data: err);
+                validationData.Fail(code: ResultCode.Identity_FailToRegisterUser, data: err);
 
-            throw validationData.BuildException(resultLocalizer);
+            throw validationData.BuildException();
         }
 
         public async Task AddUserRolesAsync(ChangeUserRolesBaseModel model)
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
             var appUser = await _userManager.FindByNameAsync(model.Username);
@@ -218,21 +217,21 @@ namespace TFW.Docs.Business.Core.Services
             if (result.Succeeded) return;
 
             foreach (var err in result.Errors)
-                validationData.Fail(resultLocalizer, code: ResultCode.Identity_FailToChangeUserRoles, data: err);
+                validationData.Fail(code: ResultCode.Identity_FailToChangeUserRoles, data: err);
 
-            throw validationData.BuildException(resultLocalizer);
+            throw validationData.BuildException();
         }
 
         public async Task RemoveUserRolesAsync(ChangeUserRolesBaseModel model)
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
             var appUser = await _userManager.FindByNameAsync(model.Username);
@@ -245,9 +244,9 @@ namespace TFW.Docs.Business.Core.Services
             if (result.Succeeded) return;
 
             foreach (var err in result.Errors)
-                validationData.Fail(resultLocalizer, code: ResultCode.Identity_FailToChangeUserRoles, data: err);
+                validationData.Fail(code: ResultCode.Identity_FailToChangeUserRoles, data: err);
 
-            throw validationData.BuildException(resultLocalizer);
+            throw validationData.BuildException();
         }
         #endregion
 
@@ -256,16 +255,15 @@ namespace TFW.Docs.Business.Core.Services
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
-            var validationData = new ValidationData();
+            var validationData = new ValidationData(resultLocalizer);
 
             // validation logic here
 
             if (!validationData.IsValid)
-                throw validationData.BuildException(resultLocalizer);
+                throw validationData.BuildException();
             #endregion
 
-            var query = dbContext.Roles.AsNoTracking()
-                .OrderBy(o => o.Name);
+            var query = dbContext.Roles.AsNoTracking().OrderBy(o => o.Name);
 
             var responseModels = await query.DefaultProjectTo<TModel>().ToArrayAsync();
 

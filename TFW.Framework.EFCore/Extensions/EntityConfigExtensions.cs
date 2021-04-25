@@ -108,10 +108,10 @@ namespace TFW.Framework.EFCore.Extensions
 
                     foreach (var cond in provider.Conditions)
                     {
-                        if (cond.Item1(entityType))
+                        if (cond.Predicate(entityType))
                         {
                             var expr = provider.GetType().GetInstanceMethod(
-                                cond.Item2, nonPublic: true).InvokeGeneric<LambdaExpression>(
+                                cond.MethodName, nonPublic: true).InvokeGeneric<LambdaExpression>(
                                     provider, new[] { entityType.ClrType }, dbContext);
 
                             if (andExpr == null) andExpr = expr;

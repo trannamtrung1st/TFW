@@ -9,6 +9,6 @@ namespace TFW.Framework.EFCore.Providers
         /// <summary>
         /// Expression provider signature: Expression<Func<E, bool>> Method<E>(TDBContext dbContext) where E : class
         /// </summary>
-        IEnumerable<(Func<IMutableEntityType, bool>, string)> Conditions { get; }
+        IEnumerable<(Func<IMutableEntityType, bool> Predicate, string MethodName)> Conditions { get; }
     }
 }

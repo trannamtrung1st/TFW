@@ -16,6 +16,7 @@
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
     <ProjectReference Include="..\TFW.Docs.Data\TFW.Docs.Data.csproj" />
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

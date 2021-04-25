@@ -11,6 +11,7 @@ namespace TFW.Docs.Cross.Models.Common
     {
         private bool _autoMessage;
         private string _autoMessageSeperator;
+        private readonly IStringLocalizer _localizer;
 
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }
@@ -41,17 +42,18 @@ namespace TFW.Docs.Cross.Models.Common
             }
         }
 
-        public ValidationData(bool autoMessage = true, string autoMessageSeperator = "\n")
+        public ValidationData(IStringLocalizer localizer, bool autoMessage = true, string autoMessageSeperator = "\n")
         {
+            _localizer = localizer;
             _autoMessage = autoMessage;
             _autoMessageSeperator = autoMessageSeperator;
             Details = new List<AppResult>();
             IsValid = true;
         }
 
-        public ValidationData Fail(IStringLocalizer localizer, string mess = null, ResultCode? code = null, object data = null)
+        public ValidationData Fail(string mess = null, ResultCode? code = null, object data = null)
         {
-            Details.Add(AppResult.OfCode(localizer, code, data, mess));
+            Details.Add(AppResult.OfCode(_localizer, code, data, mess));
 
             IsValid = false;
 
@@ -67,12 +69,12 @@ namespace TFW.Docs.Cross.Models.Common
             return this;
         }
 
-        public AppValidationException BuildException(IStringLocalizer localizer)
+        public AppValidationException BuildException()
         {
             if (IsValid)
                 throw new InvalidOperationException("This validation is valid");
 
-            return AppValidationException.From(localizer, this);
+            return AppValidationException.From(_localizer, this);
         }
     }
 }

@@ -1,22 +1,26 @@
-﻿using System;
+﻿using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Business.Services;
-using TFW.Cross.Models.Common;
-using TFW.Cross.Models.Setting;
+using TFW.Docs.Business.Services;
+using TFW.Docs.Cross;
+using TFW.Docs.Cross.Models.Common;
+using TFW.Docs.Cross.Models.Setting;
+using TFW.Docs.Cross.Providers;
 using TFW.Docs.Data;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.i18n.Helpers;
 
-namespace TFW.Business.Core.Services
+namespace TFW.Docs.Business.Core.Services
 {
     [ScopedService(ServiceType = typeof(IReferenceDataService))]
     public class ReferenceDataService : BaseService, IReferenceDataService
     {
-        public ReferenceDataService(DataContext dbContext) : base(dbContext)
+        public ReferenceDataService(DataContext dbContext, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider) : base(dbContext, resultLocalizer, contextProvider)
         {
         }
 
@@ -37,7 +41,7 @@ namespace TFW.Business.Core.Services
         public Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync()
         {
             // [TODO] add caching
-            var cultureOptions = Settings.App.SupportedCultureInfos.MapTo<CultureOption>().ToArray();
+            var cultureOptions = Settings.Get<AppSettings>().SupportedCultureInfos.MapTo<CultureOption>().ToArray();
 
             var response = new GetListResponseModel<CultureOption>()
             {
@@ -51,7 +55,7 @@ namespace TFW.Business.Core.Services
         public Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
         {
             // [TODO] add caching
-            var currencyOptions = Settings.App.SupportedRegionInfos.MapTo<CurrencyOption>().ToArray();
+            var currencyOptions = Settings.Get<AppSettings>().SupportedRegionInfos.MapTo<CurrencyOption>().ToArray();
 
             var response = new GetListResponseModel<CurrencyOption>()
             {

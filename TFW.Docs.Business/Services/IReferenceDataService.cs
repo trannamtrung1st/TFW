@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TFW.Docs.Cross.Models.Common;
 
-namespace TFW.Business.Services
+namespace TFW.Docs.Business.Services
 {
     public interface IReferenceDataService
     {

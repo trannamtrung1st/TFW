@@ -15,6 +15,10 @@ namespace TFW.Docs.Cross
             public const string WindowsCmd = "cmd.exe";
         }
 
+        public static class Mail
+        {
+            public const string PasswordKey = "Mail:Password";
+        }
     }
 
     public static class DynamicLinq
@@ -184,4 +188,8 @@ namespace TFW.Docs.Cross
         }
     }
 
+    public class RequestDataKey
+    {
+        public const string PrincipalInfo = nameof(PrincipalInfo);
+    }
 }
