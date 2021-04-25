@@ -14,7 +14,8 @@ namespace TFW.Docs.Business.Core.Services
         protected readonly IStringLocalizer resultLocalizer;
         protected readonly IBusinessContextProvider contextProvider;
 
-        public BaseService(DataContext dbContext, IStringLocalizer<ResultCodeResources> resultLocalizer,
+        public BaseService(DataContext dbContext,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IBusinessContextProvider contextProvider)
         {
             this.dbContext = dbContext;

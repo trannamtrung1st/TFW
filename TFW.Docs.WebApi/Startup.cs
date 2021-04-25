@@ -71,6 +71,7 @@ namespace TFW.Docs.WebApi
                 .AddDefaultDbMigrator()
                 .AddDefaultDateTimeModelBinder()
                 .AddRequestFeatureMiddleware()
+                .AddAppCaching()
                 .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
                 .AddSmtpService(opt =>

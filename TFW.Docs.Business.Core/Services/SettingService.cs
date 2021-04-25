@@ -24,9 +24,12 @@ namespace TFW.Docs.Business.Core.Services
         private readonly ISecretsManager _secretsManager;
         private readonly IConfigurationRoot _configurationRoot;
 
-        public SettingService(DataContext dbContext, IStringLocalizer<ResultCodeResources> resultLocalizer,
-            IBusinessContextProvider contextProvider, IJsonConfigurationManager configurationManager,
-            ISecretsManager secretsManager, IConfiguration configuration) : base(dbContext, resultLocalizer, contextProvider)
+        public SettingService(DataContext dbContext,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider,
+            IJsonConfigurationManager configurationManager,
+            ISecretsManager secretsManager,
+            IConfiguration configuration) : base(dbContext, resultLocalizer, contextProvider)
         {
             _configurationManager = configurationManager;
             _secretsManager = secretsManager;

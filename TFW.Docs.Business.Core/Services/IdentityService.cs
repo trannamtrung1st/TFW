@@ -36,9 +36,11 @@ namespace TFW.Docs.Business.Core.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public IdentityService(DataContext dbContext, IStringLocalizer<ResultCodeResources> resultLocalizer,
+        public IdentityService(DataContext dbContext,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IBusinessContextProvider contextProvider,
-            UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(dbContext, resultLocalizer, contextProvider)
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager) : base(dbContext, resultLocalizer, contextProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -248,6 +250,26 @@ namespace TFW.Docs.Business.Core.Services
 
             throw validationData.BuildException();
         }
+
+        private async Task<IdentityResult> CreateUserWithRolesTransactionAsync(AppUser appUser, string password,
+            IEnumerable<string> roles = null)
+        {
+            PrepareCreate(appUser);
+
+            var result = await _userManager.CreateAsync(appUser, password);
+
+            if (!result.Succeeded)
+                return result;
+
+            if (!roles.IsNullOrEmpty())
+                result = await _userManager.AddToRolesAsync(appUser, roles);
+
+            return result;
+        }
+
+        private void PrepareCreate(AppUser appUser)
+        {
+        }
         #endregion
 
         #region AppRole
@@ -324,16 +346,6 @@ namespace TFW.Docs.Business.Core.Services
 
             return tokenResponse;
         }
-        #endregion
-
-        #region Common
-        public PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal)
-        {
-            var principalInfo = principal.MapTo<PrincipalInfo>();
-
-            return principalInfo;
-        }
-        #endregion
 
         private async Task<AppUser> AuthenticateAsync(string username, string password)
         {
@@ -345,7 +357,7 @@ namespace TFW.Docs.Business.Core.Services
             return user;
         }
 
-        public ClaimsPrincipal ValidateRefreshToken(string tokenStr)
+        private ClaimsPrincipal ValidateRefreshToken(string tokenStr)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -468,26 +480,14 @@ namespace TFW.Docs.Business.Core.Services
 
             return resp;
         }
+        #endregion
 
-        private async Task<IdentityResult> CreateUserWithRolesTransactionAsync(AppUser appUser, string password,
-            IEnumerable<string> roles = null)
+        #region Common
+        public PrincipalInfo MapToPrincipalInfo(ClaimsPrincipal principal)
         {
-            PrepareCreate(appUser);
+            var principalInfo = principal.MapTo<PrincipalInfo>();
 
-            var result = await _userManager.CreateAsync(appUser, password);
-
-            if (!result.Succeeded)
-                return result;
-
-            if (!roles.IsNullOrEmpty())
-                result = await _userManager.AddToRolesAsync(appUser, roles);
-
-            return result;
-        }
-
-        #region Preparation
-        private void PrepareCreate(AppUser appUser)
-        {
+            return principalInfo;
         }
         #endregion
     }

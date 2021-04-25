@@ -223,6 +223,11 @@ namespace TFW.Docs.WebApi
             return services;
         }
 
+        public static IServiceCollection AddAppCaching(this IServiceCollection services)
+        {
+            return services.AddMemoryCache();
+        }
+
         public static IServiceCollection ConfigureAppOptions(this IServiceCollection services, IConfiguration configuration)
         {
             return services.ConfigureSettings(configuration)

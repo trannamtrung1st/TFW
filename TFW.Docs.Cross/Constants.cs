@@ -9,6 +9,15 @@ using TFW.Framework.Logging.Serilog.Web;
 
 namespace TFW.Docs.Cross
 {
+    public static class CachingKeys
+    {
+        public const string Prefix = nameof(TFW);
+        public const string ListTimeZoneInfo = Prefix + ":" + nameof(ListTimeZoneInfo);
+        public const string ListCultureOptions = Prefix + ":" + nameof(ListCultureOptions);
+        public const string ListCurrencyOptions = Prefix + ":" + nameof(ListCurrencyOptions);
+        public const string ListRegionOptions = Prefix + ":" + nameof(ListRegionOptions);
+    }
+
     public static class EnvironmentVariables
     {
         public static class AspNetCoreEnv
