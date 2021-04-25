@@ -25,8 +25,10 @@ namespace TFW.Docs.WebApi.Controllers
 
         public UserController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer) : base(unitOfWork, contextProvider, resultLocalizer)
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
+            _identityService = identityService;
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]

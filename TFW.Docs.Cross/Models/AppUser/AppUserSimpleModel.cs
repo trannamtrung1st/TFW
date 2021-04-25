@@ -10,7 +10,7 @@ namespace TFW.Docs.Cross.Models.AppUser
         public string FullName { get; set; }
 
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("username")]
         public string UserName { get; set; }

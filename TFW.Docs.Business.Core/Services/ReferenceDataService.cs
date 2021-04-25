@@ -48,7 +48,7 @@ namespace TFW.Docs.Business.Core.Services
 
         public Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync()
         {
-            var cultureOptions = _memoryCache.GetOrCreate(CachingKeys.ListTimeZoneInfo,
+            var cultureOptions = _memoryCache.GetOrCreate(CachingKeys.ListCultureOptions,
                 (entry) =>
                 {
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(CacheDurationInHours);
@@ -66,7 +66,7 @@ namespace TFW.Docs.Business.Core.Services
 
         public Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
         {
-            var currencyOptions = _memoryCache.GetOrCreate(CachingKeys.ListTimeZoneInfo,
+            var currencyOptions = _memoryCache.GetOrCreate(CachingKeys.ListCurrencyOptions,
                 (entry) =>
                 {
                     entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(CacheDurationInHours);
@@ -84,7 +84,7 @@ namespace TFW.Docs.Business.Core.Services
 
         public Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync()
         {
-            var countryOptions = _memoryCache.GetOrCreate(CachingKeys.ListTimeZoneInfo,
+            var countryOptions = _memoryCache.GetOrCreate(CachingKeys.ListRegionOptions,
                 (entry) => CultureHelper.GetDistinctRegions().MapTo<RegionOption>().ToArray());
 
             var response = new GetListResponseModel<RegionOption>()

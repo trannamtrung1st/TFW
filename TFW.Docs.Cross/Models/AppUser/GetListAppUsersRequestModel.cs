@@ -6,7 +6,7 @@ namespace TFW.Docs.Cross.Models.AppUser
 {
     public class GetListAppUsersRequestModel : BaseGetListRequestModel
     {
-        public string id { get; set; }
+        public int id { get; set; }
         public string userName { get; set; }
         public string searchTerm { get; set; }
     }

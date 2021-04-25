@@ -5,7 +5,7 @@ namespace TFW.Docs.Cross.Models.AppRole
     public class RoleSimpleModel
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
