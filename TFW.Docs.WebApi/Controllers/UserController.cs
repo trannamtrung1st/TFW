@@ -17,20 +17,10 @@ using AllowAnonymous = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribut
 
 namespace TFW.Docs.WebApi.Controllers
 {
-    [Route(ApiEndpoint.UserApi)]
+    [Route(Routing.Controller.User.Route)]
     [Authorize]
     public class UserController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string GetListAppUser = "";
-            public const string GetListDeletedAppUser = "deleted";
-            public const string GetCurrentUserProfile = "profile";
-            public const string Register = "register";
-            public const string AddUserRoles = "user-roles";
-            public const string RemoveUserRoles = "user-roles";
-        }
-
         private readonly IIdentityService _identityService;
 
         public UserController(IUnitOfWork unitOfWork,
@@ -40,7 +30,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
-        [HttpGet(Endpoint.GetListAppUser)]
+        [HttpGet(Routing.Controller.User.GetListAppUser)]
         public async Task<IActionResult> GetListAppUser([FromQuery][QueryObject] GetListAppUsersRequestModel model)
         {
             var data = await _identityService.GetListAppUsersAsync<GetListAppUsersResponseModel>(model);
@@ -49,7 +39,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<UserProfileModel>))]
-        [HttpGet(Endpoint.GetCurrentUserProfile)]
+        [HttpGet(Routing.Controller.User.GetCurrentUserProfile)]
         public async Task<IActionResult> GetCurrentUserProfile()
         {
             var data = await _identityService.GetUserProfileAsync(UserId);
@@ -58,7 +48,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
-        [HttpPost(Endpoint.Register)]
+        [HttpPost(Routing.Controller.User.Register)]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterModel model)
         {
@@ -69,7 +59,7 @@ namespace TFW.Docs.WebApi.Controllers
 
 #if DEBUG
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
-        [HttpPost(Endpoint.AddUserRoles)]
+        [HttpPost(Routing.Controller.User.AddUserRoles)]
         public async Task<IActionResult> AddUserRoles(ChangeUserRolesBaseModel model)
         {
             await _identityService.AddUserRolesAsync(model);
@@ -78,7 +68,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
-        [HttpDelete(Endpoint.RemoveUserRoles)]
+        [HttpDelete(Routing.Controller.User.RemoveUserRoles)]
         public async Task<IActionResult> RemoveUserRoles(ChangeUserRolesBaseModel model)
         {
             await _identityService.RemoveUserRolesAsync(model);
@@ -87,7 +77,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
-        [HttpGet(Endpoint.GetListDeletedAppUser)]
+        [HttpGet(Routing.Controller.User.GetListDeletedAppUser)]
         [AllowAnonymous]
         public async Task<IActionResult> GetListDeletedAppUser()
         {

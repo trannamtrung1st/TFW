@@ -240,13 +240,64 @@ namespace TFW.Docs.Cross
         }
     }
 
-    public static class ApiEndpoint
+    public static class Routing
     {
-        public const string Auth = "auth";
-        public const string UserApi = "api/users";
-        public const string RoleApi = "api/roles";
-        public const string SettingApi = "api/settings";
-        public const string ReferenceDataApi = "api/ref";
-        public const string Error = "error";
+        public static class Page
+        {
+            public const string Index = "/";
+
+            public static class Post
+            {
+                public const string Index = "/post";
+            }
+        }
+
+        public static class Controller
+        {
+            public static class Auth
+            {
+                public const string Route = "auth";
+                public const string RequestToken = "token";
+            }
+
+            public static class User
+            {
+                public const string Route = "api/users";
+                public const string GetListAppUser = "";
+                public const string GetListDeletedAppUser = "deleted";
+                public const string GetCurrentUserProfile = "profile";
+                public const string Register = "register";
+                public const string AddUserRoles = "user-roles";
+                public const string RemoveUserRoles = "user-roles";
+            }
+
+            public static class Role
+            {
+                public const string Route = "api/roles";
+                public const string GetAllRoles = "";
+            }
+
+            public static class Setting
+            {
+                public const string Route = "api/settings";
+                public const string ChangeSmtpOption = "smtp";
+                public const string ReloadConfiguration = "reload";
+            }
+
+            public static class Reference
+            {
+                public const string Route = "api/ref";
+                public const string GetTimeZoneOptions = "time-zones";
+                public const string GetCultureOptions = "cultures";
+                public const string GetCurrencyOptions = "currencies";
+                public const string GetRegionOptions = "regions";
+            }
+
+            public static class Error
+            {
+                public const string Route = "error";
+                public const string HandleException = "";
+            }
+        }
     }
 }

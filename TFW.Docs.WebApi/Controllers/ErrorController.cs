@@ -20,14 +20,9 @@ using TFW.Docs.Business;
 namespace TFW.Docs.WebApi.Controllers
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route(ApiEndpoint.Error)]
+    [Route(Routing.Controller.Error.Route)]
     public class ErrorController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string HandleException = "";
-        }
-
         private readonly IWebHostEnvironment _env;
 
         public ErrorController(IUnitOfWork unitOfWork,
@@ -38,7 +33,7 @@ namespace TFW.Docs.WebApi.Controllers
             _env = env;
         }
 
-        [Route(Endpoint.HandleException)]
+        [Route(Routing.Controller.Error.HandleException)]
         public async Task<IActionResult> HandleException()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();

@@ -15,16 +15,10 @@ using TFW.Framework.Web.Attributes;
 
 namespace TFW.Docs.WebApi.Controllers
 {
-    [Route(ApiEndpoint.SettingApi)]
+    [Route(Routing.Controller.Setting.Route)]
     [Authorize(RoleName.Administrator)]
     public class SettingController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string ChangeSmtpOption = "smtp";
-            public const string ReloadConfiguration = "reload";
-        }
-
         private readonly ISettingService _settingService;
 
         public SettingController(IUnitOfWork unitOfWork,
@@ -36,7 +30,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
-        [HttpPatch(Endpoint.ChangeSmtpOption)]
+        [HttpPatch(Routing.Controller.Setting.ChangeSmtpOption)]
         public async Task<IActionResult> ChangeSmtpOption(ChangeSmtpOptionModel model)
         {
             await _settingService.ChangeSmtpOptionAsync(model);
@@ -45,7 +39,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
-        [HttpPost(Endpoint.ReloadConfiguration)]
+        [HttpPost(Routing.Controller.Setting.ReloadConfiguration)]
         public IActionResult ReloadConfiguration()
         {
             _settingService.ReloadConfiguration();

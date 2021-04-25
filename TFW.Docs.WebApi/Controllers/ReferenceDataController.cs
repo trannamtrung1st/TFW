@@ -15,18 +15,10 @@ using TFW.Docs.Business;
 
 namespace TFW.Docs.WebApi.Controllers
 {
-    [Route(ApiEndpoint.ReferenceDataApi)]
+    [Route(Routing.Controller.Reference.Route)]
     [Authorize]
     public class ReferenceDataController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string GetTimeZoneOptions = "time-zones";
-            public const string GetCultureOptions = "cultures";
-            public const string GetCurrencyOptions = "currencies";
-            public const string GetRegionOptions = "regions";
-        }
-
         private readonly IReferenceDataService _referenceDataService;
 
         public ReferenceDataController(IUnitOfWork unitOfWork,
@@ -38,7 +30,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<TimeZoneOption>>))]
-        [HttpGet(Endpoint.GetTimeZoneOptions)]
+        [HttpGet(Routing.Controller.Reference.GetTimeZoneOptions)]
         public async Task<IActionResult> GetTimeZoneOptions()
         {
             var data = await _referenceDataService.GetTimeZoneOptionsAsync();
@@ -47,7 +39,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CultureOption>>))]
-        [HttpGet(Endpoint.GetCultureOptions)]
+        [HttpGet(Routing.Controller.Reference.GetCultureOptions)]
         public async Task<IActionResult> GetCultureOptions()
         {
             var data = await _referenceDataService.GetCultureOptionsAsync();
@@ -56,7 +48,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CurrencyOption>>))]
-        [HttpGet(Endpoint.GetCurrencyOptions)]
+        [HttpGet(Routing.Controller.Reference.GetCurrencyOptions)]
         public async Task<IActionResult> GetCurrencyOptions()
         {
             var data = await _referenceDataService.GetCurrencyOptionsAsync();
@@ -65,7 +57,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<RegionOption>>))]
-        [HttpGet(Endpoint.GetRegionOptions)]
+        [HttpGet(Routing.Controller.Reference.GetRegionOptions)]
         public async Task<IActionResult> GetRegionOptions()
         {
             var data = await _referenceDataService.GetRegionOptionsAsync();

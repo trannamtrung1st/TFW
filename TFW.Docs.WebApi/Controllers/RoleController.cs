@@ -15,15 +15,10 @@ using TFW.Framework.Web.Attributes;
 
 namespace TFW.Docs.WebApi.Controllers
 {
-    [Route(ApiEndpoint.RoleApi)]
+    [Route(Routing.Controller.Role.Route)]
     [Authorize]
     public class RoleController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string GetAllRoles = "";
-        }
-
         private readonly IIdentityService _identityService;
 
         public RoleController(IUnitOfWork unitOfWork,
@@ -35,7 +30,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListRolesResponseModel>>))]
-        [HttpGet(Endpoint.GetAllRoles)]
+        [HttpGet(Routing.Controller.Role.GetAllRoles)]
         public async Task<IActionResult> GetAllRoles()
         {
             var data = await _identityService.GetListRolesAsync<GetListRolesResponseModel>();

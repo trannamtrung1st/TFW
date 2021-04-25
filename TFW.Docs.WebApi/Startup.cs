@@ -131,7 +131,7 @@ namespace TFW.Docs.WebApi
             else app.UseDefaultSerilogRequestLogging(_requestLoggingOptions);
             #endregion
 
-            app.UseExceptionHandler($"/{ApiEndpoint.Error}");
+            app.UseExceptionHandler($"/{Routing.Controller.Error.Route}");
 
             app.UseRequestFeature();
 

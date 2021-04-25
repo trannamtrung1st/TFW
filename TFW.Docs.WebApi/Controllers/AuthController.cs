@@ -18,18 +18,13 @@ using TFW.Docs.Business;
 
 namespace TFW.Docs.WebApi.Controllers
 {
-    [Route(ApiEndpoint.Auth)]
+    [Route(Routing.Controller.Auth.Route)]
     public class AuthController : BaseApiController
     {
-        public static class Endpoint
-        {
-            public const string RequestToken = "token";
-        }
-
         private readonly IIdentityService _identityService;
 
         public AuthController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, 
+            IBusinessContextProvider contextProvider,
             IStringLocalizer<ResultCodeResources> resultLocalizer,
             IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
@@ -43,7 +38,7 @@ namespace TFW.Docs.WebApi.Controllers
         /// <param name="model">OAuth2 Grant request model</param>
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(TokenResponseModel))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, null, typeof(OAuthErrorResponse))]
-        [HttpPost(Endpoint.RequestToken)]
+        [HttpPost(Routing.Controller.Auth.RequestToken)]
         [ShouldSkipFilter(typeof(AutoValidateActionFilter))]
         public async Task<IActionResult> RequestToken([FromForm] RequestTokenModel model)
         {
