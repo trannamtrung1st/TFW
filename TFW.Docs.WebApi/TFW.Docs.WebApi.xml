@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TFW.Docs.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:TFW.Docs.WebApi.Controllers.AuthController.RequestToken(TFW.Docs.Cross.Models.Identity.RequestTokenModel)">
+            <summary>
+            OAuth2 Token endpoint 
+            </summary>
+            <param name="model">OAuth2 Grant request model</param>
+        </member>
+    </members>
+</doc>

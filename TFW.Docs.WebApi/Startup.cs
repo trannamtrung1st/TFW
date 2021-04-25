@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
-using TFW.Docs.Cross.Providers;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Configuration;
 using TFW.Framework.Configuration.Extensions;
@@ -37,12 +36,12 @@ namespace TFW.Docs.WebApi
             Configuration = configuration;
             _resources = new List<IDisposable>();
 
-            // App settings
+            // App Settings
             Settings.Set(Configuration.Parse<AppSettings>(nameof(AppSettings)));
             Settings.Set(Configuration.Parse<JwtSettings>(nameof(JwtSettings)));
-            Settings.Set(Configuration.Parse<SerilogSettings>(nameof(Serilog)));
 
             // Serilog
+            Settings.Set(Configuration.Parse<SerilogSettings>(nameof(Serilog)));
             _requestLoggingOptions = Configuration.Parse<RequestLoggingOptions>(LoggingConsts.RequestLoggingOptionsKey);
 
             // Mail
@@ -120,13 +119,6 @@ namespace TFW.Docs.WebApi
             // HttpContext
             app.ConfigureHttpContext();
 
-            PrepareEnvironment(env);
-
-            if (env.IsDevelopment())
-            {
-                // configure dev settings
-            }
-
             #region Serilog
             if (!_requestLoggingOptions.UseDefaultLogger)
             {
@@ -184,6 +176,8 @@ namespace TFW.Docs.WebApi
             {
                 endpoints.MapControllers();
             });
+
+            PrepareEnvironment(env);
 
             // app lifetime
             appLifetime.ApplicationStarted.Register(OnApplicationStarted);

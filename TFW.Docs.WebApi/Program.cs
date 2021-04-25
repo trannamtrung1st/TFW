@@ -87,9 +87,9 @@ namespace TFW.Docs.WebApi
         public static LoggerConfiguration HostLevelLog(this LoggerSinkConfiguration writeTo)
         {
             var template = LoggingConsts.HostLevelLogTemplate;
+            var env = Environment.GetEnvironmentVariable(EnvironmentVariables.AspNetCoreEnv.Key);
 
-            if (Environment.GetEnvironmentVariable(EnvironmentVariables.AspNetCoreEnv.Key)
-                == EnvironmentVariables.AspNetCoreEnv.Development)
+            if (env == EnvironmentVariables.AspNetCoreEnv.Development)
             {
                 return writeTo.Console(restrictedToMinimumLevel: LogEventLevel.Information, outputTemplate: template);
             }

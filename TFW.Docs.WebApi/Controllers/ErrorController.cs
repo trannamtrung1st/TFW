@@ -11,7 +11,6 @@ using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Exceptions;
 using TFW.Docs.Cross.Models.Setting;
-using TFW.Data;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.Web.Features;
 using TFW.Docs.Cross.Providers;
@@ -24,16 +23,22 @@ namespace TFW.Docs.WebApi.Controllers
     [Route(ApiEndpoint.Error)]
     public class ErrorController : BaseApiController
     {
+        public static class Endpoint
+        {
+            public const string HandleException = "";
+        }
+
         private readonly IWebHostEnvironment _env;
 
         public ErrorController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IWebHostEnvironment env) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _env = env;
         }
 
-        [Route("")]
+        [Route(Endpoint.HandleException)]
         public async Task<IActionResult> HandleException()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
@@ -71,7 +76,7 @@ namespace TFW.Docs.WebApi.Controllers
         private async Task LogErrorRequestAsync(Exception ex)
         {
             var originalRequest = HttpContext.Features.Get<ISimpleHttpRequestFeature>();
-            object bodyInfo = "";
+            var bodyInfo = "";
 
             if (originalRequest.ContentLength > 0 &&
                 originalRequest.ContentLength <= Settings.Get<SerilogSettings>().MaxBodyLengthForLogging)

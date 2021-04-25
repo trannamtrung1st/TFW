@@ -9,7 +9,6 @@ using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Exceptions;
 using TFW.Docs.Cross.Models.Identity;
-using TFW.Data;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web.Attributes;
 using TFW.Docs.WebApi.Filters;
@@ -30,7 +29,8 @@ namespace TFW.Docs.WebApi.Controllers
         private readonly IIdentityService _identityService;
 
         public AuthController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider, 
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _identityService = identityService;

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Text;
 
 namespace TFW.Framework.EFCore.Options
 {
     public class QueryFilterOptions
     {
-        private IDictionary<string, QueryFilter> _filterMap;
-        public IReadOnlyDictionary<string, QueryFilter> FilterMap => _filterMap.ToImmutableDictionary();
+        private Dictionary<string, QueryFilter> _filterMap;
+        public IReadOnlyDictionary<string, QueryFilter> FilterMap => _filterMap;
 
         public QueryFilterOptions()
         {

@@ -27,7 +27,8 @@ namespace TFW.Docs.WebApi.Controllers
         private readonly IIdentityService _identityService;
 
         public RoleController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _identityService = identityService;

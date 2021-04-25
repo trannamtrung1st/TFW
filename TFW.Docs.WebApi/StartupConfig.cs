@@ -4,15 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,11 +20,7 @@ using TFW.Docs.Cross.Requirements;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Configuration;
 using TFW.Framework.Data;
-using TFW.Framework.Data.Options;
-using TFW.Framework.Data.SqlServer;
 using TFW.Framework.EFCore;
-using TFW.Framework.i18n;
-using TFW.Framework.Localization.Json;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
 using TFW.Framework.Web.Bindings;
@@ -50,6 +42,7 @@ namespace TFW.Docs.WebApi
         public static void Setup()
         {
             TempAssemblyList = ReflectionHelper.GetAllAssemblies(
+                searchPattern: "TFW.Docs.*.dll",
                 excludedRelativeDirPaths: WebApiConsts.ExcludedAssemblyDirs);
 
             FrameworkOptionsBuilder = new FrameworkOptionsBuilder();

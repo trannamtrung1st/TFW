@@ -11,7 +11,6 @@ using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.AppUser;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Providers;
-using TFW.Docs.Data;
 using TFW.Framework.Web.Attributes;
 using TFW.Framework.Web.Bindings;
 using AllowAnonymous = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
@@ -35,8 +34,8 @@ namespace TFW.Docs.WebApi.Controllers
         private readonly IIdentityService _identityService;
 
         public UserController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer)
-            : base(unitOfWork, contextProvider, resultLocalizer)
+            IBusinessContextProvider contextProvider,
+            IStringLocalizer<ResultCodeResources> resultLocalizer) : base(unitOfWork, contextProvider, resultLocalizer)
         {
         }
 

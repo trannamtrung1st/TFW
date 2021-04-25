@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Common;
-using TFW.Data;
 using TFW.Framework.Web.Attributes;
 using TFW.Docs.Cross.Providers;
 using Microsoft.Extensions.Localization;
@@ -31,7 +30,8 @@ namespace TFW.Docs.WebApi.Controllers
         private readonly IReferenceDataService _referenceDataService;
 
         public ReferenceDataController(IUnitOfWork unitOfWork,
-            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IBusinessContextProvider contextProvider,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IReferenceDataService referenceDataService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _referenceDataService = referenceDataService;

@@ -15,6 +15,7 @@
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
     <ProjectReference Include="..\TFW.Framework.Security\TFW.Framework.Security.csproj" />
     <ProjectReference Include="..\TFW.Framework.SimpleMail\TFW.Framework.SimpleMail.csproj" />
+    <ProjectReference Include="..\TFW.Framework.UoW\TFW.Framework.UoW.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -21,18 +20,19 @@ namespace TFW.Framework.Web.Options
 
     public class FrameworkOptionsBuilder
     {
-        public IDictionary<object, Type[]> ShouldSkipFilterTypesMap { get; }
+        private Dictionary<object, Type[]> _shouldSkipFilterTypesMap;
+        public IDictionary<object, Type[]> ShouldSkipFilterTypesMap => _shouldSkipFilterTypesMap;
 
         public FrameworkOptionsBuilder()
         {
-            ShouldSkipFilterTypesMap = new Dictionary<object, Type[]>();
+            _shouldSkipFilterTypesMap = new Dictionary<object, Type[]>();
         }
 
         public FrameworkOptions Build()
         {
             return new FrameworkOptions
             {
-                ShouldSkipFilterTypesMap = ShouldSkipFilterTypesMap.ToImmutableDictionary()
+                ShouldSkipFilterTypesMap = _shouldSkipFilterTypesMap
             };
         }
 
@@ -48,7 +48,7 @@ namespace TFW.Framework.Web.Options
                 var skipAttr = type.GetCustomAttribute<ShouldSkipFilterAttribute>();
 
                 if (skipAttr != null)
-                    ShouldSkipFilterTypesMap[type] = skipAttr.SkippedFilterTypes;
+                    _shouldSkipFilterTypesMap[type] = skipAttr.SkippedFilterTypes;
 
                 var typeMethods = type.GetMethods().Select(o => new
                 {
@@ -57,7 +57,7 @@ namespace TFW.Framework.Web.Options
                 }).Where(o => o.SkipAttr != null);
 
                 foreach (var methodObj in typeMethods)
-                    ShouldSkipFilterTypesMap[methodObj.Method] = methodObj.SkipAttr.SkippedFilterTypes;
+                    _shouldSkipFilterTypesMap[methodObj.Method] = methodObj.SkipAttr.SkippedFilterTypes;
             }
         }
     }
