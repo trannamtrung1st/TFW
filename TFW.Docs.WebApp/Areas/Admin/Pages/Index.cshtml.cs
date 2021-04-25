@@ -16,12 +16,8 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages
         {
         }
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            if (!User.Identity.IsAuthenticated)
-                return LocalRedirect(Routing.Admin.Login);
-
-            return Page();
         }
     }
 }

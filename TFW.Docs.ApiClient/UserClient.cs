@@ -26,14 +26,15 @@ namespace TFW.Docs.ApiClient
             GetListAppUsersRequestModel model = null)
         {
             var queryBuilder = model?.BuildQuery();
-            var uri = $"{Routing.Controller.User.GetListAppUser}{queryBuilder}";
+            var uri = $"{string.Join('/', Routing.Controller.User.Route, Routing.Controller.User.GetListAppUser)}{queryBuilder}";
             var resp = await http.GetAsync(uri);
             return (await HandleJsonAsync<AppResult<GetListResponseModel<GetListAppUsersResponseModel>>>(resp), resp);
         }
 
         public async Task<(AppResult<int> Result, HttpResponseMessage Response)> GetTotalUserCountAsync()
         {
-            var resp = await http.GetAsync(Routing.Controller.User.GetTotalUserCount);
+            var resp = await http.GetAsync(
+                string.Join('/', Routing.Controller.User.Route, Routing.Controller.User.GetTotalUserCount));
             return (await HandleJsonAsync<AppResult<int>>(resp), resp);
         }
     }

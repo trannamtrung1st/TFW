@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TFW.Framework.Web.Extensions;
 
 namespace TFW.Docs.Cross.Models.Common
 {
@@ -61,11 +62,11 @@ namespace TFW.Docs.Cross.Models.Common
         public virtual QueryBuilder BuildQuery()
         {
             var queryBuilder = new QueryBuilder();
-            queryBuilder.Add(nameof(countTotal), countTotal.ToString());
-            queryBuilder.Add(nameof(page), page.ToString());
-            queryBuilder.Add(nameof(pageLimit), pageLimit.ToString());
-            queryBuilder.Add(nameof(sortBy), _sortByArr);
-            queryBuilder.Add(nameof(fields), _fieldsArr);
+            queryBuilder.AddIfNotNull(nameof(countTotal), countTotal.ToString())
+                .AddIfNotNull(nameof(page), page.ToString())
+                .AddIfNotNull(nameof(pageLimit), pageLimit.ToString())
+                .AddIfNotNull(nameof(sortBy), _sortByArr ?? new string[0])
+                .AddIfNotNull(nameof(fields), _fieldsArr ?? new string[0]);
             return queryBuilder;
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using TFW.Docs.Cross.Models.Common;
+using TFW.Framework.Web.Extensions;
 
 namespace TFW.Docs.Cross.Models.AppUser
 {
@@ -14,9 +15,9 @@ namespace TFW.Docs.Cross.Models.AppUser
         public override QueryBuilder BuildQuery()
         {
             var builder = base.BuildQuery();
-            builder.Add(nameof(id), id?.ToString());
-            builder.Add(nameof(userName), userName);
-            builder.Add(nameof(searchTerm), searchTerm);
+            builder.AddIfNotNull(nameof(id), id?.ToString())
+                .AddIfNotNull(nameof(userName), userName)
+                .AddIfNotNull(nameof(searchTerm), searchTerm);
             return builder;
         }
     }
