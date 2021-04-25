@@ -107,7 +107,7 @@ namespace TFW.Docs.Business.Core.Services
             var projectionStr = string.Join(',', projectionArr);
 
             var projectedQuery = query.Select<TModel>(
-                parsingConfig ?? DynamicLinq.DefaultParsingConfig,
+                parsingConfig ?? DynamicLinqConsts.DefaultParsingConfig,
                 $"new {typeof(TModel).FullName}({projectionStr})");
             #endregion
 

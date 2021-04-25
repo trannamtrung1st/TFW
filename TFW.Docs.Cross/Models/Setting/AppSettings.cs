@@ -8,6 +8,18 @@ namespace TFW.Docs.Cross.Models.Setting
 {
     public class AppSettings
     {
+        public string Name { get; set; }
+
+        private SwaggerSettings _swagger = new SwaggerSettings();
+        public SwaggerSettings Swagger
+        {
+            get => _swagger; set
+            {
+                if (value is null) return;
+                _swagger = value;
+            }
+        }
+
         private IEnumerable<string> _supportedCultureNames;
         public IEnumerable<string> SupportedCultureNames
         {
@@ -39,5 +51,11 @@ namespace TFW.Docs.Cross.Models.Setting
 
         private IEnumerable<RegionInfo> _supportedRegionInfos = ImmutableArray.Create(RegionInfo.CurrentRegion);
         public IEnumerable<RegionInfo> SupportedRegionInfos => _supportedRegionInfos;
+    }
+
+    public class SwaggerSettings
+    {
+        public bool AddSwaggerAcceptLanguageHeader { get; set; }
+        public bool AddSwaggerTimeZoneHeader { get; set; }
     }
 }

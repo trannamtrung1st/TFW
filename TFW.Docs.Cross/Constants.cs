@@ -5,11 +5,26 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using TFW.Docs.Cross.Models.Setting;
+using TFW.Framework.Logging.Serilog.Web;
 
 namespace TFW.Docs.Cross
 {
+    public static class EnvironmentVariables
+    {
+        public static class AspNetCoreEnv
+        {
+            public const string Key = "ASPNETCORE_ENVIRONMENT";
+            public const string Development = nameof(Development);
+        }
+    }
+
     public static class ConfigConsts
     {
+        public static class i18n
+        {
+            public const string ResourcesPath = "Resources";
+        }
+
         public static class CommandLine
         {
             public const string WindowsCmd = "cmd.exe";
@@ -21,7 +36,7 @@ namespace TFW.Docs.Cross
         }
     }
 
-    public static class DynamicLinq
+    public static class DynamicLinqConsts
     {
         private static ParsingConfig _defaultParsingConfig;
         public static ParsingConfig DefaultParsingConfig
@@ -191,5 +206,38 @@ namespace TFW.Docs.Cross
     public class RequestDataKey
     {
         public const string PrincipalInfo = nameof(PrincipalInfo);
+    }
+
+    public static class Policy
+    {
+        public static class Name
+        {
+
+            public const string AdminOrOwner = nameof(AdminOrOwner);
+            public const string AuthUser = nameof(AuthUser);
+        }
+    }
+
+    public static class LoggingConsts
+    {
+        public const string RequestLoggingOptionsKey = nameof(Serilog) + ":" + nameof(RequestLoggingOptions);
+        public const string HostLevelLogFolder = "logs/host";
+        public const string HostLevelLogFile = "host.txt";
+        public const string HostLevelLogTemplate = "[{UtcTimestamp} {Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+        public static class Properties
+        {
+            public const string UserId = nameof(UserId);
+        }
+    }
+
+    public static class ApiEndpoint
+    {
+        public const string Auth = "auth";
+        public const string UserApi = "api/users";
+        public const string RoleApi = "api/roles";
+        public const string SettingApi = "api/settings";
+        public const string ReferenceDataApi = "api/ref";
+        public const string Error = "error";
     }
 }

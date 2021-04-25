@@ -6,21 +6,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.0.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TFW.Docs.Business\TFW.Docs.Business.csproj" />
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
     <ProjectReference Include="..\TFW.Docs.Data\TFW.Docs.Data.csproj" />
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Localization.Json\TFW.Framework.Localization.Json.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Logging.Serilog.Web\TFW.Framework.Logging.Serilog.Web.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Security\TFW.Framework.Security.csproj" />
+    <ProjectReference Include="..\TFW.Framework.SimpleMail\TFW.Framework.SimpleMail.csproj" />
     <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="logs\" />
   </ItemGroup>
 
 

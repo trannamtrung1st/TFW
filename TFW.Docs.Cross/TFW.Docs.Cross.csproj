@@ -16,6 +16,7 @@
     <ProjectReference Include="..\TFW.Framework.Cross\TFW.Framework.Cross.csproj" />
     <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
     <ProjectReference Include="..\TFW.Framework.i18n\TFW.Framework.i18n.csproj" />
+    <ProjectReference Include="..\TFW.Framework.Logging.Serilog.Web\TFW.Framework.Logging.Serilog.Web.csproj" />
     <ProjectReference Include="..\TFW.Framework.Validations.Fluent\TFW.Framework.Validations.Fluent.csproj" />
     <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
   </ItemGroup>
