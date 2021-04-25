@@ -187,7 +187,7 @@ namespace TFW.Docs.Cross
     public static class SecurityConsts
     {
         public const string OAuth2 = nameof(OAuth2);
-        public const string ClientAuthenticationScheme = "Client";
+        public const string ClientAuthenticationScheme = "Basic";
 
         public static class GrantTypes
         {
@@ -250,7 +250,7 @@ namespace TFW.Docs.Cross
     {
         public static class Name
         {
-
+            public const string Admin = nameof(Admin);
             public const string AdminOrOwner = nameof(AdminOrOwner);
             public const string AuthUser = nameof(AuthUser);
         }

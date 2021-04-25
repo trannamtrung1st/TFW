@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TFW.Docs.Business.Services;
@@ -34,8 +33,7 @@ namespace TFW.Docs.WebApi.Handlers
             if (clientInfo == null) return null;
 
             var principal = _identityService.MapToClaimsPrincipal(clientInfo);
-            var prop = new AuthenticationProperties();
-            var ticket = new AuthenticationTicket(principal, prop, SecurityConsts.ClientAuthenticationScheme);
+            var ticket = new AuthenticationTicket(principal, SecurityConsts.ClientAuthenticationScheme);
             return ticket;
         }
     }

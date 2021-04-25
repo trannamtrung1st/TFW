@@ -19,8 +19,10 @@ namespace TFW.Framework.Web.Handlers
         {
         }
 
-        protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+        protected override async Task HandleChallengeAsync(AuthenticationProperties properties)
         {
+            await base.HandleChallengeAsync(properties);
+
             if (Response.StatusCode == 401)
             {
                 var wwwAuth = Response.Headers.GetCommaSeparatedValues(HeaderNames.WWWAuthenticate);
@@ -29,8 +31,6 @@ namespace TFW.Framework.Web.Handlers
                     Response.Headers.Append(HeaderNames.WWWAuthenticate, Scheme.Name);
                 }
             }
-
-            return Task.CompletedTask;
         }
     }
 

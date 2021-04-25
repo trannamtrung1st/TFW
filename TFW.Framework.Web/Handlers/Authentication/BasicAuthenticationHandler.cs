@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace TFW.Framework.Web.Handlers
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            AuthenticateResult authResult = null;
+
             try
             {
                 var authHeader = GetAuthorizationHeader();
@@ -38,19 +41,20 @@ namespace TFW.Framework.Web.Handlers
                             var ticket = await AuthenticateAsync(credentials[0], credentials[1]);
 
                             if (ticket != null)
-                                return AuthenticateResult.Success(ticket);
-
-                            return AuthenticateResult.Fail(string.Empty);
+                                authResult = AuthenticateResult.Success(ticket);
+                            else authResult = AuthenticateResult.Fail("Unauthorized");
                         }
                     }
                 }
-
-                return AuthenticateResult.NoResult();
             }
             catch (Exception ex)
             {
-                return AuthenticateResult.Fail(ex);
+                authResult = AuthenticateResult.Fail(ex);
             }
+
+            if (authResult == null) authResult = AuthenticateResult.NoResult();
+
+            return authResult;
         }
 
         public abstract Task<AuthenticationTicket> AuthenticateAsync(string username, string password);

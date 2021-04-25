@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using TFW.Docs.Cross;
 
 namespace TFW.Docs.WebApi.Filters
 {
@@ -53,8 +54,29 @@ namespace TFW.Docs.WebApi.Filters
 
                 operation.Security.Add(new OpenApiSecurityRequirement
                 {
-                    [oAuthScheme] = authAttrs.Where(o => o.Policy != null).Select(o => o.Policy).ToArray()
+                    //[oAuthScheme] = authAttrs.Where(o => o.Policy != null).Select(o => o.Policy).ToArray()
+                    [oAuthScheme] = new string[0]
                 });
+
+                if (authAttrs.Any(attr =>
+                    attr.AuthenticationSchemes?
+                        .Split(',').Any(scheme => scheme.Equals(
+                            SecurityConsts.ClientAuthenticationScheme, StringComparison.OrdinalIgnoreCase)) == true))
+                {
+                    var clientScheme = new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = SecurityConsts.ClientAuthenticationScheme
+                        }
+                    };
+
+                    operation.Security.Add(new OpenApiSecurityRequirement
+                    {
+                        [clientScheme] = new string[0]
+                    });
+                }
             }
         }
     }

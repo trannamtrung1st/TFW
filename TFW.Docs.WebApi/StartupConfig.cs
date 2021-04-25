@@ -32,6 +32,8 @@ using TFW.Docs.WebApi.Providers;
 using TFW.Docs.WebApi.Controllers;
 using TFW.Docs.Data;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.Net.Http.Headers;
+using System.Net;
 
 namespace TFW.Docs.WebApi
 {
@@ -129,13 +131,17 @@ namespace TFW.Docs.WebApi
         public static AuthenticationBuilder AddClientAuthentication(this AuthenticationBuilder builder)
         {
             return builder.AddScheme<BasicAuthenticationOptions, AppClientAuthenticationHandler>(
-                SecurityConsts.ClientAuthenticationScheme, options => { });
+                SecurityConsts.ClientAuthenticationScheme, null);
         }
 
         public static IServiceCollection AddAppAuthorization(this IServiceCollection services)
         {
             services.AddAuthorization(opt =>
             {
+                opt.AddPolicy(Policy.Name.Admin, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireRole(RoleName.Administrator));
+
                 opt.AddPolicy(Policy.Name.AdminOrOwner, policy => policy.RequireAuthenticatedUser()
                     .AddRequirements(new AdminOrOwnerRequirement()));
 
@@ -203,25 +209,57 @@ namespace TFW.Docs.WebApi
                 if (appSettings.Swagger.AddSwaggerTimeZoneHeader)
                     c.OperationFilter<SwaggerTimeZoneHeaderOperationFilter>();
 
+                #region Bearer/Api Key
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
                     new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
                         Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                        Name = "Authorization",
+                        Name = HeaderNames.Authorization,
                         Type = SecuritySchemeType.ApiKey
                     });
 
-                var requirement = new OpenApiSecurityRequirement();
-                requirement[new OpenApiSecurityScheme
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    Reference = new OpenApiReference
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = JwtBearerDefaults.AuthenticationScheme
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        new string[0]
                     }
-                }] = Array.Empty<string>();
-                c.AddSecurityRequirement(requirement);
+                });
+                #endregion
+
+                #region Client
+                c.AddSecurityDefinition(SecurityConsts.ClientAuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Description = "Basic auth added to authorization header",
+                    Name = HeaderNames.Authorization,
+                    In = ParameterLocation.Header,
+                    Scheme = AuthenticationSchemes.Basic.ToString(),
+                    Type = SecuritySchemeType.Http
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = AuthenticationSchemes.Basic.ToString()
+                            }
+                        },
+                        new string[0]
+                    }
+                });
+                #endregion
 
                 var filePath = Path.Combine(System.AppContext.BaseDirectory,
                     $"{typeof(Startup).Assembly.GetName().Name}.xml");
