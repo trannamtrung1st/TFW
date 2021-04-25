@@ -35,6 +35,7 @@ namespace TFW.Docs.WebApp
 
             services.ConfigureAppOptions(Configuration)
                 .AddApiClient(webAppSettings.ApiBase)
+                .AddAppAuthentication()
                 .AddWebFrameworks();
         }
 
@@ -47,7 +48,7 @@ namespace TFW.Docs.WebApp
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler(Routing.Root.Error);
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

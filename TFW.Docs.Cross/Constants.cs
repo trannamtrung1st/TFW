@@ -271,9 +271,10 @@ namespace TFW.Docs.Cross
 
     public static class Routing
     {
-        public static class Page
+        public static class Root
         {
             public const string Index = "/";
+            public const string Error = "/error";
 
             public static class Post
             {
@@ -284,8 +285,10 @@ namespace TFW.Docs.Cross
         public static class Admin
         {
             public const string Index = "/admin";
-
+            public const string Error = Index + "/error";
             public const string Login = Index + "/login";
+            public const string Logout = Index + "/logout";
+            public const string AccessDenied = Index + "/accessdenied";
         }
 
         public static class Controller

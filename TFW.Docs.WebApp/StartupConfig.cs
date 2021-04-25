@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Docs.WebApp.Models;
@@ -40,13 +41,44 @@ namespace TFW.Docs.WebApp
             });
         }
 
+        public static IServiceCollection AddAppAuthentication(this IServiceCollection services)
+        {
+            var webAppSettings = Settings.Get<WebAppSettings>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+               .AddCookie(options =>
+               {
+                   options.Cookie.HttpOnly = true;
+                   options.AccessDeniedPath = Routing.Admin.AccessDenied;
+                   options.ExpireTimeSpan = TimeSpan.FromHours(webAppSettings.CookiePersistenceHours);
+                   options.LoginPath = Routing.Admin.Login;
+                   options.LogoutPath = Routing.Admin.Logout;
+                   options.ReturnUrlParameter = "return_url";
+                   options.SlidingExpiration = true;
+                   //options.Events.OnValidatePrincipal = async (c) =>
+                   //{
+                   //    await SecurityStampValidator.ValidatePrincipalAsync(c);
+                   //};
+               });
+
+            return services;
+        }
+
         public static IServiceCollection AddWebFrameworks(this IServiceCollection services)
         {
             services.AddLocalization(options => options.ResourcesPath = ConfigConsts.i18n.ResourcesPath);
 
             services.AddRazorPages(options =>
             {
-                //options.Conventions.AddPageRoute();
+                #region Admin
+                var authorizeAdminFolders = new[] { PageConsts.Admin.Folder_Root };
+                var allowAnonymousAdminPages = new[] { PageConsts.Admin.Page_Login };
+
+                foreach (var folder in authorizeAdminFolders)
+                    options.Conventions.AuthorizeAreaFolder(PageConsts.Admin.AreaName, folder);
+                foreach (var page in allowAnonymousAdminPages)
+                    options.Conventions.AllowAnonymousToAreaPage(PageConsts.Admin.AreaName, page);
+                #endregion
             })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();

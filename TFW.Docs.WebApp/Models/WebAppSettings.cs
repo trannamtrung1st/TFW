@@ -9,5 +9,6 @@ namespace TFW.Docs.WebApp.Models
     {
         public string Author { get; set; }
         public string ApiBase { get; set; }
+        public int CookiePersistenceHours { get; set; }
     }
 }
