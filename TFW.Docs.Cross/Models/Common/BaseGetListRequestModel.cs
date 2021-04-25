@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,5 +58,15 @@ namespace TFW.Docs.Cross.Models.Common
             return _fieldsArr;
         }
 
+        public virtual QueryBuilder BuildQuery()
+        {
+            var queryBuilder = new QueryBuilder();
+            queryBuilder.Add(nameof(countTotal), countTotal.ToString());
+            queryBuilder.Add(nameof(page), page.ToString());
+            queryBuilder.Add(nameof(pageLimit), pageLimit.ToString());
+            queryBuilder.Add(nameof(sortBy), _sortByArr);
+            queryBuilder.Add(nameof(fields), _fieldsArr);
+            return queryBuilder;
+        }
     }
 }

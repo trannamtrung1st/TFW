@@ -15,9 +15,13 @@ namespace TFW.Docs.Business.Services
         Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
             GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null);
 
+        Task<int> GetTotalUserCountAsync();
+
         Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>();
 
         Task<UserProfileModel> GetUserProfileAsync(int userId);
+
+        Task InitializeAsync(RegisterModel model);
 
         Task RegisterAsync(RegisterModel model);
 

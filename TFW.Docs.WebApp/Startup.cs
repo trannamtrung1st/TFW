@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TFW.Docs.ApiClient;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Docs.WebApp.Models;
@@ -30,7 +31,10 @@ namespace TFW.Docs.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var webAppSettings = Settings.Get<WebAppSettings>();
+
             services.ConfigureAppOptions(Configuration)
+                .AddApiClient(webAppSettings.ApiBase)
                 .AddWebFrameworks();
         }
 

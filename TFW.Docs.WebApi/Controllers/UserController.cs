@@ -40,6 +40,16 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(data);
         }
 
+
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<int>))]
+        [HttpGet(Routing.Controller.User.GetTotalUserCount)]
+        public async Task<IActionResult> GetTotalUserCount()
+        {
+            var count = await _identityService.GetTotalUserCountAsync();
+
+            return Success(count);
+        }
+
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<UserProfileModel>))]
         [HttpGet(Routing.Controller.User.GetCurrentUserProfile)]
         public async Task<IActionResult> GetCurrentUserProfile()
@@ -50,6 +60,17 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
+        [HttpPost(Routing.Controller.User.Init)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Initialize([FromForm] RegisterModel model)
+        {
+            await _identityService.RegisterAsync(model);
+
+            return NoContent();
+        }
+
+#if DEBUG
+        [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
         [HttpPost(Routing.Controller.User.Register)]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterModel model)
@@ -59,7 +80,6 @@ namespace TFW.Docs.WebApi.Controllers
             return NoContent();
         }
 
-#if DEBUG
         [SwaggerResponse((int)HttpStatusCode.NoContent, null)]
         [HttpPost(Routing.Controller.User.AddUserRoles)]
         public async Task<IActionResult> AddUserRoles(ChangeUserRolesBaseModel model)

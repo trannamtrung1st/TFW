@@ -8,5 +8,6 @@ namespace TFW.Docs.WebApp.Models
     public class WebAppSettings
     {
         public string Author { get; set; }
+        public string ApiBase { get; set; }
     }
 }

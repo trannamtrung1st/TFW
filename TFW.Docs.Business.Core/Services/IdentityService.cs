@@ -125,6 +125,12 @@ namespace TFW.Docs.Business.Core.Services
             return response;
         }
 
+        public async Task<int> GetTotalUserCountAsync()
+        {
+            var total = await dbContext.Users.CountAsync();
+            return total;
+        }
+
         public async Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>()
         {
             var responseModels = await dbContext.QueryDeleted<AppUser>()
@@ -158,6 +164,46 @@ namespace TFW.Docs.Business.Core.Services
                 throw validationData.Fail(code: ResultCode.EntityNotFound).BuildException();
 
             return userProfile;
+        }
+
+        public async Task InitializeAsync(RegisterModel model)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            var hasAnyUser = await dbContext.Users.AnyAsync();
+            if (hasAnyUser)
+                validationData.Fail(code: ResultCode.Identity_AlreadyInitialized);
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            IdentityResult result;
+            using (var trans = dbContext.Database.BeginTransaction())
+            {
+                var appUser = new AppUser
+                {
+                    UserName = model.username,
+                    FullName = model.fullName,
+                    Email = model.email
+                };
+
+                result = await CreateUserWithRolesTransactionAsync(appUser, model.password,
+                    new[] { RoleName.Administrator });
+
+                if (result.Succeeded)
+                {
+                    trans.Commit();
+                    return;
+                }
+            }
+
+            foreach (var err in result.Errors)
+                validationData.Fail(code: ResultCode.Identity_FailToRegisterUser, data: err);
+
+            throw validationData.BuildException();
         }
 
         public async Task RegisterAsync(RegisterModel model)

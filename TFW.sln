@@ -139,6 +139,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Business", "TFW.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Business.Core", "TFW.Docs.Business.Core\TFW.Docs.Business.Core.csproj", "{5EFABCD9-6592-4443-968A-E321A36A4865}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Docs.ApiClient", "TFW.Docs.ApiClient\TFW.Docs.ApiClient.csproj", "{55201E6F-54D9-478B-BE0C-20994ACC1028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -309,6 +311,10 @@ Global
 		{5EFABCD9-6592-4443-968A-E321A36A4865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EFABCD9-6592-4443-968A-E321A36A4865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EFABCD9-6592-4443-968A-E321A36A4865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55201E6F-54D9-478B-BE0C-20994ACC1028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55201E6F-54D9-478B-BE0C-20994ACC1028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55201E6F-54D9-478B-BE0C-20994ACC1028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55201E6F-54D9-478B-BE0C-20994ACC1028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -377,6 +383,7 @@ Global
 		{052DB73A-842D-434D-8CF4-47FB670D366F} = {001E4CB7-4370-434F-AD86-7C05B7B9CA21}
 		{7C7E7957-77D2-43C1-A286-28F5CE7979B8} = {9B83DB39-57F3-4EA2-AAE1-55FEBCE7C985}
 		{5EFABCD9-6592-4443-968A-E321A36A4865} = {9B83DB39-57F3-4EA2-AAE1-55FEBCE7C985}
+		{55201E6F-54D9-478B-BE0C-20994ACC1028} = {9B83DB39-57F3-4EA2-AAE1-55FEBCE7C985}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7026D7F0-4EB7-4B18-A4FE-81D32724A9DF}

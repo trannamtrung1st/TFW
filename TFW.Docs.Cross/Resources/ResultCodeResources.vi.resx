@@ -132,6 +132,9 @@
   <data name="FailValidation" xml:space="preserve">
     <value>Không hợp lệ</value>
   </data>
+  <data name="Identity_AlreadyInitialize" xml:space="preserve">
+    <value>Đã khởi tạo nguòi dùng quản trị trước đó</value>
+  </data>
   <data name="Identity_FailToChangeUserRoles" xml:space="preserve">
     <value>Thất bại trong việc đổi vai trò người dùng</value>
   </data>

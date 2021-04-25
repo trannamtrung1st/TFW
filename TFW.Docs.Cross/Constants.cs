@@ -101,6 +101,7 @@ namespace TFW.Docs.Cross
             public const string Identity_FailToRegisterUser = nameof(Identity_FailToRegisterUser);
             public const string Identity_FailToChangeUserRoles = nameof(Identity_FailToChangeUserRoles);
             public const string Identity_InvalidChangeUserRolesRequest = nameof(Identity_InvalidChangeUserRolesRequest);
+            public const string Identity_AlreadyInitialized = nameof(Identity_AlreadyInitialized);
             #endregion
 
             #region Setting
@@ -164,6 +165,9 @@ namespace TFW.Docs.Cross
 
         [Display(Name = ResultCodeResources.Name.Identity_InvalidChangeUserRolesRequest)]
         Identity_InvalidChangeUserRolesRequest = ResultCodeGroup.Identity + 3,
+
+        [Display(Name = ResultCodeResources.Name.Identity_AlreadyInitialized)]
+        Identity_AlreadyInitialized = ResultCodeGroup.Identity + 4,
         #endregion
 
         #region Setting
@@ -252,6 +256,13 @@ namespace TFW.Docs.Cross
             }
         }
 
+        public static class Admin
+        {
+            public const string Index = "/admin";
+
+            public const string Login = Index + "/login";
+        }
+
         public static class Controller
         {
             public static class Auth
@@ -264,9 +275,11 @@ namespace TFW.Docs.Cross
             {
                 public const string Route = "api/users";
                 public const string GetListAppUser = "";
+                public const string GetTotalUserCount = "count";
                 public const string GetListDeletedAppUser = "deleted";
                 public const string GetCurrentUserProfile = "profile";
                 public const string Register = "register";
+                public const string Init = "init";
                 public const string AddUserRoles = "user-roles";
                 public const string RemoveUserRoles = "user-roles";
             }
