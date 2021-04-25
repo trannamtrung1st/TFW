@@ -17,7 +17,7 @@ namespace TFW.Docs.WebApp
         public const string Description = nameof(Description);
     }
 
-    public static class PageConsts
+    public static class WebAppConsts
     {
         public static class Admin
         {
@@ -26,6 +26,8 @@ namespace TFW.Docs.WebApp
             public const string Folder_Root = "/";
 
             public const string Page_Login = "/Login";
+
+            public const string ReturnUrlParameter = "returnUrl";
         }
     }
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -53,7 +52,7 @@ namespace TFW.Docs.WebApp
                    options.ExpireTimeSpan = TimeSpan.FromHours(webAppSettings.CookiePersistenceHours);
                    options.LoginPath = Routing.Admin.Login;
                    options.LogoutPath = Routing.Admin.Logout;
-                   options.ReturnUrlParameter = "return_url";
+                   options.ReturnUrlParameter = WebAppConsts.Admin.ReturnUrlParameter;
                    options.SlidingExpiration = true;
                    //options.Events.OnValidatePrincipal = async (c) =>
                    //{
@@ -71,13 +70,13 @@ namespace TFW.Docs.WebApp
             services.AddRazorPages(options =>
             {
                 #region Admin
-                var authorizeAdminFolders = new[] { PageConsts.Admin.Folder_Root };
-                var allowAnonymousAdminPages = new[] { PageConsts.Admin.Page_Login };
+                var authorizeAdminFolders = new[] { WebAppConsts.Admin.Folder_Root };
+                var allowAnonymousAdminPages = new[] { WebAppConsts.Admin.Page_Login };
 
                 foreach (var folder in authorizeAdminFolders)
-                    options.Conventions.AuthorizeAreaFolder(PageConsts.Admin.AreaName, folder);
+                    options.Conventions.AuthorizeAreaFolder(WebAppConsts.Admin.AreaName, folder);
                 foreach (var page in allowAnonymousAdminPages)
-                    options.Conventions.AllowAnonymousToAreaPage(PageConsts.Admin.AreaName, page);
+                    options.Conventions.AllowAnonymousToAreaPage(WebAppConsts.Admin.AreaName, page);
                 #endregion
             })
                 .AddViewLocalization()

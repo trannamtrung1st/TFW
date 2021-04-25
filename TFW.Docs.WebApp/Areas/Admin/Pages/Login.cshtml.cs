@@ -15,10 +15,10 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages
         {
         }
 
-        public IActionResult OnGet(string return_url = Routing.Admin.Index)
+        public IActionResult OnGet(string returnUrl = Routing.Admin.Index)
         {
             if (User.Identity.IsAuthenticated)
-                return LocalRedirect(return_url);
+                return LocalRedirect(returnUrl);
 
             return Page();
         }

@@ -58,6 +58,8 @@ namespace TFW.Docs.WebApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
