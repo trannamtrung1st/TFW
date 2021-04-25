@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.AppUser;
 using TFW.Docs.Cross.Models.Common;
+using TFW.Docs.Cross.Models.Identity;
 
 namespace TFW.Docs.ApiClient
 {
@@ -18,7 +19,7 @@ namespace TFW.Docs.ApiClient
 
     public class UserClient : BaseClient, IUserClient
     {
-        public UserClient(HttpClient client) : base(client)
+        public UserClient(HttpClient client, ClientInfo clientInfo) : base(client, clientInfo)
         {
         }
 

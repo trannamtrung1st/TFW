@@ -17,6 +17,7 @@ namespace TFW.Docs.Cross
         public const string ListCultureOptions = Prefix + ":" + nameof(ListCultureOptions);
         public const string ListCurrencyOptions = Prefix + ":" + nameof(ListCurrencyOptions);
         public const string ListRegionOptions = Prefix + ":" + nameof(ListRegionOptions);
+        public const string InitStatus = Prefix + ":" + nameof(InitStatus);
     }
 
     public static class EnvironmentVariables

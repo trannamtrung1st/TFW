@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,13 +35,16 @@ namespace TFW.Docs.WebApp
             var webAppSettings = Settings.Get<WebAppSettings>();
 
             services.ConfigureAppOptions(Configuration)
-                .AddApiClient(webAppSettings.ApiBase)
+                .AddApiClient(webAppSettings.ApiBase, AppClients.TFWDocsWebApp)
+                .AddMemoryCache()
                 .AddAppAuthentication()
                 .AddWebFrameworks();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            IApiClient apiClient,
+            IMemoryCache memoryCache)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +70,14 @@ namespace TFW.Docs.WebApp
             {
                 endpoints.MapRazorPages();
             });
+
+            InitializeAsync(apiClient, memoryCache).Wait();
+        }
+
+        private async Task InitializeAsync(IApiClient apiClient, IMemoryCache memoryCache)
+        {
+            var initStatus = await apiClient.Setting.GetInitStatusAsync();
+            memoryCache.Set(CachingKeys.InitStatus, initStatus.Result.Data);
         }
     }
 }

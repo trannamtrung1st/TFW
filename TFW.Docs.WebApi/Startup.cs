@@ -178,11 +178,11 @@ namespace TFW.Docs.WebApi
                 endpoints.MapControllers();
             });
 
-            PrepareEnvironment(env);
-
             // app lifetime
             appLifetime.ApplicationStarted.Register(OnApplicationStarted);
             appLifetime.ApplicationStopped.Register(OnApplicationStopped);
+
+            PrepareEnvironment(env);
         }
 
         private void PrepareEnvironment(IWebHostEnvironment env)

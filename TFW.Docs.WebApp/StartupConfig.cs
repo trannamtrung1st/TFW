@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Docs.WebApp.Models;
@@ -84,6 +85,5 @@ namespace TFW.Docs.WebApp
 
             return services;
         }
-
     }
 }
