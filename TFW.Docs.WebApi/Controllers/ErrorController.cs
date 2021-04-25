@@ -16,6 +16,7 @@ using TFW.Framework.Common.Extensions;
 using TFW.Framework.Web.Features;
 using TFW.Docs.Cross.Providers;
 using Microsoft.Extensions.Localization;
+using TFW.Docs.Business;
 
 namespace TFW.Docs.WebApi.Controllers
 {
@@ -25,8 +26,9 @@ namespace TFW.Docs.WebApi.Controllers
     {
         private readonly IWebHostEnvironment _env;
 
-        public ErrorController(IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
-            IWebHostEnvironment env) : base(contextProvider, resultLocalizer)
+        public ErrorController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IWebHostEnvironment env) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _env = env;
         }

@@ -12,6 +12,7 @@ using TFW.Data;
 using TFW.Framework.Web.Attributes;
 using TFW.Docs.Cross.Providers;
 using Microsoft.Extensions.Localization;
+using TFW.Docs.Business;
 
 namespace TFW.Docs.WebApi.Controllers
 {
@@ -29,8 +30,9 @@ namespace TFW.Docs.WebApi.Controllers
 
         private readonly IReferenceDataService _referenceDataService;
 
-        public ReferenceDataController(IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
-            IReferenceDataService referenceDataService) : base(contextProvider, resultLocalizer)
+        public ReferenceDataController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IReferenceDataService referenceDataService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _referenceDataService = referenceDataService;
         }

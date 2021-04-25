@@ -15,6 +15,7 @@ using TFW.Framework.Web.Attributes;
 using TFW.Docs.WebApi.Filters;
 using TFW.Docs.Cross.Providers;
 using Microsoft.Extensions.Localization;
+using TFW.Docs.Business;
 
 namespace TFW.Docs.WebApi.Controllers
 {
@@ -28,8 +29,9 @@ namespace TFW.Docs.WebApi.Controllers
 
         private readonly IIdentityService _identityService;
 
-        public AuthController(IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
-            IIdentityService identityService) : base(contextProvider, resultLocalizer)
+        public AuthController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _identityService = identityService;
         }

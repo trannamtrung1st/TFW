@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using TFW.Docs.Business;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
@@ -26,8 +27,9 @@ namespace TFW.Docs.WebApi.Controllers
 
         private readonly ISettingService _settingService;
 
-        public SettingController(IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
-            ISettingService settingService) : base(contextProvider, resultLocalizer)
+        public SettingController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer,
+            ISettingService settingService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _settingService = settingService;
         }

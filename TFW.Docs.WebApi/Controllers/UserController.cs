@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using TFW.Docs.Business;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.AppUser;
@@ -33,7 +34,9 @@ namespace TFW.Docs.WebApi.Controllers
 
         private readonly IIdentityService _identityService;
 
-        public UserController(IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer) : base(contextProvider, resultLocalizer)
+        public UserController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider, IStringLocalizer<ResultCodeResources> resultLocalizer)
+            : base(unitOfWork, contextProvider, resultLocalizer)
         {
         }
 

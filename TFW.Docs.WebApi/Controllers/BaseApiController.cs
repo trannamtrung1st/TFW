@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using TFW.Docs.Business;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Providers;
@@ -18,12 +19,15 @@ namespace TFW.Docs.WebApi.Controllers
     [SwaggerResponse((int)HttpStatusCode.InternalServerError, null, typeof(AppResult))]
     public abstract class BaseApiController : ControllerBase
     {
+        protected readonly IUnitOfWork unitOfWork;
         protected readonly IBusinessContextProvider contextProvider;
         protected readonly IStringLocalizer<ResultCodeResources> resultLocalizer;
 
-        public BaseApiController(IBusinessContextProvider contextProvider,
+        public BaseApiController(IUnitOfWork unitOfWork,
+            IBusinessContextProvider contextProvider,
             IStringLocalizer<ResultCodeResources> resultLocalizer)
         {
+            this.unitOfWork = unitOfWork;
             this.contextProvider = contextProvider;
             this.resultLocalizer = resultLocalizer;
         }
