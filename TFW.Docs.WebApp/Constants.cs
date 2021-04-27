@@ -25,7 +25,7 @@ namespace TFW.Docs.WebApp
 
             public const string Folder_Root = "/";
 
-            public const string Page_Login = "/Login";
+            public const string Page_Login = "/Login/Index";
 
             public const string ReturnUrlParameter = "returnUrl";
         }

@@ -45,6 +45,7 @@ namespace TFW.Docs.WebApi
         public static void Setup()
         {
             TempAssemblyList = ReflectionHelper.GetAllAssemblies(
+                rootPath: AppHelper.GetAppContextBaseDirectory(),
                 searchPattern: "TFW.Docs.*.dll",
                 excludedRelativeDirPaths: WebApiConsts.ExcludedAssemblyDirs);
 
@@ -261,7 +262,7 @@ namespace TFW.Docs.WebApi
                 });
                 #endregion
 
-                var filePath = Path.Combine(System.AppContext.BaseDirectory,
+                var filePath = Path.Combine(AppHelper.GetAppContextBaseDirectory(),
                     $"{typeof(Startup).Assembly.GetName().Name}.xml");
                 c.IncludeXmlComments(filePath);
             });

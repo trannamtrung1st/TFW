@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace TFW.Docs.WebApp.Pages.Shared
 {
-    public class BasePageModel<T> : PageModel, ILayoutPageModel
+    public class BasePageModel<T> : PageModel, ILayoutPageModel, ILocalizedPageModel
     {
         public BasePageModel(IStringLocalizer<T> localizer)
         {
             Localizer = localizer;
         }
 
-        public IStringLocalizer<T> Localizer { get; }
+        public IStringLocalizer Localizer { get; }
 
         public virtual string Title => Localizer[ResourceKeys.Title];
 

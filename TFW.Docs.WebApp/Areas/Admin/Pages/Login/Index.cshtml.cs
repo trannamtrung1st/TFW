@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using TFW.Docs.Cross;
 using TFW.Docs.WebApp.Pages.Shared;
 
-namespace TFW.Docs.WebApp.Areas.Admin.Pages
+namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
 {
-    public class LoginModel : BasePageModel<LoginModel>, ILayoutPageModel
+    public class IndexModel : BasePageModel<IndexModel>, ILayoutPageModel
     {
+        public static class Resources
+        {
+            public const string InitSuccess = nameof(InitSuccess);
+        }
+
         private readonly IMemoryCache _memoryCache;
 
-        public LoginModel(IStringLocalizer<LoginModel> localizer,
+        public IndexModel(IStringLocalizer<IndexModel> localizer,
             IMemoryCache memoryCache) : base(localizer)
         {
             _memoryCache = memoryCache;

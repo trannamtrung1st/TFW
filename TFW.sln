@@ -139,7 +139,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Business", "TFW.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.Business.Core", "TFW.Docs.Business.Core\TFW.Docs.Business.Core.csproj", "{5EFABCD9-6592-4443-968A-E321A36A4865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Docs.ApiClient", "TFW.Docs.ApiClient\TFW.Docs.ApiClient.csproj", "{55201E6F-54D9-478B-BE0C-20994ACC1028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Docs.ApiClient", "TFW.Docs.ApiClient\TFW.Docs.ApiClient.csproj", "{55201E6F-54D9-478B-BE0C-20994ACC1028}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -41,7 +41,6 @@ namespace TFW.Docs.Cross.Validators.Identity
                 .InvalidState();
 
             RuleFor(model => model.fullName)
-                .NotEmpty().InvalidState()
                 .MaximumLength(100).InvalidState();
 
             RuleFor(model => model.email)
