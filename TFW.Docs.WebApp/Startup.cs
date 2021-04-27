@@ -46,6 +46,8 @@ namespace TFW.Docs.WebApp
             IApiClient apiClient,
             IMemoryCache memoryCache)
         {
+            ApiEndpoints.BaseUrl = Settings.Get<WebAppSettings>().ApiBase;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

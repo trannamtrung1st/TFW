@@ -343,4 +343,57 @@ namespace TFW.Docs.Cross
             }
         }
     }
+
+    public static class ApiEndpoints
+    {
+        public static string BaseUrl { get; set; } = "";
+
+        public static class Auth
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.Auth.Route);
+            public static string RequestToken => string.Join('/', Route, Routing.Controller.Auth.RequestToken);
+        }
+
+        public static class User
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.User.Route);
+            public static string GetListAppUser => string.Join('/', Route, Routing.Controller.User.GetListAppUser);
+            public static string GetTotalUserCount => string.Join('/', Route, Routing.Controller.User.GetTotalUserCount);
+            public static string GetListDeletedAppUser => string.Join('/', Route, Routing.Controller.User.GetListDeletedAppUser);
+            public static string GetCurrentUserProfile => string.Join('/', Route, Routing.Controller.User.GetCurrentUserProfile);
+            public static string Register => string.Join('/', Route, Routing.Controller.User.Register);
+            public static string Init => string.Join('/', Route, Routing.Controller.User.Init);
+            public static string AddUserRoles => string.Join('/', Route, Routing.Controller.User.AddUserRoles);
+            public static string RemoveUserRoles => string.Join('/', Route, Routing.Controller.User.RemoveUserRoles);
+        }
+
+        public static class Role
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.Role.Route);
+            public static string GetAllRoles => string.Join('/', Route, Routing.Controller.Role.GetAllRoles);
+        }
+
+        public static class Setting
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.Setting.Route);
+            public static string ChangeSmtpOption => string.Join('/', Route, Routing.Controller.Setting.ChangeSmtpOption);
+            public static string ReloadConfiguration => string.Join('/', Route, Routing.Controller.Setting.ReloadConfiguration);
+            public static string InitStatus => string.Join('/', Route, Routing.Controller.Setting.InitStatus);
+        }
+
+        public static class Reference
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.Reference.Route);
+            public static string GetTimeZoneOptions => string.Join('/', Route, Routing.Controller.Reference.GetTimeZoneOptions);
+            public static string GetCultureOptions => string.Join('/', Route, Routing.Controller.Reference.GetCultureOptions);
+            public static string GetCurrencyOptions => string.Join('/', Route, Routing.Controller.Reference.GetCurrencyOptions);
+            public static string GetRegionOptions => string.Join('/', Route, Routing.Controller.Reference.GetRegionOptions);
+        }
+
+        public static class Error
+        {
+            public static string Route => string.Join('/', BaseUrl, Routing.Controller.Error.Route);
+            public static string HandleException => string.Join('/', Route, Routing.Controller.Error.HandleException);
+        }
+    }
 }
