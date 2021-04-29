@@ -70,6 +70,7 @@
     </div>
 </div>
 <!-- /.login-box -->
+<partial name="LoadingPartial" />
 <!-- jQuery -->
 <script src="/admin/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -81,13 +82,12 @@
 <script src="/admin/plugins/jquery-validation/additional-methods.min.js"></script>
 <!-- Services -->
 <partial name="Services/IdentityServicePartial" />
-<partial name="Services/UiServicePartial" />
+<partial name="Services/CommonServicePartial" />
 <script>
     const identityService = getIdentityService();
-    const uiService = getUiService();
+    const commonService = getCommonService();
 
     const init = () => {
-        identityService.clearToken();
         $(document).ready(() => {
             console.log('Document ready');
         });

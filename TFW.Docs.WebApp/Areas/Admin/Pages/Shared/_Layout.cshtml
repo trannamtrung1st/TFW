@@ -16,12 +16,14 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!--<link rel="stylesheet" href="/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">-->
+    <link rel="stylesheet" href="/admin/plugins/sweetalert2/sweetalert2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/admin/dist/css/adminlte.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="/admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-
+    <!-- Shared -->
+    <link rel="stylesheet" href="/admin/dist/css/shared.min.css">
     @RenderSection(SectionNames.Styles, false)
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -864,6 +866,7 @@
         <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+    <partial name="LoadingPartial" />
     <!-- jQuery -->
     <script src="/admin/plugins/jquery/jquery.min.js"></script>
     <!-- jQuery UI 1.11.4 -->

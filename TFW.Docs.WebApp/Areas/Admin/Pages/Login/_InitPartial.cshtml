@@ -53,6 +53,7 @@
     </div>
 </div>
 <!-- /.login-box -->
+<partial name="LoadingPartial" />
 <!-- jQuery -->
 <script src="/admin/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -66,14 +67,14 @@
 <script src="/admin/plugins/jquery-validation/additional-methods.min.js"></script>
 <!-- Services -->
 <partial name="Services/IdentityServicePartial" />
-<partial name="Services/UiServicePartial" />
+<partial name="Services/CommonServicePartial" />
 <!-- Page -->
 <script>
     const identityService = getIdentityService();
-    const uiService = getUiService();
+    const commonService = getCommonService();
 
     const confirmInitializeUser = (form) => {
-        uiService.showConfirm({
+        commonService.showConfirm({
             text: '@Model.Localizer[IndexModel.Resources.ConfirmInit]'
         }).then((result) => {
             if (result.value)
@@ -82,27 +83,24 @@
     }
 
     const initializeUser = (form) => {
-        uiService.changeLoading(true);
+        commonService.changeLoading(true);
         identityService.initializeUser({
             form,
             success: (_) => {
-                uiService.showSuccess("@Model.Localizer[IndexModel.Resources.InitSuccess]").then(() => {
-                    location.href = '@Routing.Admin.Index';
+                commonService.showSuccess({
+                    text: "@Model.Localizer[IndexModel.Resources.InitSuccess]"
+                }).then(() => {
+                    location.href = "?iS=true";
                 });
             },
-            error: (data) => {
-                console.log(data);
-                // [TODO] handle error
-                alert('[TODO]');
-            },
+            error: commonService.showApiError,
             complete: () => {
-                uiService.changeLoading(false);
+                commonService.changeLoading(false);
             }
         });
     }
 
     const init = () => {
-        identityService.clearToken();
         $(document).ready(() => {
             console.log('Document ready');
             $("#form-init").validate({

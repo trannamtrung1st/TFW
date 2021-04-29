@@ -123,4 +123,16 @@
   <data name="DefaultConfirmTitle" xml:space="preserve">
     <value>Confirmation</value>
   </data>
+  <data name="DefaultErrorHtml" xml:space="preserve">
+    <value>Unknown error</value>
+  </data>
+  <data name="DefaultErrorTitle" xml:space="preserve">
+    <value>Sorry</value>
+  </data>
+  <data name="DefaultOkBtnText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="DefaultSuccessTitle" xml:space="preserve">
+    <value>Success</value>
+  </data>
 </root>

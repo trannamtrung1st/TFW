@@ -29,10 +29,18 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
 
         public bool Init { get; set; }
 
-        public IActionResult OnGet(string returnUrl = Routing.Admin.Index)
+        public IActionResult OnGet(
+            [FromQuery(Name = "iS")] bool? initSuccess = null,
+            string returnUrl = Routing.Admin.Index)
         {
             if (User.Identity.IsAuthenticated)
                 return LocalRedirect(returnUrl);
+
+            if (initSuccess != null)
+            {
+                _memoryCache.Set(CachingKeys.InitStatus, initSuccess.Value);
+                return LocalRedirect(returnUrl);
+            }
 
             Init = !_memoryCache.Get<bool>(CachingKeys.InitStatus);
 

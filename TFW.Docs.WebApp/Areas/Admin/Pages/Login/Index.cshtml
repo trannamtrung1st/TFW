@@ -18,9 +18,12 @@
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!--<link rel="stylesheet" href="/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">-->
+    <link rel="stylesheet" href="/admin/plugins/sweetalert2/sweetalert2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/admin/dist/css/adminlte.min.css">
+    <!-- Shared -->
+    <link rel="stylesheet" href="/admin/dist/css/shared.min.css">
 </head>
 <body class="hold-transition login-page">
     @if (Model.Init)
@@ -31,5 +34,8 @@
     {
         <partial name="_LoginPartial" />
     }
+    <script>
+        identityService.clearToken();
+    </script>
 </body>
 </html>
