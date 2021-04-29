@@ -16,6 +16,7 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
         public static class Resources
         {
             public const string InitSuccess = nameof(InitSuccess);
+            public const string ConfirmInit = nameof(ConfirmInit);
         }
 
         private readonly IMemoryCache _memoryCache;

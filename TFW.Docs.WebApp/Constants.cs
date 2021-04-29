@@ -11,10 +11,15 @@ namespace TFW.Docs.WebApp
         public const string Styles = nameof(Styles);
     }
 
-    public static class ResourceKeys
+    public class AppResources
     {
+        private AppResources() { }
+
         public const string Title = nameof(Title);
         public const string Description = nameof(Description);
+
+        public const string DefaultConfirmBtnText = nameof(DefaultConfirmBtnText);
+        public const string DefaultConfirmTitle = nameof(DefaultConfirmTitle);
     }
 
     public static class WebAppConsts
