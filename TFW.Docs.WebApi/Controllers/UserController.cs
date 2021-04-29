@@ -63,7 +63,7 @@ namespace TFW.Docs.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Initialize([FromForm] RegisterModel model)
         {
-            await _identityService.RegisterAsync(model);
+            await _identityService.InitializeAsync(model);
 
             return NoContent();
         }
