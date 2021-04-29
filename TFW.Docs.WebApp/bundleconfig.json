@@ -1,0 +1,8 @@
+[
+  {
+    "outputFileName": "wwwroot/admin/dist/css/shared.min.css",
+    "inputFiles": [
+      "wwwroot/admin/dist/css/shared.css"
+    ]
+  }
+]
