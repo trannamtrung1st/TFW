@@ -24,6 +24,7 @@ namespace TFW.Docs.WebApp
 
             // Settings
             Settings.Set(Configuration.Parse<WebAppSettings>(nameof(WebAppSettings)));
+            Settings.Set(Configuration.Parse<JwtSettings>(nameof(JwtSettings)));
             Settings.Set(Configuration.Parse<AppSettings>(nameof(AppSettings)));
         }
 

@@ -489,18 +489,19 @@ namespace TFW.Docs.Business.Core.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.Default.GetBytes(jwtSettings.SecretKey);
             var issuer = jwtSettings.Issuer;
-            var audience = jwtSettings.Audience;
             var identity = principal.Identity as ClaimsIdentity;
+            var audClaims = jwtSettings.Audiences.Select(aud => new Claim(JwtRegisteredClaimNames.Aud, aud)).ToArray();
 
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, principal.IdentityName()));
+            identity.AddClaims(audClaims);
 
             var utcNow = DateTime.UtcNow;
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = issuer,
-                Audience = audience,
+                //Audience = audience,
                 Subject = identity,
                 IssuedAt = utcNow,
                 Expires = utcNow.AddSeconds(jwtSettings.TokenExpiresInSeconds),
@@ -515,9 +516,9 @@ namespace TFW.Docs.Business.Core.Services
             #endregion
 
             var resp = new TokenResponseModel();
-            resp.access_token = tokenString;
-            resp.token_type = JwtBearerDefaults.AuthenticationScheme;
-            resp.expires_in = jwtSettings.TokenExpiresInSeconds;
+            resp.AccessToken = tokenString;
+            resp.TokenType = JwtBearerDefaults.AuthenticationScheme;
+            resp.ExpiresIn = jwtSettings.TokenExpiresInSeconds;
 
             int userId;
             if (int.TryParse(principal.Identity.Name, out userId))
@@ -526,16 +527,16 @@ namespace TFW.Docs.Business.Core.Services
             #region Refresh Token
             key = Encoding.Default.GetBytes(jwtSettings.SecretKey);
             issuer = jwtSettings.Issuer;
-            audience = jwtSettings.Audience;
 
             identity = new ClaimsIdentity(
                 identity.Claims.Where(c => c.Type == identity.NameClaimType),
                 identity.AuthenticationType);
+            identity.AddClaims(audClaims);
 
             tokenDescriptor = new SecurityTokenDescriptor
             {
                 Issuer = issuer,
-                Audience = audience,
+                //Audience = audience,
                 Subject = identity,
                 IssuedAt = utcNow,
                 Expires = utcNow.AddSeconds(jwtSettings.RefreshTokenExpiresInSeconds),
@@ -548,7 +549,7 @@ namespace TFW.Docs.Business.Core.Services
             token = tokenHandler.CreateToken(tokenDescriptor);
             tokenString = tokenHandler.WriteToken(token);
 
-            resp.refresh_token = tokenString;
+            resp.RefreshToken = tokenString;
             #endregion
 
             return resp;

@@ -28,18 +28,19 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
         }
 
         public bool Init { get; set; }
+        [BindProperty(Name = WebAppConsts.Admin.ReturnUrlParameter)]
+        public string ReturnUrl { get; set; } = Routing.Admin.Index;
 
         public IActionResult OnGet(
-            [FromQuery(Name = "iS")] bool? initSuccess = null,
-            string returnUrl = Routing.Admin.Index)
+            [FromQuery(Name = "iS")] bool? initSuccess = null)
         {
             if (User.Identity.IsAuthenticated)
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(ReturnUrl);
 
             if (initSuccess != null)
             {
                 _memoryCache.Set(CachingKeys.InitStatus, initSuccess.Value);
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(ReturnUrl);
             }
 
             Init = !_memoryCache.Get<bool>(CachingKeys.InitStatus);

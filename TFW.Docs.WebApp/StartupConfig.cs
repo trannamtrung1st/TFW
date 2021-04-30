@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +24,7 @@ namespace TFW.Docs.WebApp
         {
             return services
                 .Configure<WebAppSettings>(configuration.GetSection(nameof(WebAppSettings)))
+                .Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)))
                 .Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
         }
 
@@ -45,21 +46,23 @@ namespace TFW.Docs.WebApp
         {
             var webAppSettings = Settings.Get<WebAppSettings>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options =>
-               {
-                   options.Cookie.HttpOnly = true;
-                   options.AccessDeniedPath = Routing.Admin.AccessDenied;
-                   options.ExpireTimeSpan = TimeSpan.FromHours(webAppSettings.CookiePersistenceHours);
-                   options.LoginPath = Routing.Admin.Login;
-                   options.LogoutPath = Routing.Admin.Logout;
-                   options.ReturnUrlParameter = WebAppConsts.Admin.ReturnUrlParameter;
-                   options.SlidingExpiration = true;
-                   //options.Events.OnValidatePrincipal = async (c) =>
-                   //{
-                   //    await SecurityStampValidator.ValidatePrincipalAsync(c);
-                   //};
-               });
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(jwtBearerOptions =>
+                {
+                    jwtBearerOptions.TokenValidationParameters = SecurityConsts.DefaultTokenParameters;
+                    //jwtBearerOptions.Events = new JwtBearerEvents
+                    //{
+                    //    OnMessageReceived = (context) =>
+                    //    {
+                    //        StringValues values;
+                    //        if (!context.Request.Query.TryGetValue("access_token", out values))
+                    //            return Task.CompletedTask;
+                    //        var token = values.FirstOrDefault();
+                    //        context.Token = token;
+                    //        return Task.CompletedTask;
+                    //    }
+                    //};
+                });
 
             return services;
         }
