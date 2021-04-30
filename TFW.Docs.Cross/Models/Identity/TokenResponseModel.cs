@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,5 +19,11 @@ namespace TFW.Docs.Cross.Models.Identity
 
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
+
+        [JsonProperty("user_id")]
+        public int user_id { get; set; }
+
+        [JsonExtensionData]
+        public IDictionary<string, JToken> Extra { get; set; } = new Dictionary<string, JToken>();
     }
 }

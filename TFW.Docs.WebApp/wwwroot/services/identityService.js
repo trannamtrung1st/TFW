@@ -5,6 +5,10 @@
 }) => {
     const tokenInfoKey = 'tokenInfo';
     return {
+        saveToken: (model) => {
+            localStorage.setItem(tokenInfoKey, JSON.stringify(model));
+        },
+
         clearToken: () => {
             localStorage.removeItem(tokenInfoKey);
         },
@@ -13,22 +17,23 @@
             const tokenInfoCache = localStorage[tokenInfoKey];
             const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
 
-            if (tokenInfo?.expires_utc) {
-                var curExpStr = tokenInfo.expires_utc;
-                var cur = moment(new Date());
-                var exp = moment(new Date(curExpStr));
+            if (tokenInfo?.expires_in) {
+                const curAccessToken = tokenInfo.access_token;
+                const current = new Date();
+                const cur = moment(current);
+                const exp = moment(current).add(parseInt(curExpIn), 'seconds');
 
-                var minDiff = exp.diff(cur, 'minutes');
+                let minDiff = exp.diff(cur, 'minutes');
                 minDiff = minDiff < 0 ? 0 : minDiff;
-                var minRefDiff = minDiff - 5;
+                let minRefDiff = minDiff - 5;
                 minRefDiff = minRefDiff < 0 ? 0 : minRefDiff;
 
                 console.log('refresh token in ' + minRefDiff + ' mins');
 
                 if (tokenInfo.refresh_token) {
                     setTimeout(() => {
-                        if (tokenInfo.expires_utc == curExpStr) {
-                            var formData = new FormData();
+                        if (tokenInfo.access_token == curAccessToken) {
+                            const formData = new FormData();
                             formData.append('grant_type', 'refresh_token');
                             formData.append('refresh_token', tokenInfo.refresh_token);
                             $.ajax({
@@ -67,6 +72,22 @@
             const formData = new FormData(form);
             $.ajax({
                 url: settings.initUserEndpoint,
+                type: 'post',
+                contentType: false,
+                processData: false,
+                cache: false,
+                data: formData,
+                success: success,
+                error: error,
+                complete: complete
+            });
+        },
+
+        login: ({ form, success, error, complete }) => {
+            form = $(form)[0];
+            const formData = new FormData(form);
+            $.ajax({
+                url: settings.requestTokenEndpoint,
                 type: 'post',
                 contentType: false,
                 processData: false,

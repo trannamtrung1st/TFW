@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -19,7 +20,7 @@ namespace TFW.Docs.Cross.Models.Common
         public ResultCode? Code { get; set; }
 
         [JsonExtensionData]
-        public IDictionary<string, object> Extra { get; set; } = new Dictionary<string, object>();
+        public IDictionary<string, JToken> Extra { get; set; } = new Dictionary<string, JToken>();
     }
 
     public class AppResult : AppResult<object>

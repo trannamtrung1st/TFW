@@ -515,9 +515,13 @@ namespace TFW.Docs.Business.Core.Services
             #endregion
 
             var resp = new TokenResponseModel();
-            resp.AccessToken = tokenString;
-            resp.TokenType = JwtBearerDefaults.AuthenticationScheme;
-            resp.ExpiresIn = jwtSettings.TokenExpiresInSeconds;
+            resp.access_token = tokenString;
+            resp.token_type = JwtBearerDefaults.AuthenticationScheme;
+            resp.expires_in = jwtSettings.TokenExpiresInSeconds;
+
+            int userId;
+            if (int.TryParse(principal.Identity.Name, out userId))
+                resp.user_id = userId;
 
             #region Refresh Token
             key = Encoding.Default.GetBytes(jwtSettings.SecretKey);
@@ -544,7 +548,7 @@ namespace TFW.Docs.Business.Core.Services
             token = tokenHandler.CreateToken(tokenDescriptor);
             tokenString = tokenHandler.WriteToken(token);
 
-            resp.RefreshToken = tokenString;
+            resp.refresh_token = tokenString;
             #endregion
 
             return resp;
