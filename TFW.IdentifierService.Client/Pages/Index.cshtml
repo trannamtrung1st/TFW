@@ -14,20 +14,36 @@
 
 @section Scripts{
     <script>
-        let deviceId;
+        // http://www.websocket.org/echo.html
+        var output = document.querySelector("#device-id"),
+            // wsUri = "ws://echo.websocket.org/",
+            wsUri = "ws://127.0.0.1:7777/",
+            websocket = new WebSocket(wsUri);
 
-        getDeviceID({
-            success: (data) => {
-                deviceId = data;
-                $('#device-id').html(deviceId);
-            }
-        });
+        websocket.onopen = function (e) {
+            writeToScreen("CONNECTED");
+            doSend("WebSocket rocks\n");
+        };
 
-        function getDeviceID({ success }) {
-            $.get({
-                url: 'http://localhost:5000',
-                success
-            });
+        websocket.onclose = function (e) {
+            writeToScreen("DISCONNECTED");
+        };
+
+        websocket.onmessage = function (e) {
+            writeToScreen("<span>RESPONSE: " + e.data + "</span>");
+        };
+
+        websocket.onerror = function (e) {
+            writeToScreen("<span>ERROR:</span> " + e.data);
+        };
+
+        function doSend(message) {
+            writeToScreen("SENT: " + message);
+            websocket.send(message);
+        }
+
+        function writeToScreen(message) {
+            output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
         }
     </script>
 }
