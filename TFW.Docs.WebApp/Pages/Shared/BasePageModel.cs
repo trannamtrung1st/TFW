@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TFW.Docs.WebApp.Pages.Shared
 {
-    public class BasePageModel<T> : PageModel, ILayoutPageModel, ILocalizedPageModel
+    public class BasePageModel<T> : PageModel, IPageModel, ILocalizedPageModel
     {
         public BasePageModel(IStringLocalizer<T> localizer)
         {

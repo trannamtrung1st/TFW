@@ -74,8 +74,8 @@ namespace TFW.Docs.WebApp
             services.AddRazorPages(options =>
             {
                 #region Admin
-                var authorizeAdminFolders = new[] { WebAppConsts.Admin.Folder_Root };
-                var allowAnonymousAdminPages = new[] { WebAppConsts.Admin.Page_Login };
+                var authorizeAdminFolders = new[] { AppPages.Folders.Root };
+                var allowAnonymousAdminPages = new[] { AppPages.Pages.Login };
 
                 foreach (var folder in authorizeAdminFolders)
                     options.Conventions.AuthorizeAreaFolder(WebAppConsts.Admin.AreaName, folder);

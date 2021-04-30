@@ -11,7 +11,7 @@ using TFW.Docs.WebApp.Pages.Shared;
 
 namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
 {
-    public class IndexModel : BasePageModel<IndexModel>, ILayoutPageModel
+    public class IndexModel : BasePageModel<IndexModel>, IPageModel
     {
         public static class Resources
         {
@@ -28,7 +28,7 @@ namespace TFW.Docs.WebApp.Areas.Admin.Pages.Login
         }
 
         public bool Init { get; set; }
-        [BindProperty(Name = WebAppConsts.Admin.ReturnUrlParameter)]
+        [BindProperty(Name = WebAppConsts.Admin.ReturnUrlParam)]
         public string ReturnUrl { get; set; } = Routing.Admin.Index;
 
         public IActionResult OnGet(

@@ -7,7 +7,7 @@ using TFW.Docs.WebApp.Pages.Shared;
 
 namespace TFW.Docs.WebApp.Pages
 {
-    public class IndexModel : BasePageModel<IndexModel>, ILayoutPageModel
+    public class IndexModel : BasePageModel<IndexModel>, IPageModel
     {
         public IndexModel(IStringLocalizer<IndexModel> localizer) : base(localizer)
         {

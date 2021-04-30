@@ -31,12 +31,30 @@ namespace TFW.Docs.WebApp
         public static class Admin
         {
             public const string AreaName = nameof(Admin);
+            public const string ReturnUrlParam = "returnUrl";
+            public const string StatusParam = "code";
+        }
+    }
 
-            public const string Folder_Root = "/";
+    public static class AppPages
+    {
+        public static class Folders
+        {
+            public const string Root = "/";
+        }
 
-            public const string Page_Login = "/Login/Index";
+        public static class Pages
+        {
+            public const string Login = "/Login/Index";
+        }
+    }
 
-            public const string ReturnUrlParameter = "returnUrl";
+    public static class AppViews
+    {
+        public static class Admin
+        {
+            public const string Status = "Admin/StatusView";
+            public const string Message = "Admin/MessageView";
         }
     }
 

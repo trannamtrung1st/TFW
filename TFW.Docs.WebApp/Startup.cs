@@ -49,14 +49,11 @@ namespace TFW.Docs.WebApp
         {
             ApiEndpoints.BaseUrl = Settings.Get<WebAppSettings>().ApiBase;
 
-            if (env.IsDevelopment())
+            app.UseExceptionHandler(Routing.Root.Error);
+            app.UseStatusCodePagesWithReExecute(Routing.Root.Status, $"?{WebAppConsts.Admin.StatusParam}={{0}}");
+
+            if (!env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler(Routing.Root.Error);
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TFW.Docs.WebApp.Pages.Shared
 {
-    public interface ILayoutPageModel
+    public interface IPageModel
     {
         string Title { get; }
         string Description { get; }

@@ -276,6 +276,7 @@ namespace TFW.Docs.Cross
         {
             public const string Index = "/";
             public const string Error = "/error";
+            public const string Status = "/statuscode";
 
             public static class Post
             {
