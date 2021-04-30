@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>
+        Device ID: <span id="device-id" class="text-success font-weight-bold">Retrieving ...</span>
+    </p>
+</div>
+
+@section Scripts{
+    <script>
+        let deviceId;
+
+        getDeviceID({
+            success: (data) => {
+                deviceId = data;
+                $('#device-id').html(deviceId);
+            }
+        });
+
+        function getDeviceID({ success }) {
+            $.get({
+                url: 'http://localhost:5000',
+                success
+            });
+        }
+    </script>
+}
