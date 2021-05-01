@@ -44,11 +44,4 @@ namespace TFW.Docs.AppAdmin
             public const string Login = "/Login/Index";
         }
     }
-
-    public static class AppViews
-    {
-        public const string Status = "StatusView";
-        public const string Message = "MessageView";
-    }
-
 }

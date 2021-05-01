@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using TFW.Docs.Cross;
 using TFW.Docs.AppAdmin.Pages.Shared;
+using TFW.Docs.Cross.Exceptions;
 
 namespace TFW.Docs.AppAdmin.Pages.Login
 {
@@ -20,11 +21,15 @@ namespace TFW.Docs.AppAdmin.Pages.Login
         }
 
         private readonly IMemoryCache _memoryCache;
+        private readonly IStringLocalizer _resultLocalizer;
 
-        public IndexModel(IStringLocalizer<IndexModel> localizer,
+        public IndexModel(
+            IStringLocalizer<IndexModel> localizer,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
             IMemoryCache memoryCache) : base(localizer)
         {
             _memoryCache = memoryCache;
+            _resultLocalizer = resultLocalizer;
         }
 
         public bool Init { get; set; }
@@ -33,6 +38,9 @@ namespace TFW.Docs.AppAdmin.Pages.Login
             [FromQuery(Name = "iS")] bool? initSuccess = null,
             string returnUrl = Routing.Admin.Index)
         {
+            if (!Url.IsLocalUrl(returnUrl))
+                throw AppValidationException.From(_resultLocalizer, ResultCode.Identity_InvalidRedirectUrl);
+
             if (User.Identity.IsAuthenticated)
                 return LocalRedirect(returnUrl);
 

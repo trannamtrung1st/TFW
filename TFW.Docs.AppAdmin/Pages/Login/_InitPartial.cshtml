@@ -73,19 +73,12 @@
     const identityService = getIdentityService();
     const commonService = getCommonService();
 
-    const confirmInitializeUser = (form) => {
-        commonService.showConfirm({
-            text: '@Model.Localizer[IndexModel.Resources.ConfirmInit]'
-        }).then((result) => {
-            if (result.value)
-                initializeUser(form);
-        });
-    }
-
     const initializeUser = (form) => {
+        form = $(form)[0];
+        const formData = new FormData(form);
         commonService.changeLoading(true);
         identityService.initializeUser({
-            form,
+            formData,
             success: (_) => {
                 commonService.showSuccess({
                     text: "@Model.Localizer[IndexModel.Resources.InitSuccess]"
@@ -97,6 +90,15 @@
             complete: () => {
                 commonService.changeLoading(false);
             }
+        });
+    }
+
+    const confirmInitializeUser = (form) => {
+        commonService.showConfirm({
+            text: '@Model.Localizer[IndexModel.Resources.ConfirmInit]'
+        }).then((result) => {
+            if (result.value)
+                initializeUser(form);
         });
     }
 

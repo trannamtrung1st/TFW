@@ -144,6 +144,9 @@
   <data name="Identity_InvalidChangeUserRolesRequest" xml:space="preserve">
     <value>Yêu cầu đổi vai trò người dùng không hợp lệ</value>
   </data>
+  <data name="Identity_InvalidRedirectUrl" xml:space="preserve">
+    <value>Chuyển hướng URL không hợp lệ</value>
+  </data>
   <data name="Identity_InvalidRegisterRequest" xml:space="preserve">
     <value>Yêu cầu đăng kí không hợp lệ</value>
   </data>

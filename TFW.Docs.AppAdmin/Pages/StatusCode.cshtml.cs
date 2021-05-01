@@ -7,44 +7,185 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
 using TFW.Docs.Cross;
-using TFW.Docs.AppAdmin.Extensions;
 using TFW.Docs.AppAdmin.Pages.Shared;
+using System.Net;
+using TFW.Docs.Cross.Models.Common;
+using TFW.Docs.Cross.Exceptions;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using System.Diagnostics;
 
 namespace TFW.Docs.AppAdmin.Pages
 {
-    public class StatusCodeModel : BasePageModel<StatusCodeModel>, IStatusPage
+    public class StatusCodeModel : BasePageModel<StatusCodeModel>, IPageModel
     {
         public static class Resources
         {
-            public const string Message = nameof(Message);
-            public const string MessageTitle = nameof(MessageTitle);
+            public const string ErrorMessage = nameof(ErrorMessage);
+            public const string ErrorMessageTitle = nameof(ErrorMessageTitle);
+            public const string ErrorMessageStyle = "danger";
+
+            public const string BadRequestMessage = nameof(BadRequestMessage);
+            public const string BadRequestMessageTitle = nameof(BadRequestMessageTitle);
+            public const string BadRequestMessageStyle = "warning";
+
+            public const string UnauthorizedMessage = nameof(UnauthorizedMessage);
+            public const string UnauthorizedMessageTitle = nameof(UnauthorizedMessageTitle);
+            public const string UnauthorizedMessageStyle = "danger";
+
+            public const string AccessDeniedMessage = nameof(AccessDeniedMessage);
+            public const string AccessDeniedMessageTitle = nameof(AccessDeniedMessageTitle);
+            public const string AccessDeniedMessageStyle = "danger";
+
+            public const string NotFoundMessage = nameof(NotFoundMessage);
+            public const string NotFoundMessageTitle = nameof(NotFoundMessageTitle);
+            public const string NotFoundMessageStyle = "secondary";
+
+            public const string CommonMessage = nameof(CommonMessage);
+            public const string CommonMessageTitle = nameof(CommonMessageTitle);
+            public const string CommonMessageStyle = "warning";
         }
 
-        public StatusCodeModel(IStringLocalizer<StatusCodeModel> localizer) : base(localizer)
+        private readonly IWebHostEnvironment _env;
+        private readonly IStringLocalizer<ResultCodeResources> _resultLocalizer;
+
+        public StatusCodeModel(
+            IStringLocalizer<StatusCodeModel> localizer,
+            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IWebHostEnvironment env) : base(localizer)
         {
+            _resultLocalizer = resultLocalizer;
+            _env = env;
         }
 
-        public string Message => Localizer[Resources.Message];
+        public string Message { get; set; }
         public int Code { get; set; }
         public string Layout { get; set; } = null;
-        public string MessageTitle => Localizer[Resources.MessageTitle];
-        public string StatusCodeStyle { get; set; } = "warning";
+        public string MessageTitle { get; set; }
+        public string StatusCodeStyle { get; set; }
         public string OriginalUrl { get; set; }
+        public string RequestId { get; set; }
+        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        public IActionResult OnGet(int code)
+        public IActionResult OnGet(int? code = null)
+        {
+            return OnAll(code);
+        }
+
+        public IActionResult OnPost(int? code = null)
+        {
+            return OnAll(code);
+        }
+
+        private IActionResult OnAll(int? code = null)
         {
             var statusCodeReExecuteFeature =
                 HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
+            var exceptionHandlerPathFeature =
+                HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-            if (statusCodeReExecuteFeature == null) return LocalRedirect(Routing.App.Index);
+            if (exceptionHandlerPathFeature?.Error != null)
+                return HandleError(exceptionHandlerPathFeature);
 
+            if (statusCodeReExecuteFeature != null)
+                return HandleStatus(code.Value, statusCodeReExecuteFeature);
+
+            return LocalRedirect(Routing.App.Index);
+        }
+
+        private IActionResult HandleError(IExceptionHandlerPathFeature feature)
+        {
+            var ex = feature.Error;
+            AppResult result;
+
+            if (ex is AppValidationException validEx)
+            {
+                result = validEx.Result;
+                StatusCodeStyle = Resources.BadRequestMessageStyle;
+                MessageTitle = Localizer[Resources.BadRequestMessageTitle];
+                Code = (int)HttpStatusCode.BadRequest;
+            }
+            else if (ex is AuthorizationException authEx)
+            {
+                if (authEx.IsUnauthorized)
+                {
+                    result = AppResult.Unauthorized(_resultLocalizer);
+                    StatusCodeStyle = Resources.UnauthorizedMessageStyle;
+                    MessageTitle = Localizer[Resources.UnauthorizedMessageTitle];
+                    Code = (int)HttpStatusCode.Unauthorized;
+                }
+                else
+                {
+                    result = AppResult.AccessDenied(_resultLocalizer);
+                    StatusCodeStyle = Resources.AccessDeniedMessageStyle;
+                    MessageTitle = Localizer[Resources.AccessDeniedMessageTitle];
+                    Code = (int)HttpStatusCode.Forbidden;
+                }
+            }
+            else if (ex is AppException appEx)
+            {
+                result = appEx.Result;
+                StatusCodeStyle = Resources.ErrorMessageStyle;
+                MessageTitle = Localizer[Resources.ErrorMessageTitle];
+                Code = (int)HttpStatusCode.InternalServerError;
+            }
+            else
+            {
+                if (_env.IsDevelopment())
+                    result = AppResult.Error(_resultLocalizer, data: ex, mess: ex.Message);
+                else result = AppResult.Error(_resultLocalizer, Localizer[Resources.ErrorMessage]);
+
+                StatusCodeStyle = Resources.ErrorMessageStyle;
+                MessageTitle = Localizer[Resources.ErrorMessageTitle];
+                Code = (int)HttpStatusCode.InternalServerError;
+            }
+
+            Message = result.Message;
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            OriginalUrl = feature.Path;
+
+            return Page();
+        }
+
+        private IActionResult HandleStatus(int code, IStatusCodeReExecuteFeature feature)
+        {
             OriginalUrl =
-                statusCodeReExecuteFeature.OriginalPathBase
-                + statusCodeReExecuteFeature.OriginalPath
-                + statusCodeReExecuteFeature.OriginalQueryString;
+                feature.OriginalPathBase
+                + feature.OriginalPath
+                + feature.OriginalQueryString;
             Code = code;
+            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 
-            return this.StatusView();
+            switch (Code)
+            {
+                case (int)HttpStatusCode.NotFound:
+                    StatusCodeStyle = Resources.NotFoundMessageStyle;
+                    MessageTitle = Localizer[Resources.NotFoundMessageTitle];
+                    Message = Localizer[Resources.NotFoundMessage];
+                    break;
+                case (int)HttpStatusCode.Forbidden:
+                    StatusCodeStyle = Resources.AccessDeniedMessageStyle;
+                    MessageTitle = Localizer[Resources.AccessDeniedMessageTitle];
+                    Message = Localizer[Resources.AccessDeniedMessage];
+                    break;
+                case (int)HttpStatusCode.Unauthorized:
+                    StatusCodeStyle = Resources.UnauthorizedMessageStyle;
+                    MessageTitle = Localizer[Resources.UnauthorizedMessageTitle];
+                    Message = Localizer[Resources.UnauthorizedMessage];
+                    break;
+                case (int)HttpStatusCode.BadRequest:
+                    StatusCodeStyle = Resources.BadRequestMessageStyle;
+                    MessageTitle = Localizer[Resources.BadRequestMessageTitle];
+                    Message = Localizer[Resources.BadRequestMessage];
+                    break;
+                default:
+                    StatusCodeStyle = Resources.CommonMessageStyle;
+                    MessageTitle = Localizer[Resources.CommonMessageTitle];
+                    Message = Localizer[Resources.CommonMessage];
+                    break;
+            }
+
+            return Page();
         }
     }
 }

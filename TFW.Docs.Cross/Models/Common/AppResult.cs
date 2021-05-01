@@ -107,6 +107,16 @@ namespace TFW.Docs.Cross.Models.Common
             };
         }
 
+        public static AppResult AccessDenied(IStringLocalizer localizer, object data = null, string mess = null)
+        {
+            return new AppResult
+            {
+                Code = ResultCode.AccessDenied,
+                Message = mess ?? localizer[ResultCode.AccessDenied.Display().Name],
+                Data = data,
+            };
+        }
+
         public static AppResult OfCode(IStringLocalizer localizer, ResultCode? code, object data = null, string mess = null)
         {
             return new AppResult

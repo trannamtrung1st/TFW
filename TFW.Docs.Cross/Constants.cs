@@ -104,6 +104,7 @@ namespace TFW.Docs.Cross
             public const string Identity_FailToChangeUserRoles = nameof(Identity_FailToChangeUserRoles);
             public const string Identity_InvalidChangeUserRolesRequest = nameof(Identity_InvalidChangeUserRolesRequest);
             public const string Identity_AlreadyInitialized = nameof(Identity_AlreadyInitialized);
+            public const string Identity_InvalidRedirectUrl = nameof(Identity_InvalidRedirectUrl);
             #endregion
 
             #region Setting
@@ -170,6 +171,9 @@ namespace TFW.Docs.Cross
 
         [Display(Name = ResultCodeResources.Name.Identity_AlreadyInitialized)]
         Identity_AlreadyInitialized = ResultCodeGroup.Identity + 4,
+
+        [Display(Name = ResultCodeResources.Name.Identity_InvalidRedirectUrl)]
+        Identity_InvalidRedirectUrl = ResultCodeGroup.Identity + 5,
         #endregion
 
         #region Setting

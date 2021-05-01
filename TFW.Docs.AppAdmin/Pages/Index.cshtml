@@ -1,5 +1,19 @@
 ﻿@page
 @model TFW.Docs.AppAdmin.Pages.IndexModel
 @{
-    Layout = null;
+}
+
+@section Scripts {
+    <!-- Services -->
+    <partial name="Services/IdentityServicePartial" />
+
+    <script>
+        const identityService = getIdentityService();
+
+        const init = () => {
+            identityService.authorize();
+        };
+
+        init();
+    </script>
 }

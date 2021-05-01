@@ -1,102 +1,118 @@
-﻿const IdentityService = (settings = {
-    requestTokenEndpoint,
-    logOutPage,
-    initUserEndpoint
+const IdentityService = ({
+  requestTokenEndpoint,
+  initUserEndpoint,
+  logOutPage,
+  logInPage
 }) => {
-    const tokenInfoKey = 'tokenInfo';
-    return {
-        saveToken: (model) => {
-            localStorage.setItem(tokenInfoKey, JSON.stringify(model));
-        },
+  const tokenInfoKey = 'tokenInfo';
+  const saveToken = (model) => {
+    localStorage.setItem(tokenInfoKey, JSON.stringify(model));
+  };
+  const login = ({ formData, success = null, error = null, complete = null }) => {
+    $.ajax({
+      url: requestTokenEndpoint,
+      type: 'post',
+      contentType: false,
+      processData: false,
+      cache: false,
+      data: formData,
+      success: (data) => {
+        data.issuedAt = new Date();
+        saveToken(data);
+        if (success)
+          success(data);
+      },
+      error: error,
+      complete: complete
+    });
+  };
+  const logOut = () => {
+    location.href = logOutPage;
+  };
+  const navigateToLoginPage = (returnUrl = location.pathname) => {
+    const loginUrl = new URL(logInPage, location.origin);
+    if (returnUrl) {
+      loginUrl.searchParams.set('returnUrl', returnUrl);
+    }
+    location.href = loginUrl.href;
+  };
+  const validateToken = () => {
+    const tokenInfoCache = localStorage[tokenInfoKey];
+    const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
 
-        clearToken: () => {
-            localStorage.removeItem(tokenInfoKey);
-        },
+    if (tokenInfo?.expires_in) {
+      const curAccessToken = tokenInfo.access_token;
+      const issuedAt = tokenInfo.issuedAt;
+      const cur = moment(new Date());
+      const exp = moment(issuedAt).add(parseInt(curExpIn), 'seconds');
 
-        validateToken: () => {
-            const tokenInfoCache = localStorage[tokenInfoKey];
-            const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
+      let minDiff = exp.diff(cur, 'minutes');
+      minDiff = minDiff < 0 ? 0 : minDiff;
+      let minRefDiff = minDiff - 5;
+      minRefDiff = minRefDiff < 0 ? 0 : minRefDiff;
 
-            if (tokenInfo?.expires_in) {
-                const curAccessToken = tokenInfo.access_token;
-                const current = new Date();
-                const cur = moment(current);
-                const exp = moment(current).add(parseInt(curExpIn), 'seconds');
+      console.log('refresh token in ' + minRefDiff + ' mins');
 
-                let minDiff = exp.diff(cur, 'minutes');
-                minDiff = minDiff < 0 ? 0 : minDiff;
-                let minRefDiff = minDiff - 5;
-                minRefDiff = minRefDiff < 0 ? 0 : minRefDiff;
-
-                console.log('refresh token in ' + minRefDiff + ' mins');
-
-                if (tokenInfo.refresh_token) {
-                    setTimeout(() => {
-                        if (tokenInfo.access_token == curAccessToken) {
-                            const formData = new FormData();
-                            formData.append('grant_type', 'refresh_token');
-                            formData.append('refresh_token', tokenInfo.refresh_token);
-                            $.ajax({
-                                url: settings.requestTokenEndpoint,
-                                type: 'post',
-                                contentType: false,
-                                processData: false,
-                                cache: false,
-                                data: formData,
-                                success: (data) => {
-                                    saveToken(data);
-                                    checkToken();
-                                    if (minRefDiff == 0)
-                                        location.reload();
-                                },
-                                error: (e) => {
-                                    location.href = settings.logOutPage;
-                                }
-                            });
-                        }
-                    }, minRefDiff * 60 * 1000);
-                } else {
-                    setTimeout(() => {
-                        location.href = settings.logOutPage;
-                    }, minDiff * 60 * 1000);
-                }
-            }
-
-            const saveToken = (data) => {
-                localStorage.setItem(tokenInfoKey, JSON.sAdminringify(data));
-            };
-        },
-
-        initializeUser: ({ form, success, error, complete }) => {
-            form = $(form)[0];
-            const formData = new FormData(form);
-            $.ajax({
-                url: settings.initUserEndpoint,
-                type: 'post',
-                contentType: false,
-                processData: false,
-                cache: false,
-                data: formData,
-                success: success,
-                error: error,
-                complete: complete
+      if (tokenInfo.refresh_token) {
+        setTimeout(() => {
+          if (tokenInfo.access_token == curAccessToken) {
+            const formData = new FormData();
+            formData.append('grant_type', 'refresh_token');
+            formData.append('refresh_token', tokenInfo.refresh_token);
+            login({
+              formData,
+              success: (data) => {
+                validateToken();
+                if (minRefDiff == 0)
+                  location.reload();
+              },
+              error: (e) => {
+                logOut();
+              }
             });
-        },
+          }
+        }, minRefDiff * 60 * 1000);
+      } else {
+        setTimeout(logOut, minDiff * 60 * 1000);
+      }
+    }
+  };
+  return {
+    saveToken,
+    logOut,
+    navigateToLoginPage,
+    validateToken,
+    login,
 
-        login: ({ form, success, error, complete }) => {
-            form = $(form)[0];
-            const formData = new FormData(form);
-            $.ajax({
-                url: settings.requestTokenEndpoint,
-                type: 'post',
-                contentType: false,
-                processData: false,
-                cache: false,
-                data: formData,
-                success: success,
-                error: error,
-                complete: complete
-            });
-        }
-    };
+    authorize: () => {
+      const tokenInfoCache = localStorage[tokenInfoKey];
+      const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
+
+      if (!tokenInfo) {
+        return navigateToLoginPage();
+      }
+
+      if (tokenInfo) {
+        validateToken();
+      }
+    },
+
+    clearToken: () => {
+      localStorage.removeItem(tokenInfoKey);
+    },
+
+    initializeUser: ({ formData, success, error, complete }) => {
+      $.ajax({
+        url: initUserEndpoint,
+        type: 'post',
+        contentType: false,
+        processData: false,
+        cache: false,
+        data: formData,
+        success: success,
+        error: error,
+        complete: complete
+      });
+    },
+  };
 }

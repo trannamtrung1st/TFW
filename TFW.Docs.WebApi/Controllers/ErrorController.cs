@@ -43,19 +43,17 @@ namespace TFW.Docs.WebApi.Controllers
 
             AppResult response;
 
-            if (ex is AppValidationException)
-                return BadRequest((ex as AppValidationException).Result);
-            else if (ex is AuthorizationException)
+            if (ex is AppValidationException validEx)
+                return BadRequest(validEx.Result);
+            else if (ex is AuthorizationException authEx)
             {
-                var authEx = ex as AuthorizationException;
-
                 if (authEx.IsForbidden)
                     return Forbid();
 
                 return Unauthorized();
             }
-            else if (ex is AppException)
-                response = (ex as AppException).Result;
+            else if (ex is AppException appEx)
+                response = appEx.Result;
             else
             {
                 if (_env.IsDevelopment())
