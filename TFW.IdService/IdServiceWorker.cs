@@ -1,9 +1,6 @@
 ﻿using DeviceId;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,16 +8,18 @@ using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace TFW.IdService
 {
     partial class IdServiceWorker : ServiceBase
     {
         public const string ConfigFile = "config";
+        public const string LocalhostIpAddr = "127.0.0.1";
+        public const int DefaultPort = 7777;
 
         private TcpListener _server;
         private BackgroundWorker _worker;
+        private bool _stop;
 
         public IdServiceWorker()
         {
@@ -29,7 +28,10 @@ namespace TFW.IdService
 
         protected override void OnStart(string[] args)
         {
-            _worker = new BackgroundWorker();
+            _worker = new BackgroundWorker()
+            {
+                WorkerSupportsCancellation = true
+            };
             _worker.DoWork += Worker_DoWork;
             _worker.RunWorkerAsync(args);
             base.OnStart(args);
@@ -37,9 +39,10 @@ namespace TFW.IdService
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            _stop = false;
             string[] args = e.Argument as string[];
-            var configFile = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFile);
-            string[] configs = File.ReadAllText(configFile).Split('\n');
+            var configFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigFile);
+            string[] configs = File.ReadAllText(configFile).Split('\n').Select(item => item.Trim()).ToArray();
 
             string deviceId = new DeviceIdBuilder()
                 .AddMachineName()
@@ -47,28 +50,25 @@ namespace TFW.IdService
                 .AddMotherboardSerialNumber()
                 .AddSystemDriveSerialNumber()
                 .ToString();
+            byte[] deviceIdData = EncodeOutgoingMessage(deviceId);
 
-            string ip = "127.0.0.1";
             string portArgs = configs.FirstOrDefault(x => x.StartsWith("port="))?.Split('=')[1];
-            int port = string.IsNullOrWhiteSpace(portArgs) ? 7777 : int.Parse(portArgs);
-            _server = new TcpListener(IPAddress.Parse(ip), port);
-
+            int port = string.IsNullOrWhiteSpace(portArgs) ? DefaultPort : int.Parse(portArgs);
+            _server = new TcpListener(IPAddress.Parse(LocalhostIpAddr), port);
             _server.Start();
-            Console.WriteLine("Server has started on {0}:{1}, Waiting for a connection...", ip, port);
-            System.Threading.CancellationToken token = default;
 
-            while (!token.IsCancellationRequested)
+            while (!e.Cancel)
             {
                 TcpClient client = _server.AcceptTcpClient();
-                Console.WriteLine("A client connected.");
-
                 NetworkStream stream = client.GetStream();
+                bool sendResp = false;
 
-                // enter to an infinite cycle to be able to handle every change in stream
-                while (true)
+                while (!sendResp)
                 {
-                    while (!stream.DataAvailable) ;
-                    while (client.Available < 3) ; // match against "get"
+                    while (!stream.DataAvailable && !e.Cancel) ;
+                    while (client.Available < 3 && !e.Cancel) ;
+
+                    if (e.Cancel) return;
 
                     byte[] bytes = new byte[client.Available];
                     stream.Read(bytes, 0, client.Available);
@@ -91,19 +91,19 @@ namespace TFW.IdService
                     }
                     else
                     {
-                        byte[] resp = EncodeOutgoingMessage(deviceId);
-                        stream.Write(resp, 0, resp.Length);
+                        stream.Write(deviceIdData, 0, deviceIdData.Length);
                         client.Close();
-                        Console.WriteLine("Disconnected.");
-                        break;
+                        sendResp = true;
                     }
                 }
             }
+
+            _stop = true;
         }
 
         protected override void OnStop()
         {
-            _server?.Stop();
+            StopWork();
             base.OnStop();
         }
 
@@ -121,12 +121,18 @@ namespace TFW.IdService
 
         protected override void OnShutdown()
         {
-            _server?.Stop();
-            _worker.CancelAsync();
+            StopWork();
             base.OnShutdown();
         }
 
-        private static byte[] EncodeOutgoingMessage(string text, bool masked = false)
+        private void StopWork()
+        {
+            _server?.Stop();
+            _worker.CancelAsync();
+            _worker.Dispose();
+        }
+
+        private byte[] EncodeOutgoingMessage(string text, bool masked = false)
         {
             byte[] header = new byte[] { 0x81, (byte)((masked ? 0x1 << 7 : 0x0) + text.Length) };
             byte[] maskKey = new byte[4];

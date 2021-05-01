@@ -12,6 +12,7 @@ namespace TFW.IdService
     [RunInstaller(true)]
     public partial class ProjectInstaller : Installer
     {
+        #region Constants
         public static class Properties
         {
             public const string Port = "PORT";
@@ -23,8 +24,8 @@ namespace TFW.IdService
         }
 
         public const string ConfigFile = "config";
+        #endregion
 
-        private string _installationFolder;
         private Dictionary<string, object> _props;
 
         public ProjectInstaller()
@@ -36,9 +37,11 @@ namespace TFW.IdService
             this.AfterInstall += IdServiceInstaller_AfterInstall;
         }
 
+        private string InstallationFolder { get; set; }
+
         private void IdServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
-            File.WriteAllText(Path.Combine(_installationFolder, ConfigFile),
+            File.WriteAllText(Path.Combine(InstallationFolder, ConfigFile),
                 $"port={_props[Properties.Port]}");
 
             ServiceController service = new ServiceController(nameof(IdService));
@@ -50,13 +53,14 @@ namespace TFW.IdService
         {
             int port = 7777;
             string portArgs = this.Context.Parameters[Properties.Port];
+
             if (!string.IsNullOrWhiteSpace(portArgs) && !int.TryParse(portArgs, out port))
                 throw new ArgumentException("Invalid format", Properties.Port);
 
             _props[Properties.Port] = port;
 
             var assPath = Context.Parameters[Parameters.AssemblyPath];
-            _installationFolder = Path.GetDirectoryName(assPath);
+            InstallationFolder = Path.GetDirectoryName(assPath);
         }
     }
 }
