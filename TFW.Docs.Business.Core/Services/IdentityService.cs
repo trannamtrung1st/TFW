@@ -519,10 +519,12 @@ namespace TFW.Docs.Business.Core.Services
             resp.AccessToken = tokenString;
             resp.TokenType = JwtBearerDefaults.AuthenticationScheme;
             resp.ExpiresIn = jwtSettings.TokenExpiresInSeconds;
+            resp.Roles = identity.FindAll(identity.RoleClaimType).Select(c => c.Value).ToArray();
+            resp.Permissions = identity.FindAll(SecurityConsts.ClaimTypes.Permissions).Select(c => c.Value).ToArray();
 
             int userId;
-            if (int.TryParse(principal.Identity.Name, out userId))
-                resp.user_id = userId;
+            if (int.TryParse(identity.Name, out userId))
+                resp.UserId = userId;
 
             #region Refresh Token
             key = Encoding.Default.GetBytes(jwtSettings.SecretKey);

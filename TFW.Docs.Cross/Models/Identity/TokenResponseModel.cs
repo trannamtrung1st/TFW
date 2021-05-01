@@ -21,7 +21,13 @@ namespace TFW.Docs.Cross.Models.Identity
         public string RefreshToken { get; set; }
 
         [JsonProperty("user_id")]
-        public int user_id { get; set; }
+        public int UserId { get; set; }
+
+        [JsonProperty("roles")]
+        public IEnumerable<string> Roles { get; set; }
+
+        [JsonProperty("permissions")]
+        public IEnumerable<string> Permissions { get; set; }
 
         [JsonExtensionData]
         public IDictionary<string, JToken> Extra { get; set; } = new Dictionary<string, JToken>();

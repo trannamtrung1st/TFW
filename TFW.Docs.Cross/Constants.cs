@@ -202,6 +202,7 @@ namespace TFW.Docs.Cross
 
         public static class ClaimTypes
         {
+            public const string Permissions = "permissions";
             public const string AppScope = "appscope";
             public const string ClientType = "clienttype";
         }
