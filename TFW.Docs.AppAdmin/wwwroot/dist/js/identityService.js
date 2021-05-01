@@ -1,14 +1,21 @@
 const IdentityService = ({
   requestTokenEndpoint,
   initUserEndpoint,
-  logOutPage,
   logInPage
 }) => {
+  let lastTokenValidationHandler;
   const tokenInfoKey = 'tokenInfo';
-  const saveToken = (model) => {
-    localStorage.setItem(tokenInfoKey, JSON.stringify(model));
+  const getTokenStorage = (persistent = null) => {
+    if (persistent === true) return localStorage;
+    else if (persistent === false) return sessionStorage;
+    else if (localStorage[tokenInfoKey]) return localStorage;
+    return sessionStorage;
   };
-  const login = ({ formData, success = null, error = null, complete = null }) => {
+  const saveToken = (model, rememberMe) => {
+    getTokenStorage(rememberMe).setItem(tokenInfoKey, JSON.stringify(model));
+  };
+  const login = ({ formData, success = null, error = null, complete = null, rememberMe = null }) => {
+    formData.append('grant_type', 'password');
     $.ajax({
       url: requestTokenEndpoint,
       type: 'post',
@@ -18,7 +25,7 @@ const IdentityService = ({
       data: formData,
       success: (data) => {
         data.issuedAt = new Date();
-        saveToken(data);
+        saveToken(data, rememberMe);
         if (success)
           success(data);
       },
@@ -27,7 +34,8 @@ const IdentityService = ({
     });
   };
   const logOut = () => {
-    location.href = logOutPage;
+    getTokenStorage().removeItem(tokenInfoKey);
+    navigateToLoginPage();
   };
   const navigateToLoginPage = (returnUrl = location.pathname) => {
     const loginUrl = new URL(logInPage, location.origin);
@@ -37,11 +45,12 @@ const IdentityService = ({
     location.href = loginUrl.href;
   };
   const validateToken = () => {
-    const tokenInfoCache = localStorage[tokenInfoKey];
-    const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
+    const tokenInfoCache = getTokenStorage()[tokenInfoKey];
+    const tokenInfo = tokenInfoCache ? JSON.parse(tokenInfoCache) : null;
 
     if (tokenInfo?.expires_in) {
       const curAccessToken = tokenInfo.access_token;
+      const curExpIn = tokenInfo.expires_in;
       const issuedAt = tokenInfo.issuedAt;
       const cur = moment(new Date());
       const exp = moment(issuedAt).add(parseInt(curExpIn), 'seconds');
@@ -53,8 +62,10 @@ const IdentityService = ({
 
       console.log('refresh token in ' + minRefDiff + ' mins');
 
+      if (lastTokenValidationHandler) clearTimeout(lastTokenValidationHandler);
+
       if (tokenInfo.refresh_token) {
-        setTimeout(() => {
+        lastTokenValidationHandler = setTimeout(() => {
           if (tokenInfo.access_token == curAccessToken) {
             const formData = new FormData();
             formData.append('grant_type', 'refresh_token');
@@ -67,15 +78,33 @@ const IdentityService = ({
                   location.reload();
               },
               error: (e) => {
+                console.log(e);
                 logOut();
               }
             });
           }
         }, minRefDiff * 60 * 1000);
       } else {
-        setTimeout(logOut, minDiff * 60 * 1000);
+        lastTokenValidationHandler = setTimeout(logOut, minDiff * 60 * 1000);
       }
     }
+  };
+  const isTokenValid = () => {
+    const tokenInfoCache = getTokenStorage()[tokenInfoKey];
+    const tokenInfo = tokenInfoCache ? JSON.parse(tokenInfoCache) : null;
+
+    if (!tokenInfo) return false;
+
+    if (tokenInfo?.expires_in) {
+      const curExpIn = tokenInfo.expires_in;
+      const issuedAt = tokenInfo.issuedAt;
+      const cur = moment(new Date());
+      const exp = moment(issuedAt).add(parseInt(curExpIn), 'seconds');
+
+      return exp.isAfter(cur);
+    }
+
+    return true;
   };
   return {
     saveToken,
@@ -83,10 +112,12 @@ const IdentityService = ({
     navigateToLoginPage,
     validateToken,
     login,
+    getTokenStorage,
+    isTokenValid,
 
     authorize: () => {
-      const tokenInfoCache = localStorage[tokenInfoKey];
-      const tokenInfo = tokenInfoCache ? JSON.stringify(tokenInfoCache) : null;
+      const tokenInfoCache = getTokenStorage()[tokenInfoKey];
+      const tokenInfo = tokenInfoCache ? JSON.parse(tokenInfoCache) : null;
 
       if (!tokenInfo) {
         return navigateToLoginPage();
@@ -98,7 +129,7 @@ const IdentityService = ({
     },
 
     clearToken: () => {
-      localStorage.removeItem(tokenInfoKey);
+      getTokenStorage().removeItem(tokenInfoKey);
     },
 
     initializeUser: ({ formData, success, error, complete }) => {

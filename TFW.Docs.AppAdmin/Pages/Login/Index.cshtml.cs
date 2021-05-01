@@ -18,6 +18,7 @@ namespace TFW.Docs.AppAdmin.Pages.Login
         {
             public const string InitSuccess = nameof(InitSuccess);
             public const string ConfirmInit = nameof(ConfirmInit);
+            public const string InvalidUsernameOrPassword = nameof(InvalidUsernameOrPassword);
         }
 
         private readonly IMemoryCache _memoryCache;
@@ -33,6 +34,7 @@ namespace TFW.Docs.AppAdmin.Pages.Login
         }
 
         public bool Init { get; set; }
+        public string ReturnUrl { get; set; }
 
         public IActionResult OnGet(
             [FromQuery(Name = "iS")] bool? initSuccess = null,
@@ -41,15 +43,13 @@ namespace TFW.Docs.AppAdmin.Pages.Login
             if (!Url.IsLocalUrl(returnUrl))
                 throw AppValidationException.From(_resultLocalizer, ResultCode.Identity_InvalidRedirectUrl);
 
-            if (User.Identity.IsAuthenticated)
-                return LocalRedirect(returnUrl);
-
             if (initSuccess != null)
             {
                 _memoryCache.Set(CachingKeys.InitStatus, initSuccess.Value);
                 return LocalRedirect(returnUrl);
             }
 
+            ReturnUrl = returnUrl;
             Init = !_memoryCache.Get<bool>(CachingKeys.InitStatus);
 
             return Page();

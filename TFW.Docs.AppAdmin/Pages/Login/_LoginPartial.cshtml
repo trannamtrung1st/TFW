@@ -5,7 +5,7 @@
 @{
 }
 
-<div class="login-box">
+<div class="login-box" style="display:none">
     <div class="login-logo">
         <a href="/index2.html"><b>Admin</b>LTE</a>
     </div>
@@ -13,18 +13,18 @@
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg">Sign in to start your session</p>
-
-            <form action="/index3.html" method="post">
+            <div id="login-error" class="text-center text-danger text-sm"></div>
+            <form id="form-login" method="post">
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" placeholder="Email">
+                    <input type="text" name="username" class="form-control" placeholder="Username">
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                            <span class="fas fa-user"></span>
                         </div>
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" class="form-control" placeholder="Password">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-8">
                         <div class="icheck-primary">
-                            <input type="checkbox" id="remember">
+                            <input type="checkbox" id="remember" name="rememberMe" value="true">
                             <label for="remember">
                                 Remember Me
                             </label>
@@ -77,6 +77,8 @@
 <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- SweetAlert2 -->
 <script src="/plugins/sweetalert2/sweetalert2.min.js"></script>
+<!-- moment.js -->
+<script src="/plugins/moment/moment.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.min.js"></script>
 <!-- jQuery-validation -->
@@ -89,10 +91,70 @@
     const identityService = getIdentityService();
     const commonService = getCommonService();
 
+    const login = (form) => {
+        form = $(form);
+        const rememberMe = form.find('[name=rememberMe]:checked').val();
+        const formData = new FormData(form[0]);
+        $('#login-error').html('');
+        commonService.changeLoading(true);
+        const handler = () => {
+            identityService.login({
+                formData,
+                success: (_) => {
+                    location.href = '@Model.ReturnUrl';
+                },
+                error: (data) => {
+                    const errorCode = data?.responseJSON?.error;
+                    if (errorCode === 'invalid_grant') {
+                        $('#login-error').html('@Model.Localizer[IndexModel.Resources.InvalidUsernameOrPassword]');
+                        return;
+                    }
+                    commonService.handleApiError(data);
+                },
+                complete: () => {
+                    commonService.changeLoading(false);
+                },
+                rememberMe
+            });
+        };
+        setTimeout(handler, 1000);
+    }
+
     const init = () => {
+        const tokenValid = identityService.isTokenValid();
+        if (tokenValid) {
+            location.href = '@Model.ReturnUrl';
+            return;
+        }
         identityService.clearToken();
         $(document).ready(() => {
             console.log('Document ready');
+            $('.login-box').show();
+            $("#form-login").validate({
+                submitHandler: login,
+                rules: {
+                    username: {
+                        required: true,
+                    },
+                    password: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    // [TODO] add localization
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
         });
     }
 

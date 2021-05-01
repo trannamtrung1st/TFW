@@ -293,7 +293,6 @@ namespace TFW.Docs.Cross
             public const string Index = "/";
             public const string Error = Index + "error";
             public const string Login = Index + "login";
-            public const string Logout = Index + "logout";
             public const string AccessDenied = Index + "accessdenied";
         }
 

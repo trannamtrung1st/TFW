@@ -86,7 +86,7 @@
                     location.href = "?iS=true";
                 });
             },
-            error: commonService.showApiError,
+            error: commonService.handleApiError,
             complete: () => {
                 commonService.changeLoading(false);
             }

@@ -87,7 +87,7 @@ function CommonService({
 
     getApiErrorMessage,
 
-    showApiError: (data) => {
+    handleApiError: (data) => {
       const html = getApiErrorMessage(data);
       showError({
         html
