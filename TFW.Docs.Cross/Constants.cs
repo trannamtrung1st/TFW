@@ -272,25 +272,25 @@ namespace TFW.Docs.Cross
 
     public static class Routing
     {
-        public static class Root
+        public static class App
         {
             public const string Index = "/";
-            public const string Error = "/error";
-            public const string Status = "/statuscode";
+            public const string Error = Index + "error";
+            public const string Status = Index + "statuscode";
 
             public static class Post
             {
-                public const string Index = "/post";
+                public const string Index = App.Index + "post";
             }
         }
 
         public static class Admin
         {
-            public const string Index = "/admin";
-            public const string Error = Index + "/error";
-            public const string Login = Index + "/login";
-            public const string Logout = Index + "/logout";
-            public const string AccessDenied = Index + "/accessdenied";
+            public const string Index = "/";
+            public const string Error = Index + "error";
+            public const string Login = Index + "login";
+            public const string Logout = Index + "logout";
+            public const string AccessDenied = Index + "accessdenied";
         }
 
         public static class Controller

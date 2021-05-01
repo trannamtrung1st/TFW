@@ -49,8 +49,8 @@ namespace TFW.Docs.WebApp
         {
             ApiEndpoints.BaseUrl = Settings.Get<WebAppSettings>().ApiBase;
 
-            app.UseExceptionHandler(Routing.Root.Error);
-            app.UseStatusCodePagesWithReExecute(Routing.Root.Status, $"?{WebAppConsts.Admin.StatusParam}={{0}}");
+            app.UseExceptionHandler(Routing.App.Error);
+            app.UseStatusCodePagesWithReExecute(Routing.App.Status, $"?{WebAppConsts.Admin.StatusParam}={{0}}");
 
             if (!env.IsDevelopment())
             {

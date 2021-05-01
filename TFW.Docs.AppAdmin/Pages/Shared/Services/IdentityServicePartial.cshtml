@@ -1,0 +1,16 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<script src="/dist/js/identityService.js"></script>
+<script>
+    function getIdentityService() {
+        return IdentityService({
+            initUserEndpoint: '@ApiEndpoints.User.Init',
+            logOutPage: '@Routing.Admin.Logout',
+            requestTokenEndpoint: '@ApiEndpoints.Auth.RequestToken'
+        })
+    }
+</script>

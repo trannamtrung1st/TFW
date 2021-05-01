@@ -1,0 +1,8 @@
+.modal-loading .modal-loading__body {
+  /*background: rgba(0,0,0,.1)*/
+}
+
+.modal-loading .spinner-border {
+  width: 70px;
+  height: 70px;
+}

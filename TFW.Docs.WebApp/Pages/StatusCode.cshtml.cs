@@ -36,7 +36,7 @@ namespace TFW.Docs.WebApp.Pages
         {
             var statusCodeReExecuteFeature =
                 HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
-            if (statusCodeReExecuteFeature == null) return LocalRedirect(Routing.Root.Index);
+            if (statusCodeReExecuteFeature == null) return LocalRedirect(Routing.App.Index);
             OriginalUrl =
                 statusCodeReExecuteFeature.OriginalPathBase
                 + statusCodeReExecuteFeature.OriginalPath
