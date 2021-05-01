@@ -34,12 +34,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C75AD5FF8A60340F58AE28BFBF253E97"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_ECDB82DAC7C3709D4881C3853F89DA4E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -47,6 +41,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2EAD957D343D4FF4977E823BCD050793"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C75AD5FF8A60340F58AE28BFBF253E97"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -74,6 +74,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -282,9 +290,9 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TFW IdService"
-        "ProductCode" = "8:{9FD3F093-1361-46F2-8FBE-85F83A5E2808}"
-        "PackageCode" = "8:{AD0CCC93-0368-4D5C-BF14-BC536764817B}"
-        "UpgradeCode" = "8:{D1D44854-2F34-4BFD-8583-76B89824FDDD}"
+        "ProductCode" = "8:{4729A85D-75A3-487F-962F-1903D1C1A3C6}"
+        "PackageCode" = "8:{BAAE532C-A6B5-47CF-9370-F6A79CC9D053}"
+        "UpgradeCode" = "8:{DD143B74-F769-48EA-A7A9-36729028B04E}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"

@@ -35,9 +35,20 @@ namespace TFW.IdService
 
             this.BeforeInstall += IdServiceInstaller_BeforeInstall;
             this.AfterInstall += IdServiceInstaller_AfterInstall;
+            this.AfterUninstall += ProjectInstaller_AfterUninstall;
         }
 
         private string InstallationFolder { get; set; }
+
+        private void ProjectInstaller_AfterUninstall(object sender, InstallEventArgs e)
+        {
+            var assPath = Context.Parameters[Parameters.AssemblyPath];
+            InstallationFolder = Path.GetDirectoryName(assPath);
+            var fileInfo = new FileInfo(Path.Combine(InstallationFolder, ConfigFile));
+
+            if (fileInfo.Exists)
+                fileInfo.Delete();
+        }
 
         private void IdServiceInstaller_AfterInstall(object sender, InstallEventArgs e)
         {
