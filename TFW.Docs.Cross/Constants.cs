@@ -279,7 +279,6 @@ namespace TFW.Docs.Cross
         public static class App
         {
             public const string Index = "/";
-            public const string Error = Index + "error";
             public const string Status = Index + "statuscode";
 
             public static class Post

@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <Content Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="bundleconfig.json" />
   </ItemGroup>
 
@@ -16,10 +23,6 @@
     <ProjectReference Include="..\TFW.Docs.ApiClient\TFW.Docs.ApiClient.csproj" />
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
     <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
