@@ -12,6 +12,8 @@ namespace TFW.Docs.Data.EntityConfigs
         {
             base.Configure(builder);
 
+            builder.Property(e => e.Title).IsRequired();
+
             builder.HasOne(e => e.Entity)
                 .WithMany(e => e.ListOfLocalization)
                 .HasForeignKey(e => e.EntityId);

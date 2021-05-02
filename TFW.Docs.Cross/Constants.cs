@@ -73,9 +73,11 @@ namespace TFW.Docs.Cross
     {
         public const int Common = 1;
 
-        public const int Identity = 1000;
+        public const int Identity = 500;
 
-        public const int Setting = 2000;
+        public const int Setting = 1000;
+
+        public const int PostCategory = 1500;
     }
 
     public class ResultCodeResources
@@ -109,6 +111,10 @@ namespace TFW.Docs.Cross
 
             #region Setting
             public const string Setting_InvalidChangeSmtpOptionRequest = nameof(Setting_InvalidChangeSmtpOptionRequest);
+            #endregion
+
+            #region PostCategory
+            public const string PostCategory_InvalidCreatePostCategoryRequest = nameof(PostCategory_InvalidCreatePostCategoryRequest);
             #endregion
         }
     }
@@ -179,6 +185,11 @@ namespace TFW.Docs.Cross
         #region Setting
         [Display(Name = ResultCodeResources.Name.Setting_InvalidChangeSmtpOptionRequest)]
         Setting_InvalidChangeSmtpOptionRequest = ResultCodeGroup.Setting,
+        #endregion
+
+        #region PostCategory
+        [Display(Name = ResultCodeResources.Name.PostCategory_InvalidCreatePostCategoryRequest)]
+        PostCategory_InvalidCreatePostCategoryRequest = ResultCodeGroup.PostCategory,
         #endregion
     }
 
@@ -321,6 +332,12 @@ namespace TFW.Docs.Cross
             {
                 public const string Route = "api/roles";
                 public const string GetAllRoles = "";
+            }
+
+            public static class PostCategory
+            {
+                public const string Route = "api/post-categories";
+                public const string CreatePostCategory = "";
             }
 
             public static class Setting

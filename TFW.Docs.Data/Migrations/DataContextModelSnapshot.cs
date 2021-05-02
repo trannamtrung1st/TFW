@@ -137,7 +137,7 @@ namespace TFW.Docs.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "56612923-ec7f-4c26-aff0-6617ba1e8af6",
+                            ConcurrencyStamp = "a1c47a9d-8585-4094-8d4b-6ea8e87ce8f8",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -371,6 +371,7 @@ namespace TFW.Docs.Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
@@ -401,9 +402,6 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<int>("EntityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Index")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
@@ -419,12 +417,18 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("PostIndex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
                     b.Property<string>("Region")
                         .HasColumnType("varchar(2)")
                         .HasMaxLength(2)
                         .IsUnicode(false);
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 

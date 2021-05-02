@@ -12,6 +12,12 @@ namespace TFW.Docs.Data.EntityConfigs
         {
             base.Configure(builder);
 
+            builder.Property(e => e.Title).IsRequired();
+
+            builder.Property(e => e.PostIndex)
+                .HasMaxLength(PostLocalization.PostIndexMaxLength)
+                .IsRequired();
+
             builder.HasOne(e => e.Entity)
                 .WithMany(e => e.ListOfLocalization)
                 .HasForeignKey(e => e.EntityId);
