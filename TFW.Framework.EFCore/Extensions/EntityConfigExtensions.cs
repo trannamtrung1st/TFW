@@ -16,6 +16,19 @@ namespace TFW.Framework.EFCore.Extensions
 {
     public static class EntityConfigExtensions
     {
+        public const string DefaultFkPrefix = "FK";
+
+        public static EntityTypeBuilder<T> ConfigureLocalizationEntity<T>(this EntityTypeBuilder<T> builder) where T : class
+        {
+            if (!typeof(ILocalizationEntity).IsAssignableFrom(typeof(T))) return builder;
+
+            builder.Property(o => (o as ILocalizationEntity).Lang).HasMaxLength(2).IsUnicode(false).IsRequired();
+
+            builder.Property(o => (o as ILocalizationEntity).Region).HasMaxLength(2).IsUnicode(false).IsRequired(false);
+
+            return builder;
+        }
+
         public static EntityTypeBuilder<T> ConfigureAuditableEntityWithStringKey<T>(this EntityTypeBuilder<T> builder,
             int? userKeyStringLength = null,
             bool isUnicode = false) where T : class
@@ -61,6 +74,28 @@ namespace TFW.Framework.EFCore.Extensions
                 foreignKeys.DeleteBehavior = DeleteBehavior.Restrict;
 
             return builder;
+        }
+
+        public static ReferenceCollectionBuilder<Sub, Ref> HasDefaultConstraintName<Sub, Ref>(
+            this ReferenceCollectionBuilder<Sub, Ref> builder,
+            string prefix = DefaultFkPrefix,
+            string principal = null, string dependent = null, string key = null)
+            where Sub : class
+            where Ref : class
+        {
+            return builder.HasConstraintName(
+                builder.Metadata.GetDefaultConstraintName(prefix, principal, dependent, key));
+        }
+
+        private static string GetDefaultConstraintName(this IMutableForeignKey metadata,
+            string prefix = DefaultFkPrefix,
+            string principal = null, string dependent = null, string key = null)
+        {
+            principal ??= metadata.PrincipalEntityType.Name;
+            dependent ??= metadata.DeclaringEntityType.Name;
+            key ??= metadata.GetNavigation(true).Name;
+
+            return $"{prefix}_{dependent}_{principal}_{key}";
         }
 
         public static ModelBuilder UseEntityTypeNameForTable(this ModelBuilder builder,

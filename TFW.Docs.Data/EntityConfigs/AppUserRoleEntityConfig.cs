@@ -15,15 +15,13 @@ namespace TFW.Docs.Data.EntityConfigs
 
             builder.HasOne(e => e.User)
                 .WithMany(e => e.UserRoles)
-                .HasForeignKey(e => e.UserId)
-                //.OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_AppUserRole_AppUser_UserId");
+                .HasForeignKey(e => e.UserId);
+            //.OnDelete(DeleteBehavior.Restrict)
 
             builder.HasOne(e => e.Role)
                 .WithMany(e => e.UserRoles)
-                .HasForeignKey(e => e.RoleId)
-                //.OnDelete(DeleteBehavior.Restrict)
-                .HasConstraintName("FK_AppUserRole_AppRole_RoleId");
+                .HasForeignKey(e => e.RoleId);
+            //.OnDelete(DeleteBehavior.Restrict)
         }
     }
 }

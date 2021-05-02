@@ -6,6 +6,7 @@ namespace TFW.Docs.Cross.Entities
 {
     public class PostLocalization : AppLocalizationEntity<int, Post>
     {
+        public int Id { get; set; }
         public string Index { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
