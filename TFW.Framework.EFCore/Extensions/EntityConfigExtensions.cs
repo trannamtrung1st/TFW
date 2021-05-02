@@ -170,7 +170,6 @@ namespace TFW.Framework.EFCore.Extensions
         public static ModelBuilder RestrictStringLength(this ModelBuilder builder,
             int maxLength, bool? setIsFixedLength = null,
             bool unboundNormalColumnsOnly = true,
-            bool identityModelPropsExcluded = true,
             Func<IMutableProperty, bool> extraColumnPredicate = null,
             Func<IMutableEntityType, bool> entityTypePredicate = null)
         {
@@ -192,9 +191,6 @@ namespace TFW.Framework.EFCore.Extensions
                         strProps = strProps.Where(IsUnboundLength)
                             .Where(o => !o.IsForeignKey());
 
-                    if (identityModelPropsExcluded)
-                        strProps = strProps.Where(o => !o.IsIdentityModelDefaultProperty());
-
                     if (extraColumnPredicate != null)
                         strProps = strProps.Where(extraColumnPredicate);
 
@@ -211,39 +207,6 @@ namespace TFW.Framework.EFCore.Extensions
             return builder;
         }
 
-        public static bool IsIdentityModelDefaultProperty(this IMutableProperty prop)
-        {
-            var entityType = prop.DeclaringEntityType;
-
-            var modelName = entityType.IsIdentityModel();
-
-            return modelName != null;
-        }
-
-        public static string IsIdentityModel(this IMutableEntityType eType)
-        {
-            var clrType = eType.ClrType;
-            do
-            {
-                var modelName = clrType.IsIdentityModel();
-
-                if (modelName != null) return modelName;
-
-                clrType = clrType.BaseType;
-            }
-            while (clrType != typeof(object));
-
-            return null;
-        }
-
-        public static string IsIdentityModel(this Type type)
-        {
-            var modelName = Caching.IdentityEntityTypeNames.FirstOrDefault(o =>
-                o == type.GetNameWithoutGenericParameters());
-
-            return modelName;
-        }
-
         // include string foreign keys (also unbound length)
         public static bool IsUnboundLength(this IMutableProperty prop)
         {
@@ -253,6 +216,14 @@ namespace TFW.Framework.EFCore.Extensions
         public static bool IsSoftDeleteEntity(this Type type)
         {
             return typeof(ISoftDeleteEntity).IsAssignableFrom(type);
+        }
+
+        public static bool IsAnyPropertyOfTypes(this IMutableProperty prop, IEnumerable<Type> types)
+        {
+            var entityType = prop.DeclaringEntityType.ClrType;
+
+            return entityType == null ||
+                types.Any(t => t.IsAssignableFrom(entityType));
         }
     }
 }

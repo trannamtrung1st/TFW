@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TFW.Docs.Cross.Entities;
 using TFW.Docs.Cross.Providers;
+using TFW.Framework.Common.Helpers;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Extensions;
@@ -21,6 +23,9 @@ namespace TFW.Docs.Data
     public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
         AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
+        private const string IdentityNamespace = "Microsoft.AspNetCore.Identity";
+        private const string IdentityModelNameStart = "Identity";
+
         [Inject(Required = false)]
         public IBusinessContextProvider BusinessContextProvider { get; set; }
 
@@ -64,11 +69,15 @@ namespace TFW.Docs.Data
 
             modelBuilder.AddGlobalQueryFilter(this, new[] { dataContextAssembly });
 
+            #region Restrict string length
+            var identityModelTypes = ReflectionHelper.GetTypesOfNamespace(IdentityNamespace, typeof(IdentityUser).Assembly)
+                .Where(t => t.Name.StartsWith(IdentityModelNameStart) && t.IsClass && !t.IsAbstract).ToArray();
+
             modelBuilder.RestrictStringLength(EntityConfigConsts.DefaultTitleLikeStringLength,
                 extraColumnPredicate: col =>
                 {
                     var colName = col.GetColumnName();
-                    return EntityConfigConsts
+                    return !col.IsAnyPropertyOfTypes(identityModelTypes) && EntityConfigConsts
                         .CommonTitleLikeColumnEndWiths.Any(o => colName.EndsWith(o));
                 });
 
@@ -76,7 +85,7 @@ namespace TFW.Docs.Data
                 extraColumnPredicate: col =>
                 {
                     var colName = col.GetColumnName();
-                    return EntityConfigConsts
+                    return !col.IsAnyPropertyOfTypes(identityModelTypes) && EntityConfigConsts
                         .CommonCodeLikeColumnEndWiths.Any(o => colName.EndsWith(o));
                 });
 
@@ -84,11 +93,10 @@ namespace TFW.Docs.Data
                 extraColumnPredicate: col =>
                 {
                     var colName = col.GetColumnName();
-                    return EntityConfigConsts
+                    return !col.IsAnyPropertyOfTypes(identityModelTypes) && EntityConfigConsts
                         .CommonDescriptionLikeColumnEndWiths.Any(o => colName.EndsWith(o));
                 });
-
-            Framework.EFCore.Caching.ClearCache();
+            #endregion
         }
 
         public override void PrepareAdd(object entity)
