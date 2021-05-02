@@ -9,9 +9,9 @@ namespace TFW.Docs.Cross.Entities
     {
         public AppRole()
         {
-            UserRoles = new List<AppUserRole>();
+            UserRoles = new HashSet<AppUserRole>();
         }
 
-        public virtual IList<AppUserRole> UserRoles { get; set; }
+        public virtual ICollection<AppUserRole> UserRoles { get; set; }
     }
 }

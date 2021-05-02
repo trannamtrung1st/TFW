@@ -21,11 +21,11 @@ namespace TFW.Docs.Cross.Entities
     {
         public AppUser()
         {
-            UserRoles = new List<AppUserRole>();
+            UserRoles = new HashSet<AppUserRole>();
         }
 
         public string FullName { get; set; }
 
-        public virtual IList<AppUserRole> UserRoles { get; set; }
+        public virtual ICollection<AppUserRole> UserRoles { get; set; }
     }
 }
