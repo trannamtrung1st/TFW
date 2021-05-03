@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TFW.Docs.Cross.Entities
 {
-    public class PostEntity : AppLocalizedEntity<PostLocalizationEntity>
+    public class PostEntity : AppLocalizedEntity<int?, PostLocalizationEntity>
     {
         public PostEntity() : base()
         {

@@ -5,14 +5,16 @@ using TFW.Framework.Cross.Models;
 
 namespace TFW.Docs.Cross.Entities
 {
-    public abstract class AppLocalizedEntity<LEntity>
-        : AppFullAuditableEntity, ILocalizedEntity<LEntity> where LEntity : ILocalizationEntity
+    public abstract class AppLocalizedEntity<LKey, LEntity>
+        : AppFullAuditableEntity, ILocalizedEntity<LKey, LEntity> where LEntity : class, ILocalizationEntity
     {
         public AppLocalizedEntity()
         {
             ListOfLocalization = new HashSet<LEntity>();
         }
 
+        public LKey DefaultLocalizationId { get; set; }
+        public virtual LEntity DefaultLocalization { get; set; }
         public virtual ICollection<LEntity> ListOfLocalization { get; set; }
     }
 
@@ -21,7 +23,6 @@ namespace TFW.Docs.Cross.Entities
     {
         public string Lang { get; set; }
         public string Region { get; set; }
-        public bool IsDefault { get; set; }
         public EKey EntityId { get; set; }
         public virtual TEntity Entity { get; set; }
     }

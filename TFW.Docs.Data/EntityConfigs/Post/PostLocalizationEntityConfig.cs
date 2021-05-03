@@ -6,7 +6,7 @@ using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Data.EntityConfigs
 {
-    public class PostLocalizationEntityConfig : BaseEntityConfig<PostLocalizationEntity>
+    public class PostLocalizationEntityConfig : BaseLocalizationEntityConfig<PostLocalizationEntity, int, PostEntity>
     {
         public override void Configure(EntityTypeBuilder<PostLocalizationEntity> builder)
         {
@@ -17,10 +17,6 @@ namespace TFW.Docs.Data.EntityConfigs
             builder.Property(e => e.PostIndex)
                 .HasMaxLength(PostLocalizationEntity.PostIndexMaxLength)
                 .IsRequired();
-
-            builder.HasOne(e => e.Entity)
-                .WithMany(e => e.ListOfLocalization)
-                .HasForeignKey(e => e.EntityId);
         }
     }
 }

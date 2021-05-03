@@ -19,13 +19,28 @@ namespace TFW.Framework.EFCore.Extensions
     {
         public const string DefaultFkPrefix = "FK";
 
-        public static EntityTypeBuilder<T> ConfigureLocalizationEntity<T>(this EntityTypeBuilder<T> builder) where T : class
+        public static EntityTypeBuilder<T> ConfigureLocalizationEntity<T, EKey, TEntity>(this EntityTypeBuilder<T> builder)
+            where T : class, ILocalizationEntity<EKey, TEntity>
+            where TEntity : class
         {
-            if (!typeof(ILocalizationEntity).IsAssignableFrom(typeof(T))) return builder;
+            builder.Property(o => o.Lang).HasMaxLength(2).IsUnicode(false).IsRequired();
 
-            builder.Property(o => (o as ILocalizationEntity).Lang).HasMaxLength(2).IsUnicode(false).IsRequired();
+            builder.Property(o => o.Region).HasMaxLength(2).IsUnicode(false).IsRequired(false);
 
-            builder.Property(o => (o as ILocalizationEntity).Region).HasMaxLength(2).IsUnicode(false).IsRequired(false);
+            builder.HasOne(o => o.Entity)
+                .WithMany(nameof(ILocalizedEntity<object, T>.ListOfLocalization))
+                .HasForeignKey(o => o.EntityId);
+
+            return builder;
+        }
+
+        public static EntityTypeBuilder<T> ConfigureLocalizedEntity<T, LKey, LEntity>(this EntityTypeBuilder<T> builder)
+            where T : class, ILocalizedEntity<LKey, LEntity>
+            where LEntity : class, ILocalizationEntity
+        {
+            builder.HasOne(o => o.DefaultLocalization)
+                .WithMany()
+                .HasForeignKey(o => o.DefaultLocalizationId);
 
             return builder;
         }

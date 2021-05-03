@@ -27,14 +27,6 @@ namespace TFW.Docs.Cross.Validators.PostCategory
             RuleFor(model => model.Description)
                 .FollowSchema(entitySchema, pcLocalizationType, nameof(PostCategoryLocalizationEntity.Description))
                 .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
-
-            RuleFor(model => model.Lang).NotEmpty()
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest)
-                .Length(2)
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
-
-            RuleFor(model => model.Region).Length(2)
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
         }
     }
 }

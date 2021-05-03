@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Extensions;
 
 namespace TFW.Docs.Data.EntityConfigs
@@ -11,7 +12,30 @@ namespace TFW.Docs.Data.EntityConfigs
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.ConfigureLocalizationEntity();
+        }
+    }
+
+    public abstract class BaseLocalizationEntityConfig<T, EKey, TEntity> : BaseEntityConfig<T>
+        where T : class, ILocalizationEntity<EKey, TEntity>
+        where TEntity : class
+    {
+        public override void Configure(EntityTypeBuilder<T> builder)
+        {
+            base.Configure(builder);
+
+            builder.ConfigureLocalizationEntity<T, EKey, TEntity>();
+        }
+    }
+
+    public abstract class BaseLocalizedEntityConfig<T, LKey, LEntity> : BaseEntityConfig<T>
+        where T : class, ILocalizedEntity<LKey, LEntity>
+        where LEntity : class, ILocalizationEntity
+    {
+        public override void Configure(EntityTypeBuilder<T> builder)
+        {
+            base.Configure(builder);
+
+            builder.ConfigureLocalizedEntity<T, LKey, LEntity>();
         }
     }
 }
