@@ -140,7 +140,7 @@ namespace TFW.Docs.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "00d99e5e-457a-44a4-be4b-7bbf8fae4f47",
+                            ConcurrencyStamp = "5bef6349-ca9c-4f9c-9fc1-aef6bfcb1260",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -329,6 +329,7 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Region")
+                        .IsRequired()
                         .HasColumnType("varchar(2)")
                         .HasMaxLength(2)
                         .IsUnicode(false);
@@ -340,7 +341,9 @@ namespace TFW.Docs.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EntityId", "Lang", "Region")
+                        .IsUnique()
+                        .HasName("UI_EntityId_Lang_Region");
 
                     b.ToTable("PostCategoryLocalization");
                 });
@@ -431,6 +434,7 @@ namespace TFW.Docs.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<string>("Region")
+                        .IsRequired()
                         .HasColumnType("varchar(2)")
                         .HasMaxLength(2)
                         .IsUnicode(false);
@@ -442,7 +446,9 @@ namespace TFW.Docs.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityId");
+                    b.HasIndex("EntityId", "Lang", "Region")
+                        .IsUnique()
+                        .HasName("UI_EntityId_Lang_Region");
 
                     b.ToTable("PostLocalization");
                 });

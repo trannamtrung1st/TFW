@@ -18,18 +18,27 @@ namespace TFW.Framework.EFCore.Extensions
     public static class EntityConfigExtensions
     {
         public const string DefaultFkPrefix = "FK";
+        public const string DefaultUniqueIdxName = "UI_EntityId_Lang_Region";
 
-        public static EntityTypeBuilder<T> ConfigureLocalizationEntity<T, EKey, TEntity>(this EntityTypeBuilder<T> builder)
+        public static EntityTypeBuilder<T> ConfigureLocalizationEntity<T, EKey, TEntity>(this EntityTypeBuilder<T> builder,
+            string uniqueIdxName = null)
             where T : class, ILocalizationEntity<EKey, TEntity>
             where TEntity : class
         {
             builder.Property(o => o.Lang).HasMaxLength(2).IsUnicode(false).IsRequired();
 
-            builder.Property(o => o.Region).HasMaxLength(2).IsUnicode(false).IsRequired(false);
+            builder.Property(o => o.Region).HasMaxLength(2).IsUnicode(false).IsRequired();
 
             builder.HasOne(o => o.Entity)
                 .WithMany(nameof(ILocalizedEntity<object, T>.ListOfLocalization))
                 .HasForeignKey(o => o.EntityId);
+
+            builder.HasIndex(o => new
+            {
+                o.EntityId,
+                o.Lang,
+                o.Region
+            }).IsUnique().HasName(uniqueIdxName ?? DefaultUniqueIdxName);
 
             return builder;
         }

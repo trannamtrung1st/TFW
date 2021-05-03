@@ -194,7 +194,7 @@ namespace TFW.Docs.Data.Migrations
                     LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
                     Lang = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
-                    Region = table.Column<string>(unicode: false, maxLength: 2, nullable: true),
+                    Region = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
                     EntityId = table.Column<int>(nullable: false),
                     Title = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true)
@@ -221,7 +221,7 @@ namespace TFW.Docs.Data.Migrations
                     LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
                     Lang = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
-                    Region = table.Column<string>(unicode: false, maxLength: 2, nullable: true),
+                    Region = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
                     EntityId = table.Column<int>(nullable: false),
                     PostIndex = table.Column<string>(maxLength: 256, nullable: false),
                     Title = table.Column<string>(maxLength: 256, nullable: false),
@@ -275,7 +275,7 @@ namespace TFW.Docs.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "00d99e5e-457a-44a4-be4b-7bbf8fae4f47", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { 1, "5bef6349-ca9c-4f9c-9fc1-aef6bfcb1260", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -342,14 +342,16 @@ namespace TFW.Docs.Data.Migrations
                 column: "StartingPostId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostCategoryLocalization_EntityId",
+                name: "UI_EntityId_Lang_Region",
                 table: "PostCategoryLocalization",
-                column: "EntityId");
+                columns: new[] { "EntityId", "Lang", "Region" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostLocalization_EntityId",
+                name: "UI_EntityId_Lang_Region",
                 table: "PostLocalization",
-                column: "EntityId");
+                columns: new[] { "EntityId", "Lang", "Region" },
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PostCategory_PostCategoryLocalization_DefaultLocalizationId",

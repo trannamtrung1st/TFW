@@ -22,7 +22,10 @@ namespace TFW.Docs.Cross.Validators.PostCategory
                 .Length(2)
                 .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
 
-            RuleFor(model => model.Region).Length(2)
+            RuleFor(model => model.Region).NotNull()
+                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest)
+                .When(model => model.Region != null)
+                .Length(2)
                 .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
         }
     }
