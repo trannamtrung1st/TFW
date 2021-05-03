@@ -33,9 +33,18 @@ namespace TFW.Docs.WebApi.Controllers
         [HttpPost(Routing.Controller.PostCategory.CreatePostCategory)]
         public async Task<IActionResult> CreatePostCategory(CreatePostCategoryModel model)
         {
-            var id = await _postCategoryService.CreatePostCategory(model);
+            var id = await _postCategoryService.CreatePostCategoryAsync(model);
 
             return Success(id);
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        [HttpPost(Routing.Controller.PostCategory.UpdatePostCategory)]
+        public async Task<IActionResult> UpdatePostCategory(int id, UpdatePostCategoryModel model)
+        {
+            await _postCategoryService.UpdatePostCategoryAsync(id, model);
+
+            return NoContent();
         }
     }
 }

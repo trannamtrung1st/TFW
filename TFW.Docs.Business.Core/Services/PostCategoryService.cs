@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Docs.Business.Core.Queries;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Entities;
@@ -24,7 +26,7 @@ namespace TFW.Docs.Business.Core.Services
         {
         }
 
-        public async Task<int> CreatePostCategory(CreatePostCategoryModel model)
+        public async Task<int> CreatePostCategoryAsync(CreatePostCategoryModel model)
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
@@ -46,7 +48,45 @@ namespace TFW.Docs.Business.Core.Services
             return entity.Id;
         }
 
+        public async Task UpdatePostCategoryAsync(int id, UpdatePostCategoryModel model)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            var entity = dbContext.PostCategory.ById(id).Select(o => new PostCategoryEntity
+            {
+                Id = o.Id
+            }).FirstOrDefault();
+
+            if (entity == null)
+                validationData.Fail(code: ResultCode.EntityNotFound);
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            model.CopyTo(entity);
+            PrepareUpdate(entity);
+
+            entity = dbContext.Update(entity, o => o.StartingPostId).Entity;
+
+            foreach (var updateModel in model.ListOfUpdatedLocalization)
+            {
+                var localization = updateModel.MapTo<PostCategoryLocalizationEntity>();
+
+                dbContext.Update(localization, o => o.Title,
+                    o => o.Description);
+            }
+
+            await dbContext.SaveChangesAsync();
+        }
+
         private void PrepareCreate(PostCategoryEntity entity)
+        {
+        }
+
+        private void PrepareUpdate(PostCategoryEntity entity)
         {
         }
     }

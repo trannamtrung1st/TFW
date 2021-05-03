@@ -8,6 +8,7 @@ namespace TFW.Docs.Business.Services
 {
     public interface IPostCategoryService
     {
-        Task<int> CreatePostCategory(CreatePostCategoryModel model);
+        Task<int> CreatePostCategoryAsync(CreatePostCategoryModel model);
+        Task UpdatePostCategoryAsync(int id, UpdatePostCategoryModel model);
     }
 }

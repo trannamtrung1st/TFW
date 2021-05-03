@@ -13,7 +13,15 @@ namespace TFW.Docs.Cross.Profiles
         {
             CreateMap<PostCategoryLocalizationEditableModel, PostCategoryLocalizationEntity>();
 
+            CreateMap<CreatePostCategoryLocalizationModel, PostCategoryLocalizationEntity>();
+
+            CreateMap<UpdatePostCategoryLocalizationModel, PostCategoryLocalizationEntity>();
+
+            CreateMap<PostCategoryEditableModel, PostCategoryEntity>();
+
             CreateMap<CreatePostCategoryModel, PostCategoryEntity>();
+
+            CreateMap<UpdatePostCategoryModel, PostCategoryEntity>();
         }
     }
 }

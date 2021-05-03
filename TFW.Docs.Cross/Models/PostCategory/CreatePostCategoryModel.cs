@@ -7,6 +7,6 @@ namespace TFW.Docs.Cross.Models.PostCategory
     public class CreatePostCategoryModel : PostCategoryEditableModel
     {
         [JsonProperty("listOfLocalization")]
-        public IEnumerable<PostCategoryLocalizationEditableModel> ListOfLocalization { get; set; }
+        public IEnumerable<CreatePostCategoryLocalizationModel> ListOfLocalization { get; set; }
     }
 }
