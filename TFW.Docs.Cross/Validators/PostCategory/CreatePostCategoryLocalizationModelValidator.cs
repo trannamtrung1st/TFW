@@ -9,24 +9,15 @@ using TFW.Framework.Validations.Fluent;
 namespace TFW.Docs.Cross.Validators.PostCategory
 {
     public class CreatePostCategoryLocalizationModelValidator
-        : LocalizedSafeValidator<CreatePostCategoryLocalizationModel, CreatePostCategoryLocalizationModelValidator>
+        : LocalizationModelValidator<CreatePostCategoryLocalizationModel, CreatePostCategoryLocalizationModelValidator>
     {
         public CreatePostCategoryLocalizationModelValidator(IValidationResultProvider validationResultProvider,
             IServiceProvider serviceProvider,
             IStringLocalizer<CreatePostCategoryLocalizationModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             IncludeBaseValidators(serviceProvider);
-
-            RuleFor(model => model.Lang).NotEmpty()
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest)
-                .Length(2)
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
-
-            RuleFor(model => model.Region).NotNull()
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest)
-                .Length(2)
-                .When(model => !string.IsNullOrEmpty(model.Region), ApplyConditionTo.CurrentValidator)
-                .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
         }
+
+        protected override ResultCode DefaultInvalidLangCode => ResultCode.PostCategory_InvalidCreatePostCategoryLocalizationRequest;
     }
 }

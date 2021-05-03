@@ -2,7 +2,7 @@
 
 namespace TFW.Docs.Cross.Models.PostCategory
 {
-    public class CreatePostCategoryLocalizationModel : PostCategoryLocalizationEditableModel
+    public class CreatePostCategoryLocalizationModel : PostCategoryLocalizationEditableModel, ICreateLocalizationModel
     {
         [JsonProperty("lang")]
         public string Lang { get; set; }

@@ -115,6 +115,7 @@ namespace TFW.Docs.Cross
 
             #region PostCategory
             public const string PostCategory_InvalidCreatePostCategoryRequest = nameof(PostCategory_InvalidCreatePostCategoryRequest);
+            public const string PostCategory_InvalidCreatePostCategoryLocalizationRequest = nameof(PostCategory_InvalidCreatePostCategoryLocalizationRequest);
             #endregion
         }
     }
@@ -190,6 +191,9 @@ namespace TFW.Docs.Cross
         #region PostCategory
         [Display(Name = ResultCodeResources.Name.PostCategory_InvalidCreatePostCategoryRequest)]
         PostCategory_InvalidCreatePostCategoryRequest = ResultCodeGroup.PostCategory,
+
+        [Display(Name = ResultCodeResources.Name.PostCategory_InvalidCreatePostCategoryLocalizationRequest)]
+        PostCategory_InvalidCreatePostCategoryLocalizationRequest = ResultCodeGroup.PostCategory + 1,
         #endregion
     }
 
