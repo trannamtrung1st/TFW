@@ -175,7 +175,7 @@ namespace TFW.Docs.Data.Migrations
                     CreatedUserId = table.Column<int>(nullable: true),
                     LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
-                    DefaultLocalizationId = table.Column<int>(nullable: true),
+                    DefaultLocalizationId = table.Column<int>(nullable: false),
                     StartingPostId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -245,7 +245,7 @@ namespace TFW.Docs.Data.Migrations
                     CreatedUserId = table.Column<int>(nullable: true),
                     LastModifiedTime = table.Column<DateTime>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
-                    DefaultLocalizationId = table.Column<int>(nullable: true),
+                    DefaultLocalizationId = table.Column<int>(nullable: false),
                     ParentId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: false)
                 },
@@ -275,7 +275,7 @@ namespace TFW.Docs.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "5bef6349-ca9c-4f9c-9fc1-aef6bfcb1260", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { 1, "c445f722-7513-4001-a306-05f02580adb1", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
