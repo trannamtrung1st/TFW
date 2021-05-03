@@ -29,7 +29,7 @@ namespace TFW.Docs.WebApi.Middlewares
 
             context.SetPrincipalInfo(principalInfo);
 
-            if (principalInfo.UserId != 0)
+            if (principalInfo.UserId != null)
                 _diagnosticContext.Set(LoggingConsts.Properties.UserId, principalInfo.UserId);
 
             await next(context);

@@ -29,6 +29,7 @@ namespace TFW.Docs.Data
         private const string IdentityModelNameStart = "Identity";
         private const string EntityPostfix = "Entity";
 
+        private readonly IBusinessContextProvider _businessContextProvider;
         private IMutableModel _model;
 
         public DataContext() : base()
@@ -41,13 +42,19 @@ namespace TFW.Docs.Data
 
         public DataContext(DbContextOptions options,
             IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null,
+            IBusinessContextProvider businessContextProvider = null,
             AppEntitySchema entitySchema = null) : base(options, queryFilterOptions)
         {
+            _businessContextProvider = businessContextProvider;
+
             if (_model != null) entitySchema.InitSchema(_model.ParseSchema());
         }
 
-        [Inject(Required = false)]
-        public IBusinessContextProvider BusinessContextProvider { get; set; }
+
+        public DbSet<PostCategoryEntity> PostCategory { get; set; }
+        public DbSet<PostCategoryLocalizationEntity> PostCategoryLocalization { get; set; }
+        public DbSet<PostEntity> Post { get; set; }
+        public DbSet<PostLocalizationEntity> PostLocalization { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -121,10 +128,10 @@ namespace TFW.Docs.Data
         {
             base.PrepareAdd(entity);
 
-            if (entity is IAppAuditableEntity == false) return;
-
-            var auditableEntity = entity as IAppAuditableEntity;
-            auditableEntity.CreatedUserId = BusinessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
+            if (entity is IAppAuditableEntity auditableEntity)
+            {
+                auditableEntity.CreatedUserId = _businessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
+            }
         }
 
         public override void PrepareModify(object entity)
@@ -133,21 +140,16 @@ namespace TFW.Docs.Data
 
             var isSoftDeleted = false;
 
-            if (entity is IAppSoftDeleteEntity)
+            if (entity is IAppSoftDeleteEntity softDeleteEntity && softDeleteEntity.IsDeleted)
             {
-                var softDeleteEntity = entity as IAppSoftDeleteEntity;
-
-                if (softDeleteEntity.IsDeleted)
-                {
-                    softDeleteEntity.DeletedUserId = BusinessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
-                    isSoftDeleted = true;
-                }
+                softDeleteEntity.DeletedUserId = _businessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
+                isSoftDeleted = true;
             }
 
-            if (isSoftDeleted || entity is IAppAuditableEntity == false) return;
-
-            var auditableEntity = entity as IAppAuditableEntity;
-            auditableEntity.LastModifiedUserId = BusinessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
+            if (!isSoftDeleted && entity is IAppAuditableEntity auditableEntity)
+            {
+                auditableEntity.LastModifiedUserId = _businessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
+            }
         }
     }
 }

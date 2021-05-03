@@ -17,6 +17,9 @@ namespace TFW.Docs.Cross.Models.Identity
         [JsonProperty("expires_in")]
         public int ExpiresIn { get; set; }
 
+        [JsonProperty("rt_expires_in")]
+        public int? RefreshTokenExpiresIn { get; set; }
+
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
 

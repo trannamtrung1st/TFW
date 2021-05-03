@@ -67,6 +67,10 @@ const IdentityService = ({
       if (lastTokenValidationHandler) clearTimeout(lastTokenValidationHandler);
 
       if (tokenInfo.refresh_token) {
+        const curRtExpIn = tokenInfo.rt_expires_in;
+        const rtExp = moment(issuedAt).add(parseInt(curRtExpIn), 'seconds');
+        if (!rtExp.isAfter(cur)) return logOut();
+
         lastTokenValidationHandler = setTimeout(() => {
           if (tokenInfo.access_token == curAccessToken) {
             const formData = new FormData();

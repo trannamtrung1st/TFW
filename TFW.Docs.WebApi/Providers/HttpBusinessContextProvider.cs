@@ -13,13 +13,13 @@ namespace TFW.Docs.WebApi.Providers
 {
     public class HttpBusinessContextProvider : IBusinessContextProvider
     {
-        public BusinessContext BusinessContext => new HttpBusinessContext();
+        private readonly BusinessContext _businessContext = new HttpBusinessContext();
+        public BusinessContext BusinessContext => _businessContext;
     }
 
     internal class HttpBusinessContext : BusinessContext
     {
         public override PrincipalInfo PrincipalInfo => HttpContext.Current.GetPrincipalInfo();
-
         public override ClaimsPrincipal User => HttpContext.Current.User;
     }
 }

@@ -8,4 +8,9 @@ namespace TFW.Docs.Cross.Providers
     {
         BusinessContext BusinessContext { get; }
     }
+
+    public class NullBusinessContextProvider : IBusinessContextProvider
+    {
+        public BusinessContext BusinessContext => null;
+    }
 }

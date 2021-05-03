@@ -14,24 +14,21 @@ namespace TFW.Docs.Data
     public class DataContextFactory : DbContextFactory<DataContext> //, IDesignTimeDbContextFactory<DataContext>
     {
         private readonly IOptionsSnapshot<QueryFilterOptions> _queryFilters;
+        private readonly IBusinessContextProvider _businessContextProvider;
 
         public DataContextFactory(DbContextOptions<DataContext> options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilters) : base(options)
+            IOptionsSnapshot<QueryFilterOptions> queryFilters,
+            IBusinessContextProvider businessContextProvider) : base(options)
         {
             _queryFilters = queryFilters;
+            _businessContextProvider = businessContextProvider;
         }
-
-        [Inject(Required = false)]
-        public IBusinessContextProvider BusinessContextProvider { get; set; }
 
         protected override DataContext CreateCore(DbContextOptions<DataContext> overrideOptions = null)
         {
             overrideOptions = overrideOptions ?? options;
 
-            return new DataContext(overrideOptions, _queryFilters)
-            {
-                BusinessContextProvider = BusinessContextProvider
-            };
+            return new DataContext(overrideOptions, _queryFilters, _businessContextProvider);
         }
 
         //public DataContext CreateDbContext(string[] args)
