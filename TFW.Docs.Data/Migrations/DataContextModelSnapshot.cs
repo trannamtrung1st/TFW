@@ -140,7 +140,7 @@ namespace TFW.Docs.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "c445f722-7513-4001-a306-05f02580adb1",
+                            ConcurrencyStamp = "761f3ba7-ac08-442b-a24f-568a247c1e0a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -266,7 +266,7 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DefaultLocalizationId")
+                    b.Property<int?>("DefaultLocalizationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedTime")
@@ -364,7 +364,7 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DefaultLocalizationId")
+                    b.Property<int?>("DefaultLocalizationId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedTime")
@@ -509,8 +509,7 @@ namespace TFW.Docs.Data.Migrations
                     b.HasOne("TFW.Docs.Cross.Entities.PostCategoryLocalizationEntity", "DefaultLocalization")
                         .WithMany()
                         .HasForeignKey("DefaultLocalizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "StartingPost")
                         .WithMany()
@@ -538,8 +537,7 @@ namespace TFW.Docs.Data.Migrations
                     b.HasOne("TFW.Docs.Cross.Entities.PostLocalizationEntity", "DefaultLocalization")
                         .WithMany()
                         .HasForeignKey("DefaultLocalizationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "Parent")
                         .WithMany("SubPosts")

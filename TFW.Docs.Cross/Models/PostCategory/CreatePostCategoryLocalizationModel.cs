@@ -10,5 +10,7 @@ namespace TFW.Docs.Cross.Models.PostCategory
         [JsonProperty("region")]
         public string Region { get; set; }
 
+        [JsonProperty("isDefault")]
+        public bool IsDefault { get; set; }
     }
 }

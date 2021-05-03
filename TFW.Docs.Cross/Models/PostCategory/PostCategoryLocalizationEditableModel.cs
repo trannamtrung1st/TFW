@@ -9,8 +9,5 @@ namespace TFW.Docs.Cross.Models.PostCategory
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        [JsonProperty("isDefault")]
-        public bool IsDefault { get; set; }
     }
 }

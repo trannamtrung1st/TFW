@@ -39,7 +39,7 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
-        [HttpPost(Routing.Controller.PostCategory.UpdatePostCategory)]
+        [HttpPatch(Routing.Controller.PostCategory.UpdatePostCategory)]
         public async Task<IActionResult> UpdatePostCategory(int id, UpdatePostCategoryModel model)
         {
             await _postCategoryService.UpdatePostCategoryAsync(id, model);

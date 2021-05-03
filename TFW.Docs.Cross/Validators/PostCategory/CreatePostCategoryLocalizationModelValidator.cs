@@ -24,8 +24,8 @@ namespace TFW.Docs.Cross.Validators.PostCategory
 
             RuleFor(model => model.Region).NotNull()
                 .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest)
-                .When(model => model.Region != null)
                 .Length(2)
+                .When(model => !string.IsNullOrEmpty(model.Region), ApplyConditionTo.CurrentValidator)
                 .WithState(model => ResultCode.PostCategory_InvalidCreatePostCategoryRequest);
         }
     }

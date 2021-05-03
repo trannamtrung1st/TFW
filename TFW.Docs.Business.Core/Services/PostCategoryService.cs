@@ -41,9 +41,20 @@ namespace TFW.Docs.Business.Core.Services
             var entity = model.MapTo<PostCategoryEntity>();
             PrepareCreate(entity);
 
-            entity = dbContext.PostCategory.Add(entity).Entity;
+            using (var trans = await dbContext.BeginTransactionAsync())
+            {
+                entity = dbContext.PostCategory.Add(entity).Entity;
 
-            await dbContext.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
+
+                var defaultLocalization = model.ListOfLocalization.Single(o => o.IsDefault);
+                entity.DefaultLocalizationId = entity.ListOfLocalization.Single(
+                    o => o.Lang == defaultLocalization.Lang && o.Region == defaultLocalization.Region).Id;
+
+                await dbContext.SaveChangesAsync();
+                
+                await trans.CommitAsync();
+            }
 
             return entity.Id;
         }

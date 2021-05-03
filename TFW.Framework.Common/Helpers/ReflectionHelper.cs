@@ -16,7 +16,8 @@ namespace TFW.Framework.Common.Helpers
             assembly = assembly ?? Assembly.GetEntryAssembly();
 
             return assembly.GetTypes()
-                .Where(type => includeSubns ? type.Namespace == nameSpace || type.Namespace.StartsWith(nameSpace + ".") :
+                .Where(type => includeSubns ?
+                    type.Namespace == nameSpace || type.Namespace?.StartsWith(nameSpace + ".") == true :
                     type.Namespace == nameSpace);
         }
 
