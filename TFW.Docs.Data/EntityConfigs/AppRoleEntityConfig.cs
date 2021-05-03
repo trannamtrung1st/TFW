@@ -7,15 +7,15 @@ using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Data.EntityConfigs
 {
-    public class AppRoleEntityConfig : BaseEntityConfig<AppRole>
+    public class AppRoleEntityConfig : BaseEntityConfig<AppRoleEntity>
     {
-        public override void Configure(EntityTypeBuilder<AppRole> builder)
+        public override void Configure(EntityTypeBuilder<AppRoleEntity> builder)
         {
             base.Configure(builder);
 
-            var listRole = new List<AppRole>
+            var listRole = new List<AppRoleEntity>
             {
-                new AppRole
+                new AppRoleEntity
                 {
                     ConcurrencyStamp = Guid.NewGuid().ToString(),
                     Name = RoleName.Administrator,

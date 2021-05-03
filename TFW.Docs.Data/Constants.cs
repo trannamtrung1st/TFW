@@ -11,7 +11,7 @@ namespace TFW.Docs.Data
 
     public static class EntityConfigConsts
     {
-        public const int DefaultTitleLikeStringLength = 255;
+        public const int DefaultTitleLikeStringLength = 256;
         public const int DefaultCodeLikeStringLength = 100;
         public const int DefaultDescriptionLikeStringLength = 2000;
 

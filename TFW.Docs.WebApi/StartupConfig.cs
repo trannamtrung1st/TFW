@@ -34,6 +34,7 @@ using TFW.Docs.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Net.Http.Headers;
 using System.Net;
+using static TFW.Docs.Cross.SecurityConsts;
 
 namespace TFW.Docs.WebApi
 {
@@ -81,10 +82,10 @@ namespace TFW.Docs.WebApi
 
         public static IServiceCollection AddAppAuthentication(this IServiceCollection services)
         {
-            services.AddIdentityCore<AppUser>(options =>
+            services.AddIdentityCore<AppUserEntity>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = false;
-            }).AddRoles<AppRole>()
+            }).AddRoles<AppRoleEntity>()
                 .AddDefaultTokenProviders()
                 .AddSignInManager()
                 .AddEntityFrameworkStores<DataContext>();
@@ -95,7 +96,7 @@ namespace TFW.Docs.WebApi
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = AccountConstraints.PasswordMinLength;
                 options.Password.RequiredUniqueChars = 0;
 
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);

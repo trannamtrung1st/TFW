@@ -21,7 +21,7 @@ namespace TFW.Docs.Cross.Providers
             var assembly = Assembly.GetExecutingAssembly();
 
             var entityTypes = ReflectionHelper.GetTypesOfNamespace(
-                typeof(AppUser).Namespace, assembly, includeSubns: true);
+                typeof(AppUserEntity).Namespace, assembly, includeSubns: true);
             var modelTypes = ReflectionHelper.GetTypesOfNamespace(
                 typeof(NamespaceModel).Namespace, assembly, includeSubns: true);
 

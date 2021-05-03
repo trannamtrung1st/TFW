@@ -1,6 +1,6 @@
 ﻿namespace TFW.Docs.Cross.Entities
 {
-    public class PostCategoryLocalization : AppLocalizationEntity<int, PostCategory>
+    public class PostCategoryLocalizationEntity : AppLocalizationEntity<int, PostCategoryEntity>
     {
         public int Id { get; set; }
         public string Title { get; set; }

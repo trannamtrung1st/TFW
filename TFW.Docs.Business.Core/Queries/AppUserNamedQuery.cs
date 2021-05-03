@@ -8,17 +8,17 @@ namespace TFW.Docs.Business.Core.Queries
 {
     public static class AppUserNamedQuery
     {
-        public static IQueryable<AppUser> ById(this IQueryable<AppUser> query, int id)
+        public static IQueryable<AppUserEntity> ById(this IQueryable<AppUserEntity> query, int id)
         {
             return query.Where(o => o.Id == id);
         }
 
-        public static IQueryable<AppUser> ByUsername(this IQueryable<AppUser> query, string username)
+        public static IQueryable<AppUserEntity> ByUsername(this IQueryable<AppUserEntity> query, string username)
         {
             return query.Where(o => o.UserName == username);
         }
 
-        public static IQueryable<AppUser> BySearchTerm(this IQueryable<AppUser> query, string searchTerm)
+        public static IQueryable<AppUserEntity> BySearchTerm(this IQueryable<AppUserEntity> query, string searchTerm)
         {
             return query.Where(o => o.UserName.Contains(searchTerm)
                 || o.FullName.Contains(searchTerm));

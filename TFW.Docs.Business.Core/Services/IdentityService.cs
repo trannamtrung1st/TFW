@@ -33,14 +33,14 @@ namespace TFW.Docs.Business.Core.Services
     [ScopedService(ServiceType = typeof(IIdentityService))]
     public class IdentityService : BaseService, IIdentityService
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUserEntity> _userManager;
+        private readonly SignInManager<AppUserEntity> _signInManager;
 
         public IdentityService(DataContext dbContext,
             IStringLocalizer<ResultCodeResources> resultLocalizer,
             IBusinessContextProvider contextProvider,
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager) : base(dbContext, resultLocalizer, contextProvider)
+            UserManager<AppUserEntity> userManager,
+            SignInManager<AppUserEntity> signInManager) : base(dbContext, resultLocalizer, contextProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -61,7 +61,7 @@ namespace TFW.Docs.Business.Core.Services
             #endregion
 
             var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
-            IQueryable<AppUser> query = dbContext.Users.AsNoTracking();
+            IQueryable<AppUserEntity> query = dbContext.Users.AsNoTracking();
 
             #region Filter
             if (queryModel.Id != null)
@@ -133,7 +133,7 @@ namespace TFW.Docs.Business.Core.Services
 
         public async Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>()
         {
-            var responseModels = await dbContext.QueryDeleted<AppUser>()
+            var responseModels = await dbContext.QueryDeleted<AppUserEntity>()
                    .AsNoTracking().DefaultProjectTo<TModel>().ToArrayAsync();
 
             var response = new GetListResponseModel<TModel>
@@ -183,7 +183,7 @@ namespace TFW.Docs.Business.Core.Services
             IdentityResult result;
             using (var trans = dbContext.Database.BeginTransaction())
             {
-                var appUser = new AppUser
+                var appUser = new AppUserEntity
                 {
                     UserName = model.username,
                     FullName = model.fullName,
@@ -221,7 +221,7 @@ namespace TFW.Docs.Business.Core.Services
             IdentityResult result;
             using (var trans = dbContext.Database.BeginTransaction())
             {
-                var appUser = new AppUser
+                var appUser = new AppUserEntity
                 {
                     UserName = model.username,
                     FullName = model.fullName,
@@ -297,7 +297,7 @@ namespace TFW.Docs.Business.Core.Services
             throw validationData.BuildException();
         }
 
-        private async Task<IdentityResult> CreateUserWithRolesTransactionAsync(AppUser appUser, string password,
+        private async Task<IdentityResult> CreateUserWithRolesTransactionAsync(AppUserEntity appUser, string password,
             IEnumerable<string> roles = null)
         {
             PrepareCreate(appUser);
@@ -313,7 +313,7 @@ namespace TFW.Docs.Business.Core.Services
             return result;
         }
 
-        private void PrepareCreate(AppUser appUser)
+        private void PrepareCreate(AppUserEntity appUser)
         {
         }
         #endregion
@@ -371,7 +371,7 @@ namespace TFW.Docs.Business.Core.Services
 
         public async Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel)
         {
-            AppUser entity = null;
+            AppUserEntity entity = null;
 
             switch (requestModel.grant_type)
             {
@@ -416,7 +416,7 @@ namespace TFW.Docs.Business.Core.Services
             return tokenResponse;
         }
 
-        private async Task<AppUser> AuthenticateAsync(string username, string password)
+        private async Task<AppUserEntity> AuthenticateAsync(string username, string password)
         {
             var user = await _userManager.FindByNameAsync(username);
 
@@ -444,7 +444,7 @@ namespace TFW.Docs.Business.Core.Services
             }
         }
 
-        private async Task<ClaimsIdentity> GetIdentityAsync(AppUser entity, string scheme)
+        private async Task<ClaimsIdentity> GetIdentityAsync(AppUserEntity entity, string scheme)
         {
             var identity = new ClaimsIdentity(scheme);
 
@@ -462,7 +462,7 @@ namespace TFW.Docs.Business.Core.Services
         }
 
         //for IdentityCookie
-        private async Task<ClaimsPrincipal> GetApplicationPrincipalAsync(AppUser entity)
+        private async Task<ClaimsPrincipal> GetApplicationPrincipalAsync(AppUserEntity entity)
         {
             var principal = await _signInManager.CreateUserPrincipalAsync(entity);
 

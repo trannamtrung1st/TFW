@@ -3,8 +3,10 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TFW.Docs.Cross.Entities;
 using TFW.Docs.Cross.Models.AppUser;
 using TFW.Framework.Validations.Fluent;
+using TFW.Framework.Validations.Fluent.Extensions;
 
 namespace TFW.Docs.Cross.Validators.Identity
 {
@@ -25,27 +27,31 @@ namespace TFW.Docs.Cross.Validators.Identity
         }
 
         public RegisterModelValidator(IValidationResultProvider validationResultProvider,
-            IStringLocalizer<RegisterModelValidator> localizer) : base(validationResultProvider, localizer)
+            IStringLocalizer<RegisterModelValidator> localizer,
+            AppEntitySchema entitySchema) : base(validationResultProvider, localizer)
         {
+            var appUserType = typeof(AppUserEntity);
+
             RuleFor(model => model.username)
                 .NotEmpty().InvalidState()
-                .Length(5, 100).InvalidState();
+                .MinimumLength(SecurityConsts.AccountConstraints.UsernameMinLength).InvalidState()
+                .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.UserName)).InvalidState();
 
             RuleFor(model => model.password)
                 .NotEmpty().InvalidState()
-                .MinimumLength(6).InvalidState()
-                .MaximumLength(100).InvalidState();
+                .Length(SecurityConsts.AccountConstraints.PasswordMinLength,
+                    SecurityConsts.AccountConstraints.PasswordMaxLength).InvalidState();
 
             RuleFor(model => model.confirmPassword)
                 .Equal(model => model.password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
                 .InvalidState();
 
             RuleFor(model => model.fullName)
-                .MaximumLength(100).InvalidState();
+                .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.FullName)).InvalidState();
 
             RuleFor(model => model.email)
                 .EmailAddress().InvalidState()
-                .MaximumLength(100).InvalidState();
+                .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.Email)).InvalidState();
         }
     }
 }

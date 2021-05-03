@@ -17,15 +17,15 @@ namespace TFW.Docs.Cross.Entities
         public bool IsDeleted { get; set; }
     }
 
-    public class AppUser : FullAuditableUser
+    public class AppUserEntity : FullAuditableUser
     {
-        public AppUser()
+        public AppUserEntity()
         {
-            UserRoles = new HashSet<AppUserRole>();
+            UserRoles = new HashSet<AppUserRoleEntity>();
         }
 
         public string FullName { get; set; }
 
-        public virtual ICollection<AppUserRole> UserRoles { get; set; }
+        public virtual ICollection<AppUserRoleEntity> UserRoles { get; set; }
     }
 }

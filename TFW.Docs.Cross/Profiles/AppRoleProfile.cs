@@ -11,13 +11,13 @@ namespace TFW.Docs.Cross.Profiles
     {
         public AppRoleProfile()
         {
-            CreateMap<AppRole, RoleSimpleModel>();
+            CreateMap<AppRoleEntity, RoleSimpleModel>();
 
-            CreateMap<AppRole, RoleBaseModel>();
+            CreateMap<AppRoleEntity, RoleBaseModel>();
             
-            CreateMap<AppRole, RoleDetailModel>();
+            CreateMap<AppRoleEntity, RoleDetailModel>();
             
-            CreateMap<AppRole, GetListRolesResponseModel>();
+            CreateMap<AppRoleEntity, GetListRolesResponseModel>();
         }
     }
 }

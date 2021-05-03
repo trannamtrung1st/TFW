@@ -205,6 +205,13 @@ namespace TFW.Docs.Cross
         public const string OAuth2 = nameof(OAuth2);
         public const string ClientAuthenticationScheme = "Basic";
 
+        public static class AccountConstraints
+        {
+            public const int PasswordMinLength = 6;
+            public const int PasswordMaxLength = 100;
+            public const int UsernameMinLength = 5;
+        }
+
         public static class GrantTypes
         {
             public const string Password = "password";

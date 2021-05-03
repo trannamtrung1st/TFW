@@ -6,9 +6,9 @@ using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Data.EntityConfigs
 {
-    public class PostEntityConfig : BaseEntityConfig<Post>
+    public class PostEntityConfig : BaseEntityConfig<PostEntity>
     {
-        public override void Configure(EntityTypeBuilder<Post> builder)
+        public override void Configure(EntityTypeBuilder<PostEntity> builder)
         {
             base.Configure(builder);
 

@@ -9,4 +9,8 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TFW.Framework.Cross\TFW.Framework.Cross.csproj" />
+  </ItemGroup>
+
 </Project>

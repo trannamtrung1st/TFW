@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TFW.Docs.Cross;
 using TFW.Docs.Cross.Entities;
 using TFW.Docs.Cross.Providers;
 using TFW.Framework.Common.Helpers;
@@ -20,14 +22,14 @@ namespace TFW.Docs.Data
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IFullAuditableDbContext))]
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IBaseDbContext))]
     [ProviderService(ServiceLifetime.Scoped, ServiceType = typeof(IHighLevelDbContext))]
-    public partial class DataContext : BaseIdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>,
-        AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public partial class DataContext : BaseIdentityDbContext<AppUserEntity, AppRoleEntity, int, IdentityUserClaim<int>,
+        AppUserRoleEntity, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         private const string IdentityNamespace = "Microsoft.AspNetCore.Identity";
         private const string IdentityModelNameStart = "Identity";
+        private const string EntityPostfix = "Entity";
 
-        [Inject(Required = false)]
-        public IBusinessContextProvider BusinessContextProvider { get; set; }
+        private IMutableModel _model;
 
         public DataContext() : base()
         {
@@ -38,9 +40,14 @@ namespace TFW.Docs.Data
         }
 
         public DataContext(DbContextOptions options,
-            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null) : base(options, queryFilterOptions)
+            IOptionsSnapshot<QueryFilterOptions> queryFilterOptions = null,
+            AppEntitySchema entitySchema = null) : base(options, queryFilterOptions)
         {
+            if (_model != null) entitySchema.InitSchema(_model.ParseSchema());
         }
+
+        [Inject(Required = false)]
+        public IBusinessContextProvider BusinessContextProvider { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,6 +65,7 @@ namespace TFW.Docs.Data
             base.OnModelCreating(modelBuilder);
 
             var dataContextAssembly = typeof(DataContext).Assembly;
+            var modelAssembly = typeof(NamespaceModel).Assembly;
 
             // we can pass a 'predicate' to these below extensions to filter which type to apply
 
@@ -97,6 +105,16 @@ namespace TFW.Docs.Data
                         .CommonDescriptionLikeColumnEndWiths.Any(o => colName.EndsWith(o));
                 });
             #endregion
+
+            modelBuilder.AdjustTableName(eType =>
+            {
+                var tblName = eType.GetTableName();
+                var postfixIdx = tblName.LastIndexOf(EntityPostfix);
+                return postfixIdx > 0 ? tblName.Substring(0, postfixIdx) : tblName;
+
+            }, entityTypePredicate: type => type.ClrType?.Assembly == modelAssembly);
+
+            _model = modelBuilder.Model;
         }
 
         public override void PrepareAdd(object entity)

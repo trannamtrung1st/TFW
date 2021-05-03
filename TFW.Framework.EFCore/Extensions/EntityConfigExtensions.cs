@@ -10,6 +10,7 @@ using System.Text;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Cross.Models;
+using TFW.Framework.Cross.Schema;
 using TFW.Framework.EFCore.Providers;
 
 namespace TFW.Framework.EFCore.Extensions
@@ -111,6 +112,25 @@ namespace TFW.Framework.EFCore.Extensions
                 // skip Shadow types
                 if (entityType.ClrType != null)
                     entityType.SetTableName(entityType.ClrType.Name);
+            }
+
+            return builder;
+        }
+
+        public static ModelBuilder AdjustTableName(this ModelBuilder builder,
+            Func<IMutableEntityType, string> func,
+            Func<IMutableEntityType, bool> entityTypePredicate = null)
+        {
+            var entityTypes = builder.Model.GetEntityTypes();
+
+            if (entityTypePredicate != null)
+                entityTypes = entityTypes.Where(entityTypePredicate);
+
+            foreach (var entityType in entityTypes)
+            {
+                // skip Shadow types
+                if (entityType.ClrType != null)
+                    entityType.SetTableName(func(entityType));
             }
 
             return builder;
@@ -224,6 +244,31 @@ namespace TFW.Framework.EFCore.Extensions
 
             return entityType == null ||
                 types.Any(t => t.IsAssignableFrom(entityType));
+        }
+
+        public static IDictionary<string, SchemaPropertyInfo> ParseSchema(this IMutableModel model)
+        {
+            var dict = new Dictionary<string, SchemaPropertyInfo>();
+            var stringType = typeof(string);
+
+            foreach (var type in model.GetEntityTypes())
+            {
+                foreach (var prop in type.GetProperties())
+                {
+                    if (prop.ClrType == stringType)
+                    {
+                        dict[$"{type.ClrType.Namespace}.{type.ClrType.Name}.{prop.Name}"] = new StringPropertyInfo
+                        {
+                            PropertyType = prop.ClrType,
+                            StringLength = prop.GetMaxLength(),
+                            IsFixLength = prop.IsFixedLength(),
+                            IsUnboundLength = prop.IsUnboundLength(),
+                        };
+                    }
+                }
+            }
+
+            return dict;
         }
     }
 }

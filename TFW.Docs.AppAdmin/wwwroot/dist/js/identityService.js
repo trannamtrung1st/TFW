@@ -6,9 +6,11 @@ const IdentityService = ({
   let lastTokenValidationHandler;
   const tokenInfoKey = 'tokenInfo';
   const getTokenStorage = (persistent = null) => {
-    if (persistent === true) return localStorage;
-    else if (persistent === false) return sessionStorage;
-    else if (localStorage[tokenInfoKey]) return localStorage;
+    if (persistent === null) {
+      return localStorage[tokenInfoKey] ? localStorage : sessionStorage;
+    } else if (persistent) {
+      return localStorage;
+    }
     return sessionStorage;
   };
   const saveToken = (model, rememberMe) => {

@@ -10,7 +10,7 @@ using TFW.Docs.Data;
 namespace TFW.Docs.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210502061520_InitDb")]
+    [Migration("20210503025857_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,10 +73,12 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -97,7 +99,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -107,7 +110,7 @@ namespace TFW.Docs.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppRole", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppRoleEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,13 +142,13 @@ namespace TFW.Docs.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a1c47a9d-8585-4094-8d4b-6ea8e87ce8f8",
+                            ConcurrencyStamp = "dfbdfc4d-978c-400b-aa4a-2a6ccbb0cb94",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUser", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -179,7 +182,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -236,7 +240,7 @@ namespace TFW.Docs.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUserRole", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUserRoleEntity", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -251,7 +255,97 @@ namespace TFW.Docs.Data.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.Post", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("LastModifiedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StartingPostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StartingPostId");
+
+                    b.ToTable("PostCategory");
+                });
+
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryLocalizationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lang")
+                        .IsRequired()
+                        .HasColumnType("varchar(2)")
+                        .HasMaxLength(2)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("LastModifiedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("LastModifiedUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Region")
+                        .HasColumnType("varchar(2)")
+                        .HasMaxLength(2)
+                        .IsUnicode(false);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
+
+                    b.ToTable("PostCategoryLocalization");
+                });
+
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -294,97 +388,7 @@ namespace TFW.Docs.Data.Migrations
                     b.ToTable("Post");
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("LastModifiedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StartingPostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StartingPostId");
-
-                    b.ToTable("PostCategory");
-                });
-
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryLocalization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(2000)")
-                        .HasMaxLength(2000);
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Lang")
-                        .IsRequired()
-                        .HasColumnType("varchar(2)")
-                        .HasMaxLength(2)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("LastModifiedUserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Region")
-                        .HasColumnType("varchar(2)")
-                        .HasMaxLength(2)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EntityId");
-
-                    b.ToTable("PostCategoryLocalization");
-                });
-
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostLocalization", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostLocalizationEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -421,8 +425,8 @@ namespace TFW.Docs.Data.Migrations
 
                     b.Property<string>("PostIndex")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.Property<string>("Region")
                         .HasColumnType("varchar(2)")
@@ -431,8 +435,8 @@ namespace TFW.Docs.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
 
                     b.HasKey("Id");
 
@@ -443,7 +447,7 @@ namespace TFW.Docs.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.AppRole", null)
+                    b.HasOne("TFW.Docs.Cross.Entities.AppRoleEntity", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -452,7 +456,7 @@ namespace TFW.Docs.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.AppUser", null)
+                    b.HasOne("TFW.Docs.Cross.Entities.AppUserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -461,7 +465,7 @@ namespace TFW.Docs.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.AppUser", null)
+                    b.HasOne("TFW.Docs.Cross.Entities.AppUserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -470,62 +474,62 @@ namespace TFW.Docs.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.AppUser", null)
+                    b.HasOne("TFW.Docs.Cross.Entities.AppUserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUserRole", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.AppUserRoleEntity", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.AppRole", "Role")
+                    b.HasOne("TFW.Docs.Cross.Entities.AppRoleEntity", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TFW.Docs.Cross.Entities.AppUser", "User")
+                    b.HasOne("TFW.Docs.Cross.Entities.AppUserEntity", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.Post", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryEntity", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.PostCategory", "Category")
-                        .WithMany("Posts")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TFW.Docs.Cross.Entities.Post", "Parent")
-                        .WithMany("SubPosts")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategory", b =>
-                {
-                    b.HasOne("TFW.Docs.Cross.Entities.Post", "StartingPost")
+                    b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "StartingPost")
                         .WithMany()
                         .HasForeignKey("StartingPostId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryLocalization", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryLocalizationEntity", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.PostCategory", "Entity")
+                    b.HasOne("TFW.Docs.Cross.Entities.PostCategoryEntity", "Entity")
                         .WithMany("ListOfLocalization")
                         .HasForeignKey("EntityId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostLocalization", b =>
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostEntity", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.Post", "Entity")
+                    b.HasOne("TFW.Docs.Cross.Entities.PostCategoryEntity", "Category")
+                        .WithMany("Posts")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "Parent")
+                        .WithMany("SubPosts")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TFW.Docs.Cross.Entities.PostLocalizationEntity", b =>
+                {
+                    b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "Entity")
                         .WithMany("ListOfLocalization")
                         .HasForeignKey("EntityId")
                         .OnDelete(DeleteBehavior.Restrict)

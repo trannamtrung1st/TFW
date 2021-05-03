@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using TFW.Docs.Cross.Models.Common;
-using AU = TFW.Docs.Cross.Entities.AppUser;
+using AU = TFW.Docs.Cross.Entities.AppUserEntity;
 
 namespace TFW.Docs.Cross.Models.AppUser
 {

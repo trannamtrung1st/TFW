@@ -7,9 +7,9 @@ using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Data.EntityConfigs
 {
-    public class AppUserRoleEntityConfig : BaseEntityConfig<AppUserRole>
+    public class AppUserRoleEntityConfig : BaseEntityConfig<AppUserRoleEntity>
     {
-        public override void Configure(EntityTypeBuilder<AppUserRole> builder)
+        public override void Configure(EntityTypeBuilder<AppUserRoleEntity> builder)
         {
             base.Configure(builder);
 

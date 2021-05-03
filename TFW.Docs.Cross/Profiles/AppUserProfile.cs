@@ -11,15 +11,15 @@ namespace TFW.Docs.Cross.Profiles
     {
         public AppUserProfile()
         {
-            CreateMap<AppUser, AppUserSimpleModel>();
+            CreateMap<AppUserEntity, AppUserSimpleModel>();
 
-            CreateMap<AppUser, AppUserBaseModel>();
+            CreateMap<AppUserEntity, AppUserBaseModel>();
 
-            CreateMap<AppUser, AppUserDetailModel>();
+            CreateMap<AppUserEntity, AppUserDetailModel>();
 
-            CreateMap<AppUser, GetListAppUsersResponseModel>();
+            CreateMap<AppUserEntity, GetListAppUsersResponseModel>();
 
-            CreateMap<AppUser, UserProfileModel>();
+            CreateMap<AppUserEntity, UserProfileModel>();
 
             CreateMap<GetListAppUsersRequestModel, DynamicQueryAppUserModel>();
             // Not necessary because of AutoMapper case insensitive

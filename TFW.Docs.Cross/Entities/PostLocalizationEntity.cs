@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TFW.Docs.Cross.Entities
 {
-    public class PostLocalization : AppLocalizationEntity<int, Post>
+    public class PostLocalizationEntity : AppLocalizationEntity<int, PostEntity>
     {
-        public const int PostIndexMaxLength = 255;
+        public const int PostIndexMaxLength = 256;
 
         public int Id { get; set; }
         public string PostIndex { get; set; }

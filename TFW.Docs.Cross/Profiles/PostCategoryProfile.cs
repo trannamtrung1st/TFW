@@ -11,9 +11,9 @@ namespace TFW.Docs.Cross.Profiles
     {
         public PostCategoryProfile()
         {
-            CreateMap<PostCategoryLocalizationEditableModel, PostCategoryLocalization>();
+            CreateMap<PostCategoryLocalizationEditableModel, PostCategoryLocalizationEntity>();
 
-            CreateMap<CreatePostCategoryModel, PostCategory>();
+            CreateMap<CreatePostCategoryModel, PostCategoryEntity>();
         }
     }
 }

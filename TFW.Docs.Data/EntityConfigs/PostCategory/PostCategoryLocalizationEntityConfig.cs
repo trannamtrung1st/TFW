@@ -6,9 +6,9 @@ using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Data.EntityConfigs
 {
-    public class PostCategoryLocalizationEntityConfig : BaseEntityConfig<PostCategoryLocalization>
+    public class PostCategoryLocalizationEntityConfig : BaseEntityConfig<PostCategoryLocalizationEntity>
     {
-        public override void Configure(EntityTypeBuilder<PostCategoryLocalization> builder)
+        public override void Configure(EntityTypeBuilder<PostCategoryLocalizationEntity> builder)
         {
             base.Configure(builder);
 

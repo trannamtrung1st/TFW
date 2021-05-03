@@ -49,7 +49,7 @@ namespace TFW.Docs.Data.Migrations
                     DeletedTime = table.Column<DateTime>(nullable: true),
                     DeletedUserId = table.Column<int>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    FullName = table.Column<string>(nullable: true)
+                    FullName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,8 +103,8 @@ namespace TFW.Docs.Data.Migrations
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
-                    ProviderDisplayName = table.Column<string>(nullable: true),
+                    ProviderKey = table.Column<string>(maxLength: 100, nullable: false),
+                    ProviderDisplayName = table.Column<string>(maxLength: 256, nullable: true),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -148,7 +148,7 @@ namespace TFW.Docs.Data.Migrations
                 {
                     UserId = table.Column<int>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -229,7 +229,7 @@ namespace TFW.Docs.Data.Migrations
                     Region = table.Column<string>(unicode: false, maxLength: 2, nullable: true),
                     IsDefault = table.Column<bool>(nullable: false),
                     EntityId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    Title = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
@@ -257,8 +257,8 @@ namespace TFW.Docs.Data.Migrations
                     Region = table.Column<string>(unicode: false, maxLength: 2, nullable: true),
                     IsDefault = table.Column<bool>(nullable: false),
                     EntityId = table.Column<int>(nullable: false),
-                    PostIndex = table.Column<string>(maxLength: 255, nullable: false),
-                    Title = table.Column<string>(maxLength: 255, nullable: false),
+                    PostIndex = table.Column<string>(maxLength: 256, nullable: false),
+                    Title = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
@@ -275,7 +275,7 @@ namespace TFW.Docs.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "a1c47a9d-8585-4094-8d4b-6ea8e87ce8f8", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { 1, "dfbdfc4d-978c-400b-aa4a-2a6ccbb0cb94", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
