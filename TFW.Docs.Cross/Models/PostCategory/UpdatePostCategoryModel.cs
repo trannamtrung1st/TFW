@@ -7,8 +7,5 @@ namespace TFW.Docs.Cross.Models.PostCategory
     {
         [JsonProperty("startingPostId")]
         public int? StartingPostId { get; set; }
-
-        [JsonProperty("listOfUpdatedLocalization")]
-        public IEnumerable<UpdatePostCategoryLocalizationModel> ListOfUpdatedLocalization { get; set; }
     }
 }

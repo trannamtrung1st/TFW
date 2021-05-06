@@ -52,7 +52,7 @@ namespace TFW.Docs.Business.Core.Services
                     o => o.Lang == defaultLocalization.Lang && o.Region == defaultLocalization.Region).Id;
 
                 await dbContext.SaveChangesAsync();
-                
+
                 await trans.CommitAsync();
             }
 
@@ -81,14 +81,6 @@ namespace TFW.Docs.Business.Core.Services
             PrepareUpdate(entity);
 
             entity = dbContext.Update(entity, o => o.StartingPostId).Entity;
-
-            foreach (var updateModel in model.ListOfUpdatedLocalization)
-            {
-                var localization = updateModel.MapTo<PostCategoryLocalizationEntity>();
-
-                dbContext.Update(localization, o => o.Title,
-                    o => o.Description);
-            }
 
             await dbContext.SaveChangesAsync();
         }

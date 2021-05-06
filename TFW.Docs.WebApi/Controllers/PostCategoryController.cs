@@ -38,6 +38,7 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(id);
         }
 
+        // [TODO] Add validation
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
         [HttpPatch(Routing.Controller.PostCategory.UpdatePostCategory)]
         public async Task<IActionResult> UpdatePostCategory(int id, UpdatePostCategoryModel model)

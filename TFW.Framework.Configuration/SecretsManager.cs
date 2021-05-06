@@ -14,13 +14,13 @@ namespace TFW.Framework.Configuration
     public interface ISecretsManager
     {
         T Get<T>(string key = null, string prodKey = null,
-           IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+           IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process);
         string Get(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process);
         Task SetAsync(string key, string value, string prodKey = null, string project = null, string workingDir = "",
-            EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.Process);
         Task RemoveAsync(string key, string prodKey = null, string project = null, string workingDir = "",
-            EnvironmentVariableTarget target = EnvironmentVariableTarget.User);
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.Process);
     }
 
     public class SecretsManager : ISecretsManager
@@ -44,7 +44,7 @@ namespace TFW.Framework.Configuration
         public SecretsManager() { }
 
         public T Get<T>(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             if (!Env.IsProduction())
             {
@@ -61,7 +61,7 @@ namespace TFW.Framework.Configuration
         }
 
         public string Get(string key = null, string prodKey = null,
-            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+            IConfiguration configuration = null, EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             if (!Env.IsProduction())
             {
@@ -74,7 +74,7 @@ namespace TFW.Framework.Configuration
         }
 
         public Task SetAsync(string key, string value, string prodKey = null, string project = null, string workingDir = "",
-            EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             if (CmdLineProgram == null) throw new InvalidOperationException($"{nameof(CmdLineProgram)} has not been set");
 
@@ -100,7 +100,7 @@ namespace TFW.Framework.Configuration
         }
 
         public Task RemoveAsync(string key, string prodKey = null, string project = null, string workingDir = "",
-            EnvironmentVariableTarget target = EnvironmentVariableTarget.User)
+            EnvironmentVariableTarget target = EnvironmentVariableTarget.Process)
         {
             if (CmdLineProgram == null) throw new InvalidOperationException($"{nameof(CmdLineProgram)} has not been set");
 
