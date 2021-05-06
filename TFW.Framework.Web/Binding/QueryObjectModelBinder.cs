@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TFW.Framework.Web.Bindings
+namespace TFW.Framework.Web.Binding
 {
     public class QueryObjectModelBinder : ComplexTypeModelBinder
     {
@@ -22,7 +22,7 @@ namespace TFW.Framework.Web.Bindings
     {
         private static readonly Type[] QueryObjectModelBinderTypes = new[]
         {
-            typeof(DefaultDateTimeModelBinder)
+            typeof(TimeZoneAwaredDateTimeModelBinder)
         };
 
         public IModelBinder GetBinder(ModelBinderProviderContext context)
@@ -35,7 +35,7 @@ namespace TFW.Framework.Web.Bindings
             if (context.Metadata.IsComplexType && context.Metadata.BinderType == typeof(QueryObjectModelBinder))
             {
                 var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
-            
+
                 foreach (var p in context.Metadata.Properties)
                 {
                     if (QueryObjectModelBinderTypes.Contains(p.BinderType))
@@ -43,9 +43,9 @@ namespace TFW.Framework.Web.Bindings
                     else
                         propertyBinders.Add(p, context.CreateBinder(p));
                 }
-                
+
                 var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
-                
+
                 return new QueryObjectModelBinder(propertyBinders, loggerFactory);
             }
 

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TFW.Framework.Web.Bindings
+namespace TFW.Framework.Web.Binding
 {
     public class UtcDateTimeModelBinder : IModelBinder
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TFW.Framework.i18n.Helpers;
 using TFW.Framework.Web.Options;
-using TFW.Framework.Web.Bindings;
+using TFW.Framework.Web.Binding;
 using TFW.Framework.Web.Middlewares;
 using TFW.Framework.Web.Providers;
 using TFW.Framework.Web.Handlers;
@@ -69,9 +69,9 @@ namespace TFW.Framework.Web
             });
         }
 
-        public static IServiceCollection AddDefaultDateTimeModelBinder(this IServiceCollection services)
+        public static IServiceCollection AddTimeZoneAwaredDateTimeModelBinder(this IServiceCollection services)
         {
-            return services.AddSingleton(new DefaultDateTimeModelBinder());
+            return services.AddSingleton(new TimeZoneAwaredDateTimeModelBinder());
         }
     }
 }

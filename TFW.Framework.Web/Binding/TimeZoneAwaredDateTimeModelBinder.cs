@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using TFW.Framework.i18n;
 using TFW.Framework.i18n.Extensions;
 
-namespace TFW.Framework.Web.Bindings
+namespace TFW.Framework.Web.Binding
 {
-    public class DefaultDateTimeModelBinder : IModelBinder
+    public class TimeZoneAwaredDateTimeModelBinder : IModelBinder
     {
         private static readonly Type[] supportedTypes = new Type[] { typeof(DateTime), typeof(DateTime?) };
 
@@ -122,7 +122,7 @@ namespace TFW.Framework.Web.Bindings
         public bool ToUtc { get; set; } = true;
 
         public DefaultDateTimeModelBinderAttribute()
-            : base(typeof(DefaultDateTimeModelBinder))
+            : base(typeof(TimeZoneAwaredDateTimeModelBinder))
         {
         }
     }

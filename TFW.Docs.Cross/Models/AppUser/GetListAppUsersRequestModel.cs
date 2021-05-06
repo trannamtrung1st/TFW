@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TFW.Docs.Cross.Models.Common;
-using TFW.Framework.Web.Bindings;
+using TFW.Framework.Web.Binding;
 using TFW.Framework.Web.Extensions;
 using AU = TFW.Docs.Cross.Entities.AppUserEntity;
 
