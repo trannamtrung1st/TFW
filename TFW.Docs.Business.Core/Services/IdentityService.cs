@@ -60,33 +60,39 @@ namespace TFW.Docs.Business.Core.Services
                 throw validationData.BuildException();
             #endregion
 
-            var queryModel = requestModel.MapTo<DynamicQueryAppUserModel>();
             IQueryable<AppUserEntity> query = dbContext.Users.AsNoTracking();
 
             #region Filter
-            if (queryModel.Id != null)
-                query = query.ById(queryModel.Id.Value);
+            if (requestModel.Id != null)
+                query = query.ById(requestModel.Id.Value);
 
-            if (queryModel.UserName != null)
-                query = query.ByUsername(queryModel.UserName);
+            if (requestModel.UserName != null)
+                query = query.ByUsername(requestModel.UserName);
 
-            if (queryModel.SearchTerm != null)
-                query = query.BySearchTerm(queryModel.SearchTerm);
+            if (requestModel.SearchTerm != null)
+                query = query.BySearchTerm(requestModel.SearchTerm);
+
+            if (requestModel.RegisteredFromDate != null)
+                query = query.CreatedFrom(requestModel.RegisteredFromDate.Value);
+
+            if (requestModel.RegisteredToDate != null)
+                query = query.CreatedTo(requestModel.RegisteredToDate.Value);
             #endregion
 
             var orgQuery = query;
 
             #region Sorting
-            if (!queryModel.SortBy.IsNullOrEmpty())
+            var sortByArr = requestModel.GetSortByArr();
+            if (!sortByArr.IsNullOrEmpty())
             {
-                foreach (var field in queryModel.SortBy)
+                foreach (var field in sortByArr)
                 {
                     var asc = field[0] == QueryConsts.SortAscPrefix;
                     var fieldName = field.Remove(0, 1);
 
                     switch (fieldName)
                     {
-                        case DynamicQueryAppUserModel.SortByUsername:
+                        case GetListAppUsersRequestModel.SortByUsername:
                             {
                                 if (asc)
                                     query = query.SequentialOrderBy(o => o.UserName);
@@ -101,11 +107,11 @@ namespace TFW.Docs.Business.Core.Services
             }
             #endregion
 
-            if (queryModel.Page > 0)
-                query = query.Limit(queryModel.Page, queryModel.PageLimit);
+            if (requestModel.Page > 0)
+                query = query.Limit(requestModel.Page, requestModel.PageLimit);
 
             #region Projection
-            var projectionArr = queryModel.Fields.Select(o => DynamicQueryAppUserModel.Projections[o]).ToArray();
+            var projectionArr = requestModel.GetFieldsArr().Select(o => GetListAppUsersRequestModel.Projections[o]).ToArray();
             var projectionStr = string.Join(',', projectionArr);
 
             var projectedQuery = query.Select<TModel>(
@@ -119,7 +125,7 @@ namespace TFW.Docs.Business.Core.Services
                 List = responseModels,
             };
 
-            if (queryModel.CountTotal)
+            if (requestModel.CountTotal)
                 response.TotalCount = await orgQuery.CountAsync();
 
             return response;
@@ -185,12 +191,12 @@ namespace TFW.Docs.Business.Core.Services
             {
                 var appUser = new AppUserEntity
                 {
-                    UserName = model.username,
-                    FullName = model.fullName,
-                    Email = model.email
+                    UserName = model.Username,
+                    FullName = model.FullName,
+                    Email = model.Email
                 };
 
-                result = await CreateUserWithRolesTransactionAsync(appUser, model.password,
+                result = await CreateUserWithRolesTransactionAsync(appUser, model.Password,
                     new[] { RoleName.Administrator });
 
                 if (result.Succeeded)
@@ -223,12 +229,12 @@ namespace TFW.Docs.Business.Core.Services
             {
                 var appUser = new AppUserEntity
                 {
-                    UserName = model.username,
-                    FullName = model.fullName,
-                    Email = model.email
+                    UserName = model.Username,
+                    FullName = model.FullName,
+                    Email = model.Email
                 };
 
-                result = await CreateUserWithRolesTransactionAsync(appUser, model.password);
+                result = await CreateUserWithRolesTransactionAsync(appUser, model.Password);
 
                 if (result.Succeeded)
                 {
@@ -373,23 +379,23 @@ namespace TFW.Docs.Business.Core.Services
         {
             AppUserEntity entity = null;
 
-            switch (requestModel.grant_type)
+            switch (requestModel.GrantType)
             {
                 case SecurityConsts.GrantTypes.Password:
                     {
-                        entity = await AuthenticateAsync(requestModel.username, requestModel.password);
+                        entity = await AuthenticateAsync(requestModel.Username, requestModel.Password);
                     }
                     break;
                 case SecurityConsts.GrantTypes.RefreshToken:
                     {
-                        var validResult = ValidateRefreshToken(requestModel.refresh_token);
+                        var validResult = ValidateRefreshToken(requestModel.RefreshToken);
 
                         entity = await _userManager.FindByIdAsync(validResult.IdentityName());
                     }
                     break;
                 default:
                     {
-                        throw OAuthException.UnsupportedGrantType(description: nameof(requestModel.grant_type));
+                        throw OAuthException.UnsupportedGrantType(description: nameof(requestModel.GrantType));
                     }
             }
 
@@ -399,10 +405,10 @@ namespace TFW.Docs.Business.Core.Services
                 await GetIdentityAsync(entity, JwtBearerDefaults.AuthenticationScheme);
 
             #region Handle scope
-            if (requestModel.scope != null)
+            if (requestModel.Scope != null)
             {
                 // demo only, real scenario: validate requested scopes first --> ... 
-                var scopes = requestModel.scope.Split(',')
+                var scopes = requestModel.Scope.Split(',')
                     .Select(scope => new Claim(SecurityConsts.ClaimTypes.AppScope, scope.Trim())).ToArray();
 
                 identity.AddClaims(scopes);

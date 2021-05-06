@@ -1,18 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace TFW.Docs.Cross.Models.AppUser
 {
     public class RegisterModel
     {
-        public string username { get; set; }
-        public string email { get; set; }
+        [FromForm(Name = "username")]
+        public string Username { get; set; }
+
+        [FromForm(Name = "email")]
+        public string Email { get; set; }
 
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        [FromForm(Name = "password")]
+        public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        public string confirmPassword { get; set; }
+        [FromForm(Name = "confirmPassword")]
+        public string ConfirmPassword { get; set; }
 
-        public string fullName { get; set; }
+        [FromForm(Name = "fullName")]
+        public string FullName { get; set; }
     }
 }

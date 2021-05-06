@@ -18,21 +18,21 @@ namespace TFW.Docs.Cross.Validators.Identity
 
             var invalidRequest = OAuthException.InvalidRequest();
 
-            RuleFor(request => request.grant_type).NotEmpty()
+            RuleFor(request => request.GrantType).NotEmpty()
                 .WithState(request => invalidRequest);
 
-            When(request => request.grant_type == SecurityConsts.GrantTypes.Password, () =>
+            When(request => request.GrantType == SecurityConsts.GrantTypes.Password, () =>
             {
-                RuleFor(request => request.username).NotEmpty()
+                RuleFor(request => request.Username).NotEmpty()
                     .WithState(request => invalidRequest);
 
-                RuleFor(request => request.password).NotEmpty()
+                RuleFor(request => request.Password).NotEmpty()
                     .WithState(request => invalidRequest);
             });
 
-            When(request => request.grant_type == SecurityConsts.GrantTypes.RefreshToken, () =>
+            When(request => request.GrantType == SecurityConsts.GrantTypes.RefreshToken, () =>
             {
-                RuleFor(request => request.refresh_token).NotEmpty()
+                RuleFor(request => request.RefreshToken).NotEmpty()
                     .WithState(request => invalidRequest);
             });
         }

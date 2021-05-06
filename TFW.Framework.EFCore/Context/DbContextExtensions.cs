@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.Cross.Models;
 using TFW.Framework.EFCore.Queries;
-using TFW.Framework.i18n;
 
 namespace TFW.Framework.EFCore.Context
 {
@@ -123,63 +122,63 @@ namespace TFW.Framework.EFCore.Context
 
         public static void PrepareAddDefault(this IFullAuditableDbContext dbContext, object entity)
         {
-            if (entity is IAuditableEntity == false) return;
-
-            var auditableEntity = entity as IAuditableEntity;
-            auditableEntity.CreatedTime = Time.Now;
+            if (entity is IAuditableEntity auditableEntity)
+            {
+                auditableEntity.CreatedTime = DateTime.UtcNow;
+            }
         }
 
         public static void PrepareModifyDefault(this IFullAuditableDbContext dbContext, object entity)
         {
             var isSoftDeleted = false;
 
-            if (entity is ISoftDeleteEntity)
+            if (entity is ISoftDeleteEntity softDeleteEntity)
             {
-                var softDeleteEntity = entity as ISoftDeleteEntity;
-
                 if (softDeleteEntity.IsDeleted)
                 {
                     if (softDeleteEntity.DeletedTime != null)
                         throw new InvalidOperationException($"{nameof(entity)} is already deleted");
 
-                    softDeleteEntity.DeletedTime = Time.Now;
+                    softDeleteEntity.DeletedTime = DateTime.UtcNow;
                     isSoftDeleted = true;
                 }
             }
 
-            if (isSoftDeleted || entity is IAuditableEntity == false) return;
-
-            var auditableEntity = entity as IAuditableEntity;
-            auditableEntity.LastModifiedTime = Time.Now;
+            if (!isSoftDeleted && entity is IAuditableEntity auditableEntity)
+            {
+                auditableEntity.LastModifiedTime = DateTime.UtcNow;
+            }
         }
 
         public static EntityEntry SoftRemoveDefault(this IFullAuditableDbContext dbContext, object entity)
         {
-            if (entity is ISoftDeleteEntity == false)
-                throw new InvalidOperationException($"{nameof(entity)} is not {nameof(ISoftDeleteEntity)}");
+            if (entity is ISoftDeleteEntity softDeleteEntity)
+            {
+                softDeleteEntity.IsDeleted = true;
 
-            var softDeleteEntity = entity as ISoftDeleteEntity;
-            softDeleteEntity.IsDeleted = true;
+                var entry = dbContext.Entry(entity);
+                entry.State = EntityState.Modified;
 
-            var entry = dbContext.Entry(entity);
-            entry.State = EntityState.Modified;
+                return entry;
+            }
 
-            return entry;
+            throw new InvalidOperationException($"{nameof(entity)} is not {nameof(ISoftDeleteEntity)}");
         }
 
         public static EntityEntry<T> SoftRemoveDefault<T>(this IFullAuditableDbContext dbContext, T entity)
             where T : class
         {
-            if (entity is ISoftDeleteEntity == false)
-                throw new InvalidOperationException($"{nameof(entity)} is not {nameof(ISoftDeleteEntity)}");
+            if (entity is ISoftDeleteEntity softDeleteEntity)
+            {
+                softDeleteEntity.IsDeleted = true;
 
-            var softDeleteEntity = entity as ISoftDeleteEntity;
-            softDeleteEntity.IsDeleted = true;
+                var entry = dbContext.Entry(entity);
+                entry.State = EntityState.Modified;
 
-            var entry = dbContext.Entry(entity);
-            entry.State = EntityState.Modified;
+                return entry;
+            }
 
-            return entry;
+            throw new InvalidOperationException($"{nameof(entity)} is not {nameof(ISoftDeleteEntity)}");
         }
 
         public static bool TryAttachDefault<T>(this IFullAuditableDbContext dbContext, T entity, out EntityEntry<T> entry)

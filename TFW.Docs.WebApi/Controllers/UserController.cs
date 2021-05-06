@@ -12,7 +12,6 @@ using TFW.Docs.Cross.Models.AppUser;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Providers;
 using TFW.Framework.Web.Attributes;
-using TFW.Framework.Web.Bindings;
 using AllowAnonymous = Microsoft.AspNetCore.Authorization.AllowAnonymousAttribute;
 
 namespace TFW.Docs.WebApi.Controllers
@@ -33,7 +32,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<GetListAppUsersResponseModel>>))]
         [HttpGet(Routing.Controller.User.GetListAppUser)]
-        public async Task<IActionResult> GetListAppUser([FromQuery][QueryObject] GetListAppUsersRequestModel model)
+        public async Task<IActionResult> GetListAppUser([FromQuery] GetListAppUsersRequestModel model)
         {
             var data = await _identityService.GetListAppUsersAsync<GetListAppUsersResponseModel>(model);
 

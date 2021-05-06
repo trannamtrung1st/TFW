@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TFW.Docs.Cross</name>
+    </assembly>
+    <members>
+        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.UserName">
+            <summary>
+            Username
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.SearchTerm">
+            <summary>
+            Search terms
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.RegisteredFromDate">
+            <summary>
+            Registered from date
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.RegisteredToDate">
+            <summary>
+            Registered to date
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.CountTotal">
+            <summary>
+            Count total
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.Page">
+            <summary>
+            Page
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.PageLimit">
+            <summary>
+            Page limit
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.SortBy">
+            <summary>
+            Sort by
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.Fields">
+            <summary>
+            Fields
+            </summary>
+        </member>
+    </members>
+</doc>

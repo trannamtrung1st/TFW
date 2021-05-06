@@ -104,5 +104,9 @@ namespace TFW.Framework.i18n.Extensions
             return TimeZoneInfo.ConvertTimeToUtc(dateTime, srcTimeZoneInfo);
         }
 
+        public static DateTime Adjust(this DateTime dateTime, DateTimeKind kind)
+        {
+            return DateTime.SpecifyKind(dateTime, kind);
+        }
     }
 }

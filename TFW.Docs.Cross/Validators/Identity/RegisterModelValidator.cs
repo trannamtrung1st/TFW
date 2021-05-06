@@ -32,24 +32,24 @@ namespace TFW.Docs.Cross.Validators.Identity
         {
             var appUserType = typeof(AppUserEntity);
 
-            RuleFor(model => model.username)
+            RuleFor(model => model.Username)
                 .NotEmpty().InvalidState()
                 .MinimumLength(SecurityConsts.AccountConstraints.UsernameMinLength).InvalidState()
                 .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.UserName)).InvalidState();
 
-            RuleFor(model => model.password)
+            RuleFor(model => model.Password)
                 .NotEmpty().InvalidState()
                 .Length(SecurityConsts.AccountConstraints.PasswordMinLength,
                     SecurityConsts.AccountConstraints.PasswordMaxLength).InvalidState();
 
-            RuleFor(model => model.confirmPassword)
-                .Equal(model => model.password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
+            RuleFor(model => model.ConfirmPassword)
+                .Equal(model => model.Password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
                 .InvalidState();
 
-            RuleFor(model => model.fullName)
+            RuleFor(model => model.FullName)
                 .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.FullName)).InvalidState();
 
-            RuleFor(model => model.email)
+            RuleFor(model => model.Email)
                 .EmailAddress().InvalidState()
                 .FollowSchema(entitySchema, appUserType, nameof(AppUserEntity.Email)).InvalidState();
         }

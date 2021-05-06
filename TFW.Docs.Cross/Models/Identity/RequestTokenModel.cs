@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -10,19 +11,24 @@ namespace TFW.Docs.Cross.Models.Identity
         //REQUIRED. 
         //- password: grant username and password
         //- refresh_token: grant refresh_token
-        public string grant_type { get; set; }
+        [FromForm(Name = "grant_type")]
+        public string GrantType { get; set; }
 
         //REQUIRED.  The resource owner username.
-        public string username { get; set; }
+        [FromForm(Name = "username")]
+        public string Username { get; set; }
 
         //REQUIRED.  The resource owner password.
+        [FromForm(Name = "password")]
         [DataType(DataType.Password)]
-        public string password { get; set; }
+        public string Password { get; set; }
 
         //OPTIONAL.  The refresh_token
-        public string refresh_token { get; set; }
+        [FromForm(Name = "refresh_token")]
+        public string RefreshToken { get; set; }
 
         //OPTIONAL.  The scope of the access request as described by
-        public string scope { get; set; }
+        [FromForm(Name = "scope")]
+        public string Scope { get; set; }
     }
 }

@@ -23,7 +23,6 @@ using TFW.Framework.Data;
 using TFW.Framework.EFCore;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
-using TFW.Framework.Web.Bindings;
 using TFW.Framework.Web.Options;
 using TFW.Docs.WebApi.Filters;
 using TFW.Docs.WebApi.Handlers;
@@ -35,6 +34,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Net.Http.Headers;
 using System.Net;
 using static TFW.Docs.Cross.SecurityConsts;
+using Newtonsoft.Json;
 
 namespace TFW.Docs.WebApi
 {
@@ -176,11 +176,9 @@ namespace TFW.Docs.WebApi
 
             services.AddControllers(options =>
             {
-                options.ModelBinderProviders.Insert(0, new QueryObjectModelBinderProvider());
-
                 options.Filters.Add<AutoValidateActionFilter>();
 
-            }).AddNewtonsoftJson()
+            }).AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc)
                 .AddDefaultFluentValidation(new[] { typeof(Cross.AssemblyModel).Assembly })
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
@@ -207,9 +205,6 @@ namespace TFW.Docs.WebApi
 
                 if (appSettings.Swagger.AddSwaggerAcceptLanguageHeader)
                     c.OperationFilter<SwaggerGlobalHeaderOperationFilter>();
-
-                if (appSettings.Swagger.AddSwaggerTimeZoneHeader)
-                    c.OperationFilter<SwaggerTimeZoneHeaderOperationFilter>();
 
                 #region Bearer/Api Key
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme,
@@ -263,9 +258,11 @@ namespace TFW.Docs.WebApi
                 });
                 #endregion
 
-                var filePath = Path.Combine(AppHelper.GetAppContextBaseDirectory(),
-                    $"{typeof(Startup).Assembly.GetName().Name}.xml");
-                c.IncludeXmlComments(filePath);
+                var baseDir = AppHelper.GetAppContextBaseDirectory();
+                var webApiXml = Path.Combine(baseDir, $"{typeof(Startup).Assembly.GetName().Name}.xml");
+                var crossXml = Path.Combine(baseDir, $"{typeof(AssemblyModel).Assembly.GetName().Name}.xml");
+                c.IncludeXmlComments(webApiXml);
+                c.IncludeXmlComments(crossXml);
             });
 
             return services;
@@ -304,23 +301,7 @@ namespace TFW.Docs.WebApi
                     options.FallBackToParentCultures = true;
                     options.FallBackToParentUICultures = true;
                     //options.RequestCultureProviders = ...
-                })
-                .ConfigureAppRequestTimeZone();
-        }
-
-        public static IServiceCollection ConfigureAppRequestTimeZone(this IServiceCollection services)
-        {
-            return services.Configure<HeaderClientTimeZoneProviderOptions>(opt =>
-            {
-                opt.HeaderName = HeaderClientTimeZoneProviderOptions.DefaultHeaderName;
-            }).Configure<HeaderTimeZoneProviderOptions>(opt =>
-            {
-                opt.HeaderName = HeaderTimeZoneProviderOptions.DefaultHeaderName;
-            }).ConfigureRequestTimeZoneDefault(opt =>
-            {
-                // First detection will be used
-                opt.AddHeader().AddHeaderClient();
-            });
+                });
         }
 
         public static IServiceCollection ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

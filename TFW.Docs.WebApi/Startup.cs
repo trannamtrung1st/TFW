@@ -15,12 +15,10 @@ using TFW.Framework.Configuration;
 using TFW.Framework.Configuration.Extensions;
 using TFW.Framework.DI;
 using TFW.Framework.EFCore;
-using TFW.Framework.i18n;
 using TFW.Framework.Logging.Serilog.Web;
 using TFW.Framework.SimpleMail;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Web;
-using TFW.Docs.WebApi.Providers;
 
 namespace TFW.Docs.WebApi
 {
@@ -69,10 +67,8 @@ namespace TFW.Docs.WebApi
                 .AddServiceInjector(StartupConfig.TempAssemblyList, out serviceInjector)
                 .ScanServices(StartupConfig.TempAssemblyList, serviceInjector)
                 .AddDefaultDbMigrator()
-                .AddDefaultDateTimeModelBinder()
                 .AddRequestFeatureMiddleware()
                 .AddAppCaching()
-                .AddRequestTimeZoneMiddleware()
                 .AddDefaultValidationResultProvider()
                 .AddSmtpService(opt =>
                 {
@@ -113,10 +109,6 @@ namespace TFW.Docs.WebApi
                 CustomTypeProvider = dynamicLinkCustomTypeProvider
             };
 
-            // i18n
-            Time.Providers.Default = Time.Providers.Utc;
-            Time.ThreadTimeZoneProvider = new HttpThreadTimeZoneProvider();
-
             // HttpContext
             app.ConfigureHttpContext();
 
@@ -151,6 +143,7 @@ namespace TFW.Docs.WebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
+                c.InjectStylesheet("/custom-swagger-ui.css");
             });
 
             app.UseCors(builder =>
@@ -164,8 +157,6 @@ namespace TFW.Docs.WebApi
                     return true;
                 });
             });
-
-            app.UseRequestTimeZone();
 
             app.UseAuthentication();
 

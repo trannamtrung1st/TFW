@@ -13,11 +13,11 @@ namespace TFW.Docs.Cross.Validators.Common
         public BaseGetListRequestModelValidator(IValidationResultProvider validationResultProvider,
             IStringLocalizer<BaseGetListRequestModelValidator> localizer) : base(validationResultProvider, localizer)
         {
-            RuleFor(request => request.page)
+            RuleFor(request => request.Page)
                 .GreaterThanOrEqualTo(0)
                 .WithState(request => ResultCode.InvalidPagingRequest);
 
-            RuleFor(request => request.pageLimit)
+            RuleFor(request => request.PageLimit)
                 .GreaterThan(0)
                 .WithState(request => ResultCode.InvalidPagingRequest);
         }

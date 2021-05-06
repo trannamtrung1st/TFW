@@ -23,5 +23,15 @@ namespace TFW.Docs.Business.Core.Queries
             return query.Where(o => o.UserName.Contains(searchTerm)
                 || o.FullName.Contains(searchTerm));
         }
+
+        public static IQueryable<AppUserEntity> CreatedFrom(this IQueryable<AppUserEntity> query, DateTime dateTime)
+        {
+            return query.Where(o => o.CreatedTime >= dateTime);
+        }
+
+        public static IQueryable<AppUserEntity> CreatedTo(this IQueryable<AppUserEntity> query, DateTime dateTime)
+        {
+            return query.Where(o => o.CreatedTime <= dateTime);
+        }
     }
 }

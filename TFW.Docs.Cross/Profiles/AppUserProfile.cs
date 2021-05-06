@@ -20,11 +20,6 @@ namespace TFW.Docs.Cross.Profiles
             CreateMap<AppUserEntity, GetListAppUsersResponseModel>();
 
             CreateMap<AppUserEntity, UserProfileModel>();
-
-            CreateMap<GetListAppUsersRequestModel, DynamicQueryAppUserModel>();
-            // Not necessary because of AutoMapper case insensitive
-            //.ForMember(o => o.UserName, opt => opt.MapFrom(o => o.username))
-            //.ForMember(o => o.Id, opt => opt.MapFrom(o => o.id));
         }
     }
 }
