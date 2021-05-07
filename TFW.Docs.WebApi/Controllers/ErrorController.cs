@@ -27,7 +27,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public ErrorController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IWebHostEnvironment env) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _env = env;

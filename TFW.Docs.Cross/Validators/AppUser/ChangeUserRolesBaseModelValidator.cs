@@ -8,13 +8,10 @@ using TFW.Framework.Validations.Fluent.Extensions;
 
 namespace TFW.Docs.Cross.Validators.AppUser
 {
+    using Resources = AppResources.Validators.AppUser.ChangeUserRolesBaseModelValidator;
+
     public class ChangeUserRolesBaseModelValidator : LocalizedSafeValidator<ChangeUserRolesBaseModel, ChangeUserRolesBaseModelValidator>
     {
-        public static class Message
-        {
-            public const string InvalidRoleName = nameof(InvalidRoleName);
-        }
-
         public ChangeUserRolesBaseModelValidator(IValidationResultProvider validationResultProvider,
             IStringLocalizer<ChangeUserRolesBaseModelValidator> localizer,
             AppEntitySchema entitySchema) : base(validationResultProvider, localizer)
@@ -27,7 +24,7 @@ namespace TFW.Docs.Cross.Validators.AppUser
             RuleFor(model => model.Roles).Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .Must(roles => roles.All(role => RoleName.All.Contains(role)))
-                .WithMessage(localizer[Message.InvalidRoleName])
+                .WithMessage(localizer[Resources.InvalidRoleName])
                 .WithState(model => ResultCode.Identity_InvalidChangeUserRolesRequest);
         }
     }

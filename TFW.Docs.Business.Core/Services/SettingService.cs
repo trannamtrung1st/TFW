@@ -26,7 +26,7 @@ namespace TFW.Docs.Business.Core.Services
         private readonly IConfigurationRoot _configurationRoot;
 
         public SettingService(DataContext dbContext,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IBusinessContextProvider contextProvider,
             IJsonConfigurationManager configurationManager,
             ISecretsManager secretsManager,

@@ -32,7 +32,7 @@ namespace TFW.Docs.WebApi.Handlers
             if (context.ModelState.IsValid || FilterHelper.ShouldSkip(filter, context)) return;
 
             var resultProvider = context.HttpContext.RequestServices.GetRequiredService<IValidationResultProvider>();
-            var resultLocalizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ResultCodeResources>>();
+            var resultLocalizer = context.HttpContext.RequestServices.GetRequiredService<IStringLocalizer<ResultCode>>();
 
             var results = resultProvider.Results
                 .Where(o => !o.IsValid).SelectMany(o => o.Errors).MapTo<AppResult>().ToArray();

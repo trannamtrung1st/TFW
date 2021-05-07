@@ -25,7 +25,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public AuthController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _identityService = identityService;

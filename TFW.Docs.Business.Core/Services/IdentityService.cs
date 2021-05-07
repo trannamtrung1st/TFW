@@ -37,7 +37,7 @@ namespace TFW.Docs.Business.Core.Services
         private readonly SignInManager<AppUserEntity> _signInManager;
 
         public IdentityService(DataContext dbContext,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IBusinessContextProvider contextProvider,
             UserManager<AppUserEntity> userManager,
             SignInManager<AppUserEntity> signInManager) : base(dbContext, resultLocalizer, contextProvider)

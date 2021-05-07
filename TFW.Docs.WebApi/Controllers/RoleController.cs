@@ -23,7 +23,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public RoleController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IIdentityService identityService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _identityService = identityService;

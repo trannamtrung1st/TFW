@@ -21,11 +21,11 @@ namespace TFW.Docs.WebApi.Controllers
     {
         protected readonly IUnitOfWork unitOfWork;
         protected readonly IBusinessContextProvider contextProvider;
-        protected readonly IStringLocalizer<ResultCodeResources> resultLocalizer;
+        protected readonly IStringLocalizer<ResultCode> resultLocalizer;
 
         public BaseApiController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer)
+            IStringLocalizer<ResultCode> resultLocalizer)
         {
             this.unitOfWork = unitOfWork;
             this.contextProvider = contextProvider;

@@ -10,6 +10,8 @@ using TFW.Framework.Validations.Fluent.Extensions;
 
 namespace TFW.Docs.Cross.Validators.Identity
 {
+    using Resources = AppResources.Validators.Identity.RegisterModelValidator;
+
     internal static class RegisterModelRuleBuilderExtensions
     {
         public static IRuleBuilderOptions<RegisterModel, T> InvalidState<T>(this
@@ -21,11 +23,6 @@ namespace TFW.Docs.Cross.Validators.Identity
 
     public class RegisterModelValidator : LocalizedSafeValidator<RegisterModel, RegisterModelValidator>
     {
-        public static class Message
-        {
-            public const string ConfirmPasswordDoesNotMatch = nameof(ConfirmPasswordDoesNotMatch);
-        }
-
         public RegisterModelValidator(IValidationResultProvider validationResultProvider,
             IStringLocalizer<RegisterModelValidator> localizer,
             AppEntitySchema entitySchema) : base(validationResultProvider, localizer)
@@ -43,7 +40,7 @@ namespace TFW.Docs.Cross.Validators.Identity
                     SecurityConsts.AccountConstraints.PasswordMaxLength).InvalidState();
 
             RuleFor(model => model.ConfirmPassword)
-                .Equal(model => model.Password).WithMessage(localizer[Message.ConfirmPasswordDoesNotMatch])
+                .Equal(model => model.Password).WithMessage(localizer[Resources.ConfirmPasswordDoesNotMatch])
                 .InvalidState();
 
             RuleFor(model => model.FullName)

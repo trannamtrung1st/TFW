@@ -23,7 +23,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public PostCategoryController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IPostCategoryService postCategoryService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _postCategoryService = postCategoryService;

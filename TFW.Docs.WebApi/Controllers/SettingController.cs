@@ -23,7 +23,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public SettingController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             ISettingService settingService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _settingService = settingService;

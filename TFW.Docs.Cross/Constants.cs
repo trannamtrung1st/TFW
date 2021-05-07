@@ -10,6 +10,8 @@ using TFW.Framework.Logging.Serilog.Web;
 
 namespace TFW.Docs.Cross
 {
+    using ResultCodeName = AppResources.ResultCode.Name;
+
     public static class CachingKeys
     {
         public const string Prefix = nameof(TFW);
@@ -80,119 +82,79 @@ namespace TFW.Docs.Cross
         public const int PostCategory = 1500;
     }
 
-    public class ResultCodeResources
-    {
-        public static class Name
-        {
-            #region Common
-            public const string UnknownError = nameof(UnknownError);
-            public const string Success = nameof(Success);
-            public const string Fail = nameof(Fail);
-            public const string FailValidation = nameof(FailValidation);
-            public const string NotFound = nameof(NotFound);
-            public const string Unsupported = nameof(Unsupported);
-            public const string DependencyDeleteFail = nameof(DependencyDeleteFail);
-            public const string Unauthorized = nameof(Unauthorized);
-            public const string AccessDenied = nameof(AccessDenied);
-            public const string InvalidPagingRequest = nameof(InvalidPagingRequest);
-            public const string InvalidSortingRequest = nameof(InvalidSortingRequest);
-            public const string InvalidProjectionRequest = nameof(InvalidProjectionRequest);
-            public const string EntityNotFound = nameof(EntityNotFound);
-            #endregion
-
-            #region Identity
-            public const string Identity_InvalidRegisterRequest = nameof(Identity_InvalidRegisterRequest);
-            public const string Identity_FailToRegisterUser = nameof(Identity_FailToRegisterUser);
-            public const string Identity_FailToChangeUserRoles = nameof(Identity_FailToChangeUserRoles);
-            public const string Identity_InvalidChangeUserRolesRequest = nameof(Identity_InvalidChangeUserRolesRequest);
-            public const string Identity_AlreadyInitialized = nameof(Identity_AlreadyInitialized);
-            public const string Identity_InvalidRedirectUrl = nameof(Identity_InvalidRedirectUrl);
-            #endregion
-
-            #region Setting
-            public const string Setting_InvalidChangeSmtpOptionRequest = nameof(Setting_InvalidChangeSmtpOptionRequest);
-            #endregion
-
-            #region PostCategory
-            public const string PostCategory_InvalidCreatePostCategoryRequest = nameof(PostCategory_InvalidCreatePostCategoryRequest);
-            public const string PostCategory_InvalidCreatePostCategoryLocalizationRequest = nameof(PostCategory_InvalidCreatePostCategoryLocalizationRequest);
-            #endregion
-        }
-    }
-
     public enum ResultCode
     {
         #region Common
-        [Display(Name = ResultCodeResources.Name.UnknownError)]
+        [Display(Name = ResultCodeName.UnknownError)]
         UnknownError = ResultCodeGroup.Common,
 
-        [Display(Name = ResultCodeResources.Name.Success)]
+        [Display(Name = ResultCodeName.Success)]
         Success = ResultCodeGroup.Common + 1,
 
-        [Display(Name = ResultCodeResources.Name.Fail)]
+        [Display(Name = ResultCodeName.Fail)]
         Fail = ResultCodeGroup.Common + 2,
 
-        [Display(Name = ResultCodeResources.Name.FailValidation)]
+        [Display(Name = ResultCodeName.FailValidation)]
         FailValidation = ResultCodeGroup.Common + 3,
 
-        [Display(Name = ResultCodeResources.Name.NotFound)]
+        [Display(Name = ResultCodeName.NotFound)]
         NotFound = ResultCodeGroup.Common + 4,
 
-        [Display(Name = ResultCodeResources.Name.Unsupported)]
+        [Display(Name = ResultCodeName.Unsupported)]
         Unsupported = ResultCodeGroup.Common + 5,
 
-        [Display(Name = ResultCodeResources.Name.DependencyDeleteFail)]
+        [Display(Name = ResultCodeName.DependencyDeleteFail)]
         DependencyDeleteFail = ResultCodeGroup.Common + 6,
 
-        [Display(Name = ResultCodeResources.Name.Unauthorized)]
+        [Display(Name = ResultCodeName.Unauthorized)]
         Unauthorized = ResultCodeGroup.Common + 7,
 
-        [Display(Name = ResultCodeResources.Name.AccessDenied)]
+        [Display(Name = ResultCodeName.AccessDenied)]
         AccessDenied = ResultCodeGroup.Common + 8,
 
-        [Display(Name = ResultCodeResources.Name.InvalidPagingRequest)]
+        [Display(Name = ResultCodeName.InvalidPagingRequest)]
         InvalidPagingRequest = ResultCodeGroup.Common + 9,
 
-        [Display(Name = ResultCodeResources.Name.InvalidSortingRequest)]
+        [Display(Name = ResultCodeName.InvalidSortingRequest)]
         InvalidSortingRequest = ResultCodeGroup.Common + 10,
 
-        [Display(Name = ResultCodeResources.Name.InvalidProjectionRequest)]
+        [Display(Name = ResultCodeName.InvalidProjectionRequest)]
         InvalidProjectionRequest = ResultCodeGroup.Common + 11,
 
-        [Display(Name = ResultCodeResources.Name.EntityNotFound)]
+        [Display(Name = ResultCodeName.EntityNotFound)]
         EntityNotFound = ResultCodeGroup.Common + 12,
         #endregion
 
         #region Identity
-        [Display(Name = ResultCodeResources.Name.Identity_InvalidRegisterRequest)]
+        [Display(Name = ResultCodeName.Identity_InvalidRegisterRequest)]
         Identity_InvalidRegisterRequest = ResultCodeGroup.Identity,
 
-        [Display(Name = ResultCodeResources.Name.Identity_FailToRegisterUser)]
+        [Display(Name = ResultCodeName.Identity_FailToRegisterUser)]
         Identity_FailToRegisterUser = ResultCodeGroup.Identity + 1,
 
-        [Display(Name = ResultCodeResources.Name.Identity_FailToChangeUserRoles)]
+        [Display(Name = ResultCodeName.Identity_FailToChangeUserRoles)]
         Identity_FailToChangeUserRoles = ResultCodeGroup.Identity + 2,
 
-        [Display(Name = ResultCodeResources.Name.Identity_InvalidChangeUserRolesRequest)]
+        [Display(Name = ResultCodeName.Identity_InvalidChangeUserRolesRequest)]
         Identity_InvalidChangeUserRolesRequest = ResultCodeGroup.Identity + 3,
 
-        [Display(Name = ResultCodeResources.Name.Identity_AlreadyInitialized)]
+        [Display(Name = ResultCodeName.Identity_AlreadyInitialized)]
         Identity_AlreadyInitialized = ResultCodeGroup.Identity + 4,
 
-        [Display(Name = ResultCodeResources.Name.Identity_InvalidRedirectUrl)]
+        [Display(Name = ResultCodeName.Identity_InvalidRedirectUrl)]
         Identity_InvalidRedirectUrl = ResultCodeGroup.Identity + 5,
         #endregion
 
         #region Setting
-        [Display(Name = ResultCodeResources.Name.Setting_InvalidChangeSmtpOptionRequest)]
+        [Display(Name = ResultCodeName.Setting_InvalidChangeSmtpOptionRequest)]
         Setting_InvalidChangeSmtpOptionRequest = ResultCodeGroup.Setting,
         #endregion
 
         #region PostCategory
-        [Display(Name = ResultCodeResources.Name.PostCategory_InvalidCreatePostCategoryRequest)]
+        [Display(Name = ResultCodeName.PostCategory_InvalidCreatePostCategoryRequest)]
         PostCategory_InvalidCreatePostCategoryRequest = ResultCodeGroup.PostCategory,
 
-        [Display(Name = ResultCodeResources.Name.PostCategory_InvalidCreatePostCategoryLocalizationRequest)]
+        [Display(Name = ResultCodeName.PostCategory_InvalidCreatePostCategoryLocalizationRequest)]
         PostCategory_InvalidCreatePostCategoryLocalizationRequest = ResultCodeGroup.PostCategory + 1,
         #endregion
     }

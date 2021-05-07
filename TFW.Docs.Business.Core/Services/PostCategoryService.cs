@@ -21,7 +21,7 @@ namespace TFW.Docs.Business.Core.Services
     public class PostCategoryService : BaseService, IPostCategoryService
     {
         public PostCategoryService(DataContext dbContext,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IBusinessContextProvider contextProvider) : base(dbContext, resultLocalizer, contextProvider)
         {
         }

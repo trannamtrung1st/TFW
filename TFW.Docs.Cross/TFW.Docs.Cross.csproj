@@ -31,15 +31,4 @@
     <ProjectReference Include="..\TFW.Framework.Web\TFW.Framework.Web.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Validators\AppUser\ChangeUserRolesBaseModelValidator.resx">
-      <LastGenOutput>ChangeUserRolesBaseModelValidator.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Validators\Identity\RegisterModelValidator.resx">
-      <LastGenOutput>RegisterModelValidator.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

@@ -25,7 +25,7 @@ namespace TFW.Docs.Business.Core.Services
         private readonly IMemoryCache _memoryCache;
 
         public ReferenceDataService(DataContext dbContext,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IBusinessContextProvider contextProvider,
             IMemoryCache memoryCache) : base(dbContext, resultLocalizer, contextProvider)
         {

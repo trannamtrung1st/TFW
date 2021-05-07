@@ -23,7 +23,7 @@ namespace TFW.Docs.WebApi.Controllers
 
         public ReferenceDataController(IUnitOfWork unitOfWork,
             IBusinessContextProvider contextProvider,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IReferenceDataService referenceDataService) : base(unitOfWork, contextProvider, resultLocalizer)
         {
             _referenceDataService = referenceDataService;
