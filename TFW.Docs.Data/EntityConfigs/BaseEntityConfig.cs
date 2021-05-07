@@ -27,15 +27,15 @@ namespace TFW.Docs.Data.EntityConfigs
         }
     }
 
-    public abstract class BaseLocalizedEntityConfig<T, LKey, LEntity> : BaseEntityConfig<T>
-        where T : class, ILocalizedEntity<LKey, LEntity>
+    public abstract class BaseLocalizedEntityConfig<T, LEntity> : BaseEntityConfig<T>
+        where T : class, ILocalizedEntity<LEntity>
         where LEntity : class, ILocalizationEntity
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {
             base.Configure(builder);
 
-            builder.ConfigureLocalizedEntity<T, LKey, LEntity>();
+            builder.ConfigureLocalizedEntity<T, LEntity>();
         }
     }
 }

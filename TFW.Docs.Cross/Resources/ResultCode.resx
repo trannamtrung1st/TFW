@@ -162,6 +162,12 @@
   <data name="NotFound" xml:space="preserve">
     <value>Not found</value>
   </data>
+  <data name="PostCategory_InvalidCreatePostCategoryLocalizationRequest" xml:space="preserve">
+    <value>Invalid post category localization</value>
+  </data>
+  <data name="PostCategory_InvalidPostCategoryLocalizationExists" xml:space="preserve">
+    <value>Post category localization exists</value>
+  </data>
   <data name="Setting_InvalidChangeSmtpOptionRequest" xml:space="preserve">
     <value>Invalid change SMTP option request</value>
   </data>

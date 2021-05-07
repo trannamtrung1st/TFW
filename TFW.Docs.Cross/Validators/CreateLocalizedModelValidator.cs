@@ -11,7 +11,7 @@ namespace TFW.Docs.Cross.Validators
 {
     public abstract class CreateLocalizedModelValidator<T, LModel, Context> : LocalizedSafeValidator<T, Context>
         where T : ICreateLocalizedModel<LModel>
-        where LModel : ICreateLocalizationModel
+        where LModel : ILocalizationModel
     {
         public CreateLocalizedModelValidator(IValidationResultProvider validationResultProvider,
             IStringLocalizer<Context> localizer) : base(validationResultProvider, localizer)
@@ -20,12 +20,11 @@ namespace TFW.Docs.Cross.Validators
             list = HandleEmptyList(list)
                 .Must(model =>
                 {
-                    return model.Where(o => o.IsDefault).Count() == 1
-                        && !model.GroupBy(o => new
-                        {
-                            o.Lang,
-                            o.Region
-                        }).Any(group => group.Count() > 1);
+                    return !model.GroupBy(o => new
+                    {
+                        o.Lang,
+                        o.Region
+                    }).Any(group => group.Count() > 1);
                 });
             list = HandleInvalidList(list);
         }

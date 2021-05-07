@@ -19,7 +19,7 @@ namespace TFW.Docs.AppAdmin.Pages.Login
 
         public IndexModel(
             IStringLocalizer<IndexModel> localizer,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IMemoryCache memoryCache) : base(localizer)
         {
             _memoryCache = memoryCache;

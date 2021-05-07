@@ -16,8 +16,8 @@ namespace TFW.Docs.AppAdmin.Pages.Shared
 
         public IStringLocalizer Localizer { get; }
 
-        public virtual string Title => Localizer[AppResources.Title];
+        public virtual string Title => Localizer[AdminResources.Title];
 
-        public virtual string Description => Localizer[AppResources.Description];
+        public virtual string Description => Localizer[AdminResources.Description];
     }
 }

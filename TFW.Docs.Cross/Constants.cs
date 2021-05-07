@@ -156,6 +156,9 @@ namespace TFW.Docs.Cross
 
         [Display(Name = ResultCodeName.PostCategory_InvalidCreatePostCategoryLocalizationRequest)]
         PostCategory_InvalidCreatePostCategoryLocalizationRequest = ResultCodeGroup.PostCategory + 1,
+
+        [Display(Name = ResultCodeName.PostCategory_InvalidPostCategoryLocalizationExists)]
+        PostCategory_InvalidPostCategoryLocalizationExists = ResultCodeGroup.PostCategory + 2,
         #endregion
     }
 

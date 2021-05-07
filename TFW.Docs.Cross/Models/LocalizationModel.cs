@@ -10,12 +10,7 @@ namespace TFW.Docs.Cross.Models
         public string Region { get; set; }
     }
 
-    public interface ICreateLocalizationModel : ILocalizationModel
-    {
-        public bool IsDefault { get; set; }
-    }
-
-    public interface ICreateLocalizedModel<T> where T : ICreateLocalizationModel
+    public interface ICreateLocalizedModel<T> where T : ILocalizationModel
     {
         public IEnumerable<T> ListOfLocalization { get; set; }
     }

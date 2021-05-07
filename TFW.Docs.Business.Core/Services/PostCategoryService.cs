@@ -42,20 +42,9 @@ namespace TFW.Docs.Business.Core.Services
             var entity = model.MapTo<PostCategoryEntity>();
             PrepareCreate(entity);
 
-            using (var trans = await dbContext.BeginTransactionAsync())
-            {
-                entity = dbContext.PostCategory.Add(entity).Entity;
+            entity = dbContext.PostCategory.Add(entity).Entity;
 
-                await dbContext.SaveChangesAsync();
-
-                var defaultLocalization = model.ListOfLocalization.Single(o => o.IsDefault);
-                entity.DefaultLocalizationId = entity.ListOfLocalization.ByCulture(defaultLocalization.Lang, defaultLocalization.Region)
-                    .Select(o => o.Id).Single();
-
-                await dbContext.SaveChangesAsync();
-
-                await trans.CommitAsync();
-            }
+            await dbContext.SaveChangesAsync();
 
             return entity.Id;
         }
@@ -92,13 +81,15 @@ namespace TFW.Docs.Business.Core.Services
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
             var validationData = new ValidationData(resultLocalizer);
 
-            var postCategory = await dbContext.PostCategory.ById(postCategoryId).Select(o => new PostCategoryEntity
-            {
-                Id = o.Id
-            }).FirstOrDefaultAsync();
+            var exists = await dbContext.PostCategory.ById(postCategoryId).AnyAsync();
 
-            if (postCategory == null)
+            if (!exists)
                 validationData.Fail(code: ResultCode.EntityNotFound);
+
+            var cultures = model.ListOfLocalization.Select(o => (string.IsNullOrEmpty(o.Region) ? o.Lang : (o.Lang + "-" + o.Region))).ToArray();
+            var anyCultureExists = await dbContext.PostCategoryLocalization.ByCultures(cultures).AnyAsync();
+            if (anyCultureExists)
+                validationData.Fail(code: ResultCode.PostCategory_InvalidPostCategoryLocalizationExists);
 
             if (!validationData.IsValid)
                 throw validationData.BuildException();
@@ -107,23 +98,9 @@ namespace TFW.Docs.Business.Core.Services
             var entities = model.ListOfLocalization.MapTo<PostCategoryLocalizationEntity>().ToArray();
             foreach (var entity in entities) entity.EntityId = postCategoryId;
 
-            using (var trans = await dbContext.BeginTransactionAsync())
-            {
-                dbContext.AddRange(entities);
+            dbContext.AddRange(entities);
 
-                await dbContext.SaveChangesAsync();
-
-                var defaultLocalization = model.ListOfLocalization.SingleOrDefault(o => o.IsDefault);
-                if (defaultLocalization != null)
-                {
-                    postCategory.DefaultLocalizationId = entities.ByCulture(defaultLocalization.Lang, defaultLocalization.Region)
-                        .Select(o => o.Id).Single();
-                }
-
-                await dbContext.SaveChangesAsync();
-
-                await trans.CommitAsync();
-            }
+            await dbContext.SaveChangesAsync();
 
             return entities.Select(o => o.Id).ToArray();
         }

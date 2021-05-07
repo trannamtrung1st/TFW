@@ -4,10 +4,8 @@ using System.Text;
 
 namespace TFW.Framework.Cross.Models
 {
-    public interface ILocalizedEntity<LKey, LEntity> where LEntity : class, ILocalizationEntity
+    public interface ILocalizedEntity<LEntity> where LEntity : class, ILocalizationEntity
     {
-        public LKey DefaultLocalizationId { get; set; }
-        public LEntity DefaultLocalization { get; set; }
         public ICollection<LEntity> ListOfLocalization { get; set; }
     }
 

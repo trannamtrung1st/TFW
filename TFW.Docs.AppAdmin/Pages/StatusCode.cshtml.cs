@@ -17,16 +17,16 @@ using System.Diagnostics;
 
 namespace TFW.Docs.AppAdmin.Pages
 {
-    using Resources = AppResources.Pages.StatusCodeModel;
+    using Resources = AdminResources.Pages.StatusCodeModel;
 
     public class StatusCodeModel : BasePageModel<StatusCodeModel>, IPageModel
     {
         private readonly IWebHostEnvironment _env;
-        private readonly IStringLocalizer<ResultCodeResources> _resultLocalizer;
+        private readonly IStringLocalizer<ResultCode> _resultLocalizer;
 
         public StatusCodeModel(
             IStringLocalizer<StatusCodeModel> localizer,
-            IStringLocalizer<ResultCodeResources> resultLocalizer,
+            IStringLocalizer<ResultCode> resultLocalizer,
             IWebHostEnvironment env) : base(localizer)
         {
             _resultLocalizer = resultLocalizer;

@@ -13,9 +13,14 @@ namespace TFW.Docs.Business.Core.Queries
             return query.Where(o => o.Lang == lang && o.Region == region);
         }
 
-        public static IEnumerable<PostCategoryLocalizationEntity> ByCulture(this IEnumerable<PostCategoryLocalizationEntity> query, string lang, string region)
+        public static IQueryable<PostCategoryLocalizationEntity> ByCulture(this IQueryable<PostCategoryLocalizationEntity> query, string culture)
         {
-            return query.Where(o => o.Lang == lang && o.Region == region);
+            return query.Where(o => (string.IsNullOrEmpty(o.Region) ? o.Lang : (o.Lang + "-" + o.Region)) == culture);
+        }
+
+        public static IQueryable<PostCategoryLocalizationEntity> ByCultures(this IQueryable<PostCategoryLocalizationEntity> query, IEnumerable<string> cultures)
+        {
+            return query.Where(o => cultures.Contains((string.IsNullOrEmpty(o.Region) ? o.Lang : (o.Lang + "-" + o.Region))));
         }
     }
 }

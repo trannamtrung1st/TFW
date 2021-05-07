@@ -1,4 +1,4 @@
-﻿@inject IStringLocalizer<AppResources> AppResLocalizer
+﻿@inject IStringLocalizer<AdminResources> AppResLocalizer
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -9,12 +9,12 @@
 <script>
     function getCommonService() {
         return CommonService({
-            defaultConfirmBtnText: '@AppResLocalizer[AppResources.DefaultConfirmBtnText]',
-            defaultConfirmTitle: '@AppResLocalizer[AppResources.DefaultConfirmTitle]',
-            defaultErrorTitle: '@AppResLocalizer[AppResources.DefaultErrorTitle]',
-            defaultSuccessTitle: '@AppResLocalizer[AppResources.DefaultSuccessTitle]',
-            defaultOkBtnText: '@AppResLocalizer[AppResources.DefaultOkBtnText]',
-            defaultErrorHtml: '@AppResLocalizer[AppResources.DefaultErrorHtml]',
+            defaultConfirmBtnText: '@AppResLocalizer[AdminResources.DefaultConfirmBtnText]',
+            defaultConfirmTitle: '@AppResLocalizer[AdminResources.DefaultConfirmTitle]',
+            defaultErrorTitle: '@AppResLocalizer[AdminResources.DefaultErrorTitle]',
+            defaultSuccessTitle: '@AppResLocalizer[AdminResources.DefaultSuccessTitle]',
+            defaultOkBtnText: '@AppResLocalizer[AdminResources.DefaultOkBtnText]',
+            defaultErrorHtml: '@AppResLocalizer[AdminResources.DefaultErrorHtml]',
         });
     }
 </script>

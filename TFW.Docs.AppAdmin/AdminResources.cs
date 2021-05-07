@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TFW.Docs.AppAdmin
 {
-    public class AppResources
+    public class AdminResources
     {
         public const string Title = nameof(Title);
         public const string Description = nameof(Description);

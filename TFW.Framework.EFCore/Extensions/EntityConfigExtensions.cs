@@ -30,7 +30,7 @@ namespace TFW.Framework.EFCore.Extensions
             builder.Property(o => o.Region).HasMaxLength(2).IsUnicode(false).IsRequired();
 
             builder.HasOne(o => o.Entity)
-                .WithMany(nameof(ILocalizedEntity<object, T>.ListOfLocalization))
+                .WithMany(nameof(ILocalizedEntity<T>.ListOfLocalization))
                 .HasForeignKey(o => o.EntityId);
 
             builder.HasIndex(o => new
@@ -43,14 +43,10 @@ namespace TFW.Framework.EFCore.Extensions
             return builder;
         }
 
-        public static EntityTypeBuilder<T> ConfigureLocalizedEntity<T, LKey, LEntity>(this EntityTypeBuilder<T> builder)
-            where T : class, ILocalizedEntity<LKey, LEntity>
+        public static EntityTypeBuilder<T> ConfigureLocalizedEntity<T, LEntity>(this EntityTypeBuilder<T> builder)
+            where T : class, ILocalizedEntity<LEntity>
             where LEntity : class, ILocalizationEntity
         {
-            builder.HasOne(o => o.DefaultLocalization)
-                .WithMany()
-                .HasForeignKey(o => o.DefaultLocalizationId);
-
             return builder;
         }
 

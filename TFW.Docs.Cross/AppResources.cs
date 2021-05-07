@@ -42,6 +42,7 @@ namespace TFW.Docs.Cross
                 #region PostCategory
                 public const string PostCategory_InvalidCreatePostCategoryRequest = nameof(PostCategory_InvalidCreatePostCategoryRequest);
                 public const string PostCategory_InvalidCreatePostCategoryLocalizationRequest = nameof(PostCategory_InvalidCreatePostCategoryLocalizationRequest);
+                public const string PostCategory_InvalidPostCategoryLocalizationExists = nameof(PostCategory_InvalidPostCategoryLocalizationExists);
                 #endregion
             }
         }
