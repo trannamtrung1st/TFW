@@ -14,13 +14,6 @@ namespace TFW.Docs.AppAdmin.Pages.Login
 {
     public class IndexModel : BasePageModel<IndexModel>, IPageModel
     {
-        public static class Resources
-        {
-            public const string InitSuccess = nameof(InitSuccess);
-            public const string ConfirmInit = nameof(ConfirmInit);
-            public const string InvalidUsernameOrPassword = nameof(InvalidUsernameOrPassword);
-        }
-
         private readonly IMemoryCache _memoryCache;
         private readonly IStringLocalizer _resultLocalizer;
 
