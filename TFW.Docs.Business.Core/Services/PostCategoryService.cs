@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Localization;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,8 +49,8 @@ namespace TFW.Docs.Business.Core.Services
                 await dbContext.SaveChangesAsync();
 
                 var defaultLocalization = model.ListOfLocalization.Single(o => o.IsDefault);
-                entity.DefaultLocalizationId = entity.ListOfLocalization.Single(
-                    o => o.Lang == defaultLocalization.Lang && o.Region == defaultLocalization.Region).Id;
+                entity.DefaultLocalizationId = entity.ListOfLocalization.ByCulture(defaultLocalization.Lang, defaultLocalization.Region)
+                    .Select(o => o.Id).Single();
 
                 await dbContext.SaveChangesAsync();
 
@@ -65,10 +66,10 @@ namespace TFW.Docs.Business.Core.Services
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
             var validationData = new ValidationData(resultLocalizer);
 
-            var entity = dbContext.PostCategory.ById(id).Select(o => new PostCategoryEntity
+            var entity = await dbContext.PostCategory.ById(id).Select(o => new PostCategoryEntity
             {
                 Id = o.Id
-            }).FirstOrDefault();
+            }).FirstOrDefaultAsync();
 
             if (entity == null)
                 validationData.Fail(code: ResultCode.EntityNotFound);
@@ -83,6 +84,48 @@ namespace TFW.Docs.Business.Core.Services
             entity = dbContext.Update(entity, o => o.StartingPostId).Entity;
 
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<int>> AddPostCategoryLocalizationsAsync(int postCategoryId, AddPostCategoryLocalizationsModel model)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            var postCategory = await dbContext.PostCategory.ById(postCategoryId).Select(o => new PostCategoryEntity
+            {
+                Id = o.Id
+            }).FirstOrDefaultAsync();
+
+            if (postCategory == null)
+                validationData.Fail(code: ResultCode.EntityNotFound);
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            var entities = model.ListOfLocalization.MapTo<PostCategoryLocalizationEntity>().ToArray();
+            foreach (var entity in entities) entity.EntityId = postCategoryId;
+
+            using (var trans = await dbContext.BeginTransactionAsync())
+            {
+                dbContext.AddRange(entities);
+
+                await dbContext.SaveChangesAsync();
+
+                var defaultLocalization = model.ListOfLocalization.SingleOrDefault(o => o.IsDefault);
+                if (defaultLocalization != null)
+                {
+                    postCategory.DefaultLocalizationId = entities.ByCulture(defaultLocalization.Lang, defaultLocalization.Region)
+                        .Select(o => o.Id).Single();
+                }
+
+                await dbContext.SaveChangesAsync();
+
+                await trans.CommitAsync();
+            }
+
+            return entities.Select(o => o.Id).ToArray();
         }
 
         private void PrepareCreate(PostCategoryEntity entity)

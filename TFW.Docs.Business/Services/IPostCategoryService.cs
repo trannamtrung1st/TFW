@@ -10,5 +10,6 @@ namespace TFW.Docs.Business.Services
     {
         Task<int> CreatePostCategoryAsync(CreatePostCategoryModel model);
         Task UpdatePostCategoryAsync(int id, UpdatePostCategoryModel model);
+        Task<IEnumerable<int>> AddPostCategoryLocalizationsAsync(int postCategoryId, AddPostCategoryLocalizationsModel model);
     }
 }
