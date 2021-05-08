@@ -318,6 +318,7 @@ namespace TFW.Docs.Cross
                 public const string Route = "api/post-categories";
                 public const string CreatePostCategory = "";
                 public const string UpdatePostCategory = "{id}";
+                public const string DeletePostCategory = "{id}";
                 public const string AddLocalizations = "{id}/localizations";
                 public const string UpdateLocalizations = "{id}/localizations";
             }

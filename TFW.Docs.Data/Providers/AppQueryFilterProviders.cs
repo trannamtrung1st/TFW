@@ -9,7 +9,7 @@ using TFW.Framework.EFCore.Extensions;
 using TFW.Framework.EFCore.Options;
 using TFW.Framework.EFCore.Providers;
 
-namespace TFW.Docs.Business.Core.Providers
+namespace TFW.Docs.Data.Providers
 {
     public class AppQueryFilterProvider : IQueryFilterProvider
     {

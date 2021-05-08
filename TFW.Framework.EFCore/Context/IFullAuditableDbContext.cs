@@ -21,8 +21,8 @@ namespace TFW.Framework.EFCore.Context
         bool IsSoftDeleteEnabled();
         bool IsSoftDeleteAppliedForEntity(Type eType);
         IQueryable<T> QueryDeleted<T>() where T : class, ISoftDeleteEntity;
-        EntityEntry<E> Remove<E>(E entity, bool isPhysical = false) where E : class;
-        void RemoveRange<E>(IEnumerable<E> list, bool isPhysical = false) where E : class;
-        Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical = false) where E : class;
+        EntityEntry<E> Remove<E>(E entity, bool isPhysical) where E : class;
+        void RemoveRange<E>(IEnumerable<E> list, bool isPhysical) where E : class;
+        Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical) where E : class;
     }
 }

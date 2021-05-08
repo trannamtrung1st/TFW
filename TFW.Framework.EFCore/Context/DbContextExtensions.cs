@@ -41,7 +41,7 @@ namespace TFW.Framework.EFCore.Context
             return entry;
         }
 
-        public static EntityEntry<E> RemoveDefault<E>(this IFullAuditableDbContext dbContext, E entity, bool isPhysical = false) where E : class
+        public static EntityEntry<E> RemoveDefault<E>(this IFullAuditableDbContext dbContext, E entity, bool isPhysical) where E : class
         {
             if (isPhysical)
                 return dbContext.Remove(entity);
@@ -49,7 +49,7 @@ namespace TFW.Framework.EFCore.Context
             return dbContext.SoftDelete(entity);
         }
 
-        public static void RemoveRangeDefault<E>(this IFullAuditableDbContext dbContext, IEnumerable<E> list, bool isPhysical = false) where E : class
+        public static void RemoveRangeDefault<E>(this IFullAuditableDbContext dbContext, IEnumerable<E> list, bool isPhysical) where E : class
         {
             if (isPhysical)
             {
@@ -60,7 +60,7 @@ namespace TFW.Framework.EFCore.Context
             dbContext.SoftDeleteRange(list);
         }
 
-        public static async Task<EntityEntry<E>> RemoveAsyncDefault<E>(this IFullAuditableDbContext dbContext, object[] key, bool isPhysical = false) where E : class
+        public static async Task<EntityEntry<E>> RemoveAsyncDefault<E>(this IFullAuditableDbContext dbContext, object[] key, bool isPhysical) where E : class
         {
             var entity = await dbContext.FindAsync<E>(key);
 
@@ -150,14 +150,14 @@ namespace TFW.Framework.EFCore.Context
             }
         }
 
-        public static EntityEntry SoftRemoveDefault(this IFullAuditableDbContext dbContext, object entity)
+        public static EntityEntry SoftDeleteDefault(this IFullAuditableDbContext dbContext, object entity)
         {
             if (entity is ISoftDeleteEntity softDeleteEntity)
             {
                 softDeleteEntity.IsDeleted = true;
 
                 var entry = dbContext.Entry(entity);
-                entry.State = EntityState.Modified;
+                entry.Property(nameof(softDeleteEntity.IsDeleted)).IsModified = true;
 
                 return entry;
             }
@@ -165,7 +165,7 @@ namespace TFW.Framework.EFCore.Context
             throw new InvalidOperationException($"{nameof(entity)} is not {nameof(ISoftDeleteEntity)}");
         }
 
-        public static EntityEntry<T> SoftRemoveDefault<T>(this IFullAuditableDbContext dbContext, T entity)
+        public static EntityEntry<T> SoftDeleteDefault<T>(this IFullAuditableDbContext dbContext, T entity)
             where T : class
         {
             if (entity is ISoftDeleteEntity softDeleteEntity)
@@ -173,7 +173,7 @@ namespace TFW.Framework.EFCore.Context
                 softDeleteEntity.IsDeleted = true;
 
                 var entry = dbContext.Entry(entity);
-                entry.State = EntityState.Modified;
+                entry.Property(nameof(softDeleteEntity.IsDeleted)).IsModified = true;
 
                 return entry;
             }

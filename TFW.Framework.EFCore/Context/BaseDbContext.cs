@@ -78,12 +78,12 @@ namespace TFW.Framework.EFCore.Context
 
         public virtual EntityEntry SoftDelete(object entity)
         {
-            return this.SoftRemoveDefault(entity);
+            return this.SoftDeleteDefault(entity);
         }
 
         public virtual EntityEntry<T> SoftDelete<T>(T entity) where T : class
         {
-            return this.SoftRemoveDefault(entity);
+            return this.SoftDeleteDefault(entity);
         }
 
         public virtual void SoftDeleteRange(params object[] entities)
@@ -171,17 +171,17 @@ namespace TFW.Framework.EFCore.Context
             return this.ReloadAsyncDefault(entity);
         }
 
-        public virtual EntityEntry<E> Remove<E>(E entity, bool isPhysical = false) where E : class
+        public virtual EntityEntry<E> Remove<E>(E entity, bool isPhysical) where E : class
         {
             return this.RemoveDefault(entity, isPhysical);
         }
 
-        public virtual void RemoveRange<E>(IEnumerable<E> list, bool isPhysical = false) where E : class
+        public virtual void RemoveRange<E>(IEnumerable<E> list, bool isPhysical) where E : class
         {
             this.RemoveRangeDefault(list, isPhysical);
         }
 
-        public virtual Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical = false) where E : class
+        public virtual Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical) where E : class
         {
             return this.RemoveAsyncDefault<E>(key, isPhysical);
         }

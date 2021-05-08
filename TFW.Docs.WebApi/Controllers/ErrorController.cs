@@ -16,6 +16,7 @@ using TFW.Framework.Web.Features;
 using TFW.Docs.Cross.Providers;
 using Microsoft.Extensions.Localization;
 using TFW.Docs.Business;
+using Microsoft.EntityFrameworkCore;
 
 namespace TFW.Docs.WebApi.Controllers
 {
@@ -41,10 +42,16 @@ namespace TFW.Docs.WebApi.Controllers
 
             if (ex == null) return BadRequest();
 
-            AppResult response;
+            AppResult response = null;
 
             if (ex is AppValidationException validEx)
+            {
                 return BadRequest(validEx.Result);
+            }
+            else if (ex is DbUpdateException dbEx)
+            {
+                response = ParseDbUpdateExceptionResult(dbEx);
+            }
             else if (ex is AuthorizationException authEx)
             {
                 if (authEx.IsForbidden)
@@ -53,17 +60,31 @@ namespace TFW.Docs.WebApi.Controllers
                 return Unauthorized();
             }
             else if (ex is AppException appEx)
+            {
                 response = appEx.Result;
-            else
+            }
+
+            if (response == null)
             {
                 if (_env.IsDevelopment())
                     response = AppResult.Error(resultLocalizer, data: ex);
                 else response = AppResult.Error(resultLocalizer);
+
+                await LogErrorRequestAsync(ex);
             }
 
-            await LogErrorRequestAsync(ex);
-
             return Error(response);
+        }
+
+        private AppResult ParseDbUpdateExceptionResult(DbUpdateException ex)
+        {
+            AppResult appResult = null;
+            var method = Request.Method;
+
+            if (HttpMethods.IsDelete(method))
+                appResult = AppResult.DependencyDeleteFail(resultLocalizer);
+
+            return appResult;
         }
 
         private async Task LogErrorRequestAsync(Exception ex)

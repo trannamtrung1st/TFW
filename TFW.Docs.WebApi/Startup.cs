@@ -62,10 +62,9 @@ namespace TFW.Docs.WebApi
                     ConfigConsts.CommandLine.WindowsCmd, out secretsManager)
                 .AddKeyedServiceManager(out keyedServiceManager)
                 .AddAppDbContext(secretsManager)
+                .AddServiceInjector(StartupConfig.TempAssemblyList, out serviceInjector)
                 .AddHttpContextAccessor()
                 .AddHttpBusinessContextProvider()
-                .AddServiceInjector(StartupConfig.TempAssemblyList, out serviceInjector)
-                .ScanServices(StartupConfig.TempAssemblyList, serviceInjector)
                 .AddDefaultDbMigrator()
                 .AddRequestFeatureMiddleware()
                 .AddAppCaching()
@@ -76,11 +75,12 @@ namespace TFW.Docs.WebApi
                     opt.Password = secretsManager.Get(ConfigConsts.Mail.PasswordKey);
                 })
                 .AddJsonConfigurationManager(Program.DefaultJsonFile, Program.EnvJsonFile)
-                .ConfigureAppOptions(Configuration)
                 .AddAppAuthentication()
                 .AddAppAuthorization()
                 .AddWebFrameworks()
-                .AddAppSwagger();
+                .AddAppSwagger()
+                .ScanServices(StartupConfig.TempAssemblyList, serviceInjector)
+                .ConfigureAppOptions(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

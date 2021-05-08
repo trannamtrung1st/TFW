@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -150,6 +151,11 @@ namespace TFW.Docs.Data
             {
                 auditableEntity.LastModifiedUserId = _businessContextProvider?.BusinessContext?.PrincipalInfo?.UserId;
             }
+        }
+
+        public override EntityEntry<E> Remove<E>(E entity, bool isPhysical = false)
+        {
+            return base.Remove(entity, isPhysical);
         }
     }
 }
