@@ -162,6 +162,9 @@ namespace TFW.Docs.Cross
 
         [Display(Name = ResultCodeName.PostCategory_InvalidUpdateLocalizationsRequest)]
         PostCategory_InvalidUpdateLocalizationsRequest = ResultCodeGroup.PostCategory + 3,
+
+        [Display(Name = ResultCodeName.PostCategory_InvalidDeleteLocalizationsRequest)]
+        PostCategory_InvalidDeleteLocalizationsRequest = ResultCodeGroup.PostCategory + 4,
         #endregion
     }
 
@@ -321,6 +324,7 @@ namespace TFW.Docs.Cross
                 public const string DeletePostCategory = "{id}";
                 public const string AddLocalizations = "{id}/localizations";
                 public const string UpdateLocalizations = "{id}/localizations";
+                public const string DeleteLocalizations = "{id}/localizations";
             }
 
             public static class Setting

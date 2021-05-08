@@ -161,6 +161,32 @@ namespace TFW.Docs.Business.Core.Services
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task DeletePostCategoryLocalizationsAsync(int postCategoryId, IEnumerable<int> localizationIds)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            var entities = await dbContext.PostCategoryLocalization.ByIds(localizationIds)
+                .Select(o => new PostCategoryLocalizationEntity
+                {
+                    Id = o.Id,
+                    EntityId = o.EntityId
+                }).ToArrayAsync();
+
+            if (entities.Any(o => o.EntityId != postCategoryId)
+                || entities.Length != localizationIds.Count())
+                validationData.Fail(code: ResultCode.PostCategory_InvalidDeleteLocalizationsRequest);
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            dbContext.RemoveRange(entities);
+
+            await dbContext.SaveChangesAsync();
+        }
+
         private void PrepareCreate(PostCategoryEntity entity)
         {
         }

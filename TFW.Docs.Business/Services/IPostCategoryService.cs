@@ -13,5 +13,6 @@ namespace TFW.Docs.Business.Services
         Task DeletePostCategoryAsync(int id);
         Task<IEnumerable<int>> AddPostCategoryLocalizationsAsync(int postCategoryId, AddPostCategoryLocalizationsModel model);
         Task UpdatePostCategoryLocalizationsAsync(int postCategoryId, UpdatePostCategoryLocalizationsModel model);
+        Task DeletePostCategoryLocalizationsAsync(int postCategoryId, IEnumerable<int> localizationIds);
     }
 }

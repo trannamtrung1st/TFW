@@ -48,6 +48,15 @@ namespace TFW.Docs.WebApi.Controllers
             return NoContent();
         }
 
+        [SwaggerResponse((int)HttpStatusCode.NoContent)]
+        [HttpDelete(Routing.Controller.PostCategory.DeletePostCategory)]
+        public async Task<IActionResult> DeletePostCategory(int id)
+        {
+            await _postCategoryService.DeletePostCategoryAsync(id);
+
+            return NoContent();
+        }
+
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<IEnumerable<int>>))]
         [HttpPost(Routing.Controller.PostCategory.AddLocalizations)]
         public async Task<IActionResult> AddLocalizations(int id, AddPostCategoryLocalizationsModel model)
@@ -67,10 +76,10 @@ namespace TFW.Docs.WebApi.Controllers
         }
 
         [SwaggerResponse((int)HttpStatusCode.NoContent)]
-        [HttpDelete(Routing.Controller.PostCategory.DeletePostCategory)]
-        public async Task<IActionResult> DeletePostCategory(int id)
+        [HttpDelete(Routing.Controller.PostCategory.DeleteLocalizations)]
+        public async Task<IActionResult> DeleteLocalizations(int id, [FromBody] IEnumerable<int> localizationIds)
         {
-            await _postCategoryService.DeletePostCategoryAsync(id);
+            await _postCategoryService.DeletePostCategoryLocalizationsAsync(id, localizationIds);
 
             return NoContent();
         }
