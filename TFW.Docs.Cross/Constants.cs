@@ -157,8 +157,11 @@ namespace TFW.Docs.Cross
         [Display(Name = ResultCodeName.PostCategory_InvalidCreatePostCategoryLocalizationRequest)]
         PostCategory_InvalidCreatePostCategoryLocalizationRequest = ResultCodeGroup.PostCategory + 1,
 
-        [Display(Name = ResultCodeName.PostCategory_InvalidPostCategoryLocalizationExists)]
-        PostCategory_InvalidPostCategoryLocalizationExists = ResultCodeGroup.PostCategory + 2,
+        [Display(Name = ResultCodeName.PostCategory_LocalizationExists)]
+        PostCategory_LocalizationExists = ResultCodeGroup.PostCategory + 2,
+
+        [Display(Name = ResultCodeName.PostCategory_InvalidUpdateLocalizationsRequest)]
+        PostCategory_InvalidUpdateLocalizationsRequest = ResultCodeGroup.PostCategory + 3,
         #endregion
     }
 
@@ -316,6 +319,7 @@ namespace TFW.Docs.Cross
                 public const string CreatePostCategory = "";
                 public const string UpdatePostCategory = "{id}";
                 public const string AddLocalizations = "{id}/localizations";
+                public const string UpdateLocalizations = "{id}/localizations";
             }
 
             public static class Setting

@@ -56,5 +56,14 @@ namespace TFW.Docs.WebApi.Controllers
 
             return Success(ids);
         }
+
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<IEnumerable<int>>))]
+        [HttpPut(Routing.Controller.PostCategory.UpdateLocalizations)]
+        public async Task<IActionResult> UpdateLocalizations(int id, UpdatePostCategoryLocalizationsModel model)
+        {
+            await _postCategoryService.UpdatePostCategoryLocalizationsAsync(id, model);
+
+            return NoContent();
+        }
     }
 }

@@ -64,12 +64,6 @@ namespace TFW.Framework.EFCore.Context
             this.PrepareModifyDefault(entity);
         }
 
-        public override int SaveChanges()
-        {
-            AuditEntities();
-            return base.SaveChanges();
-        }
-
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             AuditEntities();
@@ -80,12 +74,6 @@ namespace TFW.Framework.EFCore.Context
         {
             AuditEntities();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            AuditEntities();
-            return base.SaveChangesAsync(cancellationToken);
         }
 
         public virtual EntityEntry SoftDelete(object entity)

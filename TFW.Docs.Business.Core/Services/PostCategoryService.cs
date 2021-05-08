@@ -89,7 +89,7 @@ namespace TFW.Docs.Business.Core.Services
             var cultures = model.ListOfLocalization.Select(o => (string.IsNullOrEmpty(o.Region) ? o.Lang : (o.Lang + "-" + o.Region))).ToArray();
             var anyCultureExists = await dbContext.PostCategoryLocalization.ByCultures(cultures).AnyAsync();
             if (anyCultureExists)
-                validationData.Fail(code: ResultCode.PostCategory_InvalidPostCategoryLocalizationExists);
+                validationData.Fail(code: ResultCode.PostCategory_LocalizationExists);
 
             if (!validationData.IsValid)
                 throw validationData.BuildException();
@@ -103,6 +103,39 @@ namespace TFW.Docs.Business.Core.Services
             await dbContext.SaveChangesAsync();
 
             return entities.Select(o => o.Id).ToArray();
+        }
+
+        public async Task UpdatePostCategoryLocalizationsAsync(int postCategoryId, UpdatePostCategoryLocalizationsModel model)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            var updatedLocalizationIds = model.ListOfLocalization.Select(o => o.Id).ToArray();
+            var entities = await dbContext.PostCategoryLocalization.ByIds(updatedLocalizationIds)
+                .Select(o => new PostCategoryLocalizationEntity
+                {
+                    Id = o.Id,
+                    EntityId = o.EntityId
+                }).ToArrayAsync();
+
+            if (entities.Any(o => o.EntityId != postCategoryId)
+                || entities.Length != updatedLocalizationIds.Length)
+                validationData.Fail(code: ResultCode.PostCategory_InvalidUpdateLocalizationsRequest);
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            foreach (var entity in entities)
+            {
+                model.ListOfLocalization.First(o => o.Id == entity.Id).CopyTo(entity);
+
+                dbContext.Update(entity, o => o.Description,
+                    o => o.Title);
+            }
+
+            await dbContext.SaveChangesAsync();
         }
 
         private void PrepareCreate(PostCategoryEntity entity)

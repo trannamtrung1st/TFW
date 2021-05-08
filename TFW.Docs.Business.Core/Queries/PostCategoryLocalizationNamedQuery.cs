@@ -8,6 +8,11 @@ namespace TFW.Docs.Business.Core.Queries
 {
     public static class PostCategoryLocalizationNamedQuery
     {
+        public static IQueryable<PostCategoryLocalizationEntity> ByIds(this IQueryable<PostCategoryLocalizationEntity> query, IEnumerable<int> ids)
+        {
+            return query.Where(o => ids.Contains(o.Id));
+        }
+
         public static IQueryable<PostCategoryLocalizationEntity> ByCulture(this IQueryable<PostCategoryLocalizationEntity> query, string lang, string region)
         {
             return query.Where(o => o.Lang == lang && o.Region == region);
