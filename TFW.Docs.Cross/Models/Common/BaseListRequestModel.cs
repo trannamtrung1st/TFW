@@ -13,6 +13,7 @@ namespace TFW.Docs.Cross.Models.Common
     {
         public static class Parameters
         {
+            public const string SearchTerm = "term";
             public const string CountTotal = "cTotal";
             public const string Page = "p";
             public const string PageLimit = "pLimit";
@@ -21,6 +22,12 @@ namespace TFW.Docs.Cross.Models.Common
         }
 
         protected abstract string[] DefaultFields { get; }
+
+        /// <summary>
+        /// Search terms
+        /// </summary>
+        [FromQuery(Name = Parameters.SearchTerm)]
+        public string SearchTerm { get; set; }
 
         /// <summary>
         /// Count total
@@ -33,7 +40,7 @@ namespace TFW.Docs.Cross.Models.Common
         /// </summary>
         [FromQuery(Name = Parameters.Page)]
         public int Page { get; set; } = QueryConsts.DefaultPage;
-        
+
         /// <summary>
         /// Page limit
         /// </summary>
@@ -104,7 +111,8 @@ namespace TFW.Docs.Cross.Models.Common
         public virtual QueryBuilder BuildQuery()
         {
             var queryBuilder = new QueryBuilder();
-            queryBuilder.AddIfNotNull(Parameters.CountTotal, $"{CountTotal}")
+            queryBuilder.AddIfNotNull(Parameters.SearchTerm, SearchTerm)
+                .AddIfNotNull(Parameters.CountTotal, $"{CountTotal}")
                 .AddIfNotNull(Parameters.Page, $"{Page}")
                 .AddIfNotNull(Parameters.PageLimit, $"{PageLimit}")
                 .AddIfNotNull(Parameters.SortBy, _sortByArr ?? new string[0])

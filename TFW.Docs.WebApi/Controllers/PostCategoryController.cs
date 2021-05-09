@@ -29,6 +29,15 @@ namespace TFW.Docs.WebApi.Controllers
             _postCategoryService = postCategoryService;
         }
 
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListPostCategoryResponseModel>>))]
+        [HttpGet(Routing.Controller.PostCategory.GetListPostCategory)]
+        public async Task<IActionResult> GetListPostCategory([FromQuery] ListPostCategoryRequestModel model)
+        {
+            var data = await _postCategoryService.GetListPostCategoryAsync<ListPostCategoryResponseModel>(model);
+
+            return Success(data);
+        }
+
         [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<int>))]
         [HttpPost(Routing.Controller.PostCategory.CreatePostCategory)]
         public async Task<IActionResult> CreatePostCategory(CreatePostCategoryModel model)

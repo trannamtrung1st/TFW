@@ -319,6 +319,7 @@ namespace TFW.Docs.Cross
             public static class PostCategory
             {
                 public const string Route = "api/post-categories";
+                public const string GetListPostCategory = "";
                 public const string CreatePostCategory = "";
                 public const string UpdatePostCategory = "{id}";
                 public const string DeletePostCategory = "{id}";

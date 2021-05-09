@@ -10,7 +10,6 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TFW.Docs.Business.Core.Queries;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Entities;
@@ -27,6 +26,7 @@ using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Queries;
 using TFW.Framework.Security.Extensions;
 using Microsoft.Extensions.Localization;
+using TFW.Docs.Business.Core.Queries.AppUser;
 
 namespace TFW.Docs.Business.Core.Services
 {
@@ -63,13 +63,13 @@ namespace TFW.Docs.Business.Core.Services
             IQueryable<AppUserEntity> query = dbContext.Users.AsNoTracking();
 
             #region Filter
-            if (requestModel.Id != null)
-                query = query.ById(requestModel.Id.Value);
+            if (requestModel.Ids?.Any() == true)
+                query = query.ByIds(requestModel.Ids);
 
             if (requestModel.UserName != null)
                 query = query.ByUsername(requestModel.UserName);
 
-            if (requestModel.SearchTerm != null)
+            if (!string.IsNullOrWhiteSpace(requestModel.SearchTerm))
                 query = query.BySearchTerm(requestModel.SearchTerm);
 
             if (requestModel.RegisteredFromDate != null)

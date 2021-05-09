@@ -4,19 +4,14 @@
         <name>TFW.Docs.Cross</name>
     </assembly>
     <members>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.Id">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.Ids">
             <summary>
-            Id
+            Ids
             </summary>
         </member>
         <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.UserName">
             <summary>
             Username
-            </summary>
-        </member>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.SearchTerm">
-            <summary>
-            Search terms
             </summary>
         </member>
         <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.RegisteredFromDate">
@@ -27,6 +22,11 @@
         <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.RegisteredToDate">
             <summary>
             Registered to date
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.SearchTerm">
+            <summary>
+            Search terms
             </summary>
         </member>
         <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.CountTotal">
@@ -52,6 +52,21 @@
         <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.Fields">
             <summary>
             Fields
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedListRequestModel.Lang">
+            <summary>
+            Lang
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedListRequestModel.Region">
+            <summary>
+            Region
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.PostCategory.ListPostCategoryRequestModel.Ids">
+            <summary>
+            Ids
             </summary>
         </member>
     </members>

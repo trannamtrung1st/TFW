@@ -4,13 +4,18 @@ using System.Linq;
 using System.Text;
 using TFW.Docs.Cross.Entities;
 
-namespace TFW.Docs.Business.Core.Queries
+namespace TFW.Docs.Business.Core.Queries.AppUser
 {
     public static class AppUserNamedQuery
     {
         public static IQueryable<AppUserEntity> ById(this IQueryable<AppUserEntity> query, int id)
         {
             return query.Where(o => o.Id == id);
+        }
+
+        public static IQueryable<AppUserEntity> ByIds(this IQueryable<AppUserEntity> query, IEnumerable<int> ids)
+        {
+            return query.Where(o => ids.Contains(o.Id));
         }
 
         public static IQueryable<AppUserEntity> ByUsername(this IQueryable<AppUserEntity> query, string username)

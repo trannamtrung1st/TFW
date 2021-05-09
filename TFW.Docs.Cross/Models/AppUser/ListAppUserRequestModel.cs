@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Framework.Web.Binding;
@@ -14,9 +15,8 @@ namespace TFW.Docs.Cross.Models.AppUser
     {
         public static new class Parameters
         {
-            public const string Id = "id";
+            public const string Ids = "ids";
             public const string UserName = "uname";
-            public const string SearchTerm = "term";
             public const string RegisteredFromDate = "rFromDate";
             public const string RegisteredToDate = "rToDate";
         }
@@ -24,22 +24,16 @@ namespace TFW.Docs.Cross.Models.AppUser
         protected override string[] DefaultFields { get; } = new[] { FieldInfo };
 
         /// <summary>
-        /// Id
+        /// Ids
         /// </summary>
-        [FromQuery(Name = Parameters.Id)]
-        public int? Id { get; set; }
+        [FromQuery(Name = Parameters.Ids)]
+        public IEnumerable<int> Ids { get; set; }
 
         /// <summary>
         /// Username
         /// </summary>
         [FromQuery(Name = Parameters.UserName)]
         public string UserName { get; set; }
-
-        /// <summary>
-        /// Search terms
-        /// </summary>
-        [FromQuery(Name = Parameters.SearchTerm)]
-        public string SearchTerm { get; set; }
 
         /// <summary>
         /// Registered from date
@@ -58,9 +52,8 @@ namespace TFW.Docs.Cross.Models.AppUser
         public override QueryBuilder BuildQuery()
         {
             var builder = base.BuildQuery();
-            builder.AddIfNotNull(Parameters.Id, Id?.ToString())
+            builder.AddIfNotNull(Parameters.Ids, Ids?.Select(o => o.ToString()).ToArray())
                 .AddIfNotNull(Parameters.UserName, UserName)
-                .AddIfNotNull(Parameters.SearchTerm, SearchTerm)
                 .AddIfNotNull(Parameters.RegisteredFromDate, RegisteredFromDate?.ToString("o"))
                 .AddIfNotNull(Parameters.RegisteredToDate, RegisteredToDate?.ToString("o"));
             return builder;
