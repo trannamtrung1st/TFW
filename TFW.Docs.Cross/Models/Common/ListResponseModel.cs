@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TFW.Docs.Cross.Models.Common
 {
-    public class GetListResponseModel<T>
+    public class ListResponseModel<T>
     {
         [JsonProperty("list")]
         public IEnumerable<T> List { get; set; }

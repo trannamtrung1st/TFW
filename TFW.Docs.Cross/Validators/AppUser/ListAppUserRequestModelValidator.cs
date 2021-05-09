@@ -10,19 +10,19 @@ using TFW.Framework.Validations.Fluent;
 
 namespace TFW.Docs.Cross.Validators.AppUser
 {
-    public class GetAppUserListRequestModelValidator : LocalizedSafeValidator<GetListAppUsersRequestModel, GetAppUserListRequestModelValidator>
+    public class ListAppUserRequestModelValidator : LocalizedSafeValidator<ListAppUserRequestModel, ListAppUserRequestModelValidator>
     {
-        public GetAppUserListRequestModelValidator(IValidationResultProvider validationResultProvider,
+        public ListAppUserRequestModelValidator(IValidationResultProvider validationResultProvider,
             IServiceProvider serviceProvider,
-            IStringLocalizer<GetAppUserListRequestModelValidator> localizer) : base(validationResultProvider, localizer)
+            IStringLocalizer<ListAppUserRequestModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             IncludeBaseValidators(serviceProvider);
 
             When(request => request.GetFieldsArr() != null, () =>
             {
                 RuleForEach(request => request.GetFieldsArr()).Cascade(CascadeMode.Stop)
-                    .Must(field => GetListAppUsersRequestModel.Projections.ContainsKey(field))
-                    .WithName(BaseGetListRequestModel.Parameters.Fields)
+                    .Must(field => ListAppUserRequestModel.Projections.ContainsKey(field))
+                    .WithName(BaseListRequestModel.Parameters.Fields)
                     .WithState(request => ResultCode.InvalidProjectionRequest);
             });
 
@@ -30,8 +30,8 @@ namespace TFW.Docs.Cross.Validators.AppUser
             {
                 RuleForEach(request => request.GetSortByArr()).Cascade(CascadeMode.Stop)
                     .MinimumLength(2)
-                    .Must(field => GetListAppUsersRequestModel.SortOptions.Contains(field.Substring(1)))
-                    .WithName(BaseGetListRequestModel.Parameters.SortBy)
+                    .Must(field => ListAppUserRequestModel.SortOptions.Contains(field.Substring(1)))
+                    .WithName(BaseListRequestModel.Parameters.SortBy)
                     .WithState(request => ResultCode.InvalidSortingRequest);
             });
         }

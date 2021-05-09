@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TFW.Docs.Cross.Models.AppRole
 {
-    public class GetListRolesResponseModel : RoleBaseModel
+    public class ListRoleResponseModel : RoleBaseModel
     {
     }
 }

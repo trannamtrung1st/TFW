@@ -8,10 +8,10 @@ using TFW.Framework.Validations.Fluent;
 
 namespace TFW.Docs.Cross.Validators.Common
 {
-    public class BaseGetListRequestModelValidator : LocalizedSafeValidator<BaseGetListRequestModel, BaseGetListRequestModelValidator>
+    public class BaseListRequestModelValidator : LocalizedSafeValidator<BaseListRequestModel, BaseListRequestModelValidator>
     {
-        public BaseGetListRequestModelValidator(IValidationResultProvider validationResultProvider,
-            IStringLocalizer<BaseGetListRequestModelValidator> localizer) : base(validationResultProvider, localizer)
+        public BaseListRequestModelValidator(IValidationResultProvider validationResultProvider,
+            IStringLocalizer<BaseListRequestModelValidator> localizer) : base(validationResultProvider, localizer)
         {
             RuleFor(request => request.Page)
                 .GreaterThanOrEqualTo(0)

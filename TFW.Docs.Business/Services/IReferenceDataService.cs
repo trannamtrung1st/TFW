@@ -8,9 +8,9 @@ namespace TFW.Docs.Business.Services
 {
     public interface IReferenceDataService
     {
-        Task<GetListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync();
-        Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync();
-        Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync();
-        Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync();
+        Task<ListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync();
+        Task<ListResponseModel<CultureOption>> GetCultureOptionsAsync();
+        Task<ListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync();
+        Task<ListResponseModel<RegionOption>> GetRegionOptionsAsync();
     }
 }

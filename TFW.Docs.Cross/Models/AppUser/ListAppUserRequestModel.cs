@@ -10,7 +10,7 @@ using AU = TFW.Docs.Cross.Entities.AppUserEntity;
 
 namespace TFW.Docs.Cross.Models.AppUser
 {
-    public class GetListAppUsersRequestModel : BaseGetListRequestModel
+    public class ListAppUserRequestModel : BaseListRequestModel
     {
         public static new class Parameters
         {

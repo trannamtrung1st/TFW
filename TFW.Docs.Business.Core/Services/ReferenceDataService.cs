@@ -32,12 +32,12 @@ namespace TFW.Docs.Business.Core.Services
             _memoryCache = memoryCache;
         }
 
-        public Task<GetListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync()
+        public Task<ListResponseModel<TimeZoneOption>> GetTimeZoneOptionsAsync()
         {
             var timeZoneOptions = _memoryCache.GetOrCreate(CachingKeys.ListTimeZoneInfo,
                 (entry) => TimeZoneHelper.GetAllTimeZones().MapTo<TimeZoneOption>().ToArray());
 
-            var response = new GetListResponseModel<TimeZoneOption>()
+            var response = new ListResponseModel<TimeZoneOption>()
             {
                 List = timeZoneOptions,
                 TotalCount = timeZoneOptions.Length
@@ -46,7 +46,7 @@ namespace TFW.Docs.Business.Core.Services
             return Task.FromResult(response);
         }
 
-        public Task<GetListResponseModel<CultureOption>> GetCultureOptionsAsync()
+        public Task<ListResponseModel<CultureOption>> GetCultureOptionsAsync()
         {
             var cultureOptions = _memoryCache.GetOrCreate(CachingKeys.ListCultureOptions,
                 (entry) =>
@@ -55,7 +55,7 @@ namespace TFW.Docs.Business.Core.Services
                     return Settings.Get<AppSettings>().SupportedCultureInfos.MapTo<CultureOption>().ToArray();
                 });
 
-            var response = new GetListResponseModel<CultureOption>()
+            var response = new ListResponseModel<CultureOption>()
             {
                 List = cultureOptions,
                 TotalCount = cultureOptions.Length
@@ -64,7 +64,7 @@ namespace TFW.Docs.Business.Core.Services
             return Task.FromResult(response);
         }
 
-        public Task<GetListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
+        public Task<ListResponseModel<CurrencyOption>> GetCurrencyOptionsAsync()
         {
             var currencyOptions = _memoryCache.GetOrCreate(CachingKeys.ListCurrencyOptions,
                 (entry) =>
@@ -73,7 +73,7 @@ namespace TFW.Docs.Business.Core.Services
                     return Settings.Get<AppSettings>().SupportedRegionInfos.MapTo<CurrencyOption>().ToArray();
                 });
 
-            var response = new GetListResponseModel<CurrencyOption>()
+            var response = new ListResponseModel<CurrencyOption>()
             {
                 List = currencyOptions,
                 TotalCount = currencyOptions.Length
@@ -82,12 +82,12 @@ namespace TFW.Docs.Business.Core.Services
             return Task.FromResult(response);
         }
 
-        public Task<GetListResponseModel<RegionOption>> GetRegionOptionsAsync()
+        public Task<ListResponseModel<RegionOption>> GetRegionOptionsAsync()
         {
             var countryOptions = _memoryCache.GetOrCreate(CachingKeys.ListRegionOptions,
                 (entry) => CultureHelper.GetDistinctRegions().MapTo<RegionOption>().ToArray());
 
-            var response = new GetListResponseModel<RegionOption>()
+            var response = new ListResponseModel<RegionOption>()
             {
                 List = countryOptions,
                 TotalCount = countryOptions.Length

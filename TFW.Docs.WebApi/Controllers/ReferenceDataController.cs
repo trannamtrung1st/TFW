@@ -29,7 +29,7 @@ namespace TFW.Docs.WebApi.Controllers
             _referenceDataService = referenceDataService;
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<TimeZoneOption>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<TimeZoneOption>>))]
         [HttpGet(Routing.Controller.Reference.GetTimeZoneOptions)]
         public async Task<IActionResult> GetTimeZoneOptions()
         {
@@ -38,7 +38,7 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(data);
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CultureOption>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<CultureOption>>))]
         [HttpGet(Routing.Controller.Reference.GetCultureOptions)]
         public async Task<IActionResult> GetCultureOptions()
         {
@@ -47,7 +47,7 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(data);
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<CurrencyOption>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<CurrencyOption>>))]
         [HttpGet(Routing.Controller.Reference.GetCurrencyOptions)]
         public async Task<IActionResult> GetCurrencyOptions()
         {
@@ -56,7 +56,7 @@ namespace TFW.Docs.WebApi.Controllers
             return Success(data);
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<GetListResponseModel<RegionOption>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<RegionOption>>))]
         [HttpGet(Routing.Controller.Reference.GetRegionOptions)]
         public async Task<IActionResult> GetRegionOptions()
         {

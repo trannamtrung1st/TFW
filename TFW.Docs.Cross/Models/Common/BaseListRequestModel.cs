@@ -9,7 +9,7 @@ using TFW.Framework.Web.Extensions;
 
 namespace TFW.Docs.Cross.Models.Common
 {
-    public abstract class BaseGetListRequestModel
+    public abstract class BaseListRequestModel
     {
         public static class Parameters
         {

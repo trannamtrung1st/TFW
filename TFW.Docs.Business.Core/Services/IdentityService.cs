@@ -47,8 +47,8 @@ namespace TFW.Docs.Business.Core.Services
         }
 
         #region AppUser
-        public async Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
-            GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null)
+        public async Task<ListResponseModel<TModel>> GetListAppUserAsync<TModel>(
+            ListAppUserRequestModel requestModel, ParsingConfig parsingConfig = null)
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
@@ -92,7 +92,7 @@ namespace TFW.Docs.Business.Core.Services
 
                     switch (fieldName)
                     {
-                        case GetListAppUsersRequestModel.SortByUsername:
+                        case ListAppUserRequestModel.SortByUsername:
                             {
                                 if (asc)
                                     query = query.SequentialOrderBy(o => o.UserName);
@@ -111,7 +111,7 @@ namespace TFW.Docs.Business.Core.Services
                 query = query.Limit(requestModel.Page, requestModel.PageLimit);
 
             #region Projection
-            var projectionArr = requestModel.GetFieldsArr().Select(o => GetListAppUsersRequestModel.Projections[o]).ToArray();
+            var projectionArr = requestModel.GetFieldsArr().Select(o => ListAppUserRequestModel.Projections[o]).ToArray();
             var projectionStr = string.Join(',', projectionArr);
 
             var projectedQuery = query.Select<TModel>(
@@ -120,7 +120,7 @@ namespace TFW.Docs.Business.Core.Services
             #endregion
 
             var responseModels = await projectedQuery.ToArrayAsync();
-            var response = new GetListResponseModel<TModel>
+            var response = new ListResponseModel<TModel>
             {
                 List = responseModels,
             };
@@ -137,12 +137,12 @@ namespace TFW.Docs.Business.Core.Services
             return total;
         }
 
-        public async Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>()
+        public async Task<ListResponseModel<TModel>> GetListDeletedAppUserAsync<TModel>()
         {
             var responseModels = await dbContext.QueryDeleted<AppUserEntity>()
                    .AsNoTracking().DefaultProjectTo<TModel>().ToArrayAsync();
 
-            var response = new GetListResponseModel<TModel>
+            var response = new ListResponseModel<TModel>
             {
                 List = responseModels,
                 TotalCount = responseModels.Length
@@ -325,7 +325,7 @@ namespace TFW.Docs.Business.Core.Services
         #endregion
 
         #region AppRole
-        public async Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>()
+        public async Task<ListResponseModel<TModel>> GetListRoleAsync<TModel>()
         {
             #region Validation
             var userInfo = contextProvider.BusinessContext.PrincipalInfo;
@@ -341,7 +341,7 @@ namespace TFW.Docs.Business.Core.Services
 
             var responseModels = await query.DefaultProjectTo<TModel>().ToArrayAsync();
 
-            var response = new GetListResponseModel<TModel>
+            var response = new ListResponseModel<TModel>
             {
                 List = responseModels,
                 TotalCount = await query.CountAsync()

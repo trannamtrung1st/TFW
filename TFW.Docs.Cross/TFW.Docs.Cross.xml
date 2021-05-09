@@ -4,52 +4,52 @@
         <name>TFW.Docs.Cross</name>
     </assembly>
     <members>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.Id">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.Id">
             <summary>
             Id
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.UserName">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.UserName">
             <summary>
             Username
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.SearchTerm">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.SearchTerm">
             <summary>
             Search terms
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.RegisteredFromDate">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.RegisteredFromDate">
             <summary>
             Registered from date
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.AppUser.GetListAppUsersRequestModel.RegisteredToDate">
+        <member name="P:TFW.Docs.Cross.Models.AppUser.ListAppUserRequestModel.RegisteredToDate">
             <summary>
             Registered to date
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.CountTotal">
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.CountTotal">
             <summary>
             Count total
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.Page">
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.Page">
             <summary>
             Page
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.PageLimit">
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.PageLimit">
             <summary>
             Page limit
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.SortBy">
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.SortBy">
             <summary>
             Sort by
             </summary>
         </member>
-        <member name="P:TFW.Docs.Cross.Models.Common.BaseGetListRequestModel.Fields">
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseListRequestModel.Fields">
             <summary>
             Fields
             </summary>

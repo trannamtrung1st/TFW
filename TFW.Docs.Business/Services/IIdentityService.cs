@@ -16,12 +16,12 @@ namespace TFW.Docs.Business.Services
 
         ClaimsPrincipal MapToClaimsPrincipal(ClientInfo clientInfo);
 
-        Task<GetListResponseModel<TModel>> GetListAppUsersAsync<TModel>(
-            GetListAppUsersRequestModel requestModel, ParsingConfig parsingConfig = null);
+        Task<ListResponseModel<TModel>> GetListAppUserAsync<TModel>(
+            ListAppUserRequestModel requestModel, ParsingConfig parsingConfig = null);
 
         Task<int> GetTotalUserCountAsync();
 
-        Task<GetListResponseModel<TModel>> GetListDeletedAppUsersAsync<TModel>();
+        Task<ListResponseModel<TModel>> GetListDeletedAppUserAsync<TModel>();
 
         Task<UserProfileModel> GetUserProfileAsync(int userId);
 
@@ -33,7 +33,7 @@ namespace TFW.Docs.Business.Services
 
         Task RemoveUserRolesAsync(ChangeUserRolesBaseModel model);
 
-        Task<GetListResponseModel<TModel>> GetListRolesAsync<TModel>();
+        Task<ListResponseModel<TModel>> GetListRoleAsync<TModel>();
 
         Task<TokenResponseModel> ProvideTokenAsync(RequestTokenModel requestModel);
 

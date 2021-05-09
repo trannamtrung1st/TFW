@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TFW.Docs.Cross.Models.AppUser
 {
-    public class GetListAppUsersResponseModel : AppUserBaseModel
+    public class ListAppUserResponseModel : AppUserBaseModel
     {
         [JsonProperty("createdTime")]
         public DateTime CreatedTime { get; set; }
