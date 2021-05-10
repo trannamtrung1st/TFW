@@ -54,6 +54,21 @@
             Fields
             </summary>
         </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedDetailRequestModel.Lang">
+            <summary>
+            Lang
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedDetailRequestModel.Region">
+            <summary>
+            Lang
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedDetailRequestModel.Fallback">
+            <summary>
+            Fallback
+            </summary>
+        </member>
         <member name="P:TFW.Docs.Cross.Models.Common.BaseLocalizedListRequestModel.Lang">
             <summary>
             Lang
@@ -67,6 +82,11 @@
         <member name="P:TFW.Docs.Cross.Models.PostCategory.ListPostCategoryRequestModel.Ids">
             <summary>
             Ids
+            </summary>
+        </member>
+        <member name="P:TFW.Docs.Cross.Models.PostCategory.PostCategoryDetailRequestModel.Id">
+            <summary>
+            Id
             </summary>
         </member>
     </members>

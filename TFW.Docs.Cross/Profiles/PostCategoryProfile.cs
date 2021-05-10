@@ -11,6 +11,15 @@ namespace TFW.Docs.Cross.Profiles
     {
         public PostCategoryProfile()
         {
+            CreateMap<PostCategoryEntity, PostCategoryDetailModel>();
+
+            CreateMap<PostCategoryLocalizationEntity, PostCategoryLocalizationDetailModel>();
+
+            CreateMap<PostCategoryLocalizationEntity, PostCategoryDetailModel>()
+                .ForMember(o => o.Id, opt => opt.Ignore())
+                .ForMember(o => o.CreatedTime, opt => opt.Ignore())
+                .ForMember(o => o.StartingPostId, opt => opt.Ignore());
+
             CreateMap<PostCategoryLocalizationEditableModel, PostCategoryLocalizationEntity>();
 
             CreateMap<CreatePostCategoryLocalizationModel, PostCategoryLocalizationEntity>();

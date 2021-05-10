@@ -30,11 +30,11 @@ namespace TFW.Docs.WebApi.Controllers
             _identityService = identityService;
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListAppUserResponseModel>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListAppUserModel>>))]
         [HttpGet(Routing.Controller.User.GetListAppUser)]
         public async Task<IActionResult> GetListAppUser([FromQuery] ListAppUserRequestModel model)
         {
-            var data = await _identityService.GetListAppUserAsync<ListAppUserResponseModel>(model);
+            var data = await _identityService.GetListAppUserAsync<ListAppUserModel>(model);
 
             return Success(data);
         }
@@ -96,12 +96,12 @@ namespace TFW.Docs.WebApi.Controllers
             return NoContent();
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListAppUserResponseModel>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListAppUserModel>>))]
         [HttpGet(Routing.Controller.User.GetListDeletedAppUser)]
         [AllowAnonymous]
         public async Task<IActionResult> GetListDeletedAppUser()
         {
-            var data = await _identityService.GetListDeletedAppUserAsync<ListAppUserResponseModel>();
+            var data = await _identityService.GetListDeletedAppUserAsync<ListAppUserModel>();
 
             return Success(data);
         }

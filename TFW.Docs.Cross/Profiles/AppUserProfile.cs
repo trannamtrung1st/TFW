@@ -17,7 +17,7 @@ namespace TFW.Docs.Cross.Profiles
 
             CreateMap<AppUserEntity, AppUserDetailModel>();
 
-            CreateMap<AppUserEntity, ListAppUserResponseModel>();
+            CreateMap<AppUserEntity, ListAppUserModel>();
 
             CreateMap<AppUserEntity, UserProfileModel>();
         }

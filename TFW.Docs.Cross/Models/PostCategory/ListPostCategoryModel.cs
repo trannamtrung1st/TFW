@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace TFW.Docs.Cross.Models.PostCategory
 {
-    public class ListPostCategoryResponseModel : PostCategoryBaseModel
+    public class ListPostCategoryModel : PostCategoryBaseModel
     {
     }
 }

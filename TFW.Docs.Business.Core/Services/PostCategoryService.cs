@@ -130,6 +130,56 @@ namespace TFW.Docs.Business.Core.Services
             return response;
         }
 
+        public async Task<PostCategoryDetailModel> GetPostCategoryDetailAsync(PostCategoryDetailRequestModel model)
+        {
+            #region Validation
+            var userInfo = contextProvider.BusinessContext.PrincipalInfo;
+            var validationData = new ValidationData(resultLocalizer);
+
+            // validation logic here
+
+            if (!validationData.IsValid)
+                throw validationData.BuildException();
+            #endregion
+
+            var detailModel = await dbContext.PostCategory.ById(model.Id)
+                .DefaultProjectTo<PostCategoryDetailModel>().FirstOrDefaultAsync();
+
+            if (detailModel == null)
+                throw AppValidationException.From(resultLocalizer, ResultCode.EntityNotFound);
+
+            var locQuery = dbContext.PostCategoryLocalization.ByEntity(model.Id)
+                .Select(o => new PostCategoryLocalizationEntity
+                {
+                    Description = o.Description,
+                    Lang = o.Lang,
+                    Region = o.Region,
+                    Title = o.Title
+                });
+
+            string currentLang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            string lang = model.Lang;
+            string region = model.Region;
+            if (string.IsNullOrEmpty(lang))
+                lang = currentLang;
+
+            var locEntity = await locQuery.ByCulture(lang, region).FirstOrDefaultAsync();
+
+            if (locEntity == null && model.Fallback)
+            {
+                if (lang != currentLang)
+                    locEntity = await locQuery.ByCulture(currentLang).FirstOrDefaultAsync();
+
+                if (locEntity == null)
+                    locEntity = await locQuery.FirstOrDefaultAsync();
+            }
+
+            if (locEntity != null)
+                locEntity.CopyTo(detailModel);
+
+            return detailModel;
+        }
+
         public async Task<int> CreatePostCategoryAsync(CreatePostCategoryModel model)
         {
             #region Validation

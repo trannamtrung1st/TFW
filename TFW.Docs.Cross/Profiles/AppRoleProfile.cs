@@ -17,7 +17,7 @@ namespace TFW.Docs.Cross.Profiles
             
             CreateMap<AppRoleEntity, RoleDetailModel>();
             
-            CreateMap<AppRoleEntity, ListRoleResponseModel>();
+            CreateMap<AppRoleEntity, ListRoleModel>();
         }
     }
 }

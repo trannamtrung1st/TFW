@@ -12,6 +12,7 @@ namespace TFW.Docs.Business.Services
     {
         Task<ListResponseModel<TModel>> GetListPostCategoryAsync<TModel>(
             ListPostCategoryRequestModel requestModel, ParsingConfig parsingConfig = null);
+        Task<PostCategoryDetailModel> GetPostCategoryDetailAsync(PostCategoryDetailRequestModel model);
         Task<int> CreatePostCategoryAsync(CreatePostCategoryModel model);
         Task UpdatePostCategoryAsync(int id, UpdatePostCategoryModel model);
         Task DeletePostCategoryAsync(int id);

@@ -29,11 +29,11 @@ namespace TFW.Docs.WebApi.Controllers
             _identityService = identityService;
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListRoleResponseModel>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListRoleModel>>))]
         [HttpGet(Routing.Controller.Role.GetAllRoles)]
         public async Task<IActionResult> GetAllRoles()
         {
-            var data = await _identityService.GetListRoleAsync<ListRoleResponseModel>();
+            var data = await _identityService.GetListRoleAsync<ListRoleModel>();
 
             return Success(data);
         }

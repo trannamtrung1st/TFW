@@ -11,7 +11,7 @@ namespace TFW.Docs.ApiClient
 {
     public interface IUserClient
     {
-        Task<(AppResult<ListResponseModel<ListAppUserResponseModel>> Result, HttpResponseMessage Response)> GetListAppUserAsync(
+        Task<(AppResult<ListResponseModel<ListAppUserModel>> Result, HttpResponseMessage Response)> GetListAppUserAsync(
             ListAppUserRequestModel model = null);
 
         Task<(AppResult<int> Result, HttpResponseMessage Response)> GetTotalUserCountAsync();
@@ -23,13 +23,13 @@ namespace TFW.Docs.ApiClient
         {
         }
 
-        public async Task<(AppResult<ListResponseModel<ListAppUserResponseModel>> Result, HttpResponseMessage Response)> GetListAppUserAsync(
+        public async Task<(AppResult<ListResponseModel<ListAppUserModel>> Result, HttpResponseMessage Response)> GetListAppUserAsync(
             ListAppUserRequestModel model = null)
         {
             var queryBuilder = model?.BuildQuery();
             var uri = $"{string.Join('/', Routing.Controller.User.Route, Routing.Controller.User.GetListAppUser)}{queryBuilder}";
             var resp = await http.GetAsync(uri);
-            return (await HandleJsonAsync<AppResult<ListResponseModel<ListAppUserResponseModel>>>(resp), resp);
+            return (await HandleJsonAsync<AppResult<ListResponseModel<ListAppUserModel>>>(resp), resp);
         }
 
         public async Task<(AppResult<int> Result, HttpResponseMessage Response)> GetTotalUserCountAsync()

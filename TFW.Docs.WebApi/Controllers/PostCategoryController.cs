@@ -29,11 +29,20 @@ namespace TFW.Docs.WebApi.Controllers
             _postCategoryService = postCategoryService;
         }
 
-        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListPostCategoryResponseModel>>))]
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<ListResponseModel<ListPostCategoryModel>>))]
         [HttpGet(Routing.Controller.PostCategory.GetListPostCategory)]
         public async Task<IActionResult> GetListPostCategory([FromQuery] ListPostCategoryRequestModel model)
         {
-            var data = await _postCategoryService.GetListPostCategoryAsync<ListPostCategoryResponseModel>(model);
+            var data = await _postCategoryService.GetListPostCategoryAsync<ListPostCategoryModel>(model);
+
+            return Success(data);
+        }
+
+        [SwaggerResponse((int)HttpStatusCode.OK, null, typeof(AppResult<PostCategoryDetailModel>))]
+        [HttpGet(Routing.Controller.PostCategory.GetPostCategoryDetail)]
+        public async Task<IActionResult> GetPostCategoryDetail([FromQuery] PostCategoryDetailRequestModel model)
+        {
+            var data = await _postCategoryService.GetPostCategoryDetailAsync(model);
 
             return Success(data);
         }
