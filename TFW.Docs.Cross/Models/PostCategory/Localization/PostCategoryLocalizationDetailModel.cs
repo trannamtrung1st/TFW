@@ -21,9 +21,9 @@ namespace TFW.Docs.Cross.Models.PostCategory
         public string Description { get; set; }
 
         [JsonProperty("lastModifiedTime")]
-        public DateTime? LastModifiedTime { get; set; }
+        public DateTimeOffset? LastModifiedTime { get; set; }
 
         [JsonProperty("createdTime")]
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }

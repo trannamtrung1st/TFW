@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TFW.Docs.Data.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,11 +42,11 @@ namespace TFW.Docs.Data.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false),
                     CreatedUserId = table.Column<int>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: true),
+                    LastModifiedTime = table.Column<DateTimeOffset>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
-                    DeletedTime = table.Column<DateTime>(nullable: true),
+                    DeletedTime = table.Column<DateTimeOffset>(nullable: true),
                     DeletedUserId = table.Column<int>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     FullName = table.Column<string>(maxLength: 256, nullable: true)
@@ -168,14 +168,13 @@ namespace TFW.Docs.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DeletedTime = table.Column<DateTime>(nullable: true),
+                    DeletedTime = table.Column<DateTimeOffset>(nullable: true),
                     DeletedUserId = table.Column<int>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false),
                     CreatedUserId = table.Column<int>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: true),
+                    LastModifiedTime = table.Column<DateTimeOffset>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
-                    DefaultLocalizationId = table.Column<int>(nullable: true),
                     StartingPostId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -184,14 +183,47 @@ namespace TFW.Docs.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Post",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DeletedTime = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedUserId = table.Column<int>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false),
+                    CreatedUserId = table.Column<int>(nullable: true),
+                    LastModifiedTime = table.Column<DateTimeOffset>(nullable: true),
+                    LastModifiedUserId = table.Column<int>(nullable: true),
+                    ParentId = table.Column<int>(nullable: true),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Post", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Post_PostCategory_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "PostCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Post_Post_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Post",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PostCategoryLocalization",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false),
                     CreatedUserId = table.Column<int>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: true),
+                    LastModifiedTime = table.Column<DateTimeOffset>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
                     Lang = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
                     Region = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
@@ -216,9 +248,9 @@ namespace TFW.Docs.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false),
                     CreatedUserId = table.Column<int>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: true),
+                    LastModifiedTime = table.Column<DateTimeOffset>(nullable: true),
                     LastModifiedUserId = table.Column<int>(nullable: true),
                     Lang = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
                     Region = table.Column<string>(unicode: false, maxLength: 2, nullable: false),
@@ -230,43 +262,9 @@ namespace TFW.Docs.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PostLocalization", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Post",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DeletedTime = table.Column<DateTime>(nullable: true),
-                    DeletedUserId = table.Column<int>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    CreatedTime = table.Column<DateTime>(nullable: false),
-                    CreatedUserId = table.Column<int>(nullable: true),
-                    LastModifiedTime = table.Column<DateTime>(nullable: true),
-                    LastModifiedUserId = table.Column<int>(nullable: true),
-                    DefaultLocalizationId = table.Column<int>(nullable: true),
-                    ParentId = table.Column<int>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Post", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Post_PostCategory_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "PostCategory",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Post_PostLocalization_DefaultLocalizationId",
-                        column: x => x.DefaultLocalizationId,
-                        principalTable: "PostLocalization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Post_Post_ParentId",
-                        column: x => x.ParentId,
+                        name: "FK_PostLocalization_Post_EntityId",
+                        column: x => x.EntityId,
                         principalTable: "Post",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -275,7 +273,7 @@ namespace TFW.Docs.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "761f3ba7-ac08-442b-a24f-568a247c1e0a", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { 1, "d5209383-161f-47b5-9034-a9dbc0f5bcc2", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -322,19 +320,9 @@ namespace TFW.Docs.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_DefaultLocalizationId",
-                table: "Post",
-                column: "DefaultLocalizationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Post_ParentId",
                 table: "Post",
                 column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostCategory_DefaultLocalizationId",
-                table: "PostCategory",
-                column: "DefaultLocalizationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostCategory_StartingPostId",
@@ -354,25 +342,9 @@ namespace TFW.Docs.Data.Migrations
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_PostCategory_PostCategoryLocalization_DefaultLocalizationId",
-                table: "PostCategory",
-                column: "DefaultLocalizationId",
-                principalTable: "PostCategoryLocalization",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_PostCategory_Post_StartingPostId",
                 table: "PostCategory",
                 column: "StartingPostId",
-                principalTable: "Post",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PostLocalization_Post_EntityId",
-                table: "PostLocalization",
-                column: "EntityId",
                 principalTable: "Post",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -382,14 +354,6 @@ namespace TFW.Docs.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Post_PostCategory_CategoryId",
-                table: "Post");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_PostCategoryLocalization_PostCategory_EntityId",
-                table: "PostCategoryLocalization");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Post_PostLocalization_DefaultLocalizationId",
                 table: "Post");
 
             migrationBuilder.DropTable(
@@ -408,6 +372,12 @@ namespace TFW.Docs.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "PostCategoryLocalization");
+
+            migrationBuilder.DropTable(
+                name: "PostLocalization");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -415,12 +385,6 @@ namespace TFW.Docs.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PostCategory");
-
-            migrationBuilder.DropTable(
-                name: "PostCategoryLocalization");
-
-            migrationBuilder.DropTable(
-                name: "PostLocalization");
 
             migrationBuilder.DropTable(
                 name: "Post");

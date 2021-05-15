@@ -8,6 +8,6 @@ namespace TFW.Framework.Data
     internal struct ConnectionInfo
     {
         public PooledDbConnectionWrapper Wrapper { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }

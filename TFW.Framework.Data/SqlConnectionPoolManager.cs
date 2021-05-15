@@ -393,7 +393,7 @@ namespace TFW.Framework.Data
 
         private bool HasExceededLifetime(ConnectionInfo info, ConnectionPoolOptions poolOption)
         {
-            return (DateTime.UtcNow - info.CreatedTime).TotalMinutes >= poolOption.LifetimeInMinutes;
+            return (DateTimeOffset.UtcNow - info.CreatedTime).TotalMinutes >= poolOption.LifetimeInMinutes;
         }
 
         private bool HasFullOfConnections(ConcurrentQueue<PooledDbConnectionWrapper> pool,
@@ -452,7 +452,7 @@ namespace TFW.Framework.Data
             pool.Enqueue(wrapper);
             _connInfos[(wrapper.DbConnection as SqlConnection).ClientConnectionId] = new ConnectionInfo()
             {
-                CreatedTime = DateTime.UtcNow,
+                CreatedTime = DateTimeOffset.UtcNow,
                 Wrapper = wrapper
             };
             wrapper.IsInPool = true;

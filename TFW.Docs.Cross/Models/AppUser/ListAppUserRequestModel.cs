@@ -39,15 +39,13 @@ namespace TFW.Docs.Cross.Models.AppUser
         /// Registered from date
         /// </summary>
         [FromQuery(Name = Parameters.RegisteredFromDate)]
-        [UtcDateTime]
-        public DateTime? RegisteredFromDate { get; set; }
+        public DateTimeOffset? RegisteredFromDate { get; set; }
 
         /// <summary>
         /// Registered to date
         /// </summary>
         [FromQuery(Name = Parameters.RegisteredToDate)]
-        [UtcDateTime]
-        public DateTime? RegisteredToDate { get; set; }
+        public DateTimeOffset? RegisteredToDate { get; set; }
 
         public override QueryBuilder BuildQuery()
         {

@@ -32,7 +32,7 @@ namespace TFW.Framework.DI.Examples
                 {
                     // save to database
 
-                    _logger.LogToConsole($"Added new product at {DateTime.Now}");
+                    _logger.LogToConsole($"Added new product at {DateTimeOffset.UtcNow}");
                 }
             }
 #else
@@ -49,7 +49,7 @@ namespace TFW.Framework.DI.Examples
                 {
                     // save to database
 
-                    _logger.LogToFile($"Added new product at {DateTime.Now}");
+                    _logger.LogToFile($"Added new product at {DateTimeOffset.UtcNow}");
                 }
             }
 #endif
@@ -196,7 +196,7 @@ namespace TFW.Framework.DI.Examples
             {
                 // save to database
 
-                _logger.Log($"Added new product at {DateTime.Now}");
+                _logger.Log($"Added new product at {DateTimeOffset.UtcNow}");
             }
         }
 

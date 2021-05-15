@@ -124,7 +124,7 @@ namespace TFW.Framework.EFCore.Context
         {
             if (entity is IAuditableEntity auditableEntity)
             {
-                auditableEntity.CreatedTime = DateTime.UtcNow;
+                auditableEntity.CreatedTime = DateTimeOffset.UtcNow;
             }
         }
 
@@ -139,14 +139,14 @@ namespace TFW.Framework.EFCore.Context
                     if (softDeleteEntity.DeletedTime != null)
                         throw new InvalidOperationException($"{nameof(entity)} is already deleted");
 
-                    softDeleteEntity.DeletedTime = DateTime.UtcNow;
+                    softDeleteEntity.DeletedTime = DateTimeOffset.UtcNow;
                     isSoftDeleted = true;
                 }
             }
 
             if (!isSoftDeleted && entity is IAuditableEntity auditableEntity)
             {
-                auditableEntity.LastModifiedTime = DateTime.UtcNow;
+                auditableEntity.LastModifiedTime = DateTimeOffset.UtcNow;
             }
         }
 

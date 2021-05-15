@@ -11,6 +11,6 @@ namespace TFW.Docs.Cross.Models.PostCategory
         public string Description { get; set; }
         public string Lang { get; set; }
         public string Region { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }

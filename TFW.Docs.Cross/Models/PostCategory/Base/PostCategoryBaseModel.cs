@@ -15,6 +15,6 @@ namespace TFW.Docs.Cross.Models.PostCategory
         public string Region { get; set; }
 
         [JsonProperty("createdTime")]
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }

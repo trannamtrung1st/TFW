@@ -10,8 +10,8 @@ using TFW.Docs.Data;
 namespace TFW.Docs.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210503140501_InitDb")]
-    partial class InitDb
+    [Migration("20210515100048_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -142,7 +142,7 @@ namespace TFW.Docs.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "761f3ba7-ac08-442b-a24f-568a247c1e0a",
+                            ConcurrencyStamp = "d5209383-161f-47b5-9034-a9dbc0f5bcc2",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -162,14 +162,14 @@ namespace TFW.Docs.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DeletedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("DeletedUserId")
                         .HasColumnType("int");
@@ -188,8 +188,8 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LastModifiedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
@@ -262,17 +262,14 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DefaultLocalizationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DeletedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("DeletedUserId")
                         .HasColumnType("int");
@@ -280,8 +277,8 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LastModifiedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
@@ -290,8 +287,6 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DefaultLocalizationId");
 
                     b.HasIndex("StartingPostId");
 
@@ -305,8 +300,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
@@ -324,8 +319,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasMaxLength(2)
                         .IsUnicode(false);
 
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LastModifiedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
@@ -360,17 +355,14 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DefaultLocalizationId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("DeletedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("DeletedUserId")
                         .HasColumnType("int");
@@ -378,8 +370,8 @@ namespace TFW.Docs.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LastModifiedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
@@ -390,8 +382,6 @@ namespace TFW.Docs.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("DefaultLocalizationId");
 
                     b.HasIndex("ParentId");
 
@@ -405,8 +395,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("CreatedUserId")
                         .HasColumnType("int");
@@ -424,8 +414,8 @@ namespace TFW.Docs.Data.Migrations
                         .HasMaxLength(2)
                         .IsUnicode(false);
 
-                    b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTimeOffset?>("LastModifiedTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int?>("LastModifiedUserId")
                         .HasColumnType("int");
@@ -508,11 +498,6 @@ namespace TFW.Docs.Data.Migrations
 
             modelBuilder.Entity("TFW.Docs.Cross.Entities.PostCategoryEntity", b =>
                 {
-                    b.HasOne("TFW.Docs.Cross.Entities.PostCategoryLocalizationEntity", "DefaultLocalization")
-                        .WithMany()
-                        .HasForeignKey("DefaultLocalizationId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "StartingPost")
                         .WithMany()
                         .HasForeignKey("StartingPostId")
@@ -535,11 +520,6 @@ namespace TFW.Docs.Data.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("TFW.Docs.Cross.Entities.PostLocalizationEntity", "DefaultLocalization")
-                        .WithMany()
-                        .HasForeignKey("DefaultLocalizationId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TFW.Docs.Cross.Entities.PostEntity", "Parent")
                         .WithMany("SubPosts")
