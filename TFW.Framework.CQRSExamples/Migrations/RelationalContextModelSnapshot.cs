@@ -16,12 +16,34 @@ namespace TFW.Framework.CQRSExamples.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.15");
 
+            modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.CustomerEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.OrderEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SessionId")
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("Time")
@@ -29,7 +51,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -45,8 +67,8 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("REAL");
 
                     b.HasKey("OrderId", "ProductId");
 
@@ -85,8 +107,8 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("UnitPrice")
-                        .HasColumnType("TEXT");
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
@@ -95,24 +117,11 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.SessionEntity", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("InitTime")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sessions");
-                });
-
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.OrderEntity", b =>
                 {
-                    b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.SessionEntity", "Session")
+                    b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.CustomerEntity", "Customer")
                         .WithMany()
-                        .HasForeignKey("SessionId");
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.OrderItemEntity", b =>
@@ -133,7 +142,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.ProductEntity", b =>
                 {
                     b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.ProductCategoryEntity", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId");
                 });
 #pragma warning restore 612, 618

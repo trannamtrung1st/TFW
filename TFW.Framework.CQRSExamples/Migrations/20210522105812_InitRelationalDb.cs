@@ -8,6 +8,19 @@ namespace TFW.Framework.CQRSExamples.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    CreatedTime = table.Column<DateTimeOffset>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductCategories",
                 columns: table => new
                 {
@@ -21,15 +34,24 @@ namespace TFW.Framework.CQRSExamples.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    InitTime = table.Column<DateTimeOffset>(nullable: false)
+                    CustomerId = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    Time = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,7 +62,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     CategoryId = table.Column<string>(nullable: true),
-                    UnitPrice = table.Column<decimal>(nullable: false)
+                    UnitPrice = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,32 +76,13 @@ namespace TFW.Framework.CQRSExamples.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    SessionId = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTimeOffset>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_Sessions_SessionId",
-                        column: x => x.SessionId,
-                        principalTable: "Sessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrderItems",
                 columns: table => new
                 {
                     ProductId = table.Column<string>(nullable: false),
                     OrderId = table.Column<string>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    UnitPrice = table.Column<decimal>(nullable: false)
+                    UnitPrice = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,9 +107,9 @@ namespace TFW.Framework.CQRSExamples.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_SessionId",
+                name: "IX_Orders_CustomerId",
                 table: "Orders",
-                column: "SessionId");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -126,7 +129,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Sessions");
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "ProductCategories");

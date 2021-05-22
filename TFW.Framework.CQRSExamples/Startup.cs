@@ -32,7 +32,8 @@ namespace TFW.Framework.CQRSExamples
                 options.UseSqlite(Configuration.GetConnectionString(nameof(RelationalContext))));
 
             services.AddScoped<IProductCategoryQuery, ProductCategoryQuery>()
-                .AddScoped<IProductQuery, ProductQuery>();
+                .AddScoped<IProductQuery, ProductQuery>()
+                .AddScoped<IOrderQuery, OrderQuery>();
 
             services.AddMediatR(typeof(Startup));
 

@@ -14,7 +14,7 @@ namespace TFW.Framework.CQRSExamples.Entities.Relational
         public virtual DbSet<OrderItemEntity> OrderItems { get; set; }
         public virtual DbSet<ProductEntity> Products { get; set; }
         public virtual DbSet<ProductCategoryEntity> ProductCategories { get; set; }
-        public virtual DbSet<SessionEntity> Sessions { get; set; }
+        public virtual DbSet<CustomerEntity> Customers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,9 +40,9 @@ namespace TFW.Framework.CQRSExamples.Entities.Relational
 
             modelBuilder.Entity<OrderEntity>(eBuilder =>
             {
-                eBuilder.HasOne(e => e.Session)
+                eBuilder.HasOne(e => e.Customer)
                     .WithMany()
-                    .HasForeignKey(e => e.SessionId);
+                    .HasForeignKey(e => e.CustomerId);
             });
         }
 

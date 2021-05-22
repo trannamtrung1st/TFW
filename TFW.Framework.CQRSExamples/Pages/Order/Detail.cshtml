@@ -1,0 +1,47 @@
+﻿@page "/Order/{id}"
+@model TFW.Framework.CQRSExamples.Pages.Order.DetailModel
+@{
+    ViewData["Title"] = "View Order";
+}
+
+<div class="text-center">
+    <h1 class="display-4">View Order</h1>
+</div>
+
+<div class="container">
+    <form role="form" method="post">
+        <div class="form-group">
+            <label for="order-id">Code</label>
+            <input readonly type="text" class="form-control" id="order-id" asp-for="@Model.Detail.Id" value="@Model.Detail.Id" />
+        </div>
+        <div class="form-group">
+            <label for="order-customer-name">Customer Name</label>
+            <input readonly type="text" class="form-control" id="order-customer-name" asp-for="@Model.Detail.CustomerName" value="@Model.Detail.CustomerName" />
+        </div>
+        <div class="form-group">
+            <label for="order-address">Address</label>
+            <input readonly type="text" class="form-control" id="order-address" asp-for="@Model.Detail.Address" value="@Model.Detail.Address" />
+        </div>
+        <div class="form-group">
+            <label for="order-phone">Phone</label>
+            <input readonly type="text" class="form-control" id="order-phone" asp-for="@Model.Detail.Phone" value="@Model.Detail.Phone" />
+        </div>
+        <div class="form-group">
+            <label for="order-total">Total Amount</label>
+            <input readonly type="number" class="form-control" id="order-total" asp-for="@Model.Detail.TotalAmount" value="@Model.Detail.TotalAmount" />
+        </div>
+        <div class="form-group">
+            <label for="order-time">Ordered At</label>
+            <input readonly type="text" class="form-control" id="order-time" asp-for="@Model.Detail.Time" value="@Model.Detail.Time" />
+        </div>
+        <div class="form-group">
+            <label>Your items</label>
+            @foreach (var item in Model.Detail.OrderItems)
+            {
+                <p>
+                    @item.Quantity x <span class="text-info">@item.ProductName</span> - @item.UnitPrice - <b>Total: @item.TotalAmount</b>
+                </p>
+            }
+        </div>
+    </form>
+</div>

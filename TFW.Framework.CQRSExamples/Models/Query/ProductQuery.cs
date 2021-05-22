@@ -18,7 +18,7 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Description { get; set; }
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
     }
 
     public class ProductListItem
@@ -27,6 +27,6 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Name { get; set; }
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
     }
 }

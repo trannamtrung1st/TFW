@@ -1,0 +1,54 @@
+﻿@page
+@model TFW.Framework.CQRSExamples.Pages.Order.IndexModel
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Orders</h1>
+</div>
+
+<div class="container">
+    <div class="row mb-1">
+        <div class="col-12">
+            <a asp-area="" asp-page="/Order/Create" class="btn btn-info float-right">
+                Create
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr class="d-table-row">
+                        <th class="d-table-cell">Id</th>
+                        <th class="d-table-cell">Customer Name</th>
+                        <th class="d-table-cell">Phone</th>
+                        <th class="d-table-cell">Address</th>
+                        <th class="d-table-cell">Total Amount</th>
+                        <th class="d-table-cell">Time</th>
+                        <th class="d-table-cell">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model.OrderList)
+                    {
+                        <tr class="d-table-row">
+                            <td class="d-table-cell">@item.Id</td>
+                            <td class="d-table-cell">@item.CustomerName</td>
+                            <td class="d-table-cell">@item.Phone</td>
+                            <td class="d-table-cell">@item.Address</td>
+                            <td class="d-table-cell">@item.TotalAmount</td>
+                            <td class="d-table-cell">@item.Time</td>
+                            <td class="d-table-cell">
+                                <a asp-area="" asp-page="/Order/Detail" asp-route-id="@item.Id" class="btn btn-light">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
