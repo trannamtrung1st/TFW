@@ -6,17 +6,21 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.CQRSExamples.Entities.Relational;
+using TFW.Framework.CQRSExamples.Models.Notification;
 
 namespace TFW.Framework.CQRSExamples.Models.Command
 {
     public class OrderCommandHandler : IRequestHandler<CreateOrderCommand, string>
     {
         private readonly RelationalContext _relationalContext;
+        private readonly IMediator _mediator;
 
         public OrderCommandHandler(
-            RelationalContext relationalContext)
+            RelationalContext relationalContext,
+            IMediator mediator)
         {
             _relationalContext = relationalContext;
+            _mediator = mediator;
         }
 
         public async Task<string> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -44,11 +48,36 @@ namespace TFW.Framework.CQRSExamples.Models.Command
                 }).ToArray()
             };
 
-            _relationalContext.Add(entity);
+            using (var trans = await _relationalContext.Database.BeginTransactionAsync())
+            {
+                _relationalContext.Add(entity);
 
-            await _relationalContext.SaveChangesAsync();
+                await _relationalContext.SaveChangesAsync();
 
-            // [TODO] notify
+                await trans.CommitAsync();
+
+                await _mediator.Publish(new CreateOrderEvent
+                {
+                    Address = entity.Address,
+                    Customer = new CreateOrderEvent.CustomerModel
+                    {
+                        CreatedTime = customer.CreatedTime,
+                        Id = customer.Id,
+                        Name = customer.Name
+                    },
+                    CustomerId = customer.Id,
+                    Id = entity.Id,
+                    Phone = entity.Phone,
+                    Time = entity.Time,
+                    OrderItems = entity.OrderItems.Select(o => new CreateOrderEvent.OrderItem
+                    {
+                        OrderId = o.OrderId,
+                        ProductId = o.ProductId,
+                        Quantity = o.Quantity,
+                        UnitPrice = o.UnitPrice
+                    }).ToArray()
+                });
+            }
 
             return entity.Id;
         }

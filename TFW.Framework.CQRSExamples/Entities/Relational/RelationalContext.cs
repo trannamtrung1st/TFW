@@ -6,7 +6,7 @@ namespace TFW.Framework.CQRSExamples.Entities.Relational
 {
     public class RelationalContext : DbContext
     {
-        public RelationalContext(DbContextOptions options) : base(options)
+        public RelationalContext(DbContextOptions<RelationalContext> options) : base(options)
         {
         }
 

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TFW.Framework.CQRSExamples.Entities.Query;
 using TFW.Framework.CQRSExamples.Entities.Relational;
 using TFW.Framework.CQRSExamples.Models.Query;
 using TFW.Framework.CQRSExamples.Queries;
@@ -31,9 +32,13 @@ namespace TFW.Framework.CQRSExamples
             services.AddDbContext<RelationalContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString(nameof(RelationalContext))));
 
+            services.AddDbContext<QueryDbContext>(options =>
+                options.UseSqlite(Configuration.GetConnectionString(nameof(QueryDbContext))));
+
             services.AddScoped<IProductCategoryQuery, ProductCategoryQuery>()
                 .AddScoped<IProductQuery, ProductQuery>()
-                .AddScoped<IOrderQuery, OrderQuery>();
+                .AddScoped<IOrderQuery, OrderQuery>()
+                .AddScoped<IReportQuery, ReportQuery>();
 
             services.AddMediatR(typeof(Startup));
 
@@ -51,7 +56,8 @@ namespace TFW.Framework.CQRSExamples
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            RelationalContext relationalContext)
+            RelationalContext relationalContext,
+            QueryDbContext queryDbContext)
         {
             if (env.IsDevelopment())
             {
@@ -79,6 +85,7 @@ namespace TFW.Framework.CQRSExamples
             });
 
             relationalContext.Database.Migrate();
+            queryDbContext.Database.Migrate();
         }
     }
 }

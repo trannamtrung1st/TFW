@@ -6,11 +6,11 @@ namespace TFW.Framework.CQRSExamples.Entities.Relational
     {
         public CustomerEntity()
         {
-            CreatedTime = DateTimeOffset.UtcNow;
+            CreatedTime = DateTime.UtcNow;
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public DateTimeOffset CreatedTime { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 }

@@ -1,0 +1,87 @@
+﻿@page
+@model TFW.Framework.CQRSExamples.Pages.Report.CustomerModel
+@{
+    ViewData["Title"] = "Customer Report";
+    var now = DateTime.UtcNow;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Product Report</h1>
+</div>
+
+<div class="container">
+    <div class="row mb-1">
+        <div class="col-12">
+            <form role="form" method="get">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="from-month">From Month</label>
+                            <input type="number" class="form-control" id="from-month" asp-for="@Model.FromMonth" value="@(Model.FromMonth??now.Month)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="from-year">From Year</label>
+                            <input type="number" class="form-control" id="from-year" asp-for="@Model.FromYear" value="@(Model.FromYear??now.Year)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="to-month">To Month</label>
+                            <input type="number" class="form-control" id="to-month" asp-for="@Model.ToMonth" value="@(Model.ToMonth??now.Month)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="to-year">To Year</label>
+                            <input type="number" class="form-control" id="to-year" asp-for="@Model.ToYear" value="@(Model.ToYear??now.Year)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-info float-right">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr class="d-table-row">
+                        <th class="d-table-cell">Customer Name</th>
+                        <th class="d-table-cell">Time</th>
+                        <th class="d-table-cell">Total Order</th>
+                        <th class="d-table-cell">Total Revenue</th>
+                        <th class="d-table-cell">Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @if (Model.CustomerReportList == null)
+                    {
+                        <tr class="d-table-row">
+                            <td colspan="5" class="text-center text-info">Please fill all the required filters</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.CustomerReportList)
+                        {
+                            <tr class="d-table-row">
+                                <td class="d-table-cell">@item.CustomerName</td>
+                                <td class="d-table-cell">@item.MonthTime.Month - @item.MonthTime.Year</td>
+                                <td class="d-table-cell">@item.TotalOrder</td>
+                                <td class="d-table-cell">@item.TotalRevenue</td>
+                                <td class="d-table-cell">@item.LastUpdatedTime</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

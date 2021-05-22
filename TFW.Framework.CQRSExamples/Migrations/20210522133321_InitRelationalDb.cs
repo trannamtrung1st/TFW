@@ -13,7 +13,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    CreatedTime = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,7 +41,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     CustomerId = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTimeOffset>(nullable: false)
+                    Time = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

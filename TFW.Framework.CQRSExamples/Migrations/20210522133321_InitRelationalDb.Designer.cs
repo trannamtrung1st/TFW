@@ -9,7 +9,7 @@ using TFW.Framework.CQRSExamples.Entities.Relational;
 namespace TFW.Framework.CQRSExamples.Migrations
 {
     [DbContext(typeof(RelationalContext))]
-    [Migration("20210522105812_InitRelationalDb")]
+    [Migration("20210522133321_InitRelationalDb")]
     partial class InitRelationalDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedTime")
+                    b.Property<DateTime>("CreatedTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -48,7 +48,7 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("Time")
+                    b.Property<DateTime>("Time")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -14,14 +14,44 @@ namespace TFW.Framework.i18n.Extensions
             return (int)timeSpan.TotalDays / 365;
         }
 
-        public static DateTime ToStartOfDay(this DateTime dt)
+        public static DateTime LastMonthEnd(this DateTime dateTime)
         {
-            return new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0, dt.Kind);
+            return dateTime.GetMonthStart().AddSeconds(-1);
         }
 
-        public static DateTime ToEndOfDay(this DateTime dt)
+        public static DateTime LastMonthStart(this DateTime dateTime)
         {
-            return new DateTime(dt.Year, dt.Month, dt.Day, 23, 59, 59, dt.Kind);
+            return dateTime.GetMonthStart().AddMonths(-1);
+        }
+
+        public static DateTime GetMonthEnd(this DateTime dateTime)
+        {
+            return dateTime.GetMonthStart().AddMonths(1).AddSeconds(-1);
+        }
+
+        public static DateTime GetMonthStart(this DateTime dateTime)
+        {
+            return dateTime.AddDays(1 - dateTime.Day).Date;
+        }
+
+        public static DateTime LastWeekEnd(this DateTime dateTime)
+        {
+            return dateTime.GetWeekStart().AddSeconds(-1);
+        }
+
+        public static DateTime LastWeekStart(this DateTime dateTime)
+        {
+            return dateTime.GetWeekStart().AddDays(-7);
+        }
+
+        public static DateTime GetWeekEnd(this DateTime dateTime)
+        {
+            return dateTime.GetWeekStart().AddDays(7).AddSeconds(-1);
+        }
+
+        public static DateTime GetWeekStart(this DateTime dateTime)
+        {
+            return dateTime.AddDays(-(int)dateTime.DayOfWeek).Date;
         }
 
         public static bool TryConvertToDateTime(this string str, string dateFormat, out DateTime dateTime,
@@ -49,6 +79,7 @@ namespace TFW.Framework.i18n.Extensions
             return TimeSpan.TryParse(str, out timeSpan);
         }
 
+        #region TimeZone
         public static DateTime ToTimeZone(this DateTime dateTime, TimeZoneInfo destTimeZone)
         {
             return TimeZoneInfo.ConvertTime(dateTime, destTimeZone);
@@ -103,6 +134,7 @@ namespace TFW.Framework.i18n.Extensions
         {
             return TimeZoneInfo.ConvertTimeToUtc(dateTime, srcTimeZoneInfo);
         }
+        #endregion
 
         public static DateTime Adjust(this DateTime dateTime, DateTimeKind kind)
         {

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TFW.Framework.CQRS\TFW.Framework.CQRS.csproj" />
+    <ProjectReference Include="..\TFW.Framework.i18n\TFW.Framework.i18n.csproj" />
   </ItemGroup>
 
 </Project>

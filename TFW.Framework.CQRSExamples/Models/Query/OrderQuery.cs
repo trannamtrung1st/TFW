@@ -19,7 +19,7 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Phone { get; set; }
         public string Address { get; set; }
         public double TotalAmount => OrderItems.Sum(o => o.TotalAmount);
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
 
         public IEnumerable<OrderItem> OrderItems { get; set; }
     }
@@ -41,7 +41,7 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Phone { get; set; }
         public string Address { get; set; }
         public double TotalAmount { get; set; }
-        public DateTimeOffset Time { get; set; }
+        public DateTime Time { get; set; }
     }
 
 }
