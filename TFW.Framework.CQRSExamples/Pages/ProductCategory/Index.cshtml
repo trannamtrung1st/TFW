@@ -1,0 +1,54 @@
+﻿@page
+@model TFW.Framework.CQRSExamples.Pages.ProductCategory.IndexModel
+@{
+    ViewData["Title"] = "Product Category";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Product Category</h1>
+</div>
+
+<div class="container">
+    <div class="row mb-1">
+        <div class="col-12">
+            <a asp-area="" asp-page="/ProductCategory/Create" class="btn btn-info float-right">
+                Create
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr class="d-table-row">
+                        <th class="d-table-cell">Id</th>
+                        <th class="d-table-cell">Name</th>
+                        <th class="d-table-cell">Description</th>
+                        <th class="d-table-cell">Product count</th>
+                        <th class="d-table-cell">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model.ProductCategoryList)
+                    {
+                        <tr class="d-table-row">
+                            <td class="d-table-cell">@item.Id</td>
+                            <td class="d-table-cell">@item.Name</td>
+                            <td class="d-table-cell">@item.Description</td>
+                            <td class="d-table-cell">@item.ProductCount</td>
+                            <td class="d-table-cell">
+                                <a asp-area="" asp-page="/ProductCategory/Update" asp-route-id="@item.Id" class="btn btn-light">
+                                    Update
+                                </a>
+                                <a asp-area="" asp-page="/ProductCategory/Index" asp-page-handler="Delete"
+                                   asp-route-id="@item.Id" class="btn btn-outline-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

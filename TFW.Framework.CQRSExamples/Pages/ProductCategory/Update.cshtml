@@ -1,0 +1,28 @@
+﻿@page "/ProductCategory/{id}"
+@model TFW.Framework.CQRSExamples.Pages.ProductCategory.UpdateModel
+@{
+    ViewData["Title"] = "Update Product Category";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Update Product Category</h1>
+</div>
+
+<div class="container">
+    <form role="form" method="post">
+        <div class="form-group">
+            <label for="category-id">Id</label>
+            <input type="text" class="form-control" id="category-id" value="@Model.Id" disabled />
+        </div>
+        <div class="form-group">
+            <label for="category-name">Name</label>
+            <input type="text" class="form-control" id="category-name" asp-for="@Model.Command.Name" value="@Model.Command.Name" />
+        </div>
+        <div class="form-group">
+            <label for="category-description">Description</label>
+            <textarea class="form-control" id="category-description" asp-for="@Model.Command.Description">@Model.Command.Description</textarea>
+        </div>
+        <p class="text-info">@Model.Message</p>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
