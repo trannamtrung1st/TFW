@@ -9,7 +9,7 @@ using TFW.Framework.CQRSExamples.Entities.Query;
 namespace TFW.Framework.CQRSExamples.Migrations.QueryDb
 {
     [DbContext(typeof(QueryDbContext))]
-    [Migration("20210522144246_InitQueryDb")]
+    [Migration("20210522171151_InitQueryDb")]
     partial class InitQueryDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

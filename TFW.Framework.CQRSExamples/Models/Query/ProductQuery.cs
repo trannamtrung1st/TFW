@@ -18,6 +18,10 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Description { get; set; }
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string StoreId { get; set; }
+        public string StoreName { get; set; }
+        public string BrandId { get; set; }
+        public string BrandName { get; set; }
         public double UnitPrice { get; set; }
     }
 
@@ -27,6 +31,8 @@ namespace TFW.Framework.CQRSExamples.Models.Query
         public string Name { get; set; }
         public string CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string StoreName { get; set; }
+        public string BrandName { get; set; }
         public double UnitPrice { get; set; }
     }
 }

@@ -32,6 +32,26 @@
                     @class = "form-control"
                 })
         </div>
+        <div class="form-group w-50">
+            <label for="product-store">Store</label>
+            @Html.DropDownListFor(o => o.Command.StoreId,
+                Model.Stores,
+                "Choose a store", new
+                {
+                    id = "product-store",
+                    @class = "form-control"
+                })
+        </div>
+        <div class="form-group w-50">
+            <label for="product-brand">Brand</label>
+            @Html.DropDownListFor(o => o.Command.BrandId,
+                Model.Brands,
+                "Choose a brand", new
+                {
+                    id = "product-brand",
+                    @class = "form-control"
+                })
+        </div>
         <p class="text-info">@Model.Message</p>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

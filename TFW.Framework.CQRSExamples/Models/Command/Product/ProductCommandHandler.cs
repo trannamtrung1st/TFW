@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TFW.Framework.CQRSExamples.Entities.Relational;
+using TFW.Framework.CQRSExamples.Models.Notification;
 
 namespace TFW.Framework.CQRSExamples.Models.Command
 {
@@ -13,11 +14,14 @@ namespace TFW.Framework.CQRSExamples.Models.Command
         IRequestHandler<DeleteProductCommand>
     {
         private readonly RelationalContext _relationalContext;
+        private readonly IMediator _mediator;
 
         public ProductCommandHandler(
-            RelationalContext relationalContext)
+            RelationalContext relationalContext,
+            IMediator mediator)
         {
             _relationalContext = relationalContext;
+            _mediator = mediator;
         }
 
         public async Task<string> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -28,12 +32,25 @@ namespace TFW.Framework.CQRSExamples.Models.Command
                 Description = request.Description,
                 Name = request.Name,
                 CategoryId = request.CategoryId,
+                StoreId = request.StoreId,
+                BrandId = request.BrandId,
                 UnitPrice = request.UnitPrice
             };
 
             _relationalContext.Add(entity);
 
             await _relationalContext.SaveChangesAsync();
+
+            await _mediator.Publish(new CreateProductEvent
+            {
+                BrandId = entity.BrandId,
+                CategoryId = entity.CategoryId,
+                Description = entity.Description,
+                Id = entity.Id,
+                Name = entity.Name,
+                StoreId = entity.StoreId,
+                UnitPrice = entity.UnitPrice
+            });
 
             return entity.Id;
         }
@@ -46,12 +63,25 @@ namespace TFW.Framework.CQRSExamples.Models.Command
                 Description = request.Description,
                 Name = request.Name,
                 CategoryId = request.CategoryId,
+                StoreId = request.StoreId,
+                BrandId = request.BrandId,
                 UnitPrice = request.UnitPrice
             };
 
             _relationalContext.Update(entity);
 
             await _relationalContext.SaveChangesAsync();
+
+            await _mediator.Publish(new UpdateProductEvent
+            {
+                BrandId = entity.BrandId,
+                CategoryId = entity.CategoryId,
+                Description = entity.Description,
+                Id = entity.Id,
+                Name = entity.Name,
+                StoreId = entity.StoreId,
+                UnitPrice = entity.UnitPrice
+            });
 
             return Unit.Value;
         }
@@ -61,6 +91,11 @@ namespace TFW.Framework.CQRSExamples.Models.Command
             _relationalContext.Products.Remove(new ProductEntity { Id = request.Id });
 
             await _relationalContext.SaveChangesAsync();
+
+            await _mediator.Publish(new DeleteProductEvent
+            {
+                Id = request.Id
+            });
 
             return Unit.Value;
         }

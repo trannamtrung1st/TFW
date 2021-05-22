@@ -9,14 +9,30 @@ using TFW.Framework.CQRSExamples.Entities.Relational;
 namespace TFW.Framework.CQRSExamples.Migrations
 {
     [DbContext(typeof(RelationalContext))]
-    [Migration("20210522133321_InitRelationalDb")]
-    partial class InitRelationalDb
+    [Migration("20210522171134_InitRelationDb")]
+    partial class InitRelationDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.15");
+
+            modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.BrandEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brands");
+                });
 
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.CustomerEntity", b =>
                 {
@@ -100,6 +116,9 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("BrandId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CategoryId")
                         .HasColumnType("TEXT");
 
@@ -109,14 +128,37 @@ namespace TFW.Framework.CQRSExamples.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("StoreId")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("UnitPrice")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrandId");
+
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("StoreId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.StoreEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StoreName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.OrderEntity", b =>
@@ -143,9 +185,17 @@ namespace TFW.Framework.CQRSExamples.Migrations
 
             modelBuilder.Entity("TFW.Framework.CQRSExamples.Entities.Relational.ProductEntity", b =>
                 {
+                    b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.BrandEntity", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId");
+
                     b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.ProductCategoryEntity", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
+
+                    b.HasOne("TFW.Framework.CQRSExamples.Entities.Relational.StoreEntity", "Store")
+                        .WithMany("Products")
+                        .HasForeignKey("StoreId");
                 });
 #pragma warning restore 612, 618
         }
