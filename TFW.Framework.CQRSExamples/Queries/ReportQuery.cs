@@ -26,7 +26,7 @@ namespace TFW.Framework.CQRSExamples.Queries
             int fromMonth, int fromYear, int toMonth, int toYear)
         {
             DateTime from = new DateTime(fromYear, fromMonth, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime to = from.GetMonthEnd();
+            DateTime to = new DateTime(toYear, toMonth, 1, 0, 0, 0, DateTimeKind.Utc).GetMonthEnd();
 
 #if true
             var reportList = await _queryDbContext.CustomerReports
@@ -93,7 +93,7 @@ namespace TFW.Framework.CQRSExamples.Queries
             int fromMonth, int fromYear, int toMonth, int toYear)
         {
             DateTime from = new DateTime(fromYear, fromMonth, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime to = new DateTime(toYear, toMonth, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime to = new DateTime(toYear, toMonth, 1, 0, 0, 0, DateTimeKind.Utc).GetMonthEnd();
 
             var list = await _queryDbContext.OrderReports
                 .Where(o => o.MonthTime >= from && o.MonthTime <= to)
@@ -114,7 +114,7 @@ namespace TFW.Framework.CQRSExamples.Queries
             int fromMonth, int fromYear, int toMonth, int toYear)
         {
             DateTime from = new DateTime(fromYear, fromMonth, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime to = new DateTime(toYear, toMonth, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime to = new DateTime(toYear, toMonth, 1, 0, 0, 0, DateTimeKind.Utc).GetMonthEnd();
 
             var reportList = await _queryDbContext.ProductReports
                 .Where(o => o.MonthTime >= from && o.MonthTime <= to)
