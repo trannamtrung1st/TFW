@@ -47,6 +47,9 @@ namespace TFW.FastDelete
 
             foreach (var folder in folders)
                 DeleteAllFiles(folder);
+
+            Console.WriteLine(dir);
+            Directory.Delete(dir);
         }
     }
 }
