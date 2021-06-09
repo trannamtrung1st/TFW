@@ -83,7 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{36A3D397
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.IdService", "Tools\TFW.IdService\TFW.IdService\TFW.IdService.csproj", "{53CE2789-6184-481B-B9D1-0898A1997CF1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TFW.IdService-Container", "TFW.IdService-Container", "{6542EE8F-53F4-4754-AEF4-A25FD0146110}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TFW.IdService", "TFW.IdService", "{6542EE8F-53F4-4754-AEF4-A25FD0146110}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TFW.IdService.Setup", "Tools\TFW.IdService\TFW.IdService.Setup\TFW.IdService.Setup.vdproj", "{26281008-2DE5-4A08-95BF-9C96EDC66E29}"
 EndProject
