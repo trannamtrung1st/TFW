@@ -13,9 +13,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Frameworks\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
     <ProjectReference Include="..\TFW.Docs.ApiClient\TFW.Docs.ApiClient.csproj" />
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
-    <ProjectReference Include="..\TFW.Framework.Configuration\TFW.Framework.Configuration.csproj" />
   </ItemGroup>
 
 </Project>

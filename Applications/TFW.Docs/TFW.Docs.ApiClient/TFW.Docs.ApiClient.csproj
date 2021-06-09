@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
-    <ProjectReference Include="..\TFW.Framework.Http\TFW.Framework.Http.csproj" />
   </ItemGroup>
 
 </Project>

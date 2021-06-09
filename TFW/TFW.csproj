@@ -9,8 +9,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="3.2.8" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TFW.Framework.ConsoleApp\TFW.Framework.ConsoleApp.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -9,10 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Frameworks\TFW.Framework.UoW\TFW.Framework.UoW.csproj" />
     <ProjectReference Include="..\TFW.Docs.Cross\TFW.Docs.Cross.csproj" />
     <ProjectReference Include="..\TFW.Docs.Data\TFW.Docs.Data.csproj" />
-    <ProjectReference Include="..\TFW.Framework.DI\TFW.Framework.DI.csproj" />
-    <ProjectReference Include="..\TFW.Framework.UoW\TFW.Framework.UoW.csproj" />
   </ItemGroup>
 
 </Project>
