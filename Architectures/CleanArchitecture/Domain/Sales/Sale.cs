@@ -10,6 +10,19 @@ namespace Domain.Sales
 {
     public class Sale : IEntity
     {
+        public Sale() { }
+
+        public Sale(DateTime date, Customer customer, Employee employee, Product product, int quantity)
+        {
+            Date = date;
+            Customer = customer;
+            Employee = employee;
+            Product = product;
+            UnitPrice = Product.Price;
+            Quantity = quantity;
+            // Note: Total price is calculated in domain logic
+        }
+
         private int _quantity;
         private decimal _totalPrice;
         private decimal _unitPrice;
