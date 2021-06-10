@@ -40,14 +40,15 @@ namespace Application.Employees.Queries.GetEmployeesList
 
             var queryable = employeeModelArr.AsQueryable();
             var repoMock = new Mock<IRepository<Employee>>();
+            var uowMock = new Mock<IUnitOfWork>();
 
             repoMock.Setup(p => p.Get())
                 .Returns(() => employeeArr.AsQueryable());
 
-            repoMock.Setup(p => p.ToArrayAsync(queryable))
+            uowMock.Setup(p => p.ToArrayAsync(queryable))
                 .Returns(() => Task.FromResult(employeeModelArr));
 
-            _query = new GetEmployeesListQuery(repoMock.Object);
+            _query = new GetEmployeesListQuery(uowMock.Object, repoMock.Object);
         }
 
         [Test]

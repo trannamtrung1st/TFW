@@ -16,7 +16,7 @@ namespace Application.Sales.Commands.CreateSale
     public class CreateSaleCommandHandler : IRequestHandler<CreateSaleCommand, Sale>
     {
         private readonly IDateService _dateService;
-        private readonly IDbContext _dbContext;
+        private readonly IUnitOfWork _uow;
         private readonly ISaleFactory _saleFactory;
         private readonly IRepository<Sale> _saleRepository;
         private readonly IRepository<Customer> _customerRepository;
@@ -26,7 +26,7 @@ namespace Application.Sales.Commands.CreateSale
 
         public CreateSaleCommandHandler(
             IDateService dateService,
-            IDbContext dbContext,
+            IUnitOfWork uow,
             ISaleFactory saleFactory,
             IRepository<Sale> saleRepository,
             IRepository<Customer> customerRepository,
@@ -35,7 +35,7 @@ namespace Application.Sales.Commands.CreateSale
             IInventoryService inventory)
         {
             _dateService = dateService;
-            _dbContext = dbContext;
+            _uow = uow;
             _saleFactory = saleFactory;
             _saleRepository = saleRepository;
             _customerRepository = customerRepository;
@@ -63,7 +63,7 @@ namespace Application.Sales.Commands.CreateSale
 
             _saleRepository.Add(sale);
 
-            await _dbContext.SaveChangesAsync();
+            await _uow.SaveChangesAsync();
 
             _inventoryService.NotifySaleOcurred(product.Id, quantity);
 

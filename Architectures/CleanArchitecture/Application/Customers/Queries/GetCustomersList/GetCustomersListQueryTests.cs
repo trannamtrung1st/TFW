@@ -40,14 +40,15 @@ namespace Application.Customers.Queries.GetCustomersList
 
             var queryable = customerModelArr.AsQueryable();
             var repoMock = new Mock<IRepository<Customer>>();
+            var uowMock = new Mock<IUnitOfWork>();
 
             repoMock.Setup(p => p.Get())
                 .Returns(() => customerArr.AsQueryable());
 
-            repoMock.Setup(p => p.ToArrayAsync(queryable))
+            uowMock.Setup(p => p.ToArrayAsync(queryable))
                 .Returns(() => Task.FromResult(customerModelArr));
 
-            _query = new GetCustomersListQuery(repoMock.Object);
+            _query = new GetCustomersListQuery(uowMock.Object, repoMock.Object);
         }
 
         [Test]

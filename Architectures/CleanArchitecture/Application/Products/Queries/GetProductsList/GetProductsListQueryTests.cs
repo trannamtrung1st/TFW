@@ -43,14 +43,15 @@ namespace Application.Products.Queries.GetProductsList
 
             var queryable = productModelArr.AsQueryable();
             var repoMock = new Mock<IRepository<Product>>();
+            var uowMock = new Mock<IUnitOfWork>();
 
             repoMock.Setup(p => p.Get())
                 .Returns(() => productArr.AsQueryable());
 
-            repoMock.Setup(p => p.ToArrayAsync(queryable))
+            uowMock.Setup(p => p.ToArrayAsync(queryable))
                 .Returns(() => Task.FromResult(productModelArr));
 
-            _query = new GetProductsListQuery(repoMock.Object);
+            _query = new GetProductsListQuery(uowMock.Object, repoMock.Object);
         }
 
         [Test]

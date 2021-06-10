@@ -7,10 +7,13 @@ namespace Application.Sales.Queries.GetSaleDetail
 {
     public class GetSaleDetailQuery : IGetSaleDetailQuery
     {
+        private readonly IUnitOfWork _uow;
         private readonly IRepository<Sale> _saleRepository;
 
-        public GetSaleDetailQuery(IRepository<Sale> saleRepository)
+        public GetSaleDetailQuery(IUnitOfWork uow,
+            IRepository<Sale> saleRepository)
         {
+            _uow = uow;
             _saleRepository = saleRepository;
         }
 
@@ -30,7 +33,7 @@ namespace Application.Sales.Queries.GetSaleDetail
                     TotalPrice = p.TotalPrice
                 });
 
-            return await _saleRepository.SingleOrDefaultAsync(sale);
+            return await _uow.SingleOrDefaultAsync(sale);
         }
     }
 }

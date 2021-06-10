@@ -7,10 +7,13 @@ namespace Application.Employees.Queries.GetEmployeesList
 {
     public class GetEmployeesListQuery : IGetEmployeesListQuery
     {
+        private readonly IUnitOfWork _uow;
         private readonly IRepository<Employee> _employeeRepository;
 
-        public GetEmployeesListQuery(IRepository<Employee> employeeRepository)
+        public GetEmployeesListQuery(IUnitOfWork uow,
+            IRepository<Employee> employeeRepository)
         {
+            _uow = uow;
             _employeeRepository = employeeRepository;
         }
 
@@ -23,7 +26,7 @@ namespace Application.Employees.Queries.GetEmployeesList
                     Name = p.Name
                 });
 
-            return await _employeeRepository.ToArrayAsync(query);
+            return await _uow.ToArrayAsync(query);
         }
     }
 }

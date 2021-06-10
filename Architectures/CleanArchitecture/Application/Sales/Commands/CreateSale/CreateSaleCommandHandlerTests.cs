@@ -24,7 +24,7 @@ namespace Application.Sales.Commands.CreateSale
         private CreateSaleCommand _command;
         private Sale _sale;
         private Mock<IRepository<Sale>> _saleRepoMock;
-        private Mock<IDbContext> _dbContextMock;
+        private Mock<IUnitOfWork> _uowMock;
         private Mock<IInventoryService> _inventoryServiceMock;
 
         private static readonly DateTime Date = new DateTime(2001, 2, 3);
@@ -64,7 +64,7 @@ namespace Application.Sales.Commands.CreateSale
             _sale = new Sale();
 
             var dateMock = new Mock<IDateService>();
-            _dbContextMock = new Mock<IDbContext>();
+            _uowMock = new Mock<IUnitOfWork>();
             _saleRepoMock = new Mock<IRepository<Sale>>();
             _inventoryServiceMock = new Mock<IInventoryService>();
             var customerRepoMock = new Mock<IRepository<Customer>>();
@@ -74,7 +74,7 @@ namespace Application.Sales.Commands.CreateSale
 
             dateMock.Setup(o => o.GetDate()).Returns(Date);
 
-            _dbContextMock.Setup(o => o.SaveChangesAsync()).Returns(Task.FromResult(1));
+            _uowMock.Setup(o => o.SaveChangesAsync()).Returns(Task.FromResult(1));
 
             customerRepoMock.Setup(o => o.Get()).Returns(new[] { customer }.AsQueryable());
             empRepoMock.Setup(o => o.Get()).Returns(new[] { employee }.AsQueryable());
@@ -85,7 +85,7 @@ namespace Application.Sales.Commands.CreateSale
             factoryMock.Setup(p => p.Create(Date, customer, employee, product, Quantity))
                 .Returns(_sale);
 
-            _handler = new CreateSaleCommandHandler(dateMock.Object, _dbContextMock.Object,
+            _handler = new CreateSaleCommandHandler(dateMock.Object, _uowMock.Object,
                 factoryMock.Object, _saleRepoMock.Object, customerRepoMock.Object,
                 empRepoMock.Object, productRepoMock.Object, _inventoryServiceMock.Object);
         }
@@ -103,7 +103,7 @@ namespace Application.Sales.Commands.CreateSale
         {
             await _handler.Handle(_command, default);
 
-            _dbContextMock.Verify(p => p.SaveChangesAsync(), Times.Once);
+            _uowMock.Verify(p => p.SaveChangesAsync(), Times.Once);
         }
 
         [Test]

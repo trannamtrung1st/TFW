@@ -7,10 +7,13 @@ namespace Application.Customers.Queries.GetCustomersList
 {
     public class GetCustomersListQuery : IGetCustomersListQuery
     {
+        private readonly IUnitOfWork _uow;
         private readonly IRepository<Customer> _customerRepository;
 
-        public GetCustomersListQuery(IRepository<Customer> customerRepository)
+        public GetCustomersListQuery(IUnitOfWork uow,
+            IRepository<Customer> customerRepository)
         {
+            _uow = uow;
             _customerRepository = customerRepository;
         }
 
@@ -23,7 +26,7 @@ namespace Application.Customers.Queries.GetCustomersList
                     Name = p.Name
                 });
 
-            return await _customerRepository.ToArrayAsync(query);
+            return await _uow.ToArrayAsync(query);
         }
     }
 }

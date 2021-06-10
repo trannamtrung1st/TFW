@@ -19,13 +19,5 @@ namespace Application.Abstracts.Data
         TEntity Remove(TEntity entity);
 
         IQueryable<TEntity> Get();
-
-        Task<T[]> ToArrayAsync<T>(IQueryable<T> query);
-
-        Task<List<T>> ToListAsync<T>(IQueryable<T> query);
-
-        Task<T> FirstOrDefaultAsync<T>(IQueryable<T> query);
-
-        Task<T> SingleOrDefaultAsync<T>(IQueryable<T> query);
     }
 }

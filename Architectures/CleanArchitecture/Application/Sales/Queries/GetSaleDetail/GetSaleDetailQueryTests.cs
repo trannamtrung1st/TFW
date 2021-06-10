@@ -71,14 +71,15 @@ namespace Application.Sales.Queries.GetSaleDetail
 
             var queryable = new[] { saleModel }.AsQueryable();
             var repoMock = new Mock<IRepository<Sale>>();
+            var uowMock = new Mock<IUnitOfWork>();
 
             repoMock.Setup(p => p.Get())
                 .Returns(() => new[] { _sale }.AsQueryable());
 
-            repoMock.Setup(p => p.SingleOrDefaultAsync(queryable))
+            uowMock.Setup(p => p.SingleOrDefaultAsync(queryable))
                 .Returns(() => Task.FromResult(saleModel));
 
-            _query = new GetSaleDetailQuery(repoMock.Object);
+            _query = new GetSaleDetailQuery(uowMock.Object, repoMock.Object);
         }
 
         [Test]

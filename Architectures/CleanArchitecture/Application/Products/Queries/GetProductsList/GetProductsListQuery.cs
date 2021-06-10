@@ -7,10 +7,13 @@ namespace Application.Products.Queries.GetProductsList
 {
     public class GetProductsListQuery : IGetProductsListQuery
     {
+        private readonly IUnitOfWork _uow;
         private readonly IRepository<Product> _productRepository;
 
-        public GetProductsListQuery(IRepository<Product> productRepository)
+        public GetProductsListQuery(IUnitOfWork uow,
+            IRepository<Product> productRepository)
         {
+            _uow = uow;
             _productRepository = productRepository;
         }
 
@@ -24,7 +27,7 @@ namespace Application.Products.Queries.GetProductsList
                     UnitPrice = p.Price
                 });
 
-            return await _productRepository.ToArrayAsync(query);
+            return await _uow.ToArrayAsync(query);
         }
     }
 }
