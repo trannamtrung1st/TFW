@@ -1,4 +1,4 @@
-﻿using Application.Data;
+﻿using Application.Abstracts.Data;
 using Domain.Employees;
 using Moq;
 using NUnit.Framework;

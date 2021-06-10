@@ -1,6 +1,5 @@
-﻿using Application.Abstracts;
-using Application.Data;
-using Application.Services;
+﻿using Application.Abstracts.Data;
+using Application.Abstracts.Services;
 using Cross.Dates;
 using Domain.Customers;
 using Domain.Employees;

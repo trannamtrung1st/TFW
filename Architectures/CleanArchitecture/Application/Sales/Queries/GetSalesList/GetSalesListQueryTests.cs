@@ -1,4 +1,4 @@
-﻿using Application.Data;
+﻿using Application.Abstracts.Data;
 using Domain.Customers;
 using Domain.Employees;
 using Domain.Products;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Data
+namespace Application.Abstracts.Data
 {
     public interface IRepository<TEntity> where TEntity : class
     {
