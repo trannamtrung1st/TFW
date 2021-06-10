@@ -1,5 +1,6 @@
 ﻿using Application.Abstracts.Data;
 using Application.Abstracts.Services;
+using Application.Sales.Commands.CreateSale.Factories;
 using Cross.Dates;
 using Domain.Customers;
 using Domain.Employees;
@@ -16,6 +17,7 @@ namespace Application.Sales.Commands.CreateSale
     {
         private readonly IDateService _dateService;
         private readonly IDbContext _dbContext;
+        private readonly ISaleFactory _saleFactory;
         private readonly IRepository<Sale> _saleRepository;
         private readonly IRepository<Customer> _customerRepository;
         private readonly IRepository<Employee> _employeeRepository;
@@ -25,6 +27,7 @@ namespace Application.Sales.Commands.CreateSale
         public CreateSaleCommandHandler(
             IDateService dateService,
             IDbContext dbContext,
+            ISaleFactory saleFactory,
             IRepository<Sale> saleRepository,
             IRepository<Customer> customerRepository,
             IRepository<Employee> employeeRepository,
@@ -33,6 +36,7 @@ namespace Application.Sales.Commands.CreateSale
         {
             _dateService = dateService;
             _dbContext = dbContext;
+            _saleFactory = saleFactory;
             _saleRepository = saleRepository;
             _customerRepository = customerRepository;
             _employeeRepository = employeeRepository;
@@ -55,7 +59,7 @@ namespace Application.Sales.Commands.CreateSale
 
             var quantity = request.Quantity;
 
-            var sale = new Sale(date, customer, employee, product, quantity);
+            var sale = _saleFactory.Create(date, customer, employee, product, quantity);
 
             _saleRepository.Add(sale);
 

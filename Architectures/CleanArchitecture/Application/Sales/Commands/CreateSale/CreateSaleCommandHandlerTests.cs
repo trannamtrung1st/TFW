@@ -1,5 +1,6 @@
 ﻿using Application.Abstracts.Data;
 using Application.Abstracts.Services;
+using Application.Sales.Commands.CreateSale.Factories;
 using Cross.Dates;
 using Domain.Customers;
 using Domain.Employees;
@@ -69,6 +70,7 @@ namespace Application.Sales.Commands.CreateSale
             var customerRepoMock = new Mock<IRepository<Customer>>();
             var empRepoMock = new Mock<IRepository<Employee>>();
             var productRepoMock = new Mock<IRepository<Product>>();
+            var factoryMock = new Mock<ISaleFactory>();
 
             dateMock.Setup(o => o.GetDate()).Returns(Date);
 
@@ -80,8 +82,11 @@ namespace Application.Sales.Commands.CreateSale
 
             _saleRepoMock.Setup(o => o.Add(_sale)).Returns(_sale);
 
-            _handler = new CreateSaleCommandHandler(dateMock.Object,
-                _dbContextMock.Object, _saleRepoMock.Object, customerRepoMock.Object,
+            factoryMock.Setup(p => p.Create(Date, customer, employee, product, Quantity))
+                .Returns(_sale);
+
+            _handler = new CreateSaleCommandHandler(dateMock.Object, _dbContextMock.Object,
+                factoryMock.Object, _saleRepoMock.Object, customerRepoMock.Object,
                 empRepoMock.Object, productRepoMock.Object, _inventoryServiceMock.Object);
         }
 
