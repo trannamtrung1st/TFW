@@ -18,7 +18,7 @@ namespace Application.Sales.Commands.CreateSale.Factories
 
         private static readonly DateTime DateTime = new DateTime(2001, 2, 3);
         private const int Quantity = 123;
-        private const decimal Price = 1.00m;
+        private const double Price = 1.00;
 
 
         [SetUp]

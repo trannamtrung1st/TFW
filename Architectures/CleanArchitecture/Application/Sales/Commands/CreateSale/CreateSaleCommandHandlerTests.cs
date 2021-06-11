@@ -31,7 +31,7 @@ namespace Application.Sales.Commands.CreateSale
         private const int CustomerId = 1;
         private const int EmployeeId = 2;
         private const int ProductId = 3;
-        private const decimal UnitPrice = 1.23m;
+        private const double UnitPrice = 1.23;
         private const int Quantity = 4;
 
         [SetUp]
@@ -74,7 +74,7 @@ namespace Application.Sales.Commands.CreateSale
 
             dateMock.Setup(o => o.GetDate()).Returns(Date);
 
-            _uowMock.Setup(o => o.SaveChangesAsync()).Returns(Task.FromResult(1));
+            _uowMock.Setup(o => o.SaveChangesAsync(default)).Returns(Task.FromResult(1));
 
             customerRepoMock.Setup(o => o.Get()).Returns(new[] { customer }.AsQueryable());
             empRepoMock.Setup(o => o.Get()).Returns(new[] { employee }.AsQueryable());
@@ -103,7 +103,7 @@ namespace Application.Sales.Commands.CreateSale
         {
             await _handler.Handle(_command, default);
 
-            _uowMock.Verify(p => p.SaveChangesAsync(), Times.Once);
+            _uowMock.Verify(p => p.SaveChangesAsync(default), Times.Once);
         }
 
         [Test]

@@ -131,7 +131,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Architecture
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Specification", "Architectures\CleanArchitecture\Specification\Specification.csproj", "{B4256E57-27F7-4C64-B850-8A7551F5B128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cross", "Architectures\CleanArchitecture\Cross\Cross.csproj", "{E432706E-79E7-4AFF-894F-2F3963F5C2AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cross", "Architectures\CleanArchitecture\Cross\Cross.csproj", "{E432706E-79E7-4AFF-894F-2F3963F5C2AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

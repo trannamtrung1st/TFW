@@ -18,7 +18,7 @@ namespace Domain.Sales
 
         private const int Id = 1;
         private static readonly DateTime Date = new DateTime(2001, 2, 3);
-        private const decimal UnitPrice = 1.00m;
+        private const double UnitPrice = 1.00;
         private const int Quantity = 1;
 
         [SetUp]
@@ -94,7 +94,7 @@ namespace Domain.Sales
         {
             _sale.Quantity = Quantity;
 
-            _sale.UnitPrice = 1.23m;
+            _sale.UnitPrice = 1.23;
 
             Assert.AreEqual(_sale.TotalPrice, Quantity * 1.23m);
         }

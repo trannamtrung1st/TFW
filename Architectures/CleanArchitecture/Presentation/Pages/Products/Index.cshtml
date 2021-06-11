@@ -1,0 +1,24 @@
+﻿@page
+@model Presentation.Pages.Products.IndexModel
+@{ ViewBag.Title = "Products"; }
+
+<h2>Products</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var products in Model.Products)
+        {
+            <tr>
+                <td>@products.Id</td>
+                <td>@products.Name</td>
+                <td>$@products.UnitPrice</td>
+            </tr>
+        }
+    </tbody>
+</table>

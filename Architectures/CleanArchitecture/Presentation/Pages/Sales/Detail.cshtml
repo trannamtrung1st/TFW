@@ -1,0 +1,40 @@
+﻿@page "{id}"
+@model Presentation.Pages.Sales.DetailModel
+
+@{ ViewBag.Title = "Sale"; }
+
+<h2>Sale</h2>
+<table>
+    <tr>
+        <th class="py-3 px-5">ID</th>
+        <td>@Model.Sale.Id</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Date</th>
+        <td>@Model.Sale.Date.ToString("d")</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Customer</th>
+        <td>@Model.Sale.CustomerName</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Employee</th>
+        <td>@Model.Sale.EmployeeName</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Product</th>
+        <td>@Model.Sale.ProductName</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Unit Price</th>
+        <td>$@Model.Sale.UnitPrice</td>
+    </tr>
+    <tr>
+        <th class="py-3 px-5">Quantity</th>
+        <td>@Model.Sale.Quantity</td>
+    </tr>
+    <tr>
+        <th class="py-1 px-5">Total Price</th>
+        <td>$@Model.Sale.TotalPrice</td>
+    </tr>
+</table>

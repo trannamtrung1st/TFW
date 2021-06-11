@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Abstracts.Data
@@ -9,7 +10,8 @@ namespace Application.Abstracts.Data
     public interface IUnitOfWork
     {
         int SaveChanges();
-        Task<int> SaveChangesAsync();
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         Task<T[]> ToArrayAsync<T>(IQueryable<T> query);
 

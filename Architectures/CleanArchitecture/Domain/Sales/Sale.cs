@@ -24,8 +24,8 @@ namespace Domain.Sales
         }
 
         private int _quantity;
-        private decimal _totalPrice;
-        private decimal _unitPrice;
+        private double _totalPrice;
+        private double _unitPrice;
 
         public int Id { get; set; }
 
@@ -37,7 +37,7 @@ namespace Domain.Sales
 
         public Product Product { get; set; }
 
-        public decimal UnitPrice
+        public double UnitPrice
         {
             get { return _unitPrice; }
             set
@@ -59,7 +59,7 @@ namespace Domain.Sales
             }
         }
 
-        public decimal TotalPrice
+        public double TotalPrice
         {
             get { return _totalPrice; }
             private set { _totalPrice = value; }

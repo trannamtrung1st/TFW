@@ -18,7 +18,7 @@ namespace Application.Products.Queries.GetProductsList
 
         private const int Id = 1;
         private const string Name = "Product 1";
-        private const decimal Price = 100;
+        private const double Price = 100;
 
         [SetUp]
         public void SetUp()

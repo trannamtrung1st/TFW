@@ -10,6 +10,6 @@ namespace Application.Products.Queries.GetProductsList
 
         public string Name { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public double UnitPrice { get; set; }
     }
 }

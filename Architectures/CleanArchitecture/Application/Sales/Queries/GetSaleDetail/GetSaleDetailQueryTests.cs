@@ -24,9 +24,9 @@ namespace Application.Sales.Queries.GetSaleDetail
         private const string CustomerName = "Customer 1";
         private const string EmployeeName = "Employee 1";
         private const string ProductName = "Product 1";
-        private const decimal UnitPrice = 1.23m;
+        private const double UnitPrice = 1.23;
         private const int Quantity = 2;
-        private const decimal TotalPrice = 2.46m;
+        private const double TotalPrice = 2.46;
 
         [SetUp]
         public void SetUp()
