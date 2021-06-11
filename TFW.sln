@@ -133,6 +133,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Specification", "Architectu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cross", "Architectures\CleanArchitecture\Cross\Cross.csproj", "{E432706E-79E7-4AFF-894F-2F3963F5C2AE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Architectures\CleanArchitecture\Service\Service.csproj", "{90444116-4D53-4C60-85DD-433F2C6DD301}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -581,6 +583,14 @@ Global
 		{E432706E-79E7-4AFF-894F-2F3963F5C2AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E432706E-79E7-4AFF-894F-2F3963F5C2AE}.Release|x86.ActiveCfg = Release|Any CPU
 		{E432706E-79E7-4AFF-894F-2F3963F5C2AE}.Release|x86.Build.0 = Release|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Debug|x86.Build.0 = Debug|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Release|x86.ActiveCfg = Release|Any CPU
+		{90444116-4D53-4C60-85DD-433F2C6DD301}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -644,6 +654,7 @@ Global
 		{AFBA212C-069D-407A-AA8E-597CD4CC4517} = {DEB9E434-44AE-48A8-878D-949D62AF3699}
 		{B4256E57-27F7-4C64-B850-8A7551F5B128} = {DEB9E434-44AE-48A8-878D-949D62AF3699}
 		{E432706E-79E7-4AFF-894F-2F3963F5C2AE} = {DEB9E434-44AE-48A8-878D-949D62AF3699}
+		{90444116-4D53-4C60-85DD-433F2C6DD301} = {DEB9E434-44AE-48A8-878D-949D62AF3699}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7026D7F0-4EB7-4B18-A4FE-81D32724A9DF}
