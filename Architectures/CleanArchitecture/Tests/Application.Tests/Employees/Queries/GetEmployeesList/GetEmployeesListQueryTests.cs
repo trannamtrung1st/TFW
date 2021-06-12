@@ -38,13 +38,7 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<EmployeeModel>>())).Returns((IQueryable<EmployeeModel> inp) =>
             {
-                var expected = inp.Select(o => new EmployeeModel
-                {
-                    Id = o.Id,
-                    Name = o.Name
-                }).ToArray();
-
-                return Task.FromResult(expected);
+                return Task.FromResult(inp.ToArray());
             });
 
             var employeeRepoMock = new Mock<IRepository<Employee>>();

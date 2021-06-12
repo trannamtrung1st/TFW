@@ -38,13 +38,7 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<CustomerModel>>())).Returns((IQueryable<CustomerModel> inp) =>
             {
-                var expected = inp.Select(o => new CustomerModel
-                {
-                    Id = o.Id,
-                    Name = o.Name
-                }).ToArray();
-
-                return Task.FromResult(expected);
+                return Task.FromResult(inp.ToArray());
             });
 
             var customerRepoMock = new Mock<IRepository<Customer>>();

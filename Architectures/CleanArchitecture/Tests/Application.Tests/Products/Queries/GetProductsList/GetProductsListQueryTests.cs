@@ -41,14 +41,7 @@ namespace Application.Products.Queries.GetProductsList.Tests
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<ProductModel>>())).Returns((IQueryable<ProductModel> inp) =>
             {
-                var expected = inp.Select(o => new ProductModel
-                {
-                    Id = o.Id,
-                    Name = o.Name,
-                    UnitPrice = o.UnitPrice
-                }).ToArray();
-
-                return Task.FromResult(expected);
+                return Task.FromResult(inp.ToArray());
             });
 
             var productRepoMock = new Mock<IRepository<Product>>();
