@@ -20,11 +20,14 @@ namespace Cross.Dates.Tests
         [Test()]
         public void GetDateTest()
         {
-            DateTime expectedDate = DateTime.Now.Date;
+            var expectedObj = new
+            {
+                date = DateTime.Now.Date
+            };
 
             var actualDate = _dateService.GetDate();
 
-            Assert.AreEqual(expectedDate, actualDate);
+            Assert.AreEqual(expectedObj.date, actualDate);
         }
     }
 }

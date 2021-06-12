@@ -56,10 +56,24 @@ namespace Domain.Sales.Tests
             var employee = _employees.Single(e => e.Id == employeeId);
             var product = _products.Single(p => p.Id == productId);
 
-            var sale = new Sale(now, customer, employee, product, quantity);
+            var expectedObj = new
+            {
+                now,
+                customer,
+                employee,
+                product,
+                quantity,
+                totalPrice = product.Price * quantity
+            };
 
-            Assert.AreEqual(product.Price, sale.UnitPrice);
-            Assert.AreEqual(product.Price * quantity, sale.TotalPrice);
+            var sale = new Sale(expectedObj.now,
+                expectedObj.customer,
+                expectedObj.employee,
+                expectedObj.product,
+                expectedObj.quantity);
+
+            Assert.AreEqual(expectedObj.product.Price, sale.UnitPrice);
+            Assert.AreEqual(expectedObj.totalPrice, sale.TotalPrice);
         }
 
         [TestCase(12.5, 2)]
@@ -67,16 +81,26 @@ namespace Domain.Sales.Tests
         [TestCase(51200, 10)]
         public void SetUnitPriceShouldUpdateTotalPrice(double unitPrice, int quantity)
         {
+            var expectedObj = new
+            {
+                unitPrice,
+                quantity,
+                prevPrice = 0,
+                prevTotal = 0,
+                afterPrice = unitPrice,
+                afterTotal = unitPrice * quantity
+            };
+
             var sale = new Sale();
-            sale.Quantity = quantity;
+            sale.Quantity = expectedObj.quantity;
 
-            Assert.AreEqual(0, sale.UnitPrice);
-            Assert.AreEqual(0, sale.TotalPrice);
+            Assert.AreEqual(expectedObj.prevPrice, sale.UnitPrice);
+            Assert.AreEqual(expectedObj.prevTotal, sale.TotalPrice);
 
-            sale.UnitPrice = unitPrice;
+            sale.UnitPrice = expectedObj.unitPrice;
 
-            Assert.AreEqual(unitPrice, sale.UnitPrice);
-            Assert.AreEqual(unitPrice * quantity, sale.TotalPrice);
+            Assert.AreEqual(expectedObj.afterPrice, sale.UnitPrice);
+            Assert.AreEqual(expectedObj.afterTotal, sale.TotalPrice);
         }
 
         [TestCase(12.5, 2)]
@@ -84,16 +108,26 @@ namespace Domain.Sales.Tests
         [TestCase(51200, 10)]
         public void SetQuantityShouldUpdateTotalPrice(double unitPrice, int quantity)
         {
+            var expectedObj = new
+            {
+                unitPrice,
+                quantity,
+                prevQuantity = 0,
+                prevTotal = 0,
+                afterQuantity = quantity,
+                afterTotal = unitPrice * quantity
+            };
+
             var sale = new Sale();
-            sale.UnitPrice = unitPrice;
+            sale.UnitPrice = expectedObj.unitPrice;
 
-            Assert.AreEqual(0, sale.Quantity);
-            Assert.AreEqual(0, sale.TotalPrice);
+            Assert.AreEqual(expectedObj.prevQuantity, sale.Quantity);
+            Assert.AreEqual(expectedObj.prevTotal, sale.TotalPrice);
 
-            sale.Quantity = quantity;
+            sale.Quantity = expectedObj.quantity;
 
-            Assert.AreEqual(quantity, sale.Quantity);
-            Assert.AreEqual(unitPrice * quantity, sale.TotalPrice);
+            Assert.AreEqual(expectedObj.afterQuantity, sale.Quantity);
+            Assert.AreEqual(expectedObj.afterTotal, sale.TotalPrice);
         }
     }
 }

@@ -34,6 +34,12 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
                 Name = o.Name
             }).ToArray();
 
+            var expectedObj = new
+            {
+                customers,
+                customerModels
+            };
+
             var uowMock = new Mock<IUnitOfWork>();
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<CustomerModel>>())).Returns((IQueryable<CustomerModel> inp) =>
@@ -43,15 +49,15 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
 
             var customerRepoMock = new Mock<IRepository<Customer>>();
 
-            customerRepoMock.Setup(o => o.Get()).Returns(customers.AsQueryable());
+            customerRepoMock.Setup(o => o.Get()).Returns(expectedObj.customers.AsQueryable());
 
             var query = new GetCustomersListQuery(uowMock.Object, customerRepoMock.Object);
 
             var results = await query.ExecuteAsync();
 
-            for (var i = 0; i < customerModels.Length; i++)
+            for (var i = 0; i < expectedObj.customerModels.Length; i++)
             {
-                var expected = customerModels[i];
+                var expected = expectedObj.customerModels[i];
                 var actual = results[i];
 
                 Assert.AreEqual(expected.Id, actual.Id);

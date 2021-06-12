@@ -34,6 +34,12 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
                 Name = o.Name
             }).ToArray();
 
+            var expectedObj = new
+            {
+                employees,
+                employeeModels
+            };
+
             var uowMock = new Mock<IUnitOfWork>();
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<EmployeeModel>>())).Returns((IQueryable<EmployeeModel> inp) =>
@@ -43,15 +49,15 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
 
             var employeeRepoMock = new Mock<IRepository<Employee>>();
 
-            employeeRepoMock.Setup(o => o.Get()).Returns(employees.AsQueryable());
+            employeeRepoMock.Setup(o => o.Get()).Returns(expectedObj.employees.AsQueryable());
 
             var query = new GetEmployeesListQuery(uowMock.Object, employeeRepoMock.Object);
 
             var results = await query.ExecuteAsync();
 
-            for (var i = 0; i < employeeModels.Length; i++)
+            for (var i = 0; i < expectedObj.employeeModels.Length; i++)
             {
-                var expected = employeeModels[i];
+                var expected = expectedObj.employeeModels[i];
                 var actual = results[i];
 
                 Assert.AreEqual(expected.Id, actual.Id);

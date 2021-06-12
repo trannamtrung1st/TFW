@@ -37,6 +37,12 @@ namespace Application.Products.Queries.GetProductsList.Tests
                 UnitPrice = o.Price
             }).ToArray();
 
+            var expectedObj = new
+            {
+                products,
+                productModels
+            };
+
             var uowMock = new Mock<IUnitOfWork>();
 
             uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<ProductModel>>())).Returns((IQueryable<ProductModel> inp) =>
@@ -46,15 +52,15 @@ namespace Application.Products.Queries.GetProductsList.Tests
 
             var productRepoMock = new Mock<IRepository<Product>>();
 
-            productRepoMock.Setup(o => o.Get()).Returns(products.AsQueryable());
+            productRepoMock.Setup(o => o.Get()).Returns(expectedObj.products.AsQueryable());
 
             var query = new GetProductsListQuery(uowMock.Object, productRepoMock.Object);
 
             var results = await query.ExecuteAsync();
 
-            for (var i = 0; i < productModels.Length; i++)
+            for (var i = 0; i < expectedObj.productModels.Length; i++)
             {
-                var expected = productModels[i];
+                var expected = expectedObj.productModels[i];
                 var actual = results[i];
 
                 Assert.AreEqual(expected.Id, actual.Id);

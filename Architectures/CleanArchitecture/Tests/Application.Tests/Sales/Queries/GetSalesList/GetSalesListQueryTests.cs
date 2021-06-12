@@ -70,7 +70,7 @@ namespace Application.Sales.Queries.GetSalesList.Tests
 
             var saleRepoMock = new Mock<IRepository<Sale>>();
 
-            saleRepoMock.Setup(o => o.Get()).Returns(sales.AsQueryable());
+            saleRepoMock.Setup(o => o.Get()).Returns(expectedObj.sales.AsQueryable());
 
             var uowMock = new Mock<IUnitOfWork>();
 
