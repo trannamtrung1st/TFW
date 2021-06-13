@@ -59,7 +59,7 @@ namespace Application.Sales.Queries.GetSaleDetail.Tests
             var uowMock = new Mock<IUnitOfWork>();
 
             uowMock.Setup(o => o.SingleOrDefaultAsync(It.IsAny<IQueryable<SaleDetailModel>>()))
-                .Returns((IQueryable<SaleDetailModel> inp) => Task.FromResult(inp.Single()));
+                .ReturnsAsync((IQueryable<SaleDetailModel> inp) => inp.Single());
 
             var saleRepoMock = new Mock<IRepository<Sale>>();
 

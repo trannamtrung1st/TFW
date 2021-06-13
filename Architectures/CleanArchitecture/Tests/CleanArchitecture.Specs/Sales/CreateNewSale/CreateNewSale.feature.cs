@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace CleanArchitecture.Specs.Sales.GetSalesList
+namespace CleanArchitecture.Specs.Sales.CreateNewSale
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,23 +20,22 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.8.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Get Sales List")]
-    public partial class GetSalesListFeature
+    [NUnit.Framework.DescriptionAttribute("Create new Sale")]
+    public partial class CreateNewSaleFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "GetSalesList.feature"
+#line 1 "CreateNewSale.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sales/GetSalesList", "Get Sales List", "\tAs a sales person\r\n\tI want to get a list of sales\r\n\tSo I can find a sale to revi" +
-                    "ew", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sales/CreateNewSale", "Create new Sale", "\tAs a sales person\r\n\tI want to create a sale\r\n\tTo record a sales transaction", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -75,15 +74,13 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a List of Sales")]
-        [NUnit.Framework.CategoryAttribute("mytag")]
-        public virtual void GetAListOfSales()
+        [NUnit.Framework.DescriptionAttribute("Create a Sale")]
+        public virtual void CreateASale()
         {
-            string[] tagsOfScenario = new string[] {
-                    "mytag"};
+            string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Sales", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 7
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a Sale", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -103,14 +100,26 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 8
+#line 7
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 9
- testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Customer",
+                            "Employee",
+                            "Product",
+                            "Quantity"});
+                table12.AddRow(new string[] {
+                            "Martin Fowler",
+                            "Eric Evans",
+                            "Spaghetti",
+                            "2"});
+#line 8
+ testRunner.Given("the following sale info:", ((string)(null)), table12, "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
+#line 11
+ testRunner.When("I create a sale", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "Date",
                             "Customer",
                             "Employee",
@@ -118,35 +127,25 @@ this.ScenarioInitialize(scenarioInfo);
                             "Unit Price",
                             "Quantity",
                             "Total Price"});
-                table16.AddRow(new string[] {
-                            "1",
-                            "2001-02-03",
+                table13.AddRow(new string[] {
+                            "",
                             "Martin Fowler",
                             "Eric Evans",
                             "Spaghetti",
                             "5.00",
+                            "2",
+                            "10.00"});
+#line 12
+ testRunner.Then("the following sales record should be recorded:", ((string)(null)), table13, "Then ");
+#line hidden
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Product ID",
+                            "Quantity"});
+                table14.AddRow(new string[] {
                             "1",
-                            "5.00"});
-                table16.AddRow(new string[] {
-                            "2",
-                            "2001-02-04",
-                            "Uncle Bob",
-                            "Greg Young",
-                            "Lasagna",
-                            "10.00",
-                            "2",
-                            "20.00"});
-                table16.AddRow(new string[] {
-                            "3",
-                            "2001-02-05",
-                            "Kent Beck",
-                            "Udi Dahan",
-                            "Ravioli",
-                            "15.00",
-                            "3",
-                            "45.00"});
-#line 10
- testRunner.Then("the following sales list should be returned:", ((string)(null)), table16, "Then ");
+                            "2"});
+#line 16
+ testRunner.And("the following sale-occurred notification should be sent to the inventory system:", ((string)(null)), table14, "And ");
 #line hidden
             }
             this.ScenarioCleanup();

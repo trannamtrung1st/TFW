@@ -74,9 +74,9 @@ namespace Application.Sales.Queries.GetSalesList.Tests
 
             var uowMock = new Mock<IUnitOfWork>();
 
-            uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<SalesListItemModel>>())).Returns((IQueryable<SalesListItemModel> inp) =>
+            uowMock.Setup(o => o.ToArrayAsync(It.IsAny<IQueryable<SalesListItemModel>>())).ReturnsAsync((IQueryable<SalesListItemModel> inp) =>
             {
-                return Task.FromResult(inp.ToArray());
+                return inp.ToArray();
             });
 
             var query = new GetSalesListQuery(uowMock.Object, saleRepoMock.Object);
