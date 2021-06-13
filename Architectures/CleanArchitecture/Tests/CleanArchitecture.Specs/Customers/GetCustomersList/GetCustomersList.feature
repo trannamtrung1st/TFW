@@ -4,6 +4,7 @@
 	So I can inspect the customers
 
 Scenario: Get a List of Customers
+	Given "default" dataset
 	When I request a list of customers
 	Then the following customers should be returned:
 		| Id | Name          |

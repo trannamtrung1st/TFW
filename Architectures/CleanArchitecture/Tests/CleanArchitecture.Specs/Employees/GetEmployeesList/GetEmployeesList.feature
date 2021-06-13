@@ -4,6 +4,7 @@
 	So I can inspect the employees
 
 Scenario: Get a List of Employees
+	Given "default" dataset
 	When I request a list of employees
 	Then the following employees should be returned:
 		| Id | Name       |

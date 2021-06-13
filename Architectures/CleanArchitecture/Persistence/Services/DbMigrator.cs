@@ -13,7 +13,7 @@ namespace Persistence.Services
 {
     public class DbMigrator : IDbMigrator
     {
-        private readonly DataContext _dbContext;
+        protected readonly DataContext _dbContext;
 
         public DbMigrator(DataContext dbContext)
         {

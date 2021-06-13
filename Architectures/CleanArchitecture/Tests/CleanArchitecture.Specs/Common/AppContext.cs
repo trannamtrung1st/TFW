@@ -6,13 +6,13 @@ using Application.Products.Queries.GetProductsList;
 using Application.Sales.Commands.CreateSale.Factories;
 using Application.Sales.Queries.GetSaleDetail;
 using Application.Sales.Queries.GetSalesList;
+using CleanArchitecture.Specs.Common.Data;
 using Cross.Dates;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Persistence;
-using Persistence.Services;
 using SolidToken.SpecFlow.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace CleanArchitecture.Specs.Common
 
             services.AddMediatR(typeof(Application.AssemblyModel));
 
-            services.AddScoped<IDbMigrator, DbMigrator>()
+            services.AddScoped<ISpecDbMigrator, SpecDbMigrator>()
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<ISaleFactory, SaleFactory>()

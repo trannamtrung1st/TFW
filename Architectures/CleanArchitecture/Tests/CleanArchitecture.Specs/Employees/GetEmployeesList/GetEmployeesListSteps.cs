@@ -36,6 +36,8 @@ namespace CleanArchitecture.Specs.Employees.GetEmployeesList
                 expectedResults
             };
 
+            Assert.AreEqual(expectedObj.expectedResults.Length, _results.Length);
+
             for (var i = 0; i < expectedObj.expectedResults.Length; i++)
             {
                 var expected = expectedObj.expectedResults[i];

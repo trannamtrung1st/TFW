@@ -1,7 +1,6 @@
-﻿using Persistence.Services;
+﻿using CleanArchitecture.Specs.Common.Data;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
@@ -11,27 +10,27 @@ namespace CleanArchitecture.Specs.Common
     public class GlobalHooks
     {
         private ScenarioContext _scenarioContext;
-        private readonly IDbMigrator _dbMigrator;
+        private readonly ISpecDbMigrator _specDbMigrator;
 
-        public GlobalHooks(ScenarioContext scenarioContext, IDbMigrator dbMigrator)
+        public GlobalHooks(ScenarioContext scenarioContext,
+            ISpecDbMigrator specDbMigrator)
         {
             _scenarioContext = scenarioContext;
-            _dbMigrator = dbMigrator;
-
+            _specDbMigrator = specDbMigrator;
         }
 
         [BeforeScenario]
         public async Task SetUp()
         {
-            await _dbMigrator.DropAsync();
-            await _dbMigrator.InitAsync();
+            Console.WriteLine($"Before {_scenarioContext}");
+
+            await _specDbMigrator.DropAsync();
         }
 
-
         [AfterScenario]
-        public async Task TearDown()
+        public void TearDown()
         {
-            await _dbMigrator.DropAsync();
+            Console.WriteLine($"After {_scenarioContext}");
         }
     }
 }

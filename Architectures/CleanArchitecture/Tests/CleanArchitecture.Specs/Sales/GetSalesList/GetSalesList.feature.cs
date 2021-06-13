@@ -104,9 +104,12 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 8
+ testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 9
  testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Date",
                             "Customer",
@@ -115,7 +118,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Unit Price",
                             "Quantity",
                             "Total Price"});
-                table4.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "1",
                             "2001-02-03",
                             "Martin Fowler",
@@ -124,7 +127,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "5.00",
                             "1",
                             "5.00"});
-                table4.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "2",
                             "2001-02-04",
                             "Uncle Bob",
@@ -133,7 +136,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "10.00",
                             "2",
                             "20.00"});
-                table4.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "3",
                             "2001-02-05",
                             "Kent Beck",
@@ -142,8 +145,8 @@ this.ScenarioInitialize(scenarioInfo);
                             "15.00",
                             "3",
                             "45.00"});
-#line 9
- testRunner.Then("the following sales list should be returned:", ((string)(null)), table4, "Then ");
+#line 10
+ testRunner.Then("the following sales list should be returned:", ((string)(null)), table12, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

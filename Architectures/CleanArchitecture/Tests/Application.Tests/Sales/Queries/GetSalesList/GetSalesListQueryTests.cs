@@ -83,6 +83,8 @@ namespace Application.Sales.Queries.GetSalesList.Tests
 
             var results = await query.ExecuteAsync();
 
+            Assert.AreEqual(expectedObj.saleModels.Length, results.Length);
+
             for (var i = 0; i < expectedObj.saleModels.Length; i++)
             {
                 var expected = expectedObj.saleModels[i];

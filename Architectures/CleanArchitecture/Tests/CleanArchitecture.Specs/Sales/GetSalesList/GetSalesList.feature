@@ -5,6 +5,7 @@
 
 @mytag
 Scenario: Get a List of Sales
+	Given "default" dataset
 	When I request a list of sales
 	Then the following sales list should be returned:
 		| Id | Date       | Customer      | Employee   | Product   | Unit Price | Quantity | Total Price |

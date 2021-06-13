@@ -55,6 +55,8 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
 
             var results = await query.ExecuteAsync();
 
+            Assert.AreEqual(expectedObj.employeeModels.Length, results.Length);
+
             for (var i = 0; i < expectedObj.employeeModels.Length; i++)
             {
                 var expected = expectedObj.employeeModels[i];

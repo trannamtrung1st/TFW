@@ -102,22 +102,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 7
+ testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 8
  testRunner.When("I request a list of employees", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table2.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "1",
                             "Eric Evans"});
-                table2.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "2",
                             "Greg Young"});
-                table2.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "3",
                             "Udi Dahan"});
-#line 8
- testRunner.Then("the following employees should be returned:", ((string)(null)), table2, "Then ");
+#line 9
+ testRunner.Then("the following employees should be returned:", ((string)(null)), table10, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

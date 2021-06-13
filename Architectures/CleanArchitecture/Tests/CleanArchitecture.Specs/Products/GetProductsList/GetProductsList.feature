@@ -4,6 +4,7 @@
 	So I can inspect the products
 
 Scenario: Get a List of Products
+	Given "default" dataset
 	When I request a list of products
 	Then the following products should be returned:
 		| Id | Name      | Unit Price |

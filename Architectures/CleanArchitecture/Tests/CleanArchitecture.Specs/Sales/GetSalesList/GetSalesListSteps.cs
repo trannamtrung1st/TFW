@@ -40,6 +40,8 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
                 expectedResults
             };
 
+            Assert.AreEqual(expectedObj.expectedResults.Length, _results.Length);
+
             for (var i = 0; i < expectedObj.expectedResults.Length; i++)
             {
                 var expected = expectedObj.expectedResults[i];
@@ -47,7 +49,7 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
 
                 Assert.AreEqual(expected.Id, actual.Id);
                 Assert.AreEqual(expected.Customer, actual.CustomerName);
-                Assert.AreEqual(DateTime.Now.Date, actual.Date);
+                Assert.AreEqual(expected.Date, actual.Date);
                 Assert.AreEqual(expected.Employee, actual.EmployeeName);
                 Assert.AreEqual(expected.Product, actual.ProductName);
                 Assert.AreEqual(expected.Quantity, actual.Quantity);

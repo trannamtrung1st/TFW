@@ -55,6 +55,8 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
 
             var results = await query.ExecuteAsync();
 
+            Assert.AreEqual(expectedObj.customerModels.Length, results.Length);
+
             for (var i = 0; i < expectedObj.customerModels.Length; i++)
             {
                 var expected = expectedObj.customerModels[i];
