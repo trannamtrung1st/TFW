@@ -3,7 +3,6 @@
 	I want to delete products
 	So I can remove defected or obsolete products out of my catalog
 	Rules: 
-	+ BR-000001
 	+ BR-000002
 
 @mytag

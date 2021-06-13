@@ -107,20 +107,8 @@ this.ScenarioInitialize(scenarioInfo);
 #line 8
  testRunner.When("I request a list of customers", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Name"});
-                table1.AddRow(new string[] {
-                            "1",
-                            "Martin Fowler"});
-                table1.AddRow(new string[] {
-                            "2",
-                            "Uncle Bob"});
-                table1.AddRow(new string[] {
-                            "3",
-                            "Kent Beck"});
 #line 9
- testRunner.Then("the following customers should be returned:", ((string)(null)), table1, "Then ");
+ testRunner.Then("the customers dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

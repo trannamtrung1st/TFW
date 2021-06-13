@@ -12,6 +12,7 @@ using TechTalk.SpecFlow;
 namespace CleanArchitecture.Specs.Products.RemoveProduct
 {
     [Binding]
+    [Scope(Feature = "Remove product")]
     public class RemoveProductSteps
     {
         private readonly IRepository<Product> _productRepository;

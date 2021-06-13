@@ -109,57 +109,21 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
  testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Date",
-                            "Customer",
-                            "Employee",
-                            "Product",
-                            "Unit Price",
-                            "Quantity",
-                            "Total Price"});
-                table18.AddRow(new string[] {
-                            "1",
-                            "2001-02-03",
-                            "Martin Fowler",
-                            "Eric Evans",
-                            "Spaghetti",
-                            "5.00",
-                            "1",
-                            "5.00"});
-                table18.AddRow(new string[] {
-                            "2",
-                            "2001-02-04",
-                            "Uncle Bob",
-                            "Greg Young",
-                            "Lasagna",
-                            "10.00",
-                            "2",
-                            "20.00"});
-                table18.AddRow(new string[] {
-                            "3",
-                            "2001-02-05",
-                            "Kent Beck",
-                            "Udi Dahan",
-                            "Ravioli",
-                            "15.00",
-                            "3",
-                            "45.00"});
 #line 12
- testRunner.Then("the following sales list should be returned:", ((string)(null)), table18, "Then ");
+ testRunner.Then("the sales dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a List of Sales (including deleted product)")]
-        public virtual void GetAListOfSalesIncludingDeletedProduct()
+        [NUnit.Framework.DescriptionAttribute("Get a List of Sales (including deleted products)")]
+        public virtual void GetAListOfSalesIncludingDeletedProducts()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Sales (including deleted product)", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 18
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Sales (including deleted products)", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -179,59 +143,23 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 19
+#line 15
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "Name"});
-                table19.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Spaghetti"});
-                table19.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Ravioli"});
-#line 20
- testRunner.And("products with following names are marked as deleted", ((string)(null)), table19, "And ");
+#line 16
+ testRunner.And("products with following names are marked as deleted", ((string)(null)), table14, "And ");
 #line hidden
-#line 24
+#line 20
  testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Date",
-                            "Customer",
-                            "Employee",
-                            "Product",
-                            "Unit Price",
-                            "Quantity",
-                            "Total Price"});
-                table20.AddRow(new string[] {
-                            "1",
-                            "2001-02-03",
-                            "Martin Fowler",
-                            "Eric Evans",
-                            "Spaghetti",
-                            "5.00",
-                            "1",
-                            "5.00"});
-                table20.AddRow(new string[] {
-                            "2",
-                            "2001-02-04",
-                            "Uncle Bob",
-                            "Greg Young",
-                            "Lasagna",
-                            "10.00",
-                            "2",
-                            "20.00"});
-                table20.AddRow(new string[] {
-                            "3",
-                            "2001-02-05",
-                            "Kent Beck",
-                            "Udi Dahan",
-                            "Ravioli",
-                            "15.00",
-                            "3",
-                            "45.00"});
-#line 25
- testRunner.Then("the following sales list should be returned:", ((string)(null)), table20, "Then ");
+#line 21
+ testRunner.Then("the sales dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

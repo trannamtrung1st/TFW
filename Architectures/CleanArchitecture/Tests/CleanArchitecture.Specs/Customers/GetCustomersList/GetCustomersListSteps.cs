@@ -1,4 +1,5 @@
 ﻿using Application.Customers.Queries.GetCustomersList;
+using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -9,6 +10,7 @@ using TechTalk.SpecFlow.Assist;
 namespace CleanArchitecture.Specs.Customers.GetCustomersList
 {
     [Binding]
+    [Scope(Feature = "Get Customers List")]
     public class GetCustomersListSteps
     {
         private readonly IGetCustomersListQuery _query;
@@ -26,10 +28,15 @@ namespace CleanArchitecture.Specs.Customers.GetCustomersList
             _results = await _query.ExecuteAsync();
         }
 
-        [Then(@"the following customers should be returned:")]
-        public void ThenTheFollowingCustomersShouldBeReturned(Table table)
+        [Then(@"the customers dataset should be returned")]
+        public void ThenTheCustomersDatasetShouldBeReturned()
         {
-            var expectedResults = table.CreateSet<CustomerModel>().ToArray();
+            var expectedResults = DataSets.Get("default").Customers
+                .Select(o => new CustomerModel
+                {
+                    Id = o.Id,
+                    Name = o.Name
+                }).ToArray();
 
             var expectedObj = new
             {

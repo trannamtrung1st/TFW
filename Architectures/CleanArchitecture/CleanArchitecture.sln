@@ -29,7 +29,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlowCalculator", "Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecFlowCalculator.Specs", "Tests\SpecFlowCalculator.Specs\SpecFlowCalculator.Specs.csproj", "{7484B845-B6F3-4E9B-9452-CA42991248EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanArchitecture.Specs", "Tests\CleanArchitecture.Specs\CleanArchitecture.Specs.csproj", "{FCABE98B-6029-4E7C-85B7-282189AEFAE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CleanArchitecture.Specs", "Tests\CleanArchitecture.Specs\CleanArchitecture.Specs.csproj", "{FCABE98B-6029-4E7C-85B7-282189AEFAE9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B39F0897-3BB5-4921-8550-EDD7C29EC3CC}"
+	ProjectSection(SolutionItems) = preProject
+		Keywords.txt = Keywords.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

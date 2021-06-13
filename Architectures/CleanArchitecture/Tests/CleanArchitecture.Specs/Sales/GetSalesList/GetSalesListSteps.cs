@@ -1,4 +1,5 @@
 ﻿using Application.Sales.Queries.GetSalesList;
+using CleanArchitecture.Specs.Common.Data;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ using TechTalk.SpecFlow.Assist;
 namespace CleanArchitecture.Specs.Sales.GetSalesList
 {
     [Binding]
+    [Scope(Feature = "Get Sales List")]
     public class GetSalesListSteps
     {
         private readonly IGetSalesListQuery _query;
@@ -31,6 +33,30 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
             _results = await _query.ExecuteAsync();
         }
 
+        [Then(@"the sales dataset should be returned")]
+        public void ThenTheSalesDatasetShouldBeReturned()
+        {
+            var expectedResults = DataSets.Get("default").Sales
+                .Select(o => new GetSalesListReturnModel
+                {
+                    Customer = o.Customer.Name,
+                    Date = o.Date,
+                    Employee = o.Employee.Name,
+                    Id = o.Id,
+                    Product = o.Product.Name,
+                    Quantity = o.Quantity,
+                    TotalPrice = o.TotalPrice,
+                    UnitPrice = o.UnitPrice
+                }).ToArray();
+
+            var expectedObj = new
+            {
+                expectedResults
+            };
+
+            Compare(expectedObj.expectedResults, _results);
+        }
+
         [Then(@"the following sales list should be returned:")]
         public void ThenTheFollowingSalesListShouldBeReturned(Table table)
         {
@@ -41,12 +67,17 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
                 expectedResults
             };
 
-            expectedObj.expectedResults.Length.Should().Be(_results.Length);
+            Compare(expectedObj.expectedResults, _results);
+        }
 
-            for (var i = 0; i < expectedObj.expectedResults.Length; i++)
+        private void Compare(GetSalesListReturnModel[] expectedArr, SalesListItemModel[] actualArr)
+        {
+            expectedArr.Length.Should().Be(_results.Length);
+
+            for (var i = 0; i < expectedArr.Length; i++)
             {
-                var expected = expectedObj.expectedResults[i];
-                var actual = _results[i];
+                var expected = expectedArr[i];
+                var actual = actualArr[i];
 
                 Assert.AreEqual(expected.Id, actual.Id);
                 Assert.AreEqual(expected.Customer, actual.CustomerName);

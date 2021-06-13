@@ -1,0 +1,6 @@
+- Clean Architecture
+- Screaming Architecture
+- Functional cohesion vs Categorical cohesion
+- TDD
+- BDD
+- Microservices

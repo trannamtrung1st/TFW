@@ -8,11 +8,7 @@
 Scenario: Get a List of Products
 	Given "default" dataset
 	When I request a list of products
-	Then the following products should be returned:
-		| Id | Name      | Unit Price |
-		| 1  | Spaghetti | 5.00       |
-		| 2  | Lasagna   | 10.00      |
-		| 3  | Ravioli   | 15.00      |
+	Then the products dataset should be returned
 
 Scenario: Get a List of Products (excluding deleted products)
 	Given "default" dataset

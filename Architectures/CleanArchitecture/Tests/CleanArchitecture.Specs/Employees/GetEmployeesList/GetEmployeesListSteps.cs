@@ -1,4 +1,5 @@
 ﻿using Application.Employees.Queries.GetEmployeesList;
+using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -9,6 +10,7 @@ using TechTalk.SpecFlow.Assist;
 namespace CleanArchitecture.Specs.Employees.GetEmployeesList
 {
     [Binding]
+    [Scope(Feature = "Get Employees List")]
     public class GetEmployeesListSteps
     {
         private readonly IGetEmployeesListQuery _query;
@@ -26,10 +28,15 @@ namespace CleanArchitecture.Specs.Employees.GetEmployeesList
             _results = await _query.ExecuteAsync();
         }
 
-        [Then(@"the following employees should be returned:")]
-        public void ThenTheFollowingEmployeesShouldBeReturned(Table table)
+        [Then(@"the employees dataset should be returned")]
+        public void ThenTheEmployeesDatasetShouldBeReturned()
         {
-            var expectedResults = table.CreateSet<EmployeeModel>().ToArray();
+            var expectedResults = DataSets.Get("default").Employees
+                .Select(o => new EmployeeModel
+                {
+                    Id = o.Id,
+                    Name = o.Name
+                }).ToArray();
 
             var expectedObj = new
             {

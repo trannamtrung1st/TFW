@@ -6,8 +6,4 @@
 Scenario: Get a List of Employees
 	Given "default" dataset
 	When I request a list of employees
-	Then the following employees should be returned:
-		| Id | Name       |
-		| 1  | Eric Evans |
-		| 2  | Greg Young |
-		| 3  | Udi Dahan  |
+	Then the employees dataset should be returned

@@ -1,4 +1,5 @@
 ﻿using Application.Products.Queries.GetProductsList;
+using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -9,6 +10,7 @@ using TechTalk.SpecFlow.Assist;
 namespace CleanArchitecture.Specs.Products.GetProductsList
 {
     [Binding]
+    [Scope(Feature = "Get Products List")]
     public class GetProductsListSteps
     {
         private readonly IGetProductsListQuery _query;
@@ -26,6 +28,25 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
             _results = await _query.ExecuteAsync();
         }
 
+        [Then(@"the products dataset should be returned")]
+        public void ThenTheProductsDatasetShouldBeReturned()
+        {
+            var expectedResults = DataSets.Get("default").Products
+                .Select(o => new ProductModel
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    UnitPrice = o.Price
+                }).ToArray();
+
+            var expectedObj = new
+            {
+                expectedResults
+            };
+
+            Compare(expectedObj.expectedResults, _results);
+        }
+
         [Then(@"the following products should be returned:")]
         public void ThenTheFollowingProductsShouldBeReturned(Table table)
         {
@@ -36,12 +57,17 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
                 expectedResults
             };
 
-            Assert.AreEqual(expectedObj.expectedResults.Length, _results.Length);
+            Compare(expectedObj.expectedResults, _results);
+        }
 
-            for (var i = 0; i < expectedObj.expectedResults.Length; i++)
+        private void Compare(ProductModel[] expectedArr, ProductModel[] actualArr)
+        {
+            Assert.AreEqual(expectedArr.Length, actualArr.Length);
+
+            for (var i = 0; i < expectedArr.Length; i++)
             {
-                var expected = expectedObj.expectedResults[i];
-                var actual = _results[i];
+                var expected = expectedArr[i];
+                var actual = actualArr[i];
 
                 Assert.AreEqual(expected.Id, actual.Id);
                 Assert.AreEqual(expected.Name, actual.Name);

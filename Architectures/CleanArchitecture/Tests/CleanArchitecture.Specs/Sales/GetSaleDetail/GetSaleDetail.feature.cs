@@ -75,12 +75,16 @@ namespace CleanArchitecture.Specs.Sales.GetSaleDetail
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get Sale Details")]
-        public virtual void GetSaleDetails()
+        [NUnit.Framework.DescriptionAttribute("Get Sale Detail")]
+        [NUnit.Framework.TestCaseAttribute("1", null)]
+        [NUnit.Framework.TestCaseAttribute("2", null)]
+        [NUnit.Framework.TestCaseAttribute("3", null)]
+        public virtual void GetSaleDetail(string saleId, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Sale Details", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            argumentsOfScenario.Add("saleId", saleId);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Sale Detail", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -105,28 +109,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
- testRunner.When("I request the sale details for sale 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When(string.Format("I request the sale detail for sale {0}", saleId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Date",
-                            "Customer Name",
-                            "Employee Name",
-                            "Product Name",
-                            "Unit Price",
-                            "Quantity",
-                            "Total Price"});
-                table17.AddRow(new string[] {
-                            "1",
-                            "2001-02-03",
-                            "Martin Fowler",
-                            "Eric Evans",
-                            "Spaghetti",
-                            "5.00",
-                            "1",
-                            "5.00"});
 #line 9
- testRunner.Then("the following sale details should be returned:", ((string)(null)), table17, "Then ");
+ testRunner.Then("the correct sale from dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

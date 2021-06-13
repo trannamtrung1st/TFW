@@ -6,8 +6,4 @@
 Scenario: Get a List of Customers
 	Given "default" dataset
 	When I request a list of customers
-	Then the following customers should be returned:
-		| Id | Name          |
-		| 1  | Martin Fowler |
-		| 2  | Uncle Bob     |
-		| 3  | Kent Beck     |
+	Then the customers dataset should be returned
