@@ -19,9 +19,9 @@ namespace Service
 
             using (var scope = host.Services.CreateScope())
             {
-                var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                var dbMigrator = scope.ServiceProvider.GetRequiredService<IDbMigrator>();
 
-                dbInitializer.InitAsync().Wait();
+                dbMigrator.InitAsync().Wait();
             }
 
             host.Run();

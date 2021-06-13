@@ -44,7 +44,7 @@ namespace Presentation
             services.AddMediatR(typeof(Startup),
                 typeof(Application.AssemblyModel));
 
-            services.AddScoped<IDbInitializer, DbInitializer>()
+            services.AddScoped<IDbMigrator, DbMigrator>()
                 .AddScoped(typeof(IRepository<>), typeof(Repository<>))
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IInventoryService, InventoryService>()

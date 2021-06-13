@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Persistence.Services
 {
-    public interface IDbInitializer
+    public interface IDbMigrator
     {
+        Task DropAsync();
         Task InitAsync();
     }
 }

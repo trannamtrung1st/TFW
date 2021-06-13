@@ -11,13 +11,18 @@ using System.Threading.Tasks;
 
 namespace Persistence.Services
 {
-    public class DbInitializer : IDbInitializer
+    public class DbMigrator : IDbMigrator
     {
         private readonly DataContext _dbContext;
 
-        public DbInitializer(DataContext dbContext)
+        public DbMigrator(DataContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public Task DropAsync()
+        {
+            return _dbContext.Database.EnsureDeletedAsync();
         }
 
         public async Task InitAsync()
