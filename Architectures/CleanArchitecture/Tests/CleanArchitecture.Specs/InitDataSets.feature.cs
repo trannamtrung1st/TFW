@@ -136,19 +136,23 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name",
-                            "Unit Price"});
+                            "Unit Price",
+                            "Deleted"});
                 table5.AddRow(new string[] {
                             "1",
                             "Spaghetti",
-                            "5.00"});
+                            "5.00",
+                            "false"});
                 table5.AddRow(new string[] {
                             "2",
                             "Lasagna",
-                            "10.00"});
+                            "10.00",
+                            "false"});
                 table5.AddRow(new string[] {
                             "3",
                             "Ravioli",
-                            "15.00"});
+                            "15.00",
+                            "false"});
 #line 16
  testRunner.And("the following Products", ((string)(null)), table5, "And ");
 #line hidden

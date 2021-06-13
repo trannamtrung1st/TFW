@@ -14,10 +14,10 @@ Scenario: Init datasets "default"
 		| 2  | Greg Young |
 		| 3  | Udi Dahan  |
 	And the following Products
-		| Id | Name      | Unit Price |
-		| 1  | Spaghetti | 5.00       |
-		| 2  | Lasagna   | 10.00      |
-		| 3  | Ravioli   | 15.00      |
+		| Id | Name      | Unit Price | Deleted |
+		| 1  | Spaghetti | 5.00       | false   |
+		| 2  | Lasagna   | 10.00      | false   |
+		| 3  | Ravioli   | 15.00      | false   |
 	And the following Sales
 		| Id | Date       | Customer      | Employee   | Product   | Unit Price | Quantity | Total Price |
 		| 1  | 2001-02-03 | Martin Fowler | Eric Evans | Spaghetti | 5.00       | 1        | 5.00        |

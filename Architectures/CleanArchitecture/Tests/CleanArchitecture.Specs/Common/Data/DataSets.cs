@@ -12,7 +12,7 @@ namespace CleanArchitecture.Specs.Common.Data
 {
     public static class DataSets
     {
-        private static IDictionary<string, CleanArchitectureDataSet> _dataSets = new Dictionary<string, CleanArchitectureDataSet>();
+        private static IDictionary<string, Func<CleanArchitectureDataSet>> _dataSets = new Dictionary<string, Func<CleanArchitectureDataSet>>();
 
         public static bool Contains(string key)
         {
@@ -23,46 +23,47 @@ namespace CleanArchitecture.Specs.Common.Data
         {
             if (key == null) throw new ArgumentNullException(nameof(key));
 
-            return _dataSets[key];
+            return _dataSets[key]();
         }
 
-        public static CleanArchitectureDataSet Set(string key, InitCleanArchitectureDataSetModel model)
+        public static void Set(string key, InitCleanArchitectureDataSetModel model)
         {
-            var dataSet = new CleanArchitectureDataSet();
-
-            dataSet.Customers = model.Customers.Select(o => new Customer
+            _dataSets[key] = () =>
             {
-                Id = o.Id,
-                Name = o.Name
-            }).ToArray();
+                var dataSet = new CleanArchitectureDataSet();
 
-            dataSet.Employees = model.Employees.Select(o => new Employee
-            {
-                Id = o.Id,
-                Name = o.Name
-            }).ToArray();
+                dataSet.Customers = model.Customers.Select(o => new Customer
+                {
+                    Id = o.Id,
+                    Name = o.Name
+                }).ToArray();
 
-            dataSet.Products = model.Products.Select(o => new Product
-            {
-                Id = o.Id,
-                Name = o.Name,
-                Price = o.UnitPrice
-            }).ToArray();
+                dataSet.Employees = model.Employees.Select(o => new Employee
+                {
+                    Id = o.Id,
+                    Name = o.Name
+                }).ToArray();
 
-            dataSet.Sales = model.Sales.Select(sale => new Sale
-            {
-                Id = sale.Id,
-                Customer = dataSet.Customers.Single(o => o.Name == sale.Customer),
-                Date = sale.Date,
-                Employee = dataSet.Employees.Single(o => o.Name == sale.Employee),
-                Product = dataSet.Products.Single(o => o.Name == sale.Product),
-                Quantity = sale.Quantity,
-                UnitPrice = sale.UnitPrice
-            }).ToArray();
+                dataSet.Products = model.Products.Select(o => new Product
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Price = o.UnitPrice
+                }).ToArray();
 
-            _dataSets[key] = dataSet;
+                dataSet.Sales = model.Sales.Select(sale => new Sale
+                {
+                    Id = sale.Id,
+                    Customer = dataSet.Customers.Single(o => o.Name == sale.Customer),
+                    Date = sale.Date,
+                    Employee = dataSet.Employees.Single(o => o.Name == sale.Employee),
+                    Product = dataSet.Products.Single(o => o.Name == sale.Product),
+                    Quantity = sale.Quantity,
+                    UnitPrice = sale.UnitPrice
+                }).ToArray();
 
-            return dataSet;
+                return dataSet;
+            };
         }
     }
 }

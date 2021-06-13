@@ -19,5 +19,7 @@ namespace Application.Abstracts.Data
         TEntity Remove(TEntity entity);
 
         IQueryable<TEntity> Get();
+
+        IQueryable<TEntity> GetAsNoTracking();
     }
 }

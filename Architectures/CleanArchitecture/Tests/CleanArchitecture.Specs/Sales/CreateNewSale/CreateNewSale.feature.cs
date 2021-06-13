@@ -103,23 +103,23 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "Customer",
                             "Employee",
                             "Product",
                             "Quantity"});
-                table12.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Martin Fowler",
                             "Eric Evans",
                             "Spaghetti",
                             "2"});
 #line 8
- testRunner.Given("the following sale info:", ((string)(null)), table12, "Given ");
+ testRunner.Given("the following sale info:", ((string)(null)), table14, "Given ");
 #line hidden
 #line 11
  testRunner.When("I create a sale", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                             "Date",
                             "Customer",
                             "Employee",
@@ -127,7 +127,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Unit Price",
                             "Quantity",
                             "Total Price"});
-                table13.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "",
                             "Martin Fowler",
                             "Eric Evans",
@@ -136,16 +136,16 @@ this.ScenarioInitialize(scenarioInfo);
                             "2",
                             "10.00"});
 #line 12
- testRunner.Then("the following sales record should be recorded:", ((string)(null)), table13, "Then ");
+ testRunner.Then("the following sales record should be recorded:", ((string)(null)), table15, "Then ");
 #line hidden
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                             "Product ID",
                             "Quantity"});
-                table14.AddRow(new string[] {
+                table16.AddRow(new string[] {
                             "1",
                             "2"});
 #line 16
- testRunner.And("the following sale-occurred notification should be sent to the inventory system:", ((string)(null)), table14, "And ");
+ testRunner.And("the following sale-occurred notification should be sent to the inventory system:", ((string)(null)), table16, "And ");
 #line hidden
             }
             this.ScenarioCleanup();

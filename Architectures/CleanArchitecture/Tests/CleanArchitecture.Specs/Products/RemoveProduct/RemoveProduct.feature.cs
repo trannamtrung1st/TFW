@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace CleanArchitecture.Specs.Sales.GetSaleDetail
+namespace CleanArchitecture.Specs.Products.RemoveProduct
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,23 +20,23 @@ namespace CleanArchitecture.Specs.Sales.GetSaleDetail
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.8.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Get Sale Detail")]
-    public partial class GetSaleDetailFeature
+    [NUnit.Framework.DescriptionAttribute("Remove product")]
+    public partial class RemoveProductFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "GetSaleDetail.feature"
+#line 1 "RemoveProduct.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sales/GetSaleDetail", "Get Sale Detail", "\tAs a sales person\r\n\tI want to get the details of a sale\r\n\tSo that I can review t" +
-                    "he sale", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Products/RemoveProduct", "Remove product", "\tAs an admin\r\n\tI want to delete products\r\n\tSo I can remove defected or obsolete p" +
+                    "roducts out of my catalog\r\n\tRules: \r\n\t+ BR-000001\r\n\t+ BR-000002", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -75,13 +75,15 @@ namespace CleanArchitecture.Specs.Sales.GetSaleDetail
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get Sale Details")]
-        public virtual void GetSaleDetails()
+        [NUnit.Framework.DescriptionAttribute("Remove a product")]
+        [NUnit.Framework.CategoryAttribute("mytag")]
+        public virtual void RemoveAProduct()
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = new string[] {
+                    "mytag"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Sale Details", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 6
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove a product", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+#line 10
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -101,32 +103,17 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 7
+#line 11
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 8
- testRunner.When("I request the sale details for sale 1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 12
+ testRunner.When("remove the product \"Spaghetti\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Date",
-                            "Customer Name",
-                            "Employee Name",
-                            "Product Name",
-                            "Unit Price",
-                            "Quantity",
-                            "Total Price"});
-                table17.AddRow(new string[] {
-                            "1",
-                            "2001-02-03",
-                            "Martin Fowler",
-                            "Eric Evans",
-                            "Spaghetti",
-                            "5.00",
-                            "1",
-                            "5.00"});
-#line 9
- testRunner.Then("the following sale details should be returned:", ((string)(null)), table17, "Then ");
+#line 13
+ testRunner.Then("that product is marked as deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 14
+ testRunner.But("it is still stored in data store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "But ");
 #line hidden
             }
             this.ScenarioCleanup();

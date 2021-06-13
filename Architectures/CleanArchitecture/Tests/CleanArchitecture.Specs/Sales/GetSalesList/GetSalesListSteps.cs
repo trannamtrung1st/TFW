@@ -1,4 +1,5 @@
 ﻿using Application.Sales.Queries.GetSalesList;
+using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
@@ -40,7 +41,7 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
                 expectedResults
             };
 
-            Assert.AreEqual(expectedObj.expectedResults.Length, _results.Length);
+            expectedObj.expectedResults.Length.Should().Be(_results.Length);
 
             for (var i = 0; i < expectedObj.expectedResults.Length; i++)
             {

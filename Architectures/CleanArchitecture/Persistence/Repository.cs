@@ -1,4 +1,5 @@
 ﻿using Application.Abstracts.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,11 @@ namespace Persistence
         public IQueryable<TEntity> Get()
         {
             return _dbContext.Set<TEntity>();
+        }
+
+        public IQueryable<TEntity> GetAsNoTracking()
+        {
+            return _dbContext.Set<TEntity>().AsNoTracking();
         }
 
         public TEntity Remove(TEntity entity)
