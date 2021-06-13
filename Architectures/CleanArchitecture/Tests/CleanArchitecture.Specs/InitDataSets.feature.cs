@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace CleanArchitecture.Specs.Common.InitDataSets
+namespace CleanArchitecture.Specs
 {
     using TechTalk.SpecFlow;
     using System;
@@ -20,22 +20,22 @@ namespace CleanArchitecture.Specs.Common.InitDataSets
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.8.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Init datasets")]
-    public partial class InitDatasetsFeature
+    [NUnit.Framework.DescriptionAttribute("_Init datasets")]
+    public partial class _InitDatasetsFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
         private string[] _featureTags = ((string[])(null));
         
-#line 1 "_InitDataSets.feature"
+#line 1 "InitDataSets.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Common/InitDataSets", "Init datasets", "\tInit datasets for the whole projects", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "", "_Init datasets", "\tInit datasets for the whole projects", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -103,56 +103,56 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
  testRunner.Given("the name of new dataset is \"default\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "1",
                             "Martin Fowler"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "2",
                             "Uncle Bob"});
-                table1.AddRow(new string[] {
+                table3.AddRow(new string[] {
                             "3",
                             "Kent Beck"});
 #line 6
- testRunner.And("the following Customers", ((string)(null)), table1, "And ");
+ testRunner.And("the following Customers", ((string)(null)), table3, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table2.AddRow(new string[] {
+                table4.AddRow(new string[] {
                             "1",
                             "Eric Evans"});
-                table2.AddRow(new string[] {
+                table4.AddRow(new string[] {
                             "2",
                             "Greg Young"});
-                table2.AddRow(new string[] {
+                table4.AddRow(new string[] {
                             "3",
                             "Udi Dahan"});
 #line 11
- testRunner.And("the following Employees", ((string)(null)), table2, "And ");
+ testRunner.And("the following Employees", ((string)(null)), table4, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name",
                             "Unit Price"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "1",
                             "Spaghetti",
                             "5.00"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "2",
                             "Lasagna",
                             "10.00"});
-                table3.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "3",
                             "Ravioli",
                             "15.00"});
 #line 16
- testRunner.And("the following Products", ((string)(null)), table3, "And ");
+ testRunner.And("the following Products", ((string)(null)), table5, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Date",
                             "Customer",
@@ -161,7 +161,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Unit Price",
                             "Quantity",
                             "Total Price"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "1",
                             "2001-02-03",
                             "Martin Fowler",
@@ -170,7 +170,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "5.00",
                             "1",
                             "5.00"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "2",
                             "2001-02-04",
                             "Uncle Bob",
@@ -179,7 +179,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "10.00",
                             "2",
                             "20.00"});
-                table4.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "3",
                             "2001-02-05",
                             "Kent Beck",
@@ -189,7 +189,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "3",
                             "45.00"});
 #line 21
- testRunner.And("the following Sales", ((string)(null)), table4, "And ");
+ testRunner.And("the following Sales", ((string)(null)), table6, "And ");
 #line hidden
 #line 26
  testRunner.When("init the dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -231,56 +231,56 @@ this.ScenarioInitialize(scenarioInfo);
 #line 30
  testRunner.Given("the name of new dataset is \"alternative\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table5.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             "1",
                             "Martin Fowler"});
-                table5.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             "2",
                             "Kent Beck"});
-                table5.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             "3",
                             "TNT"});
 #line 31
- testRunner.And("the following Customers", ((string)(null)), table5, "And ");
+ testRunner.And("the following Customers", ((string)(null)), table7, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name"});
-                table6.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "1",
                             "Eric Evans"});
-                table6.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "2",
                             "Michael Kevin"});
-                table6.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "3",
                             "Udi Dahan"});
 #line 36
- testRunner.And("the following Employees", ((string)(null)), table6, "And ");
+ testRunner.And("the following Employees", ((string)(null)), table8, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Name",
                             "Unit Price"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "1",
                             "Mì trộn",
                             "5.00"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "2",
                             "Cơm nấm",
                             "10.00"});
-                table7.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "3",
                             "Ravioli",
                             "15.00"});
 #line 41
- testRunner.And("the following Products", ((string)(null)), table7, "And ");
+ testRunner.And("the following Products", ((string)(null)), table9, "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Id",
                             "Date",
                             "Customer",
@@ -289,7 +289,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Unit Price",
                             "Quantity",
                             "Total Price"});
-                table8.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "1",
                             "2001-02-03",
                             "Martin Fowler",
@@ -298,7 +298,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "5.00",
                             "1",
                             "5.00"});
-                table8.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "2",
                             "2001-02-04",
                             "TNT",
@@ -307,7 +307,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "10.00",
                             "2",
                             "20.00"});
-                table8.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "3",
                             "2001-02-05",
                             "Kent Beck",
@@ -317,7 +317,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "3",
                             "45.00"});
 #line 46
- testRunner.And("the following Sales", ((string)(null)), table8, "And ");
+ testRunner.And("the following Sales", ((string)(null)), table10, "And ");
 #line hidden
 #line 51
  testRunner.When("init the dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");

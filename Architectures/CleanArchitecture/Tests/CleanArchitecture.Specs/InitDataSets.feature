@@ -1,4 +1,4 @@
-﻿Feature: Init datasets
+﻿Feature: _Init datasets
 	Init datasets for the whole projects
 
 Scenario: Init datasets "default"
