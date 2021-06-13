@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,16 @@ namespace Application.Abstracts.Data
 
         TEntity Find(params object[] keyValues);
 
-        TEntity Remove(TEntity entity);
+        TEntity RemovePhysical(TEntity entity);
+
+        T Remove<T>(T entity) where T : class, TEntity, ISoftDeleteEntity;
 
         IQueryable<TEntity> Get();
 
         IQueryable<TEntity> GetAsNoTracking();
+
+        IQueryable<TEntity> IgnoreQueryFilters(IQueryable<TEntity> query);
+
+        IQueryable<TEntity> IgnoreQueryFilters();
     }
 }

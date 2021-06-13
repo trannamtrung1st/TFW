@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Products
 {
-    public class Product : IEntity
+    public class Product : IEntity, ISoftDeleteEntity
     {
         public int Id { get; set; }
 

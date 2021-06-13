@@ -1,4 +1,5 @@
 ﻿using Application.Abstracts.Data;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -41,9 +42,28 @@ namespace Persistence
             return _dbContext.Set<TEntity>().AsNoTracking();
         }
 
-        public TEntity Remove(TEntity entity)
+        public IQueryable<TEntity> IgnoreQueryFilters(IQueryable<TEntity> query)
+        {
+            return query.IgnoreQueryFilters();
+        }
+
+        public IQueryable<TEntity> IgnoreQueryFilters()
+        {
+            return _dbContext.Set<TEntity>().IgnoreQueryFilters();
+        }
+
+        public TEntity RemovePhysical(TEntity entity)
         {
             return _dbContext.Remove(entity).Entity;
+        }
+
+        public T Remove<T>(T entity) where T : class, TEntity, ISoftDeleteEntity
+        {
+            entity.Deleted = true;
+
+            _dbContext.Entry(entity).State = EntityState.Modified;
+
+            return entity;
         }
 
         public TEntity Update(TEntity entity)

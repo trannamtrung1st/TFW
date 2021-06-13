@@ -19,7 +19,7 @@ namespace Application.Sales.Queries.GetSalesList
 
         public async Task<SalesListItemModel[]> ExecuteAsync()
         {
-            var query = _saleRepository.Get()
+            var query = _saleRepository.IgnoreQueryFilters()
                 .Select(p => new SalesListItemModel()
                 {
                     Id = p.Id,
