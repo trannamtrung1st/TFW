@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Domain.Sales;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -76,9 +75,14 @@ namespace Domain.Sales.Tests
             Assert.AreEqual(expectedObj.totalPrice, sale.TotalPrice);
         }
 
-        [TestCase(12.5, 2)]
-        [TestCase(500, 25)]
-        [TestCase(51200, 10)]
+        private static object[] UnitPriceAndQuantityCases = new[]
+        {
+            new object[] { 12.5, 2 },
+            new object[] { 500, 25 },
+            new object[] { 51200, 10 },
+        };
+
+        [TestCaseSource(nameof(UnitPriceAndQuantityCases))]
         public void SetUnitPriceShouldUpdateTotalPrice(double unitPrice, int quantity)
         {
             var expectedObj = new
@@ -103,9 +107,7 @@ namespace Domain.Sales.Tests
             Assert.AreEqual(expectedObj.afterTotal, sale.TotalPrice);
         }
 
-        [TestCase(12.5, 2)]
-        [TestCase(500, 25)]
-        [TestCase(51200, 10)]
+        [TestCaseSource(nameof(UnitPriceAndQuantityCases))]
         public void SetQuantityShouldUpdateTotalPrice(double unitPrice, int quantity)
         {
             var expectedObj = new
