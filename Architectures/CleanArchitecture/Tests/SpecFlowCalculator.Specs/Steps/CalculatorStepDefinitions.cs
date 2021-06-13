@@ -14,7 +14,8 @@ namespace SpecFlowCalculator.Specs.Steps
 
         private int _result;
 
-        public CalculatorStepDefinitions(ScenarioContext scenarioContext)
+        public CalculatorStepDefinitions(ScenarioContext scenarioContext,
+            SingleonService singleonService)
         {
             _scenarioContext = scenarioContext;
         }
