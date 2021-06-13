@@ -28,9 +28,11 @@ namespace CleanArchitecture.Specs.Common
         }
 
         [AfterScenario]
-        public void TearDown()
+        public async Task TearDown()
         {
             Console.WriteLine($"After {_scenarioContext}");
+
+            await _specDbMigrator.DropAsync();
         }
     }
 }
