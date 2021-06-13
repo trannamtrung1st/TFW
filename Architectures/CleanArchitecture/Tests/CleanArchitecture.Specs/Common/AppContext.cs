@@ -49,7 +49,7 @@ namespace CleanArchitecture.Specs.Common
                 .AddScoped(o =>
                 {
                     var mock = new Mock<IDateService>();
-                    mock.Setup(o => o.GetDate()).Returns(DateTime.Now);
+                    mock.Setup(o => o.GetDate()).Returns(DateTime.Now.Date);
                     return mock.Object;
                 });
 

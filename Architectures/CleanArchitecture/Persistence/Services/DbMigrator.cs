@@ -45,33 +45,33 @@ namespace Persistence.Services
 
         private Task CreateCustomersAsync()
         {
-            _dbContext.Customers.Add(new Customer() { Name = "Martin Fowler" });
+            _dbContext.Customers.Add(new Customer() { Id = 1, Name = "Martin Fowler" });
 
-            _dbContext.Customers.Add(new Customer() { Name = "Uncle Bob" });
+            _dbContext.Customers.Add(new Customer() { Id = 2, Name = "Uncle Bob" });
 
-            _dbContext.Customers.Add(new Customer() { Name = "Kent Beck" });
+            _dbContext.Customers.Add(new Customer() { Id = 3, Name = "Kent Beck" });
 
             return _dbContext.SaveChangesAsync();
         }
 
         private Task CreateEmployeesAsync()
         {
-            _dbContext.Employees.Add(new Employee() { Name = "Eric Evans" });
+            _dbContext.Employees.Add(new Employee() { Id = 1, Name = "Eric Evans" });
 
-            _dbContext.Employees.Add(new Employee() { Name = "Greg Young" });
+            _dbContext.Employees.Add(new Employee() { Id = 2, Name = "Greg Young" });
 
-            _dbContext.Employees.Add(new Employee() { Name = "Udi Dahan" });
+            _dbContext.Employees.Add(new Employee() { Id = 3, Name = "Udi Dahan" });
 
             return _dbContext.SaveChangesAsync();
         }
 
         private Task CreateProductsAsync()
         {
-            _dbContext.Products.Add(new Product() { Name = "Spaghetti", Price = 5 });
+            _dbContext.Products.Add(new Product() { Id = 1, Name = "Spaghetti", Price = 5 });
 
-            _dbContext.Products.Add(new Product() { Name = "Lasagna", Price = 10 });
+            _dbContext.Products.Add(new Product() { Id = 2, Name = "Lasagna", Price = 10 });
 
-            _dbContext.Products.Add(new Product() { Name = "Ravioli", Price = 15 });
+            _dbContext.Products.Add(new Product() { Id = 3, Name = "Ravioli", Price = 15 });
 
             return _dbContext.SaveChangesAsync();
         }
@@ -86,7 +86,8 @@ namespace Persistence.Services
 
             _dbContext.Sales.Add(new Sale()
             {
-                Date = DateTime.Now.Date.AddDays(-3),
+                Id = 1,
+                Date = DateTime.Now.Date,
                 Customer = customers[0],
                 Employee = employees[0],
                 Product = products[0],
@@ -96,7 +97,8 @@ namespace Persistence.Services
 
             _dbContext.Sales.Add(new Sale()
             {
-                Date = DateTime.Now.Date.AddDays(-2),
+                Id = 2,
+                Date = DateTime.Now.Date,
                 Customer = customers[1],
                 Employee = employees[1],
                 Product = products[1],
@@ -106,7 +108,8 @@ namespace Persistence.Services
 
             _dbContext.Sales.Add(new Sale()
             {
-                Date = DateTime.Now.Date.AddDays(-1),
+                Id = 3,
+                Date = DateTime.Now.Date,
                 Customer = customers[2],
                 Employee = employees[2],
                 Product = products[2],
