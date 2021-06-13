@@ -14,55 +14,29 @@ using Application.Abstracts.Data;
 using Application.Sales.Commands.CreateSale.Factories;
 using Application.Abstracts.Services;
 using System.Threading;
+using Application.Tests.Common.Data;
 
 namespace Application.Sales.Commands.CreateSale.Tests
 {
     [TestFixture()]
     public class CreateSaleCommandHandlerTests
     {
-        private Customer[] _customers;
-        private Employee[] _employees;
-        private Product[] _products;
-
-        [SetUp]
-        public void Setup()
-        {
-            var range = Enumerable.Range(1, 10);
-
-            _customers = range.Select(i => new Customer
-            {
-                Id = i,
-                Name = $"Customer {i}"
-            }).ToArray();
-
-            _employees = range.Select(i => new Employee
-            {
-                Id = i,
-                Name = $"Employee {i}"
-            }).ToArray();
-
-            _products = range.Select(i => new Product
-            {
-                Id = i,
-                Name = $"Product {i}",
-                Price = i * new Random().NextDouble() * 100
-            }).ToArray();
-        }
-
         private static object[] CommandArgs = new[]
         {
-            new object[]{ 1, 4, 5, 14 },
-            new object[]{ 6, 3, 1, 24 },
-            new object[]{ 2, 7, 9, 404 },
+            new object[]{ 1, 2, 2, 14 },
+            new object[]{ 3, 3, 1, 24 },
+            new object[]{ 2, 1, 2, 404 },
         };
 
         private async Task<(dynamic expectedObj, Sale actual, Mock<IRepository<Sale>> saleRepoMock,
             Mock<IUnitOfWork> uowMock, Mock<IInventoryService> inventoryServiceMock)>
             InitHandleTestAsync(int customerId, int employeeId, int productId, int quantity)
         {
-            var selectedCustomer = _customers.Single(o => o.Id == customerId);
-            var selectedEmployee = _employees.Single(o => o.Id == employeeId);
-            var selectedProduct = _products.Single(o => o.Id == productId);
+            var dSet = DataSets.Get("default");
+
+            var selectedCustomer = dSet.Customers.Single(o => o.Id == customerId);
+            var selectedEmployee = dSet.Employees.Single(o => o.Id == employeeId);
+            var selectedProduct = dSet.Products.Single(o => o.Id == productId);
 
             var createSaleCommand = new CreateSaleCommand
             {
@@ -81,9 +55,9 @@ namespace Application.Sales.Commands.CreateSale.Tests
 
             var expectedObj = new
             {
-                customers = _customers,
-                employees = _employees,
-                products = _products,
+                customers = dSet.Customers,
+                employees = dSet.Employees,
+                products = dSet.Products,
                 createSaleCommand,
                 createdSale
             };

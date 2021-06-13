@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Application.Employees.Queries.GetEmployeesList;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Moq;
 using Application.Abstracts.Data;
+using Application.Tests.Common.Data;
 
 namespace Application.Employees.Queries.GetEmployeesList.Tests
 {
@@ -22,13 +22,9 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
         [Test()]
         public async Task ExecuteAsyncTest()
         {
-            var employees = new Employee[]
-            {
-                new Employee {Id = 1, Name = "Abc"},
-                new Employee {Id = 2, Name = "Xyz"},
-            };
+            var dSet = DataSets.Get("default");
 
-            var employeeModels = employees.Select(o => new EmployeeModel
+            var employeeModels = dSet.Employees.Select(o => new EmployeeModel
             {
                 Id = o.Id,
                 Name = o.Name
@@ -36,7 +32,7 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
 
             var expectedObj = new
             {
-                employees,
+                employees = dSet.Employees,
                 employeeModels
             };
 

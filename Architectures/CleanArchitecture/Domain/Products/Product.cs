@@ -12,5 +12,7 @@ namespace Domain.Products
         public string Name { get; set; }
 
         public double Price { get; set; }
+
+        public bool Deleted { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Application.Products.Queries.GetProductsList;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Application.Abstracts.Data;
 using Moq;
+using Application.Tests.Common.Data;
 
 namespace Application.Products.Queries.GetProductsList.Tests
 {
@@ -22,15 +22,9 @@ namespace Application.Products.Queries.GetProductsList.Tests
         [Test()]
         public async Task ExecuteAsyncTest()
         {
-            var products = new Product[]
-            {
-                new Product {Id = 1, Name = "Abc", Price = 215},
-                new Product {Id = 2, Name = "Xyz", Price = 152},
-                new Product {Id = 3, Name = "AXyz", Price = 152.42},
-                new Product {Id = 4, Name = "BXyz", Price = 152.12},
-            };
+            var dSet = DataSets.Get("default");
 
-            var productModels = products.Select(o => new ProductModel
+            var productModels = dSet.Products.Select(o => new ProductModel
             {
                 Id = o.Id,
                 Name = o.Name,
@@ -39,7 +33,7 @@ namespace Application.Products.Queries.GetProductsList.Tests
 
             var expectedObj = new
             {
-                products,
+                products = dSet.Products,
                 productModels
             };
 

@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Application.Customers.Queries.GetCustomersList;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +7,7 @@ using Moq;
 using Application.Abstracts.Data;
 using Domain.Customers;
 using System.Linq;
+using Application.Tests.Common.Data;
 
 namespace Application.Customers.Queries.GetCustomersList.Tests
 {
@@ -22,13 +22,9 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
         [Test()]
         public async Task ExecuteAsyncTest()
         {
-            var customers = new Customer[]
-            {
-                new Customer {Id = 1, Name = "Abc"},
-                new Customer {Id = 2, Name = "Xyz"},
-            };
+            var dSet = DataSets.Get("default");
 
-            var customerModels = customers.Select(o => new CustomerModel
+            var customerModels = dSet.Customers.Select(o => new CustomerModel
             {
                 Id = o.Id,
                 Name = o.Name
@@ -36,7 +32,7 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
 
             var expectedObj = new
             {
-                customers,
+                customers = dSet.Customers,
                 customerModels
             };
 

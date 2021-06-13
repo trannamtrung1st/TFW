@@ -1,16 +1,13 @@
 ﻿using NUnit.Framework;
-using Application.Sales.Queries.GetSaleDetail;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Sales;
-using Domain.Customers;
-using Domain.Employees;
-using Domain.Products;
 using System.Linq;
 using Moq;
 using Application.Abstracts.Data;
+using Application.Tests.Common.Data;
 
 namespace Application.Sales.Queries.GetSaleDetail.Tests
 {
@@ -18,26 +15,13 @@ namespace Application.Sales.Queries.GetSaleDetail.Tests
     public class GetSaleDetailQueryTests
     {
         [TestCase(1)]
+        [TestCase(2)]
         [TestCase(3)]
-        [TestCase(5)]
         public async Task ExecuteAsyncTest(int saleId)
         {
-            var sales = new List<Sale>();
+            var dSet = DataSets.Get("default");
 
-            var customer = new Customer { Id = 1, Name = "Keven" };
-            var employee = new Employee { Id = 1, Name = "Chris" };
-            var product = new Product { Id = 1, Name = "P1", Price = 1248123.213 };
-            var now = DateTime.Now;
-
-            for (var i = 0; i < 5; i++)
-            {
-                sales.Add(new Sale(now.AddDays(i), customer, employee, product, (i + 1) * i)
-                {
-                    Id = i + 1,
-                });
-            }
-
-            var saleModel = sales.Select(o => new SaleDetailModel
+            var saleModel = dSet.Sales.Select(o => new SaleDetailModel
             {
                 CustomerName = o.Customer.Name,
                 Date = o.Date,
@@ -52,7 +36,7 @@ namespace Application.Sales.Queries.GetSaleDetail.Tests
             var expectedObj = new
             {
                 saleId,
-                sales,
+                sales = dSet.Sales,
                 saleModel,
             };
 
@@ -63,7 +47,7 @@ namespace Application.Sales.Queries.GetSaleDetail.Tests
 
             var saleRepoMock = new Mock<IRepository<Sale>>();
 
-            saleRepoMock.Setup(o => o.Get()).Returns(sales.AsQueryable());
+            saleRepoMock.Setup(o => o.Get()).Returns(expectedObj.sales.AsQueryable());
 
             var query = new GetSaleDetailQuery(uowMock.Object, saleRepoMock.Object);
 

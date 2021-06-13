@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Application.Abstracts.Data;
+using Application.Tests.Common.Data;
 
 namespace Application.Sales.Queries.GetSalesList.Tests
 {
@@ -19,35 +20,9 @@ namespace Application.Sales.Queries.GetSalesList.Tests
         [Test()]
         public async Task ExecuteAsyncTest()
         {
-            var customer = new Customer
-            {
-                Id = 1,
-                Name = "Abc"
-            };
+            var dSet = DataSets.Get("default");
 
-            var employee = new Employee
-            {
-                Id = 2,
-                Name = "Xyz"
-            };
-
-            var product = new Product
-            {
-                Id = 3,
-                Name = "p1",
-                Price = 10421.421
-            };
-
-            var sales = new List<Sale>();
-            for (var i = 0; i < 5; i++)
-            {
-                sales.Add(new Sale(DateTime.Now.AddDays(i), customer, employee, product, i * 10)
-                {
-                    Id = i + 1
-                });
-            }
-
-            var saleModels = sales.Select(o => new SalesListItemModel
+            var saleModels = dSet.Sales.Select(o => new SalesListItemModel
             {
                 UnitPrice = o.UnitPrice,
                 CustomerName = o.Customer.Name,
@@ -61,10 +36,7 @@ namespace Application.Sales.Queries.GetSalesList.Tests
 
             var expectedObj = new
             {
-                customer,
-                employee,
-                product,
-                sales,
+                sales = dSet.Sales,
                 saleModels
             };
 

@@ -17,7 +17,6 @@
   <ItemGroup>
     <Folder Include="Employees\Commands\" />
     <Folder Include="Customers\Commands\" />
-    <Folder Include="Products\Commands\" />
   </ItemGroup>
 
   <ItemGroup>
