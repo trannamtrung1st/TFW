@@ -109,9 +109,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 8
- testRunner.When(string.Format("I request the sale detail for sale {0}", saleId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 9
+ testRunner.When(string.Format("I request the sale detail for sale {0}", saleId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 10
  testRunner.Then("the correct sale from dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

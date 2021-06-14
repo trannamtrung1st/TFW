@@ -1,4 +1,5 @@
 ﻿using Application.Products.Queries.GetProductsList;
+using CleanArchitecture.Specs.Common;
 using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
@@ -13,12 +14,15 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
     [Scope(Feature = "Get Products List")]
     public class GetProductsListSteps
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly IGetProductsListQuery _query;
 
         private ProductModel[] _results;
 
-        public GetProductsListSteps(IGetProductsListQuery query)
+        public GetProductsListSteps(ScenarioContext scenarioContext,
+            IGetProductsListQuery query)
         {
+            _scenarioContext = scenarioContext;
             _query = query;
         }
 
@@ -31,7 +35,7 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
         [Then(@"the products dataset should be returned")]
         public void ThenTheProductsDatasetShouldBeReturned()
         {
-            var expectedResults = DataSets.Get("default").Products
+            var expectedResults = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet).Products
                 .Select(o => new ProductModel
                 {
                     Id = o.Id,

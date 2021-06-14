@@ -15,7 +15,7 @@ namespace CleanArchitecture.Specs.Common.Data
         {
         }
 
-        public async Task InitAsync(string dataSetKey)
+        public async Task InitAsync(CleanArchitectureDataSet dataSets)
         {
             var isFirstTime = !(await _dbContext.Database.GetAppliedMigrationsAsync()).Any();
 
@@ -23,8 +23,6 @@ namespace CleanArchitecture.Specs.Common.Data
 
             if (isFirstTime)
             {
-                var dataSets = DataSets.Get(dataSetKey);
-
                 await _dbContext.AddRangeAsync(dataSets.Customers);
                 await _dbContext.AddRangeAsync(dataSets.Employees);
                 await _dbContext.AddRangeAsync(dataSets.Products);

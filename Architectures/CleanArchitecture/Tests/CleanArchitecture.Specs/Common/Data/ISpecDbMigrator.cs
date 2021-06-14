@@ -5,6 +5,6 @@ namespace CleanArchitecture.Specs.Common.Data
 {
     public interface ISpecDbMigrator : IDbMigrator
     {
-        Task InitAsync(string dataSetKey);
+        Task InitAsync(CleanArchitectureDataSet dataSets);
     }
 }

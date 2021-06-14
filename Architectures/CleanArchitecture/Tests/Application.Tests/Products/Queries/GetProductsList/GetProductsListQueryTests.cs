@@ -8,6 +8,7 @@ using System.Linq;
 using Application.Abstracts.Data;
 using Moq;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Products.Queries.GetProductsList.Tests
 {
@@ -19,10 +20,10 @@ namespace Application.Products.Queries.GetProductsList.Tests
         {
         }
 
-        [Test()]
-        public async Task ExecuteAsyncTest()
+        [TestCase(DataSetKeys.Default)]
+        public async Task ExecuteAsyncTest(string dataSetKey)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var productModels = dSet.Products.Select(o => new ProductModel
             {

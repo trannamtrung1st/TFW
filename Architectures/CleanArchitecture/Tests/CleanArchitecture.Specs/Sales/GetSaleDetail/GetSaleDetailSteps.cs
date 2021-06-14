@@ -1,4 +1,5 @@
 ﻿using Application.Sales.Queries.GetSaleDetail;
+using CleanArchitecture.Specs.Common;
 using CleanArchitecture.Specs.Common.Data;
 using FluentAssertions;
 using System;
@@ -13,13 +14,16 @@ namespace CleanArchitecture.Specs.Sales.GetSaleDetail
     [Scope(Feature = "Get Sale Detail")]
     public class GetSaleDetailSteps
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly IGetSaleDetailQuery _query;
 
         private int _saleId;
         private SaleDetailModel _result;
 
-        public GetSaleDetailSteps(IGetSaleDetailQuery query)
+        public GetSaleDetailSteps(ScenarioContext scenarioContext,
+            IGetSaleDetailQuery query)
         {
+            _scenarioContext = scenarioContext;
             _query = query;
         }
 
@@ -33,7 +37,7 @@ namespace CleanArchitecture.Specs.Sales.GetSaleDetail
         [Then(@"the correct sale from dataset should be returned")]
         public void ThenTheCorrectSaleFromDatasetShouldBeReturned()
         {
-            var expected = DataSets.Get("default").Sales
+            var expected = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet).Sales
                 .Select(o => new SaleDetailModel
                 {
                     Id = o.Id,

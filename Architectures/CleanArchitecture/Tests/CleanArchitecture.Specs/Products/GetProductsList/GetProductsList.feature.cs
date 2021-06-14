@@ -105,9 +105,12 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 10
- testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 11
+ testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 12
  testRunner.Then("the products dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -121,7 +124,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Products (excluding deleted products)", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 13
+#line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -141,7 +144,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 14
+#line 15
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
@@ -150,10 +153,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Spaghetti"});
                 table9.AddRow(new string[] {
                             "Ravioli"});
-#line 15
+#line 16
  testRunner.And("products with following names are marked as deleted", ((string)(null)), table9, "And ");
 #line hidden
-#line 19
+#line 20
+ testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
  testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -164,7 +170,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "2",
                             "Lasagna",
                             "10.00"});
-#line 20
+#line 22
  testRunner.Then("the following products should be returned:", ((string)(null)), table10, "Then ");
 #line hidden
             }

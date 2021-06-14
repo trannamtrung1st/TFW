@@ -1,4 +1,5 @@
 ﻿using Application.Sales.Queries.GetSalesList;
+using CleanArchitecture.Specs.Common;
 using CleanArchitecture.Specs.Common.Data;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
@@ -18,12 +19,15 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
     [Scope(Feature = "Get Sales List")]
     public class GetSalesListSteps
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly IGetSalesListQuery _query;
 
         private SalesListItemModel[] _results;
 
-        public GetSalesListSteps(IGetSalesListQuery query)
+        public GetSalesListSteps(ScenarioContext scenarioContext,
+            IGetSalesListQuery query)
         {
+            _scenarioContext = scenarioContext;
             _query = query;
         }
 
@@ -36,7 +40,7 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
         [Then(@"the sales dataset should be returned")]
         public void ThenTheSalesDatasetShouldBeReturned()
         {
-            var expectedResults = DataSets.Get("default").Sales
+            var expectedResults = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet).Sales
                 .Select(o => new GetSalesListReturnModel
                 {
                     Customer = o.Customer.Name,

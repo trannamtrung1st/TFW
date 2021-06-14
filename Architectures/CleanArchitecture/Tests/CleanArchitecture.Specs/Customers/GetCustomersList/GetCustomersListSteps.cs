@@ -1,4 +1,5 @@
 ﻿using Application.Customers.Queries.GetCustomersList;
+using CleanArchitecture.Specs.Common;
 using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
@@ -13,12 +14,14 @@ namespace CleanArchitecture.Specs.Customers.GetCustomersList
     [Scope(Feature = "Get Customers List")]
     public class GetCustomersListSteps
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly IGetCustomersListQuery _query;
 
         private CustomerModel[] _results;
 
-        public GetCustomersListSteps(IGetCustomersListQuery query)
+        public GetCustomersListSteps(ScenarioContext scenarioContext, IGetCustomersListQuery query)
         {
+            _scenarioContext = scenarioContext;
             _query = query;
         }
 
@@ -31,7 +34,7 @@ namespace CleanArchitecture.Specs.Customers.GetCustomersList
         [Then(@"the customers dataset should be returned")]
         public void ThenTheCustomersDatasetShouldBeReturned()
         {
-            var expectedResults = DataSets.Get("default").Customers
+            var expectedResults = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet).Customers
                 .Select(o => new CustomerModel
                 {
                     Id = o.Id,

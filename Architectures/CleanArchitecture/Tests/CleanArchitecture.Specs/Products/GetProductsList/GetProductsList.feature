@@ -7,6 +7,7 @@
 
 Scenario: Get a List of Products
 	Given "default" dataset
+	And dataset is created
 	When I request a list of products
 	Then the products dataset should be returned
 
@@ -16,6 +17,7 @@ Scenario: Get a List of Products (excluding deleted products)
 		| Name      |
 		| Spaghetti |
 		| Ravioli   |
+	And dataset is created
 	When I request a list of products
 	Then the following products should be returned:
 		| Id | Name    | Unit Price |

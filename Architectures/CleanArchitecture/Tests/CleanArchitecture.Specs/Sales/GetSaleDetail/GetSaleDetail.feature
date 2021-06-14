@@ -5,6 +5,7 @@
 
 Scenario Outline: Get Sale Detail
 	Given "default" dataset
+	And dataset is created
 	When I request the sale detail for sale <saleId>
 	Then the correct sale from dataset should be returned
 

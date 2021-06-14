@@ -8,6 +8,7 @@
 @mytag
 Scenario: Get a List of Sales
 	Given "default" dataset
+	And dataset is created
 	When I request a list of sales
 	Then the sales dataset should be returned
 
@@ -17,5 +18,6 @@ Scenario: Get a List of Sales (including deleted products)
 		| Name      |
 		| Spaghetti |
 		| Ravioli   |
+	And dataset is created
 	When I request a list of sales
 	Then the sales dataset should be returned

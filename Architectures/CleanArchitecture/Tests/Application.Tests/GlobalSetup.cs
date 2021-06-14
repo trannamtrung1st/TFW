@@ -1,4 +1,5 @@
 ﻿using Application.Tests.Common.Data;
+using Cross.Tests;
 using Domain.Customers;
 using Domain.Employees;
 using Domain.Products;
@@ -74,7 +75,7 @@ public class GlobalSetup
 
         dSet.Sales = sales;
 
-        DataSets.Set("default", dSet);
+        DataSets.Set(DataSetKeys.Default, dSet);
     }
 
     [OneTimeTearDown]

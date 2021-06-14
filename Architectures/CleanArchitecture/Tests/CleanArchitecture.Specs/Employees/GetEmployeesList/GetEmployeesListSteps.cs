@@ -1,4 +1,5 @@
 ﻿using Application.Employees.Queries.GetEmployeesList;
+using CleanArchitecture.Specs.Common;
 using CleanArchitecture.Specs.Common.Data;
 using NUnit.Framework;
 using System;
@@ -13,12 +14,15 @@ namespace CleanArchitecture.Specs.Employees.GetEmployeesList
     [Scope(Feature = "Get Employees List")]
     public class GetEmployeesListSteps
     {
+        private readonly ScenarioContext _scenarioContext;
         private readonly IGetEmployeesListQuery _query;
 
         private EmployeeModel[] _results;
 
-        public GetEmployeesListSteps(IGetEmployeesListQuery query)
+        public GetEmployeesListSteps(ScenarioContext scenarioContext,
+            IGetEmployeesListQuery query)
         {
+            _scenarioContext = scenarioContext;
             _query = query;
         }
 
@@ -31,7 +35,7 @@ namespace CleanArchitecture.Specs.Employees.GetEmployeesList
         [Then(@"the employees dataset should be returned")]
         public void ThenTheEmployeesDatasetShouldBeReturned()
         {
-            var expectedResults = DataSets.Get("default").Employees
+            var expectedResults = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet).Employees
                 .Select(o => new EmployeeModel
                 {
                     Id = o.Id,

@@ -107,12 +107,15 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 11
- testRunner.When("remove the product \"Spaghetti\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 12
- testRunner.Then("that product is marked as deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("remove the product \"Spaghetti\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 13
+ testRunner.Then("that product is marked as deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 14
  testRunner.But("it is still stored in data store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "But ");
 #line hidden
             }

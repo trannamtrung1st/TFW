@@ -11,16 +11,17 @@ using System.Threading.Tasks;
 using Moq;
 using Application.Abstracts.Data;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Sales.Queries.GetSalesList.Tests
 {
     [TestFixture()]
     public class GetSalesListQueryTests
     {
-        [Test()]
-        public async Task ExecuteAsyncTest()
+        [TestCase(DataSetKeys.Default)]
+        public async Task ExecuteAsyncTest(string dataSetKey)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var saleModels = dSet.Sales.Select(o => new SalesListItemModel
             {

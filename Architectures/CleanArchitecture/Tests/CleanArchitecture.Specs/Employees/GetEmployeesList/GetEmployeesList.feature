@@ -5,5 +5,6 @@
 
 Scenario: Get a List of Employees
 	Given "default" dataset
+	And dataset is created
 	When I request a list of employees
 	Then the employees dataset should be returned

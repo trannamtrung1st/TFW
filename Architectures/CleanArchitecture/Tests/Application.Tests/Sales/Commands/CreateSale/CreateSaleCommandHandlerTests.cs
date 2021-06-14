@@ -15,6 +15,7 @@ using Application.Sales.Commands.CreateSale.Factories;
 using Application.Abstracts.Services;
 using System.Threading;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Sales.Commands.CreateSale.Tests
 {
@@ -23,16 +24,16 @@ namespace Application.Sales.Commands.CreateSale.Tests
     {
         private static object[] CommandArgs = new[]
         {
-            new object[]{ 1, 2, 2, 14 },
-            new object[]{ 3, 3, 1, 24 },
-            new object[]{ 2, 1, 2, 404 },
+            new object[]{ DataSetKeys.Default, 1, 2, 2, 14 },
+            new object[]{ DataSetKeys.Default, 3, 3, 1, 24 },
+            new object[]{ DataSetKeys.Default, 2, 1, 2, 404 },
         };
 
         private async Task<(dynamic expectedObj, Sale actual, Mock<IRepository<Sale>> saleRepoMock,
             Mock<IUnitOfWork> uowMock, Mock<IInventoryService> inventoryServiceMock)>
-            InitHandleTestAsync(int customerId, int employeeId, int productId, int quantity)
+            InitHandleTestAsync(string dataSetKey, int customerId, int employeeId, int productId, int quantity)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var selectedCustomer = dSet.Customers.Single(o => o.Id == customerId);
             var selectedEmployee = dSet.Employees.Single(o => o.Id == employeeId);
@@ -120,10 +121,10 @@ namespace Application.Sales.Commands.CreateSale.Tests
         }
 
         [TestCaseSource(nameof(CommandArgs))]
-        public async Task HandleTest(int customerId, int employeeId, int productId, int quantity)
+        public async Task HandleTest(string dataSetKey, int customerId, int employeeId, int productId, int quantity)
         {
             var (expectedObj, actual, _, _, _) =
-                await InitHandleTestAsync(customerId, employeeId, productId, quantity);
+                await InitHandleTestAsync(dataSetKey, customerId, employeeId, productId, quantity);
 
             var expected = expectedObj.createdSale;
             Assert.AreEqual(expected.Customer, actual.Customer);
@@ -137,10 +138,10 @@ namespace Application.Sales.Commands.CreateSale.Tests
         }
 
         [TestCaseSource(nameof(CommandArgs))]
-        public async Task HandleShouldSaveChangesTest(int customerId, int employeeId, int productId, int quantity)
+        public async Task HandleShouldSaveChangesTest(string dataSetKey, int customerId, int employeeId, int productId, int quantity)
         {
             var (expectedObj, actual, saleRepoMock, uowMock, inventoryServiceMock) =
-                await InitHandleTestAsync(customerId, employeeId, productId, quantity);
+                await InitHandleTestAsync(dataSetKey, customerId, employeeId, productId, quantity);
 
             saleRepoMock.Verify(o => o.Add(actual), Times.Once);
 
@@ -148,10 +149,10 @@ namespace Application.Sales.Commands.CreateSale.Tests
         }
 
         [TestCaseSource(nameof(CommandArgs))]
-        public async Task HandleShouldNotifyInventoryTest(int customerId, int employeeId, int productId, int quantity)
+        public async Task HandleShouldNotifyInventoryTest(string dataSetKey, int customerId, int employeeId, int productId, int quantity)
         {
             var (expectedObj, actual, saleRepoMock, uowMock, inventoryServiceMock) =
-                await InitHandleTestAsync(customerId, employeeId, productId, quantity);
+                await InitHandleTestAsync(dataSetKey, customerId, employeeId, productId, quantity);
 
             inventoryServiceMock.Verify(o => o.NotifySaleOcurred(productId, quantity), Times.Once);
         }

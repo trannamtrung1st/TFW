@@ -9,6 +9,7 @@ using Domain.Products;
 using Moq;
 using Application.Abstracts.Data;
 using System.Linq;
+using Cross.Tests;
 
 namespace Application.Products.Commands.RemoveProduct.Tests
 {
@@ -17,15 +18,15 @@ namespace Application.Products.Commands.RemoveProduct.Tests
     {
         private static object[] RemovedProductIds = new[]
         {
-            new object[]{ 1 },
-            new object[]{ 2 },
-            new object[]{ 3 },
+            new object[]{ DataSetKeys.Default, 1 },
+            new object[]{ DataSetKeys.Default, 2 },
+            new object[]{ DataSetKeys.Default, 3 },
         };
 
         private async Task<(dynamic expectedObj, Product removedProduct, Mock<IUnitOfWork> uowMock, Mock<IRepository<Product>> proRepoMock)>
-            InitTestAsync(int productId)
+            InitTestAsync(string dataSetKey, int productId)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var command = new RemoveProductCommand
             {
@@ -60,17 +61,17 @@ namespace Application.Products.Commands.RemoveProduct.Tests
         }
 
         [TestCaseSource(nameof(RemovedProductIds))]
-        public async Task HandleTest(int productId)
+        public async Task HandleTest(string dataSetKey, int productId)
         {
-            var (_, removedProduct, _, _) = await InitTestAsync(productId);
+            var (_, removedProduct, _, _) = await InitTestAsync(dataSetKey, productId);
 
             Assert.AreEqual(true, removedProduct.Deleted);
         }
 
         [TestCaseSource(nameof(RemovedProductIds))]
-        public async Task HandleShouldCallRemoveAndSaveChangesTest(int productId)
+        public async Task HandleShouldCallRemoveAndSaveChangesTest(string dataSetKey, int productId)
         {
-            var (_, removedProduct, uowMock, proRepoMock) = await InitTestAsync(productId);
+            var (_, removedProduct, uowMock, proRepoMock) = await InitTestAsync(dataSetKey, productId);
 
             proRepoMock.Verify(o => o.Remove(It.Is<Product>(o => o.Id == productId)), Times.Once);
 

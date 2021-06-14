@@ -8,6 +8,7 @@
 @mytag
 Scenario: Remove a product
 	Given "default" dataset
+	And dataset is created
 	When remove the product "Spaghetti"
 	Then that product is marked as deleted
 	But it is still stored in data store

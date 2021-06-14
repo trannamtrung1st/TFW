@@ -1,6 +1,4 @@
-﻿using Application.Abstracts.Data;
-using CleanArchitecture.Specs.Common.Data;
-using Domain.Products;
+﻿using CleanArchitecture.Specs.Common.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,38 +13,39 @@ namespace CleanArchitecture.Specs.Common.ManageDataSets
     {
         private readonly ScenarioContext _scenarioContext;
         private readonly ISpecDbMigrator _specDbMigrator;
-        private readonly IRepository<Product> _productRepository;
-        private readonly IUnitOfWork _uow;
 
         public ManageDataSetsSteps(ScenarioContext scenarioContext,
-            ISpecDbMigrator specDbMigrator,
-            IRepository<Product> productRepository,
-            IUnitOfWork uow)
+            ISpecDbMigrator specDbMigrator)
         {
             _scenarioContext = scenarioContext;
             _specDbMigrator = specDbMigrator;
-            _productRepository = productRepository;
-            _uow = uow;
         }
 
         [Given(@"""(.*)"" dataset")]
-        public async Task GivenDataset(string dataSetKey)
+        public void GivenDataset(string dataSetKey)
         {
-            await _specDbMigrator.InitAsync(dataSetKey);
+            _scenarioContext[ScenarioContextKeys.DataSet] = DataSets.Get(dataSetKey);
         }
 
         [Given(@"products with following names are marked as deleted")]
-        public async Task GivenProductsWithFollowingNamesAreMarkedAsDeleted(Table table)
+        public void GivenProductsWithFollowingNamesAreMarkedAsDeleted(Table table)
         {
-            var deletedNames = table.Rows.SelectMany(o => o.Values).ToArray();
+            var dSet = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet);
 
-            var deletedProducts = _productRepository.Get().Where(o => deletedNames.Contains(o.Name))
-                .ToArray();
+            var deletedNames = table.Rows.SelectMany(o => o.Values).ToArray();
+            var deletedProducts = dSet.Products.Where(o => deletedNames.Contains(o.Name)).ToArray();
 
             foreach (var product in deletedProducts)
-                _productRepository.Remove(product);
+                product.Deleted = true;
+        }
 
-            await _uow.SaveChangesAsync();
+        [Given(@"dataset is created")]
+        public async Task GivenDatasetIsCreated()
+        {
+            var dSet = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet);
+
+            await _specDbMigrator.DropAsync();
+            await _specDbMigrator.InitAsync(dSet);
         }
     }
 }

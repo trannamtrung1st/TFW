@@ -8,6 +8,7 @@ using System.Linq;
 using Moq;
 using Application.Abstracts.Data;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Employees.Queries.GetEmployeesList.Tests
 {
@@ -19,10 +20,10 @@ namespace Application.Employees.Queries.GetEmployeesList.Tests
         {
         }
 
-        [Test()]
-        public async Task ExecuteAsyncTest()
+        [TestCase(DataSetKeys.Default)]
+        public async Task ExecuteAsyncTest(string dataSetKey)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var employeeModels = dSet.Employees.Select(o => new EmployeeModel
             {

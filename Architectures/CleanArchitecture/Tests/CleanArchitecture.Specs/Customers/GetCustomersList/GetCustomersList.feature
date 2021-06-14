@@ -5,5 +5,6 @@
 
 Scenario: Get a List of Customers
 	Given "default" dataset
+	And dataset is created
 	When I request a list of customers
 	Then the customers dataset should be returned

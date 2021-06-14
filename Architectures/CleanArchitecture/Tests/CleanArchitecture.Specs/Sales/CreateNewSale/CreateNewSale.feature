@@ -5,6 +5,7 @@
 
 Scenario: Create a Sale
 	Given "default" dataset
+	And dataset is created
 	Given the following sale info:
 		| Customer      | Employee   | Product   | Quantity |
 		| Martin Fowler | Eric Evans | Spaghetti | 2        |

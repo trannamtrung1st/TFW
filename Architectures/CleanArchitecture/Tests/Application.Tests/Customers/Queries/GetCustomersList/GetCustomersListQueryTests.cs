@@ -8,6 +8,7 @@ using Application.Abstracts.Data;
 using Domain.Customers;
 using System.Linq;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Customers.Queries.GetCustomersList.Tests
 {
@@ -19,10 +20,10 @@ namespace Application.Customers.Queries.GetCustomersList.Tests
         {
         }
 
-        [Test()]
-        public async Task ExecuteAsyncTest()
+        [TestCase(DataSetKeys.Default)]
+        public async Task ExecuteAsyncTest(string dataSetKey)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var customerModels = dSet.Customers.Select(o => new CustomerModel
             {

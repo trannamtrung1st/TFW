@@ -8,18 +8,19 @@ using System.Linq;
 using Moq;
 using Application.Abstracts.Data;
 using Application.Tests.Common.Data;
+using Cross.Tests;
 
 namespace Application.Sales.Queries.GetSaleDetail.Tests
 {
     [TestFixture()]
     public class GetSaleDetailQueryTests
     {
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        public async Task ExecuteAsyncTest(int saleId)
+        [TestCase(DataSetKeys.Default, 1)]
+        [TestCase(DataSetKeys.Default, 2)]
+        [TestCase(DataSetKeys.Default, 3)]
+        public async Task ExecuteAsyncTest(string dataSetKey, int saleId)
         {
-            var dSet = DataSets.Get("default");
+            var dSet = DataSets.Get(dataSetKey);
 
             var saleModel = dSet.Sales.Select(o => new SaleDetailModel
             {
