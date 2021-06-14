@@ -8,22 +8,9 @@
 		| Id | Name    | Unit Price |
 		| 1  | Mì trộn | 10.00      |
 	Rules:
-	+ BR-000003
 
 Scenario: Get a List of Products
 	Given "default" dataset
 	And dataset is created
 	When I request a list of products
 	Then the products dataset should be returned
-
-Scenario: Get a List of Products (excluding deleted products)
-	Given "default" dataset
-	And products with following names are marked as deleted
-		| Name      |
-		| Spaghetti |
-		| Ravioli   |
-	And dataset is created
-	When I request a list of products
-	Then the following products should be returned:
-		| Id | Name    | Unit Price |
-		| 2  | Lasagna | 10.00      |

@@ -37,8 +37,7 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Products/GetProductsList", "Get Products List", "\tAs a sales person\r\n\tI want to get a list of products\r\n\tSo I can inspect the prod" +
                     "ucts\r\n\tDescription:\r\n\t+ Get all products in catalog\r\n\t+ Example data returned\r\n\t" +
-                    "\t| Id | Name    | Unit Price |\r\n\t\t| 1  | Mì trộn | 10.00      |\r\n\tRules:\r\n\t+ BR-" +
-                    "000003", ProgrammingLanguage.CSharp, ((string[])(null)));
+                    "\t| Id | Name    | Unit Price |\r\n\t\t| 1  | Mì trộn | 10.00      |\r\n\tRules:", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -83,7 +82,7 @@ namespace CleanArchitecture.Specs.Products.GetProductsList
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Products", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 13
+#line 12
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -103,77 +102,17 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 14
+#line 13
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 14
+ testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 15
- testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 16
- testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 17
  testRunner.Then("the products dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get a List of Products (excluding deleted products)")]
-        public virtual void GetAListOfProductsExcludingDeletedProducts()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Products (excluding deleted products)", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 19
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 20
- testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Name"});
-                table9.AddRow(new string[] {
-                            "Spaghetti"});
-                table9.AddRow(new string[] {
-                            "Ravioli"});
-#line 21
- testRunner.And("products with following names are marked as deleted", ((string)(null)), table9, "And ");
-#line hidden
-#line 25
- testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 26
- testRunner.When("I request a list of products", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Id",
-                            "Name",
-                            "Unit Price"});
-                table10.AddRow(new string[] {
-                            "2",
-                            "Lasagna",
-                            "10.00"});
-#line 27
- testRunner.Then("the following products should be returned:", ((string)(null)), table10, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

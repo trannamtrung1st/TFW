@@ -1,5 +1,2 @@
 ﻿{
-  "BR-000001": "'Get sales list' result should remain the same even when product is deleted",
-  "BR-000002": "Product is still stored in data store after its deletion",
-  "BR-000003": "'Get products list' result should not show mark-as-deleted products"
 }
