@@ -35,8 +35,16 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sales/GetSalesList", "Get Sales List", "\tAs a sales person\r\n\tI want to get a list of sales\r\n\tSo I can find a sale to revi" +
-                    "ew\r\n\tRules:\r\n\t+ BR-000001", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Sales/GetSalesList", "Get Sales List", @"	As a sales person
+	I want to get a list of sales
+	So I can find a sale to review
+	Description:
+	+ Get all sales recorded
+	+ Example data returned
+		| Id | Date       | Customer   | Employee   | Product   | Unit Price | Quantity | Total Price |
+		| 1  | 2021-01-01 | Trung Tran | David Evan | Spaghetti | 15.0       | 1        | 15.0        |
+	Rules:
+	+ BR-000001", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -83,7 +91,7 @@ namespace CleanArchitecture.Specs.Sales.GetSalesList
                     "mytag"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Sales", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 9
+#line 14
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -103,16 +111,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 10
+#line 15
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 11
+#line 16
  testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 12
+#line 17
  testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 13
+#line 18
  testRunner.Then("the sales dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -126,7 +134,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a List of Sales (including deleted products)", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
-#line 15
+#line 20
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -146,7 +154,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 16
+#line 21
  testRunner.Given("\"default\" dataset", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
@@ -155,16 +163,16 @@ this.ScenarioInitialize(scenarioInfo);
                             "Spaghetti"});
                 table14.AddRow(new string[] {
                             "Ravioli"});
-#line 17
+#line 22
  testRunner.And("products with following names are marked as deleted", ((string)(null)), table14, "And ");
 #line hidden
-#line 21
+#line 26
  testRunner.And("dataset is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 22
+#line 27
  testRunner.When("I request a list of sales", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 23
+#line 28
  testRunner.Then("the sales dataset should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
