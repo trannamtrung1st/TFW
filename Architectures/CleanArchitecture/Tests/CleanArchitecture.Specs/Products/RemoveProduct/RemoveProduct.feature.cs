@@ -113,10 +113,10 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("remove the product \"Spaghetti\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 13
- testRunner.Then("that product is marked as deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("that product is still in data store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 14
- testRunner.But("it is still stored in data store", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "But ");
+ testRunner.But("it is marked as deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "But ");
 #line hidden
             }
             this.ScenarioCleanup();

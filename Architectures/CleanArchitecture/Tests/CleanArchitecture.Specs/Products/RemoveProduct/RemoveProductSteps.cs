@@ -33,24 +33,24 @@ namespace CleanArchitecture.Specs.Products.RemoveProduct
         {
             _expectedRemovedProduct = _productRepository.Get().Single(o => o.Name == productName);
 
-            _actualRemovedProduct = await _mediator.Send(new RemoveProductCommand
+            _ = await _mediator.Send(new RemoveProductCommand
             {
                 ProductId = _expectedRemovedProduct.Id
             });
         }
 
-        [Then(@"that product is marked as deleted")]
-        public void ThenThatProductIsMarkedAsDeleted()
+        [Then(@"that product is still in data store")]
+        public void ThenThatProductIsStillInDataStore()
         {
-            _actualRemovedProduct.Deleted.Should().BeTrue();
+            _actualRemovedProduct = _productRepository.IgnoreQueryFilters().Single(o => o.Id == _expectedRemovedProduct.Id);
+
+            _actualRemovedProduct.Should().NotBeNull();
         }
 
-        [Then(@"it is still stored in data store")]
-        public void ThenItIsStillStoredInDataStore()
+        [Then(@"it is marked as deleted")]
+        public void ThenItIsMarkedAsDeleted()
         {
-            var removedProduct = _productRepository.IgnoreQueryFilters().Single(o => o.Name == _expectedRemovedProduct.Name);
-
-            removedProduct.Id.Should().Be(_expectedRemovedProduct.Id);
+            _actualRemovedProduct.Deleted.Should().BeTrue();
         }
     }
 }
