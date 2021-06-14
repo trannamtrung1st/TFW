@@ -48,7 +48,8 @@ namespace CleanArchitecture.Specs.Common.Data
                 {
                     Id = o.Id,
                     Name = o.Name,
-                    Price = o.UnitPrice
+                    Price = o.UnitPrice,
+                    Deleted = o.Deleted
                 }).ToArray();
 
                 dataSet.Sales = model.Sales.Select(sale => new Sale
