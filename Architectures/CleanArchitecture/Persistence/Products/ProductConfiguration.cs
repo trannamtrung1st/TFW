@@ -19,8 +19,6 @@ namespace Persistence.Products
 
             builder.Property(p => p.Price)
                 .IsRequired();
-
-            builder.HasQueryFilter(p => !p.Deleted);
         }
     }
 }

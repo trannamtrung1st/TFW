@@ -9,6 +9,5 @@ namespace CleanArchitecture.Specs.Common.InitDataSets
         public int Id { get; set; }
         public string Name { get; set; }
         public double UnitPrice { get; set; }
-        public bool Deleted { get; set; }
     }
 }

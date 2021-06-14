@@ -27,18 +27,6 @@ namespace CleanArchitecture.Specs.Common.ManageDataSets
             _scenarioContext[ScenarioContextKeys.DataSet] = DataSets.Get(dataSetKey);
         }
 
-        [Given(@"products with following names are marked as deleted")]
-        public void GivenProductsWithFollowingNamesAreMarkedAsDeleted(Table table)
-        {
-            var dSet = _scenarioContext.Get<CleanArchitectureDataSet>(ScenarioContextKeys.DataSet);
-
-            var deletedNames = table.Rows.SelectMany(o => o.Values).ToArray();
-            var deletedProducts = dSet.Products.Where(o => deletedNames.Contains(o.Name)).ToArray();
-
-            foreach (var product in deletedProducts)
-                product.Deleted = true;
-        }
-
         [Given(@"dataset is created")]
         public async Task GivenDatasetIsCreated()
         {
