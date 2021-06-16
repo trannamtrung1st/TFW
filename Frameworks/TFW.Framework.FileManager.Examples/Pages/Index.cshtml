@@ -4,7 +4,7 @@
     ViewBag.Title = "File Manager";
 }
 
-<div style="margin-top:100px">
+<div class="container" style="margin-top: 100px">
     <div id="elfinder"></div>
 </div>
 
@@ -18,12 +18,11 @@
             contextMenu.navbar = contextMenu.navbar.filter(o => !disableContextMenu.includes(o));
             contextMenu.cwd = contextMenu.cwd.filter(o => !disableContextMenu.includes(o));
             contextMenu.files = contextMenu.files.filter(o => !disableContextMenu.includes(o));
-            var disabledCmds = ['callback', 'chmod', 'editor', 'netmount', 'ping', 'zipdl', 'help'];
+
+            //const appCmds = ['open', ...];
             const appCmds = elFinder.prototype._options.commands;
             elFinder.prototype.i18.en.messages.TextArea = "Edit";
-            $.each(disabledCmds, function (i, cmd) {
-                (idx = $.inArray(cmd, appCmds)) !== -1 && appCmds.splice(idx, 1);
-            });
+
             var options = {
                 url: '/api/files/connector', // Default (Local File System)
                 rememberLastDir: false, // Prevent elFinder saving in the Browser LocalStorage the last visited directory
@@ -49,10 +48,12 @@
                 },
                 contextmenu: contextMenu,
                 lang: 'vi',
-                requestType: 'post'
+                requestType: 'post',
                 //onlyMimes: ["image", "text/plain"] // Get files of requested mime types only
             };
+
             $('#elfinder').elfinder(options).elfinder('instance');
+
             //$.ajax({
             //    url: '/lib/elfinder/js/i18n/elfinder.vi.js',
             //    cache: true,
