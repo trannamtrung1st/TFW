@@ -16,13 +16,13 @@ namespace TFW.Framework.EFCore.Context
         void PrepareModify(object entity);
 
         EntityEntry SoftDelete(object entity);
-        EntityEntry<T> SoftDelete<T>(T entity) where T : class;
+        EntityEntry<T> SoftDelete<T>(T entity) where T : class, ISoftDeleteEntity;
         void SoftDeleteRange(params object[] entities);
         bool IsSoftDeleteEnabled();
         bool IsSoftDeleteAppliedForEntity(Type eType);
         IQueryable<T> QueryDeleted<T>() where T : class, ISoftDeleteEntity;
-        EntityEntry<E> Remove<E>(E entity, bool isPhysical) where E : class;
-        void RemoveRange<E>(IEnumerable<E> list, bool isPhysical) where E : class;
-        Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical) where E : class;
+        EntityEntry<E> Remove<E>(E entity, bool isPhysical) where E : class, ISoftDeleteEntity;
+        void RemoveRange<E>(IEnumerable<E> list, bool isPhysical) where E : class, ISoftDeleteEntity;
+        Task<EntityEntry<E>> RemoveAsync<E>(object[] key, bool isPhysical) where E : class, ISoftDeleteEntity;
     }
 }

@@ -41,7 +41,7 @@ namespace TFW.Framework.EFCore.Context
             return entry;
         }
 
-        public static EntityEntry<E> RemoveDefault<E>(this IFullAuditableDbContext dbContext, E entity, bool isPhysical) where E : class
+        public static EntityEntry<E> RemoveDefault<E>(this IFullAuditableDbContext dbContext, E entity, bool isPhysical) where E : class, ISoftDeleteEntity
         {
             if (isPhysical)
                 return dbContext.Remove(entity);
@@ -60,7 +60,7 @@ namespace TFW.Framework.EFCore.Context
             dbContext.SoftDeleteRange(list);
         }
 
-        public static async Task<EntityEntry<E>> RemoveAsyncDefault<E>(this IFullAuditableDbContext dbContext, object[] key, bool isPhysical) where E : class
+        public static async Task<EntityEntry<E>> RemoveAsyncDefault<E>(this IFullAuditableDbContext dbContext, object[] key, bool isPhysical) where E : class, ISoftDeleteEntity
         {
             var entity = await dbContext.FindAsync<E>(key);
 
