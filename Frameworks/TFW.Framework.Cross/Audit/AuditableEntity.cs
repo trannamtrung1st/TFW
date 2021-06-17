@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.Cross.Models
+namespace TFW.Framework.Cross.Audit
 {
     public interface IAuditableEntity
     {

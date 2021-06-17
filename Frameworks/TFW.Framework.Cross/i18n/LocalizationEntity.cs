@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TFW.Framework.Cross.Models
+namespace TFW.Framework.Cross.i18n
 {
     public interface ILocalizedEntity<LEntity> where LEntity : class, ILocalizationEntity
     {

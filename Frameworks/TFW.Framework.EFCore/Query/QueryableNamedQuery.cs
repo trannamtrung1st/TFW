@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TFW.Framework.Cross.Models;
+using TFW.Framework.Cross.Audit;
 
-namespace TFW.Framework.EFCore.Queries
+namespace TFW.Framework.EFCore.Query
 {
     public static class QueryableNamedQuery
     {

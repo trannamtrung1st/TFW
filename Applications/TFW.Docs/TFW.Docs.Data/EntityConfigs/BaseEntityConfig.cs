@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Framework.Cross.Models;
+using TFW.Framework.Cross.i18n;
 using TFW.Framework.EFCore.Extensions;
 
 namespace TFW.Docs.Data.EntityConfigs

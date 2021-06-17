@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TFW.Framework.Cross.Models;
+using TFW.Framework.Cross.Audit;
 
 namespace TFW.Docs.Cross.Entities
 {

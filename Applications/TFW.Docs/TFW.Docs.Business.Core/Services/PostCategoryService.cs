@@ -21,7 +21,7 @@ using TFW.Docs.Data;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.DI.Attributes;
-using TFW.Framework.EFCore.Queries;
+using TFW.Framework.EFCore.Query;
 
 namespace TFW.Docs.Business.Core.Services
 {

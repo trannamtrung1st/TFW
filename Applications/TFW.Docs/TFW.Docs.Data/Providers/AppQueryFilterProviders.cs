@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
-using TFW.Framework.Cross.Models;
+using TFW.Framework.Cross.Audit;
 using TFW.Framework.EFCore.Context;
 using TFW.Framework.EFCore.Extensions;
 using TFW.Framework.EFCore.Options;

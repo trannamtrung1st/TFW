@@ -8,8 +8,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TFW.Framework.Cross.Models;
-using TFW.Framework.EFCore.Queries;
+using TFW.Framework.Cross.Audit;
+using TFW.Framework.EFCore.Query;
 
 namespace TFW.Framework.EFCore.Context
 {
