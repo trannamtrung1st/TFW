@@ -26,8 +26,9 @@ namespace TFW.Framework.FileManager.Examples.Controllers
         {
             SetupConnector();
             var cmd = ConnectorHelper.ParseCommand(Request);
-            var conResult = await _connector.ProcessAsync(cmd);
-            var actionResult = conResult.ToActionResult();
+            var ccTokenSource = ConnectorHelper.RegisterCcTokenSource(HttpContext);
+            var conResult = await _connector.ProcessAsync(cmd, ccTokenSource);
+            var actionResult = conResult.ToActionResult(HttpContext);
             return actionResult;
         }
 
