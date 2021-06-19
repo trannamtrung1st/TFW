@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="elFinder.Net.AspNetCore" Version="1.0.4" />
-    <PackageReference Include="elFinder.Net.Drivers.FileSystem" Version="1.0.4" />
+    <PackageReference Include="elFinder.Net.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="elFinder.Net.Drivers.FileSystem" Version="1.1.0" />
   </ItemGroup>
 
 </Project>
