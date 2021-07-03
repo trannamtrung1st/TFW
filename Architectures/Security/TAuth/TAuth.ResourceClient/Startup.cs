@@ -46,12 +46,14 @@ namespace TAuth.ResourceClient
                 opt.Authority = "https://localhost:5001/";
                 opt.ClientId = "resource-client-id";
                 opt.ResponseType = "code";
-                opt.UsePkce = false;
+                //opt.UsePkce = false;
                 //opt.CallbackPath = new PathString(""); // Default: protocol://host/signin-odic
+                //opt.SignedOutCallbackPath = new PathString("");
                 opt.Scope.Add("openid");
                 opt.Scope.Add("profile");
                 opt.SaveTokens = true;
                 opt.ClientSecret = "resource-client-secret";
+                opt.GetClaimsFromUserInfoEndpoint = true;
             });
 
             services.AddRazorPages(opt =>

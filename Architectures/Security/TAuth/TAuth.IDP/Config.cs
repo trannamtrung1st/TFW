@@ -33,6 +33,10 @@ namespace TAuth.IDP
                     {
                         "https://localhost:44385/signin-oidc"
                     },
+                    PostLogoutRedirectUris =
+                    {
+                        "https://localhost:44385/signout-callback-oidc"
+                    },
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
@@ -42,7 +46,7 @@ namespace TAuth.IDP
                     {
                         new Secret("resource-client-secret".Sha256())
                     },
-                    RequirePkce = false,
+                    RequirePkce = true,
                     RequireConsent = true
                 }
             };
