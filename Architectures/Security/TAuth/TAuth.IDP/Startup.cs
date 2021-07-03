@@ -28,6 +28,9 @@ namespace TAuth.IDP
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
+
+                // set to False to prevent single sign-out
+                //options.Endpoints.EnableEndSessionEndpoint = false;
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
