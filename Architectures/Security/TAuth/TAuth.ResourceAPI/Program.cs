@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,30 +19,7 @@ namespace TAuth.ResourceAPI
         {
             var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var provider = scope.ServiceProvider;
-                var dbContext = provider.GetRequiredService<ResourceContext>();
-
-                var isInit = !dbContext.Database.GetAppliedMigrations().Any();
-
-                dbContext.Database.Migrate();
-
-                if (isInit)
-                {
-                    dbContext.Resources.AddRange(
-                        new ResourceEntity
-                        {
-                            Name = "Sample Resource 1",
-                        },
-                        new ResourceEntity
-                        {
-                            Name = "Sample Resource 2"
-                        });
-
-                    dbContext.SaveChanges();
-                }
-            }
+            InitAsync(host).Wait();
 
             host.Run();
         }
@@ -52,5 +30,52 @@ namespace TAuth.ResourceAPI
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static async Task InitAsync(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var provider = scope.ServiceProvider;
+                var dbContext = provider.GetRequiredService<ResourceContext>();
+                var userManager = provider.GetRequiredService<UserManager<AppUser>>();
+
+                var isInit = !(await dbContext.Database.GetAppliedMigrationsAsync()).Any();
+
+                await dbContext.Database.MigrateAsync();
+
+                if (isInit)
+                {
+                    var user1 = new AppUser
+                    {
+                        UserName = "trung.tran",
+                        FirstName = "Trung",
+                        LastName = "Tran"
+                    };
+                    var user2 = new AppUser
+                    {
+                        UserName = "bob",
+                        FirstName = "Bob",
+                        LastName = "Corn"
+                    };
+
+                    await userManager.CreateAsync(user1, "123123");
+                    await userManager.CreateAsync(user2, "bob");
+
+                    await dbContext.Resources.AddRangeAsync(
+                        new ResourceEntity
+                        {
+                            Name = "Sample Resource 1",
+                            UserId = user1.Id,
+                        },
+                        new ResourceEntity
+                        {
+                            Name = "Sample Resource 2",
+                            UserId = user2.Id
+                        });
+
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+        }
     }
 }

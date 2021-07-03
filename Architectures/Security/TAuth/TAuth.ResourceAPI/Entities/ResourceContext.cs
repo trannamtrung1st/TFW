@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TAuth.ResourceAPI.Entities
 {
-    public class ResourceContext : DbContext
+    public class ResourceContext : IdentityDbContext<AppUser, AppRole, int>
     {
         public const string DefaultConnStr = "Data Source=./ResourceContext.db";
 
@@ -31,6 +32,13 @@ namespace TAuth.ResourceAPI.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ResourceEntity>(builder =>
+            {
+                builder.HasOne(o => o.User)
+                    .WithMany(o => o.Resources)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +35,29 @@ namespace TAuth.ResourceClient
                 opt.BaseAddress = new Uri(ApiSettings.ResourceApiUrl);
             });
 
-            services.AddRazorPages();
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opt =>
+            {
+                opt.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.Authority = "https://localhost:5001/";
+                opt.ClientId = "resource-client-id";
+                opt.ResponseType = "code";
+                opt.UsePkce = false;
+                //opt.CallbackPath = new PathString(""); // Default: protocol://host/signin-odic
+                opt.Scope.Add("openid");
+                opt.Scope.Add("profile");
+                opt.SaveTokens = true;
+                opt.ClientSecret = "resource-client-secret";
+            });
+
+            services.AddRazorPages(opt =>
+            {
+                opt.Conventions.AuthorizeFolder("/");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +79,7 @@ namespace TAuth.ResourceClient
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

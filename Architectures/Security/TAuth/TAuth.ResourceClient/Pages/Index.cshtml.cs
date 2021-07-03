@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TAuth.ResourceClient.Models.Resource;
@@ -26,6 +29,8 @@ namespace TAuth.ResourceClient.Pages
 
         public async Task OnGet()
         {
+            await DebugIdentity();
+
             ResourceList = await _resourceService.GetAsync();
         }
 
@@ -34,6 +39,18 @@ namespace TAuth.ResourceClient.Pages
             await _resourceService.DeleteAsync(id);
 
             return RedirectToPage("/Index");
+        }
+
+        private async Task DebugIdentity()
+        {
+            var idToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+            Debug.WriteLine($"IdToken: {idToken}");
+
+            foreach (var claim in User.Claims)
+            {
+                Debug.WriteLine($"Claim: {claim.Type} - {claim.Value}");
+            }
         }
     }
 }

@@ -33,6 +33,17 @@ namespace TAuth.ResourceAPI
             services.AddDbContext<ResourceContext>(opt =>
                 opt.UseSqlite(Configuration.GetConnectionString(nameof(ResourceContext))));
 
+            services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 1;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredUniqueChars = 0;
+            }).AddRoles<AppRole>()
+            .AddEntityFrameworkStores<ResourceContext>();
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
