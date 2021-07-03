@@ -344,3 +344,4 @@ TFW.Framework.FileManager.Examples/wwwroot/upload/
 TFW.Framework.FileManager.Examples/wwwroot/upload-2/
 TFW.Docs.WebApi/logs/
 Frameworks/TFW.Framework.FileManager.Examples/wwwroot/lib/
+*.db

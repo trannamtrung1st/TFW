@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAuth.ResourceClient", "TAuth.ResourceClient\TAuth.ResourceClient.csproj", "{142B12C2-6DC7-4DB5-B9DA-6A8FFD2158B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TAuth.ResourceAPI", "TAuth.ResourceAPI\TAuth.ResourceAPI.csproj", "{8CE75243-ACA0-45E6-989C-AB1F4A6E5B4F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{142B12C2-6DC7-4DB5-B9DA-6A8FFD2158B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142B12C2-6DC7-4DB5-B9DA-6A8FFD2158B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142B12C2-6DC7-4DB5-B9DA-6A8FFD2158B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142B12C2-6DC7-4DB5-B9DA-6A8FFD2158B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE75243-ACA0-45E6-989C-AB1F4A6E5B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE75243-ACA0-45E6-989C-AB1F4A6E5B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE75243-ACA0-45E6-989C-AB1F4A6E5B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE75243-ACA0-45E6-989C-AB1F4A6E5B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {04C2439A-4DD5-4CAB-B55F-DF9AF451084E}
+	EndGlobalSection
+EndGlobal
