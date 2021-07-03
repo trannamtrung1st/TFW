@@ -21,21 +21,42 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="">Home</a>
+                            <a class="nav-link text-dark" href="/">Home</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+
     <div class="container">
-        <main role="main" class="pb-3">
-            <div class="text-center">
-                <h1 class="display-4">Welcome</h1>
-                <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.
-                </p>
+        <div class="row mb-1">
+            <div class="col-12">
+                <a href="create.html" class="btn btn-info float-right">
+                    Create
+                </a>
             </div>
-        </main>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table" id="tbl-resource">
+                    <thead class="thead-light">
+                        <tr class="d-table-row">
+                            <th class="d-table-cell">Id</th>
+                            <th class="d-table-cell">Name</th>
+                            <th class="d-table-cell">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -46,7 +67,49 @@
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/resourceService.js"></script>
     <script src="js/site.js"></script>
+
+    <script>
+        const PageModel = () => {
+            const resourceService = ResourceService();
+
+            const fetchList = () => {
+                $('#tbl-resource tbody').children().remove();
+                resourceService.getResourceList(list => {
+                    list.forEach(item => {
+                        $('#tbl-resource tbody').append(
+                            $('<tr class="d-table-row">').append(
+                                $('<td class="d-table-cell">' + item.id + '</td>')
+                            ).append(
+                                $('<td class="d-table-cell">' + item.name + '</td>')
+                            ).append(
+                                $('<td class="d-table-cell">').append(
+                                    $('<button onclick="pageModel.deleteResource(\'' + item.id + '\')" '
+                                        + 'class="btn btn-outline-danger">Delete</button>')
+                                )
+                            )
+                        );
+                    });
+                });
+            };
+
+            const deleteResource = (id) => {
+                resourceService.deleteResource(id, fetchList);
+            };
+
+            return {
+                fetchList,
+                deleteResource
+            };
+        };
+
+        const pageModel = PageModel();
+
+        $(document).ready(() => {
+            pageModel.fetchList();
+        });
+    </script>
 </body>
 
 </html>
