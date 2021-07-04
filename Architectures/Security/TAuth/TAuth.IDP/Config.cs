@@ -48,6 +48,31 @@ namespace TAuth.IDP
                     },
                     RequirePkce = true,
                     RequireConsent = true
+                },
+                new Client
+                {
+                    ClientId = "resource-client-js-id",
+                    ClientName = "Resource Client JS",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =
+                    {
+                        "http://localhost:52330/callback.html"
+                    },
+                    PostLogoutRedirectUris =
+                    {
+                        "http://localhost:52330/index.html"
+                    },
+                    AllowedCorsOrigins =
+                    {
+                        "http://localhost:52330"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                    },
+                    RequireConsent = true
                 }
             };
     }

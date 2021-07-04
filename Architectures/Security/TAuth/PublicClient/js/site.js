@@ -16,3 +16,9 @@ function serializeFormToObj(form) {
     });
     return obj;
 }
+
+const identityService = IdentityService();
+
+$(document).ready(() => {
+    identityService.authenticateUser();
+});
