@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using TAuth.ResourceAPI.Entities;
 using TAuth.ResourceAPI.Services;
 
@@ -19,6 +20,7 @@ namespace TAuth.ResourceAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
         public IConfiguration Configuration { get; }
@@ -32,6 +34,19 @@ namespace TAuth.ResourceAPI
                 opt.UseSqlite(Configuration.GetConnectionString(nameof(ResourceContext))));
 
             services.AddScoped<IUserProvider, UserProvider>();
+
+            // Use classic JWT Bearer
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddJwtBearer(opt =>
+            //    {
+            //        opt.Authority = "https://localhost:5001";
+            //        opt.Audience = "resource_api";
+            //        opt.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            NameClaimType = JwtClaimTypes.Name,
+            //            RoleClaimType = JwtClaimTypes.Role
+            //        };
+            //    });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(opt =>

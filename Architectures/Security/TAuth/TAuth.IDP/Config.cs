@@ -26,7 +26,10 @@ namespace TAuth.IDP
         public static IEnumerable<ApiResource> ApiResources =>
             new ApiResource[]
             {
-                new ApiResource("resource_api", "Resource API")
+                new ApiResource("resource_api", "Resource API"/*, new[]
+                {
+                    JwtClaimTypes.Role
+                }*/)
                 {
                     Scopes = { "resource_api.full" }
                 }
@@ -35,7 +38,10 @@ namespace TAuth.IDP
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("resource_api.full", "Full access to Resource API")
+                new ApiScope("resource_api.full", "Full access to Resource API", new[]
+                {
+                    JwtClaimTypes.Role
+                })
             };
 
         public static IEnumerable<Client> Clients =>

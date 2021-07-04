@@ -64,6 +64,7 @@ namespace TAuth.ResourceAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.Resources.Select(o => new ResourceEntity
