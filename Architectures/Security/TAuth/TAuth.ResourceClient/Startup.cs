@@ -1,3 +1,4 @@
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using TAuth.ResourceClient.Services;
@@ -51,6 +53,7 @@ namespace TAuth.ResourceClient
                 opt.ResponseType = "code";
                 //opt.UsePkce = false;
                 opt.Scope.Add("address");
+                opt.Scope.Add("roles");
                 opt.SaveTokens = true;
                 opt.ClientSecret = "resource-client-secret";
                 opt.GetClaimsFromUserInfoEndpoint = true;
@@ -58,6 +61,13 @@ namespace TAuth.ResourceClient
                 opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.AuthTime);
                 opt.ClaimActions.DeleteClaim("s_hash");
                 opt.ClaimActions.DeleteClaim("idp");
+                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, "role");
+
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    NameClaimType = JwtClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
             });
 
             services.AddRazorPages(opt =>

@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
@@ -15,7 +16,11 @@ namespace TAuth.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Address()
+                new IdentityResources.Address(),
+                new IdentityResource("roles", "User role(s)", new string[]
+                {
+                    JwtClaimTypes.Role
+                })
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -43,6 +48,7 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
+                        "roles"
                     },
                     ClientSecrets =
                     {
@@ -74,6 +80,7 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
+                        "roles"
                     },
                     RequireConsent = true
                 }

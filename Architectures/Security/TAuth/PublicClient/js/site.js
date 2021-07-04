@@ -21,4 +21,13 @@ const identityService = IdentityService();
 
 $(document).ready(() => {
     identityService.authenticateUser();
+
+    identityService.getUser(user => {
+        if (user && user.profile) {
+            const profile = user.profile;
+            if (profile.role === 'Administrator') {
+                $('.nav-item-admin').show();
+            }
+        }
+    });
 });
