@@ -30,4 +30,13 @@ $(document).ready(() => {
             }
         }
     });
+})
+
+$.ajaxSetup({
+    beforeSend: (xhr) => {
+        const accessToken = identityService.accessToken();
+        if (accessToken) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+        }
+    }
 });

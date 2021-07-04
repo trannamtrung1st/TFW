@@ -33,6 +33,7 @@ namespace TAuth.IDP
                 //options.Endpoints.EnableEndSessionEndpoint = false;
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
                 .AddInMemoryClients(Config.Clients)
                 .AddTestUsers(TestUsers.Users);

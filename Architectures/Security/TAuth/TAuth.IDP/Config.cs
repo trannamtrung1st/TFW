@@ -23,9 +23,20 @@ namespace TAuth.IDP
                 })
             };
 
+        public static IEnumerable<ApiResource> ApiResources =>
+            new ApiResource[]
+            {
+                new ApiResource("resource_api", "Resource API")
+                {
+                    Scopes = { "resource_api.full" }
+                }
+            };
+
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
-            { };
+            {
+                new ApiScope("resource_api.full", "Full access to Resource API")
+            };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
@@ -48,7 +59,8 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
-                        "roles"
+                        "roles",
+                        "resource_api.full"
                     },
                     ClientSecrets =
                     {
@@ -80,7 +92,8 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
-                        "roles"
+                        "roles",
+                        "resource_api.full"
                     },
                     RequireConsent = true
                 }

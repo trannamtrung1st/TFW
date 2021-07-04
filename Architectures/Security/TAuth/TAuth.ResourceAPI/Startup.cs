@@ -1,3 +1,4 @@
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,13 @@ namespace TAuth.ResourceAPI
                 opt.Password.RequiredUniqueChars = 0;
             }).AddRoles<AppRole>()
             .AddEntityFrameworkStores<ResourceContext>();
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(opt =>
+                {
+                    opt.ApiName = "resource_api";
+                    opt.Authority = "https://localhost:5001";
+                });
 
             services.AddControllers();
 

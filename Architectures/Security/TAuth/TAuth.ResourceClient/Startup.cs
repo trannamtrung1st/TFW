@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Handlers;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient
@@ -32,10 +33,13 @@ namespace TAuth.ResourceClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor()
+                .AddTransient<BearerTokenHandler>();
+
             services.AddHttpClient<IResourceService, ResourceService>(opt =>
             {
                 opt.BaseAddress = new Uri(AppSettings.ResourceApiUrl);
-            });
+            }).AddHttpMessageHandler<BearerTokenHandler>();
 
             services.AddHttpClient<IIdentityService, IdentityService>(opt =>
             {
@@ -65,6 +69,7 @@ namespace TAuth.ResourceClient
                 //opt.UsePkce = false;
                 opt.Scope.Add("address");
                 opt.Scope.Add("roles");
+                opt.Scope.Add("resource_api.full");
                 opt.SaveTokens = true;
                 opt.ClientSecret = "resource-client-secret";
                 opt.GetClaimsFromUserInfoEndpoint = true;
