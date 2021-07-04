@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Exceptions;
 using TAuth.ResourceClient.Models.Resource;
 
 namespace TAuth.ResourceClient.Services
@@ -43,8 +44,18 @@ namespace TAuth.ResourceClient.Services
 
         public async Task<IEnumerable<ResourceListItemModel>> GetAsync()
         {
-            var list = await _httpClient.GetFromJsonAsync<IEnumerable<ResourceListItemModel>>("/api/resources");
-            return list;
+            var message = new HttpRequestMessage(HttpMethod.Get, "/api/resources");
+            var resp = await _httpClient.SendAsync(message);
+
+            if (!resp.IsSuccessStatusCode)
+            {
+                throw new HttpException()
+                {
+                    Response = resp
+                };
+            }
+
+            return await resp.Content.ReadFromJsonAsync<IEnumerable<ResourceListItemModel>>();
         }
 
         public async Task<ResourceDetailModel> GetAsync(int id)

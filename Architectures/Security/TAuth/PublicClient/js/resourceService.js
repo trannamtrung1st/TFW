@@ -2,7 +2,13 @@ const ResourceService = () => {
     const baseApiUrl = 'https://localhost:44357';
 
     const getResourceList = (success) => {
-        $.getJSON(baseApiUrl + '/api/resources', success);
+        $.getJSON(baseApiUrl + '/api/resources', success).catch(errResp => {
+            if (errResp.status === 401 || errResp.status === 403) {
+                identityService.forbid();
+            } else {
+                alert('Unknown error');
+            }
+        });
     };
 
     const getResourceById = (id, success) => {

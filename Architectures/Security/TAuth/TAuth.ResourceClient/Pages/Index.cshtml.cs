@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Exceptions;
 using TAuth.ResourceClient.Models.Resource;
 using TAuth.ResourceClient.Services;
 
@@ -25,11 +26,26 @@ namespace TAuth.ResourceClient.Pages
 
         public IEnumerable<ResourceListItemModel> ResourceList { get; set; }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
             await DebugIdentity();
 
-            ResourceList = await _resourceService.GetAsync();
+            try
+            {
+                ResourceList = await _resourceService.GetAsync();
+            }
+            catch (HttpException ex)
+            {
+                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Unauthorized
+                    || ex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    return Forbid();
+                }
+
+                throw ex;
+            }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnGetDeleteAsync([FromQuery] int id)

@@ -64,7 +64,7 @@
                     if (user && user.profile) {
                         const profile = user.profile;
                         if (profile.role !== 'Administrator') {
-                            window.location = '/access-denied.html#' + new Date().getTime();
+                            identityService.forbid();
                         }
                     }
                 });

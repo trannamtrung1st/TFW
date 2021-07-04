@@ -33,6 +33,10 @@ const IdentityService = () => {
         });
     }
 
+    const forbid = () => {
+        window.location = '/access-denied.html#' + new Date().getTime();
+    }
+
     const accessToken = () => {
         return _token;
     };
@@ -42,6 +46,7 @@ const IdentityService = () => {
         login,
         logout,
         authenticateUser,
+        forbid,
         accessToken
     }
 };
