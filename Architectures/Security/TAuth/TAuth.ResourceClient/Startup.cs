@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -16,12 +17,12 @@ namespace TAuth.ResourceClient
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            ApiSettings = new ApiSettings();
-            Configuration.Bind(nameof(ApiSettings), ApiSettings);
+            AppSettings = new AppSettings();
+            Configuration.Bind(nameof(AppSettings), AppSettings);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
-        public ApiSettings ApiSettings { get; }
+        public AppSettings AppSettings { get; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -29,7 +30,12 @@ namespace TAuth.ResourceClient
         {
             services.AddHttpClient<IResourceService, ResourceService>(opt =>
             {
-                opt.BaseAddress = new Uri(ApiSettings.ResourceApiUrl);
+                opt.BaseAddress = new Uri(AppSettings.ResourceApiUrl);
+            });
+
+            services.AddHttpClient<IIdentityService, IdentityService>(opt =>
+            {
+                opt.BaseAddress = new Uri(AppSettings.IdpUrl);
             });
 
             services.AddAuthentication(opt =>
@@ -44,13 +50,14 @@ namespace TAuth.ResourceClient
                 opt.ClientId = "resource-client-id";
                 opt.ResponseType = "code";
                 //opt.UsePkce = false;
-                //opt.CallbackPath = new PathString(""); // Default: protocol://host/signin-odic
-                //opt.SignedOutCallbackPath = new PathString("");
-                opt.Scope.Add("openid");
-                opt.Scope.Add("profile");
+                opt.Scope.Add("address");
                 opt.SaveTokens = true;
                 opt.ClientSecret = "resource-client-secret";
                 opt.GetClaimsFromUserInfoEndpoint = true;
+                opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.Sid);
+                opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.AuthTime);
+                opt.ClaimActions.DeleteClaim("s_hash");
+                opt.ClaimActions.DeleteClaim("idp");
             });
 
             services.AddRazorPages(opt =>

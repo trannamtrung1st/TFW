@@ -15,6 +15,7 @@ namespace TAuth.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Address()
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -41,6 +42,7 @@ namespace TAuth.IDP
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
                     },
                     ClientSecrets =
                     {
@@ -71,6 +73,7 @@ namespace TAuth.IDP
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
                     },
                     RequireConsent = true
                 }

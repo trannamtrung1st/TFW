@@ -1,0 +1,18 @@
+﻿@page
+@model TAuth.ResourceClient.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Profile</h1>
+</div>
+
+<div class="container">
+    <p>
+        <div>@Model.FullName</div>
+        <div class="text-info">
+            @Model.Address
+        </div>
+    </p>
+</div>
