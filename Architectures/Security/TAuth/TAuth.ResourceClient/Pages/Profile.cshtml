@@ -8,11 +8,9 @@
     <h1 class="display-4">Profile</h1>
 </div>
 
-<div class="container">
-    <p>
-        <div>@Model.FullName</div>
-        <div class="text-info">
-            @Model.Address
-        </div>
-    </p>
+<div class="container" id="user-profile">
+    <div class="profile-name">@Model.FullName</div>
+    <div class="profile-address text-info">
+        @Model.Address
+    </div>
 </div>

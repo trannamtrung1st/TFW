@@ -36,32 +36,12 @@
     </header>
 
     <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <h1 class="display-4">Profile</h1>
     </div>
 
-    <div class="container">
-        <div class="row mb-1">
-            <div class="col-12">
-                <a href="create.html" class="btn btn-info float-right">
-                    Create
-                </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <table class="table" id="tbl-resource">
-                    <thead class="thead-light">
-                        <tr class="d-table-row">
-                            <th class="d-table-cell">Id</th>
-                            <th class="d-table-cell">Name</th>
-                            <th class="d-table-cell">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                    </tbody>
-                </table>
-            </div>
+    <div class="container" id="user-profile">
+        <div class="profile-name"></div>
+        <div class="profile-address text-info">
         </div>
     </div>
 
@@ -80,42 +60,30 @@
 
     <script>
         const PageModel = () => {
-            const resourceService = ResourceService();
+            const identityService = IdentityService();
 
-            const fetchList = () => {
-                $('#tbl-resource tbody').children().remove();
-                resourceService.getResourceList(list => {
-                    list.forEach(item => {
-                        $('#tbl-resource tbody').append(
-                            $('<tr class="d-table-row">').append(
-                                $('<td class="d-table-cell">' + item.id + '</td>')
-                            ).append(
-                                $('<td class="d-table-cell">' + item.name + '</td>')
-                            ).append(
-                                $('<td class="d-table-cell">').append(
-                                    $('<button onclick="pageModel.deleteResource(\'' + item.id + '\')" '
-                                        + 'class="btn btn-outline-danger">Delete</button>')
-                                )
-                            )
+            const loadProfile = () => {
+                identityService.getUser((user) => {
+                    if (user && user.profile) {
+                        const profile = user.profile;
+                        const address = profile.address;
+                        $('#user-profile .profile-name').html(profile.name);
+                        $('#user-profile .profile-address').html(
+                            [address.street_address, address.locality, address.postal_code, address.country].join(', ')
                         );
-                    });
+                    }
                 });
-            };
-
-            const deleteResource = (id) => {
-                resourceService.deleteResource(id, fetchList);
-            };
+            }
 
             return {
-                fetchList,
-                deleteResource
+                loadProfile
             };
         };
 
         const pageModel = PageModel();
 
         $(document).ready(() => {
-            pageModel.fetchList();
+            pageModel.loadProfile();
         });
     </script>
 </body>
