@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient
@@ -44,7 +46,16 @@ namespace TAuth.ResourceClient
             {
                 opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+            }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+            {
+                opt.AccessDeniedPath = new PathString("/accessdenied");
+                opt.Events.OnRedirectToAccessDenied = (context) =>
+                {
+                    context.RedirectUri += $"#{DateTimeOffset.UtcNow.Ticks}";
+                    context.Response.Redirect(context.RedirectUri);
+                    return Task.CompletedTask;
+                };
+            })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opt =>
             {
                 opt.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;

@@ -39,17 +39,7 @@
     </header>
 
     <div class="text-center">
-        <h1 class="display-4">Create Resource</h1>
-    </div>
-
-    <div class="container">
-        <form role="form" method="post" id="form-create">
-            <div class="form-group">
-                <label for="resource-name">Name</label>
-                <input type="text" class="form-control" id="resource-name" name="name" required />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <h1 class="display-4">Admin area</h1>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -67,27 +57,29 @@
 
     <script>
         const PageModel = () => {
-            const resourceService = ResourceService();
-            const formCreate = $('#form-create');
+            const identityService = IdentityService();
 
-            const submitCreate = () => {
-                const model = serializeFormToObj(formCreate);
-                resourceService.createResource(model, id => {
-                    location.href = '/';
+            const authorize = () => {
+                identityService.getUser(user => {
+                    if (user && user.profile) {
+                        const profile = user.profile;
+                        if (profile.role !== 'Administrator') {
+                            window.location = '/access-denied.html#' + new Date().getTime();
+                        }
+                    }
                 });
             };
 
-            formCreate.submit(e => {
-                e.preventDefault();
-                submitCreate();
-            });
-
             return {
-                submitCreate,
+                authorize,
             };
         };
 
         const pageModel = PageModel();
+
+        $(document).ready(() => {
+            pageModel.authorize();
+        });
     </script>
 </body>
 

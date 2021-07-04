@@ -1,0 +1,21 @@
+﻿@page
+@model TAuth.ResourceClient.Pages.AccessDeniedModel
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<div class="text-center">
+    <h1 class="display-4 text-danger">Access Denied</h1>
+</div>
+
+@section Scripts{
+    <script>
+        function validate() {
+            if (!location.hash || location.hash.length === 0) {
+                window.location = '/';
+            }
+        }
+
+        validate();
+    </script>
+}
