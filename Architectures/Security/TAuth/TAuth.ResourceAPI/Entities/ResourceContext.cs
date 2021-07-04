@@ -1,18 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using TAuth.ResourceAPI.Services;
 
 namespace TAuth.ResourceAPI.Entities
 {
-    public class ResourceContext : IdentityDbContext<AppUser, AppRole, int>
+    public class ResourceContext : DbContext
     {
         public const string DefaultConnStr = "Data Source=./ResourceContext.db";
 
-        public ResourceContext()
+        private IUserProvider _userProvider;
+        private int _currentUserId;
+
+        public ResourceContext(IUserProvider userProvider)
         {
+            _userProvider = userProvider;
+            _currentUserId = userProvider.CurrentUserId;
         }
 
-        public ResourceContext(DbContextOptions options) : base(options)
+        public ResourceContext(DbContextOptions options, IUserProvider userProvider) : base(options)
         {
+            _userProvider = userProvider;
+            _currentUserId = userProvider.CurrentUserId;
         }
 
         public virtual DbSet<ResourceEntity> Resources { get; set; }
@@ -29,11 +36,9 @@ namespace TAuth.ResourceAPI.Entities
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ResourceEntity>(builder =>
+            modelBuilder.Entity<ResourceEntity>(eBuilder =>
             {
-                builder.HasOne(o => o.User)
-                    .WithMany(o => o.Resources)
-                    .OnDelete(DeleteBehavior.Restrict);
+                eBuilder.HasQueryFilter(o => o.OwnerId == _currentUserId);
             });
         }
     }

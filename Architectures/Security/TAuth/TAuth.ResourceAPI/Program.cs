@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,7 +32,6 @@ namespace TAuth.ResourceAPI
             {
                 var provider = scope.ServiceProvider;
                 var dbContext = provider.GetRequiredService<ResourceContext>();
-                var userManager = provider.GetRequiredService<UserManager<AppUser>>();
 
                 var isInit = !(await dbContext.Database.GetAppliedMigrationsAsync()).Any();
 
@@ -41,32 +39,16 @@ namespace TAuth.ResourceAPI
 
                 if (isInit)
                 {
-                    var user1 = new AppUser
-                    {
-                        UserName = "trung.tran",
-                        FirstName = "Trung",
-                        LastName = "Tran"
-                    };
-                    var user2 = new AppUser
-                    {
-                        UserName = "bob",
-                        FirstName = "Bob",
-                        LastName = "Corn"
-                    };
-
-                    await userManager.CreateAsync(user1, "123123");
-                    await userManager.CreateAsync(user2, "bob");
-
                     await dbContext.Resources.AddRangeAsync(
                         new ResourceEntity
                         {
                             Name = "Sample Resource 1",
-                            UserId = user1.Id,
+                            OwnerId = 1,
                         },
                         new ResourceEntity
                         {
                             Name = "Sample Resource 2",
-                            UserId = user2.Id
+                            OwnerId = 2
                         });
 
                     await dbContext.SaveChangesAsync();
