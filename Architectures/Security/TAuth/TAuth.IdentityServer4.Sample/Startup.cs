@@ -6,8 +6,6 @@ using IdentityExpress.Identity;
 using IdentityExpress.Manager.Api;
 using IdentityServer4;
 using IdentityServer4.Configuration;
-using TAuth.IdentityServer4.Sample.Data;
-using TAuth.IdentityServer4.Sample.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
+using TAuth.IdentityServer4.Sample.Data;
+using TAuth.IdentityServer4.Sample.Models;
 
 namespace TAuth.IdentityServer4.Sample
 {

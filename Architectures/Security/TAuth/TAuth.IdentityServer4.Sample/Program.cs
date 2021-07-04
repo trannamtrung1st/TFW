@@ -34,7 +34,7 @@ namespace TAuth.IdentityServer4.Sample
             try
             {
                 var host = CreateHostBuilder(args).Build();
-                
+
                 Log.Information("Starting host...");
                 host.Run();
                 return 0;

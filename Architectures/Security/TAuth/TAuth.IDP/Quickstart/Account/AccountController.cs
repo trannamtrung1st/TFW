@@ -315,7 +315,7 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             var context = await _interaction.GetLogoutContextAsync(logoutId);
-            
+
             // comment for disabling automatically sign-out
             if (context?.ShowSignoutPrompt == false)
             {
