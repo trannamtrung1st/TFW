@@ -11,7 +11,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Auth.Policies;
 using TAuth.ResourceClient.Handlers;
 using TAuth.ResourceClient.Services;
 
@@ -85,6 +87,32 @@ namespace TAuth.ResourceClient
                     RoleClaimType = JwtClaimTypes.Role
                 };
             });
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("CanDeleteResource", builder => builder
+                    .AddRequirements(new DeleteResourceRequirement()
+                    {
+                        TestName = "Test"
+                    }));
+
+                opt.AddPolicy("CanCreateResource", builder => builder.AddRequirements(
+                    new CreateResourceRequirement()
+                    {
+                        AllowedCountries = new[] { "Vietnam", "Germany" }
+                    }));
+
+                opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
+
+                opt.AddPolicy("IsAdmin", builder => builder.RequireRole("Administrator"));
+
+                opt.AddPolicy("EmailVerified", builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, $"{true}"));
+            });
+
+            var allAuthHandlers = typeof(Startup).Assembly.GetTypes().OfType<IAuthenticationHandler>().ToArray();
+
+            foreach (var handler in allAuthHandlers)
+                services.AddSingleton(typeof(IAuthenticationHandler), handler);
 
             services.AddRazorPages(opt =>
             {
