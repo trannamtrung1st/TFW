@@ -67,6 +67,8 @@ namespace TAuth.ResourceAPI
                     }));
 
                 opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
+
+                opt.AddPolicy("IsLucky", builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 2 == 0));
             });
 
             var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
