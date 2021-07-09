@@ -1,5 +1,6 @@
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,8 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
 using TAuth.ResourceAPI.Services;
 
@@ -54,6 +57,23 @@ namespace TAuth.ResourceAPI
                     opt.ApiName = "resource_api";
                     opt.Authority = "https://localhost:5001";
                 });
+
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("CanDeleteResource", builder => builder
+                    .AddRequirements(new DeleteResourceRequirement()
+                    {
+                        TestName = "Test"
+                    }));
+
+                opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
+            });
+
+            var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
+                .Where(type => typeof(IAuthorizationHandler).IsAssignableFrom(type)).ToArray();
+
+            foreach (var handler in allAuthHandlers)
+                services.AddSingleton(typeof(IAuthorizationHandler), handler);
 
             services.AddControllers();
 

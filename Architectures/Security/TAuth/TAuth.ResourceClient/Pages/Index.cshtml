@@ -12,9 +12,12 @@
 <div class="container">
     <div class="row mb-1">
         <div class="col-12">
-            <a asp-area="" asp-page="/Create" class="btn btn-info float-right">
-                Create
-            </a>
+            @if (Model.CanCreateResource)
+            {
+                <a asp-area="" asp-page="/Create" class="btn btn-info float-right">
+                    Create
+                </a>
+            }
         </div>
     </div>
     <div class="row">

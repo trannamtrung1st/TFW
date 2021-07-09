@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
-namespace TAuth.ResourceClient.Auth.Policies
+namespace TAuth.ResourceAPI.Auth.Policies
 {
     public class IsOwnerRequirement : IAuthorizationRequirement
     {

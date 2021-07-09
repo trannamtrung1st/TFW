@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
-namespace TAuth.ResourceClient.Auth.Policies
+namespace TAuth.ResourceAPI.Auth.Policies
 {
     public class DeleteResourceRequirement : IAuthorizationRequirement
     {
@@ -19,6 +19,8 @@ namespace TAuth.ResourceClient.Auth.Policies
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DeleteResourceRequirement requirement, ResourceAuthorizationModel resource)
         {
+            if (context.HasSucceeded) return Task.CompletedTask;
+
             if (resource.Name == requirement.TestName)
                 context.Succeed(requirement);
 
@@ -30,6 +32,8 @@ namespace TAuth.ResourceClient.Auth.Policies
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DeleteResourceRequirement requirement, ResourceAuthorizationModel resource)
         {
+            if (context.HasSucceeded) return Task.CompletedTask;
+
             var userId = context.User.FindFirst(JwtClaimTypes.Subject).Value;
 
             if (userId == $"{resource.OwnerId}")
@@ -43,6 +47,8 @@ namespace TAuth.ResourceClient.Auth.Policies
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, DeleteResourceRequirement requirement, ResourceAuthorizationModel resource)
         {
+            if (context.HasSucceeded) return Task.CompletedTask;
+
             if (context.User.IsInRole("Administrator"))
                 context.Succeed(requirement);
 

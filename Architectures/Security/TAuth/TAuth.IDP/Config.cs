@@ -11,12 +11,22 @@ namespace TAuth.IDP
 {
     public static class Config
     {
+        private static readonly IdentityResource CustomEmailResource;
+
+        static Config()
+        {
+            var standardEmailResource = new IdentityResources.Email();
+            CustomEmailResource = new IdentityResource(standardEmailResource.Name, standardEmailResource.DisplayName, standardEmailResource.UserClaims);
+            CustomEmailResource.UserClaims.Add(JwtClaimTypes.EmailVerified);
+        }
+
         public static IEnumerable<IdentityResource> IdentityResources =>
             new IdentityResource[]
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Address(),
+                CustomEmailResource,
                 new IdentityResource("roles", "User role(s)", new string[]
                 {
                     JwtClaimTypes.Role
@@ -65,6 +75,7 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.Email,
                         "roles",
                         "resource_api.full"
                     },
@@ -98,6 +109,7 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.Email,
                         "roles",
                         "resource_api.full"
                     },

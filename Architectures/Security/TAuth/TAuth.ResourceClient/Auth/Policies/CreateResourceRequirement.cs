@@ -17,6 +17,8 @@ namespace TAuth.ResourceClient.Auth.Policies
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CreateResourceRequirement requirement)
         {
+            if (context.HasSucceeded) return Task.CompletedTask;
+
             var addressVal = context.User.FindFirst(JwtClaimTypes.Address).Value;
             var addressObj = JsonConvert.DeserializeAnonymousType(addressVal, new
             {
@@ -37,6 +39,8 @@ namespace TAuth.ResourceClient.Auth.Policies
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, CreateResourceRequirement requirement)
         {
+            if (context.HasSucceeded) return Task.CompletedTask;
+
             if (context.User.IsInRole("Administrator"))
                 context.Succeed(requirement);
 

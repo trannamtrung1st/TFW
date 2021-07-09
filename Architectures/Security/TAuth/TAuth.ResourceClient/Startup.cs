@@ -2,6 +2,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -69,6 +70,7 @@ namespace TAuth.ResourceClient
                 opt.ClientId = "resource-client-id";
                 opt.ResponseType = "code";
                 //opt.UsePkce = false;
+                opt.Scope.Add("email");
                 opt.Scope.Add("address");
                 opt.Scope.Add("roles");
                 opt.Scope.Add("resource_api.full");
@@ -79,7 +81,9 @@ namespace TAuth.ResourceClient
                 opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.AuthTime);
                 opt.ClaimActions.DeleteClaim("s_hash");
                 opt.ClaimActions.DeleteClaim("idp");
-                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, "role");
+                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Address, JwtClaimTypes.Address);
+                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.EmailVerified, JwtClaimTypes.EmailVerified);
 
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -90,29 +94,22 @@ namespace TAuth.ResourceClient
 
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("CanDeleteResource", builder => builder
-                    .AddRequirements(new DeleteResourceRequirement()
-                    {
-                        TestName = "Test"
-                    }));
-
-                opt.AddPolicy("CanCreateResource", builder => builder.AddRequirements(
+                opt.AddPolicy("CanCreateResource", builder => builder.Requirements.Add(
                     new CreateResourceRequirement()
                     {
                         AllowedCountries = new[] { "Vietnam", "Germany" }
                     }));
-
-                opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
 
                 opt.AddPolicy("IsAdmin", builder => builder.RequireRole("Administrator"));
 
                 opt.AddPolicy("EmailVerified", builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, $"{true}"));
             });
 
-            var allAuthHandlers = typeof(Startup).Assembly.GetTypes().OfType<IAuthenticationHandler>().ToArray();
+            var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
+                .Where(type => typeof(IAuthorizationHandler).IsAssignableFrom(type)).ToArray();
 
             foreach (var handler in allAuthHandlers)
-                services.AddSingleton(typeof(IAuthenticationHandler), handler);
+                services.AddSingleton(typeof(IAuthorizationHandler), handler);
 
             services.AddRazorPages(opt =>
             {

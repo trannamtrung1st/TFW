@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -16,15 +17,19 @@ namespace TAuth.ResourceClient.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IResourceService _resourceService;
+        private readonly IAuthorizationService _authorizationService;
 
         public IndexModel(ILogger<IndexModel> logger,
-            IResourceService resourceService)
+            IResourceService resourceService,
+            IAuthorizationService authorizationService)
         {
             _logger = logger;
             _resourceService = resourceService;
+            _authorizationService = authorizationService;
         }
 
         public IEnumerable<ResourceListItemModel> ResourceList { get; set; }
+        public bool CanCreateResource { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -33,6 +38,7 @@ namespace TAuth.ResourceClient.Pages
             try
             {
                 ResourceList = await _resourceService.GetAsync();
+                CanCreateResource = (await _authorizationService.AuthorizeAsync(User, "CanCreateResource")).Succeeded;
             }
             catch (HttpException ex)
             {

@@ -1,5 +1,6 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient.Pages
 {
+    [Authorize("EmailVerified")]
     public class ProfileModel : PageModel
     {
         private readonly IIdentityService _identityService;
