@@ -1,14 +1,17 @@
 ﻿using IdentityModel.Client;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Exceptions;
 
 namespace TAuth.ResourceClient.Services
 {
     public interface IIdentityService
     {
-        Task<IEnumerable<Claim>> GetUserInfoAsync(string accessToken);
+        Task<IEnumerable<Claim>> GetUserInfoAsync();
     }
 
     public class IdentityService : IIdentityService
@@ -20,7 +23,7 @@ namespace TAuth.ResourceClient.Services
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<Claim>> GetUserInfoAsync(string accessToken)
+        public async Task<IEnumerable<Claim>> GetUserInfoAsync()
         {
             var metadataResp = await _httpClient.GetDiscoveryDocumentAsync();
 
@@ -29,18 +32,19 @@ namespace TAuth.ResourceClient.Services
                 throw metadataResp.Exception;
             }
 
-            var userInfoResp = await _httpClient.GetUserInfoAsync(new UserInfoRequest
-            {
-                Address = metadataResp.UserInfoEndpoint,
-                Token = accessToken
-            });
+            // Alternative: use HttpContext.GetUserAccessTokenAsync() to get access token
+            var resp = await _httpClient.GetAsync(metadataResp.UserInfoEndpoint);
 
-            if (userInfoResp.IsError)
+            if (!resp.IsSuccessStatusCode)
             {
-                throw userInfoResp.Exception;
+                throw new HttpException()
+                {
+                    Response = resp
+                };
             }
 
-            return userInfoResp.Claims;
+            var json = await resp.Content.ReadFromJsonAsync<JsonElement>();
+            return json.ToClaims(issuer: metadataResp.Issuer);
         }
 
     }

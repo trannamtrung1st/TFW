@@ -42,11 +42,11 @@ namespace TAuth.ResourceClient.Pages
             }
             catch (HttpException ex)
             {
-                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Unauthorized
-                    || ex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                {
+                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return RedirectToPage("/Logout");
+
+                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
                     return Forbid();
-                }
 
                 throw ex;
             }
@@ -64,6 +64,8 @@ namespace TAuth.ResourceClient.Pages
         private async Task DebugIdentity()
         {
             var idToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+            var accessToken = await HttpContext.GetUserAccessTokenAsync();
+            var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
             Debug.WriteLine($"IdToken: {idToken}");
 

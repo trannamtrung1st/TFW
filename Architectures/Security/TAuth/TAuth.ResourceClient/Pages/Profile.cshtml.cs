@@ -1,8 +1,6 @@
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,9 +23,7 @@ namespace TAuth.ResourceClient.Pages
 
         public async Task OnGetAsync()
         {
-            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
-
-            var userInfo = await _identityService.GetUserInfoAsync(accessToken);
+            var userInfo = await _identityService.GetUserInfoAsync();
 
             FullName = userInfo.FirstOrDefault(o => o.Type == JwtClaimTypes.Name)?.Value;
 

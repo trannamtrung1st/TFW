@@ -10,12 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Polly;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using TAuth.ResourceClient.Auth.Policies;
-using TAuth.ResourceClient.Handlers;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient
@@ -36,18 +36,17 @@ namespace TAuth.ResourceClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpContextAccessor()
-                .AddTransient<BearerTokenHandler>();
+            services.AddHttpContextAccessor();
 
             services.AddHttpClient<IResourceService, ResourceService>(opt =>
             {
                 opt.BaseAddress = new Uri(AppSettings.ResourceApiUrl);
-            }).AddHttpMessageHandler<BearerTokenHandler>();
+            }).AddUserAccessTokenHandler();
 
             services.AddHttpClient<IIdentityService, IdentityService>(opt =>
             {
                 opt.BaseAddress = new Uri(AppSettings.IdpUrl);
-            });
+            }).AddUserAccessTokenHandler();
 
             services.AddAuthentication(opt =>
             {
@@ -62,6 +61,11 @@ namespace TAuth.ResourceClient
                     context.Response.Redirect(context.RedirectUri);
                     return Task.CompletedTask;
                 };
+                opt.Events.OnSigningOut = async e =>
+                {
+                    // revoke refresh token on sign-out
+                    await e.HttpContext.RevokeUserRefreshTokenAsync();
+                };
             })
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opt =>
             {
@@ -73,8 +77,9 @@ namespace TAuth.ResourceClient
                 opt.Scope.Add("email");
                 opt.Scope.Add("address");
                 opt.Scope.Add("roles");
+                opt.Scope.Add("offline_access");
                 opt.Scope.Add("resource_api.full");
-                opt.SaveTokens = true;
+                opt.SaveTokens = true; // HttpContext.GetTokenAsync
                 opt.ClientSecret = "resource-client-secret";
                 opt.GetClaimsFromUserInfoEndpoint = true;
                 opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.Sid);
@@ -90,6 +95,26 @@ namespace TAuth.ResourceClient
                     NameClaimType = JwtClaimTypes.Name,
                     RoleClaimType = JwtClaimTypes.Role
                 };
+            });
+
+            // adds user and client access token management
+            services.AddAccessTokenManagement(options =>
+            {
+                // client config is inferred from OpenID Connect settings
+                // if you want to specify scopes explicitly, do it here, otherwise the scope parameter will not be sent
+                //options.Client.Scope = "resource_api.full";
+            }).ConfigureBackchannelHttpClient()
+            .AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(new[]
+            {
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(3)
+            }));
+
+            // registers HTTP client that uses the managed client access token
+            services.AddClientAccessTokenClient("use_client_credentials_to_get_access_token", configureClient: client =>
+            {
+                client.BaseAddress = new Uri(AppSettings.ResourceApiUrl);
             });
 
             services.AddAuthorization(opt =>

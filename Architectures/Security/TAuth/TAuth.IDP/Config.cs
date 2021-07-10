@@ -59,6 +59,10 @@ namespace TAuth.IDP
             {
                 new Client()
                 {
+                    AllowOfflineAccess = true,
+                    //RefreshTokenExpiration = TokenExpiration.Sliding,
+                    //SlidingRefreshTokenLifetime = ...,
+                    UpdateAccessTokenClaimsOnRefresh = true,
                     ClientName = "Resource Client",
                     ClientId = "resource-client-id",
                     AllowedGrantTypes = GrantTypes.Code,
@@ -76,6 +80,7 @@ namespace TAuth.IDP
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Address,
                         IdentityServerConstants.StandardScopes.Email,
+                        //IdentityServerConstants.StandardScopes.OfflineAccess,
                         "roles",
                         "resource_api.full"
                     },
