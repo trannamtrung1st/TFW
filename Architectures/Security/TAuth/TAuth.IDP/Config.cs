@@ -99,7 +99,8 @@ namespace TAuth.IDP
                     AllowAccessTokensViaBrowser = true,
                     RedirectUris =
                     {
-                        "http://localhost:52330/callback.html"
+                        "http://localhost:52330/callback.html",
+                        "http://localhost:52330/silent-refresh.html"
                     },
                     PostLogoutRedirectUris =
                     {

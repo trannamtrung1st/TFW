@@ -6,8 +6,13 @@ const IdentityService = () => {
         response_type: "id_token token",
         scope: "openid profile address roles resource_api.full",
         post_logout_redirect_uri: "http://localhost:52330/index.html",
+        automaticSilentRenew: true,
+        silent_redirect_uri: 'http://localhost:52330/silent-refresh.html'
     };
     const manager = new Oidc.UserManager(config);
+    manager.events.addSilentRenewError(err => {
+        console.log(err);
+    });
     let _token = null;
 
     const getUser = (handler) => {
