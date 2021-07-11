@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -67,6 +68,7 @@ namespace TAuth.ResourceClient.Pages
             var accessToken = await HttpContext.GetUserAccessTokenAsync();
             var refreshToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.RefreshToken);
 
+            Console.WriteLine(refreshToken);
             Debug.WriteLine($"IdToken: {idToken}");
 
             foreach (var claim in User.Claims)

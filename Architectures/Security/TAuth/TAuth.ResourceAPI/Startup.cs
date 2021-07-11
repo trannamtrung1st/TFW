@@ -12,7 +12,6 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Threading.Tasks;
 using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
 using TAuth.ResourceAPI.Services;
