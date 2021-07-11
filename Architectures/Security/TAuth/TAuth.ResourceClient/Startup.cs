@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Polly;
 using System;
@@ -72,7 +73,7 @@ namespace TAuth.ResourceClient
                 opt.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 opt.Authority = "https://localhost:5001/";
                 opt.ClientId = "resource-client-id";
-                opt.ResponseType = "code";
+                opt.ResponseType = OpenIdConnectResponseType.Code;
                 //opt.UsePkce = false;
                 opt.Scope.Add("email");
                 opt.Scope.Add("address");

@@ -41,7 +41,7 @@ namespace TAuth.IDP
                     JwtClaimTypes.Role
                 }*/)
                 {
-                    Scopes = { "resource_api.full" }
+                    Scopes = { "resource_api.full", "resource_api.background" }
                 }
             };
 
@@ -51,7 +51,8 @@ namespace TAuth.IDP
                 new ApiScope("resource_api.full", "Full access to Resource API", new[]
                 {
                     JwtClaimTypes.Role
-                })
+                }),
+                new ApiScope("resource_api.background", "Background access to Resource API")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -120,7 +121,25 @@ namespace TAuth.IDP
                         "resource_api.full"
                     },
                     RequireConsent = true
-                }
+                },
+                new Client()
+                {
+                    AccessTokenLifetime = 600,
+                    //RefreshTokenExpiration = TokenExpiration.Sliding,
+                    //SlidingRefreshTokenLifetime = ...,
+                    UpdateAccessTokenClaimsOnRefresh = true,
+                    ClientName = "Worker Client",
+                    ClientId = "worker-client-id",
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes =
+                    {
+                        "resource_api.background"
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("worker-client-secret".Sha256())
+                    }
+                },
             };
     }
 }

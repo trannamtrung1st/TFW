@@ -69,6 +69,8 @@ namespace TAuth.ResourceAPI
                 opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
 
                 opt.AddPolicy("IsLucky", builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 2 == 0));
+
+                opt.AddPolicy("WorkerOnly", builder => builder.RequireAuthenticatedUser().RequireScope("resource_api.background"));
             });
 
             var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
@@ -158,6 +160,7 @@ namespace TAuth.ResourceAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //.RequireAuthorization();
             });
         }
     }
