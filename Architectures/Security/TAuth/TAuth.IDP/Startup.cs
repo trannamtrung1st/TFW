@@ -2,11 +2,14 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace TAuth.IDP
 {
@@ -21,6 +24,10 @@ namespace TAuth.IDP
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var rsaKey = Program.GetKeyFromContainer("TAuth.IDP");
+            var rsa = RSA.Create();
+            rsa.FromXmlString(rsaKey);
+
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
@@ -32,6 +39,7 @@ namespace TAuth.IDP
                 // set to False to prevent single sign-out
                 //options.Endpoints.EnableEndSessionEndpoint = false;
             })
+                .AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
@@ -39,7 +47,7 @@ namespace TAuth.IDP
                 .AddTestUsers(TestUsers.Users);
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            //builder.AddDeveloperSigningCredential();
         }
 
         public void Configure(IApplicationBuilder app)
