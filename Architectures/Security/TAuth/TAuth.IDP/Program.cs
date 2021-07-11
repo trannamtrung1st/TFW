@@ -8,7 +8,6 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
-using System.Security.Cryptography;
 
 namespace TAuth.IDP
 {
@@ -57,25 +56,5 @@ namespace TAuth.IDP
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
-        public static string GetKeyFromContainer(string containerName)
-        {
-            // Create the CspParameters object and set the key container
-            // name used to store the RSA key pair.
-            var parameters = new CspParameters
-            {
-                KeyContainerName = containerName
-            };
-
-            // Create a new instance of RSACryptoServiceProvider that accesses
-            // the key container MyKeyContainerName.
-            using var rsa = new RSACryptoServiceProvider(2048, parameters);
-
-            var key = rsa.ToXmlString(true);
-            // Display the key information to the console.
-            Console.WriteLine($"Key retrieved from container : \n {key}");
-
-            return key;
-        }
     }
 }
