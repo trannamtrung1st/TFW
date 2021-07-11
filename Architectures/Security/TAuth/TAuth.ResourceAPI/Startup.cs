@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Threading.Tasks;
 using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
 using TAuth.ResourceAPI.Services;
@@ -52,10 +53,18 @@ namespace TAuth.ResourceAPI
             //    });
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(opt =>
+                // JWT tokens
+                .AddJwtBearer(IdentityServerAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
-                    opt.ApiName = "resource_api";
                     opt.Authority = "https://localhost:5001";
+                    opt.Audience = "resource_api";
+                })
+                // Reference tokens
+                .AddOAuth2Introspection("Introspection", opt =>
+                {
+                    opt.Authority = "https://localhost:5001";
+                    opt.ClientId = "resource_api";
+                    opt.ClientSecret = "resource-api-secret";
                 });
 
             services.AddAuthorization(opt =>

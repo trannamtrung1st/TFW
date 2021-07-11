@@ -7,7 +7,7 @@ namespace TAuth.ResourceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize("WorkerOnly")]
+    [Authorize("WorkerOnly", AuthenticationSchemes = "Introspection")]
     public class BackgroundController : ControllerBase
     {
 

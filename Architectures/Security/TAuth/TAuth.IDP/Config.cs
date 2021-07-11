@@ -41,7 +41,11 @@ namespace TAuth.IDP
                     JwtClaimTypes.Role
                 }*/)
                 {
-                    Scopes = { "resource_api.full", "resource_api.background" }
+                    Scopes = { "resource_api.full", "resource_api.background" },
+                    ApiSecrets =
+                    {
+                        new Secret("resource-api-secret".Sha256())
+                    }
                 }
             };
 
@@ -124,6 +128,7 @@ namespace TAuth.IDP
                 },
                 new Client()
                 {
+                    AccessTokenType = AccessTokenType.Reference,
                     AccessTokenLifetime = 600,
                     //RefreshTokenExpiration = TokenExpiration.Sliding,
                     //SlidingRefreshTokenLifetime = ...,
