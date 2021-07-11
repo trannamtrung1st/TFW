@@ -5,21 +5,28 @@
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using TAuth.IDP.Models;
 
 namespace TAuth.IDP
 {
     public class Startup
     {
         public IWebHostEnvironment Environment { get; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IWebHostEnvironment environment)
+        public Startup(IWebHostEnvironment environment,
+            IConfiguration configuration)
         {
             Environment = environment;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -34,6 +41,32 @@ namespace TAuth.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
+            services.AddIdentityCore<IdentityUser>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = false;
+            }).AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddSignInManager()
+                .AddEntityFrameworkStores<IdpContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequiredUniqueChars = 0;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
             var builder = services.AddIdentityServer(options =>
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
@@ -44,14 +77,30 @@ namespace TAuth.IDP
             })
                 //.AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
                 .AddSigningCredential(signingCert)
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                //.AddInMemoryIdentityResources(Config.IdentityResources)
+                //.AddInMemoryApiResources(Config.ApiResources)
+                //.AddInMemoryApiScopes(Config.ApiScopes)
+                //.AddInMemoryClients(Config.Clients)
                 .AddTestUsers(TestUsers.Users);
 
             // not recommended for production - you need to store your key material somewhere secure
             //builder.AddDeveloperSigningCredential();
+
+            builder.AddConfigurationStore<IdpContext>(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
+            });
+
+            builder.AddOperationalStore<IdpContext>(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
+
+                // this enables automatic token cleanup. this is optional.
+                opt.EnableTokenCleanup = true;
+                opt.TokenCleanupInterval = 30;
+            });
         }
 
         public void Configure(IApplicationBuilder app)
