@@ -16,5 +16,19 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         {
             return StatusCode(500);
         }
+
+        [HttpGet("need-token")]
+        public IActionResult NeedToken([FromQuery] string token)
+        {
+            if (token == "right-token")
+            {
+                if (DateTimeOffset.UtcNow.Ticks % 2 == 0)
+                    return Ok("It's okay");
+
+                return StatusCode(500);
+            }
+
+            return Unauthorized();
+        }
     }
 }
