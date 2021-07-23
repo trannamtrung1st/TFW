@@ -3,3 +3,108 @@
 @{
     ViewData["Title"] = "Upload";
 }
+
+<div class="text-center">
+    <h1 class="display-4">Upload</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads">Upload files in ASP.NET Core</a>.</p>
+</div>
+
+<div class="container">
+    <form asp-antiforgery="true" id="form-file" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label for="file-upload">Choose file(s)</label>
+            <input type="file" id="file-upload" name="files" multiple>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" onclick="bufferedUpload()">Upload using buffered</button>
+            <button class="btn btn-primary" type="button" onclick="databaseUpload()">Upload saving to database</button>
+        </div>
+    </form>
+    <hr />
+    <form asp-antiforgery="false" id="form-streaming-file" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label for="file-upload">Choose a file</label>
+            <input type="file" id="file-upload" name="file" multiple>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" onclick="streamUpload()">Streaming upload</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function bufferedUpload() {
+            const form = $('#form-file');
+            const formData = new FormData(form[0]);
+
+            $.ajax({
+                url: '/api/files/buffered-upload',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (respData) => {
+                    console.log(respData);
+                    alert('Success: ' + respData.count + ', total size: ' + respData.size);
+                },
+                error: (resp, statusCode, err) => {
+                    console.log(resp);
+                    alert('Error');
+                }
+            });
+        }
+
+        function databaseUpload() {
+            const form = $('#form-file');
+            const formData = new FormData(form[0]);
+
+            $.ajax({
+                url: '/api/files/database-upload',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: (respData) => {
+                    console.log(respData);
+                    alert('Success: ' + respData.count + ', total size: ' + respData.size);
+                },
+                error: (resp, statusCode, err) => {
+                    console.log(resp);
+                    alert('Error');
+                }
+            });
+        }
+
+        function streamUpload() {
+            const form = $('#form-streaming-file');
+            const formData = new FormData(form[0]);
+
+            $.ajax({
+                url: '/api/streaming',
+                method: 'POST',
+                data: formData,
+                headers: {
+                    'RequestVerificationToken': getCookie('RequestVerificationToken')
+                },
+                processData: false,
+                contentType: false,
+                success: (respData) => {
+                    console.log(respData);
+                    alert('Streaming success');
+                },
+                error: (resp, statusCode, err) => {
+                    console.log(resp);
+                    alert('Error');
+                }
+            });
+        }
+
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length == 2) return parts.pop().split(";").shift();
+        }
+    </script>
+}
+
