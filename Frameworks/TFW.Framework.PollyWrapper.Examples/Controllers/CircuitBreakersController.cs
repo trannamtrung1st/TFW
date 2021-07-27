@@ -41,6 +41,21 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
             });
         }
 
+        [HttpGet("advanced-circuit-breaker-wrap")]
+        public Task<string> AdvancedCircuitBreakerWrap()
+        {
+            return _circuitBreakerManager.AdvancedGetHeavyResourcesBreaker.ExecuteAsync(() =>
+            {
+                var client = new HttpClient();
+                var host = HttpContext.Request.Host.Value;
+                var scheme = HttpContext.Request.Scheme;
+
+                var uri = new Uri(new Uri($"{scheme}://{host}"), "/api/defects/always-fail");
+                var resp = client.GetStringAsync(uri);
+                return resp;
+            });
+        }
+
         [HttpGet("toggle-circuit-breaker")]
         public void ToggleCircuitBreaker()
         {

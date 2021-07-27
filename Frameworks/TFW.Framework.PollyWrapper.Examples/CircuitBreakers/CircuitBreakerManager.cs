@@ -13,6 +13,7 @@ namespace TFW.Framework.PollyWrapper.Examples.CircuitBreakers
     public interface ICircuitBreakerManager
     {
         AsyncPolicyWrap GetHeavyResourcesBreaker { get; }
+        AsyncPolicyWrap AdvancedGetHeavyResourcesBreaker { get; }
     }
 
     public class CircuitBreakerManager : ICircuitBreakerManager
@@ -23,10 +24,21 @@ namespace TFW.Framework.PollyWrapper.Examples.CircuitBreakers
         }
 
         public AsyncPolicyWrap GetHeavyResourcesBreaker { get; private set; }
+        public AsyncPolicyWrap AdvancedGetHeavyResourcesBreaker { get; private set; }
 
         private void Init()
         {
-            var breaker = Policy
+            var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: 3);
+
+            AsyncRetryPolicy retry = Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(delay,
+                    onRetry: (action, delay, count, context) =>
+                    {
+                        Console.WriteLine($"Retry: {count} - {delay.TotalSeconds} seconds");
+                    });
+
+            var simpleBreaker = Policy
                 .Handle<HttpRequestException>()
                 .CircuitBreakerAsync(exceptionsAllowedBeforeBreaking: 3, durationOfBreak: TimeSpan.FromMinutes(1),
                     onBreak: (ex, breakTime) =>
@@ -39,17 +51,25 @@ namespace TFW.Framework.PollyWrapper.Examples.CircuitBreakers
                         Console.WriteLine($"Reset circuit breaker named {nameof(GetHeavyResourcesBreaker)}");
                     }).WithPolicyKey(nameof(GetHeavyResourcesBreaker));
 
-            var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: 3);
+            GetHeavyResourcesBreaker = simpleBreaker.WrapAsync(retry);
 
-            AsyncRetryPolicy retry = Policy
+            var advancedBreaker = Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(delay,
-                    onRetry: (action, delay, count, context) =>
+                .AdvancedCircuitBreakerAsync(failureThreshold: 0.5,
+                    samplingDuration: TimeSpan.FromMinutes(1),
+                    minimumThroughput: 5,
+                    durationOfBreak: TimeSpan.FromMinutes(1),
+                    onBreak: (ex, breakTime) =>
                     {
-                        Console.WriteLine($"Retry: {count} - {delay.TotalSeconds} seconds");
-                    });
+                        Console.WriteLine(ex);
+                        Console.WriteLine($"Break for {breakTime}");
+                    },
+                    onReset: () =>
+                    {
+                        Console.WriteLine($"Reset circuit breaker named {nameof(GetHeavyResourcesBreaker)}");
+                    }).WithPolicyKey(nameof(GetHeavyResourcesBreaker));
 
-            GetHeavyResourcesBreaker = breaker.WrapAsync(retry);
+            AdvancedGetHeavyResourcesBreaker = advancedBreaker.WrapAsync(retry);
         }
     }
 }
