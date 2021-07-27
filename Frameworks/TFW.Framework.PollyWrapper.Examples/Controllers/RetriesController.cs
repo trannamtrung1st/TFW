@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Polly;
+using Polly.Contrib.WaitAndRetry;
 using Polly.Retry;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,33 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
                 return result;
 
             throw new HttpRequestException(result);
+        }
+
+        [HttpGet("jitter-retry")]
+        public async Task<string> JitterRetry()
+        {
+            var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(2), retryCount: 3);
+
+            AsyncRetryPolicy<string> retry = Policy<string>
+                .Handle<HttpRequestException>().OrResult(default(string))
+                .WaitAndRetryAsync(delay,
+                    onRetry: (action, delay, count, context) =>
+                    {
+                        Console.WriteLine($"Retry: {count} - {delay.TotalSeconds} seconds");
+                    });
+
+            var client = new HttpClient();
+            var host = HttpContext.Request.Host.Value;
+            var scheme = HttpContext.Request.Scheme;
+
+            var result = await retry.ExecuteAsync((context) =>
+            {
+                var uri = new Uri(new Uri($"{scheme}://{host}"), "/api/defects/always-fail");
+                var resp = client.GetStringAsync(uri);
+                return resp;
+            }, new Context());
+
+            return result;
         }
     }
 }
