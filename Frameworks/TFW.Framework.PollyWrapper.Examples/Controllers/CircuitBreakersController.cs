@@ -19,17 +19,17 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
     [ApiController]
     public class CircuitBreakersController : ControllerBase
     {
-        private readonly ICircuitBreakerManager _circuitBreakerManager;
+        private readonly IPolicyManager _policyManager;
 
-        public CircuitBreakersController(ICircuitBreakerManager circuitBreakerManager)
+        public CircuitBreakersController(IPolicyManager policyManager)
         {
-            _circuitBreakerManager = circuitBreakerManager;
+            _policyManager = policyManager;
         }
 
         [HttpGet("circuit-breaker-wrap")]
         public Task<string> CircuitBreakerWrap()
         {
-            return _circuitBreakerManager.GetHeavyResourcesBreaker.ExecuteAsync(() =>
+            return _policyManager.GetHeavyResourcesBreaker.ExecuteAsync(() =>
             {
                 var client = new HttpClient();
                 var host = HttpContext.Request.Host.Value;
@@ -44,7 +44,7 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         [HttpGet("advanced-circuit-breaker-wrap")]
         public Task<string> AdvancedCircuitBreakerWrap()
         {
-            return _circuitBreakerManager.AdvancedGetHeavyResourcesBreaker.ExecuteAsync(() =>
+            return _policyManager.AdvancedGetHeavyResourcesBreaker.ExecuteAsync(() =>
             {
                 var client = new HttpClient();
                 var host = HttpContext.Request.Host.Value;
@@ -59,7 +59,7 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         [HttpGet("toggle-circuit-breaker")]
         public void ToggleCircuitBreaker()
         {
-            var breaker = _circuitBreakerManager.GetHeavyResourcesBreaker
+            var breaker = _policyManager.GetHeavyResourcesBreaker
                 .GetPolicy<AsyncCircuitBreakerPolicy>();
 
             if (breaker.CircuitState != CircuitState.Isolated)

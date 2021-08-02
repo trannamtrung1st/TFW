@@ -1,4 +1,5 @@
 ﻿using Polly;
+using Polly.Bulkhead;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Retry;
 using Polly.Wrap;
@@ -10,21 +11,23 @@ using System.Threading.Tasks;
 
 namespace TFW.Framework.PollyWrapper.Examples.CircuitBreakers
 {
-    public interface ICircuitBreakerManager
+    public interface IPolicyManager
     {
         AsyncPolicyWrap GetHeavyResourcesBreaker { get; }
         AsyncPolicyWrap AdvancedGetHeavyResourcesBreaker { get; }
+        AsyncBulkheadPolicy BulkheadPolicy { get; }
     }
 
-    public class CircuitBreakerManager : ICircuitBreakerManager
+    public class PolicyManager : IPolicyManager
     {
-        public CircuitBreakerManager()
+        public PolicyManager()
         {
             Init();
         }
 
         public AsyncPolicyWrap GetHeavyResourcesBreaker { get; private set; }
         public AsyncPolicyWrap AdvancedGetHeavyResourcesBreaker { get; private set; }
+        public AsyncBulkheadPolicy BulkheadPolicy { get; private set; }
 
         private void Init()
         {
@@ -70,6 +73,14 @@ namespace TFW.Framework.PollyWrapper.Examples.CircuitBreakers
                     }).WithPolicyKey(nameof(GetHeavyResourcesBreaker));
 
             AdvancedGetHeavyResourcesBreaker = advancedBreaker.WrapAsync(retry);
+
+            BulkheadPolicy = Policy
+                .BulkheadAsync(maxParallelization: 2,
+                    maxQueuingActions: 2, onBulkheadRejectedAsync: (context) =>
+                    {
+                        Console.WriteLine("Rejected");
+                        return Task.CompletedTask;
+                    });
         }
     }
 }
