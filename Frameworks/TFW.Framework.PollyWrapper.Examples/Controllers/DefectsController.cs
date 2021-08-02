@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TFW.Framework.PollyWrapper.Examples.Controllers
@@ -11,6 +12,13 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
     [ApiController]
     public class DefectsController : ControllerBase
     {
+        [HttpGet("timeout")]
+        public IActionResult TimeOut()
+        {
+            Thread.Sleep(10000);
+            return Ok();
+        }
+
         [HttpGet("always-fail")]
         public IActionResult AlwaysFail()
         {
