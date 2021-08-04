@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Polly;
-using Polly.Bulkhead;
+using Polly.Caching;
 using Polly.Contrib.WaitAndRetry;
 using Polly.Registry;
 using Polly.Retry;
@@ -17,38 +17,31 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BulkheadsController : ControllerBase
+    public class CachesController : ControllerBase
     {
         private readonly IReadOnlyPolicyRegistry<string> _policyRegistry;
 
-        public BulkheadsController(IReadOnlyPolicyRegistry<string> policyRegistry)
+        public CachesController(IReadOnlyPolicyRegistry<string> policyRegistry)
         {
             _policyRegistry = policyRegistry;
         }
 
-        [HttpGet("bulkhead")]
-        public async Task<object> Bulkhead()
+        [HttpGet("cache")]
+        public async Task<object> Cache()
         {
             var client = new HttpClient();
             var host = HttpContext.Request.Host.Value;
             var scheme = HttpContext.Request.Scheme;
 
-            var bulkhead = _policyRegistry.Get<AsyncBulkheadPolicy>(Startup.BulkheadPolicy);
-            var bhCount = bulkhead.BulkheadAvailableCount;
-            var queueCount = bulkhead.QueueAvailableCount;
-
-            var result = await bulkhead.ExecuteAsync(async (context) =>
+            var result = await _policyRegistry.Get<AsyncCachePolicy>(Startup.CachePolicy).ExecuteAsync(async (context) =>
             {
                 var uri = new Uri(new Uri($"{scheme}://{host}"), "/api/defects/timeout");
                 var resp = await client.GetStringAsync(uri);
+                throw new Exception();
                 return resp;
-            }, new Context());
+            }, new Context(nameof(Cache)));
 
-            return new
-            {
-                bhCount,
-                queueCount
-            };
+            return result;
         }
 
     }

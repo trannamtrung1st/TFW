@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Contrib.WaitAndRetry;
+using Polly.Registry;
 using Polly.Retry;
 using Polly.Wrap;
 using System;
@@ -11,7 +12,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using TFW.Framework.PollyWrapper.Examples.CircuitBreakers;
 
 namespace TFW.Framework.PollyWrapper.Examples.Controllers
 {
@@ -19,17 +19,17 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
     [ApiController]
     public class CircuitBreakersController : ControllerBase
     {
-        private readonly IPolicyManager _policyManager;
+        private readonly IReadOnlyPolicyRegistry<string> _policyRegistry;
 
-        public CircuitBreakersController(IPolicyManager policyManager)
+        public CircuitBreakersController(IReadOnlyPolicyRegistry<string> policyRegistry)
         {
-            _policyManager = policyManager;
+            _policyRegistry = policyRegistry;
         }
 
         [HttpGet("circuit-breaker-wrap")]
         public Task<string> CircuitBreakerWrap()
         {
-            return _policyManager.GetHeavyResourcesBreaker.ExecuteAsync(() =>
+            return _policyRegistry.Get<AsyncPolicyWrap>(Startup.GetHeavyResourcesBreaker).ExecuteAsync(() =>
             {
                 var client = new HttpClient();
                 var host = HttpContext.Request.Host.Value;
@@ -44,7 +44,7 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         [HttpGet("advanced-circuit-breaker-wrap")]
         public Task<string> AdvancedCircuitBreakerWrap()
         {
-            return _policyManager.AdvancedGetHeavyResourcesBreaker.ExecuteAsync(() =>
+            return _policyRegistry.Get<AsyncPolicyWrap>(Startup.AdvancedGetHeavyResourcesBreaker).ExecuteAsync(() =>
             {
                 var client = new HttpClient();
                 var host = HttpContext.Request.Host.Value;
@@ -59,7 +59,7 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         [HttpGet("toggle-circuit-breaker")]
         public void ToggleCircuitBreaker()
         {
-            var breaker = _policyManager.GetHeavyResourcesBreaker
+            var breaker = _policyRegistry.Get<AsyncPolicyWrap>(Startup.GetHeavyResourcesBreaker)
                 .GetPolicy<AsyncCircuitBreakerPolicy>();
 
             if (breaker.CircuitState != CircuitState.Isolated)

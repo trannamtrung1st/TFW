@@ -9,11 +9,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using Polly;
+using Polly.Caching;
+using Polly.Caching.Memory;
+using Polly.Contrib.WaitAndRetry;
+using Polly.Registry;
+using Polly.Retry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using TFW.Framework.PollyWrapper.Examples.CircuitBreakers;
 
 namespace TFW.Framework.PollyWrapper.Examples
 {
@@ -29,7 +35,10 @@ namespace TFW.Framework.PollyWrapper.Examples
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IPolicyManager, PolicyManager>();
+            services.AddMemoryCache()
+                .AddSingleton<IAsyncCacheProvider, MemoryCacheProvider>()
+                .AddSingleton<IReadOnlyPolicyRegistry<string>, PolicyRegistry>((serviceProvider) =>
+                    InitPolly(serviceProvider));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -98,6 +107,78 @@ namespace TFW.Framework.PollyWrapper.Examples
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public const string GetHeavyResourcesBreaker = nameof(GetHeavyResourcesBreaker);
+        public const string AdvancedGetHeavyResourcesBreaker = nameof(AdvancedGetHeavyResourcesBreaker);
+        public const string BulkheadPolicy = nameof(BulkheadPolicy);
+        public const string CachePolicy = nameof(CachePolicy);
+
+        private PolicyRegistry InitPolly(IServiceProvider serviceProvider)
+        {
+            PolicyRegistry registry = new PolicyRegistry();
+
+            var delay = Backoff.DecorrelatedJitterBackoffV2(medianFirstRetryDelay: TimeSpan.FromSeconds(1), retryCount: 3);
+
+            AsyncRetryPolicy retry = Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(delay,
+                    onRetry: (action, delay, count, context) =>
+                    {
+                        Console.WriteLine($"Retry: {count} - {delay.TotalSeconds} seconds");
+                    });
+
+            var simpleBreaker = Policy
+                .Handle<HttpRequestException>()
+                .CircuitBreakerAsync(exceptionsAllowedBeforeBreaking: 3, durationOfBreak: TimeSpan.FromMinutes(1),
+                    onBreak: (ex, breakTime) =>
+                    {
+                        Console.WriteLine(ex);
+                        Console.WriteLine($"Break for {breakTime}");
+                    },
+                    onReset: () =>
+                    {
+                        Console.WriteLine($"Reset circuit breaker named {nameof(GetHeavyResourcesBreaker)}");
+                    }).WithPolicyKey(nameof(GetHeavyResourcesBreaker));
+
+            registry.Add(GetHeavyResourcesBreaker, simpleBreaker.WrapAsync(retry));
+
+            var advancedBreaker = Policy
+                .Handle<HttpRequestException>()
+                .AdvancedCircuitBreakerAsync(failureThreshold: 0.5,
+                    samplingDuration: TimeSpan.FromMinutes(1),
+                    minimumThroughput: 5,
+                    durationOfBreak: TimeSpan.FromMinutes(1),
+                    onBreak: (ex, breakTime) =>
+                    {
+                        Console.WriteLine(ex);
+                        Console.WriteLine($"Break for {breakTime}");
+                    },
+                    onReset: () =>
+                    {
+                        Console.WriteLine($"Reset circuit breaker named {nameof(GetHeavyResourcesBreaker)}");
+                    }).WithPolicyKey(nameof(GetHeavyResourcesBreaker));
+
+            registry.Add(AdvancedGetHeavyResourcesBreaker, advancedBreaker.WrapAsync(retry));
+
+            registry.Add(BulkheadPolicy, Policy
+                .BulkheadAsync(maxParallelization: 2,
+                    maxQueuingActions: 2, onBulkheadRejectedAsync: (context) =>
+                    {
+                        Console.WriteLine("Rejected");
+                        return Task.CompletedTask;
+                    }));
+
+            var asyncCacheProvider = serviceProvider.GetRequiredService<IAsyncCacheProvider>();
+
+            registry.Add(CachePolicy, Policy
+                .CacheAsync(asyncCacheProvider, new SlidingTtl(TimeSpan.FromMinutes(5)),
+                onCacheError: (context, cacheKey, ex) =>
+                {
+                    Console.WriteLine($"{cacheKey} - ${ex}");
+                }));
+
+            return registry;
         }
     }
 }

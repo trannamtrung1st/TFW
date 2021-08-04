@@ -16,7 +16,7 @@ namespace TFW.Framework.PollyWrapper.Examples.Controllers
         public IActionResult TimeOut()
         {
             Thread.Sleep(10000);
-            return Ok();
+            return Ok("Success");
         }
 
         [HttpGet("always-fail")]
