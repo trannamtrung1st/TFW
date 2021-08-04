@@ -113,7 +113,9 @@ namespace TFW.Framework.PollyWrapper.Examples
         public const string AdvancedGetHeavyResourcesBreaker = nameof(AdvancedGetHeavyResourcesBreaker);
         public const string BulkheadPolicy = nameof(BulkheadPolicy);
         public const string CachePolicy = nameof(CachePolicy);
+        public const string FallbackPolicy = nameof(FallbackPolicy);
 
+        // High throughput scenario: https://github.com/App-vNext/Polly/wiki/Avoiding-cache-repopulation-request-storms
         private PolicyRegistry InitPolly(IServiceProvider serviceProvider)
         {
             PolicyRegistry registry = new PolicyRegistry();
@@ -177,6 +179,10 @@ namespace TFW.Framework.PollyWrapper.Examples
                 {
                     Console.WriteLine($"{cacheKey} - ${ex}");
                 }));
+
+            registry.Add(FallbackPolicy,
+                Policy<string>.Handle<Exception>()
+                    .FallbackAsync((ct) => Task.FromResult("DEFAULT")));
 
             return registry;
         }
