@@ -119,7 +119,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.PollyWrapper"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.PollyWrapper.Examples", "Frameworks\TFW.Framework.PollyWrapper.Examples\TFW.Framework.PollyWrapper.Examples.csproj", "{121C5873-BCBF-4381-99A6-A189EA6581C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.WebExamples", "TFW.Framework.WebExamples\TFW.Framework.WebExamples.csproj", "{E679DFCB-3180-424F-B1B3-0A6143C95C7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFW.Framework.WebExamples", "TFW.Framework.WebExamples\TFW.Framework.WebExamples.csproj", "{E679DFCB-3180-424F-B1B3-0A6143C95C7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFW.Framework.Background", "TFW.Framework.Background\TFW.Framework.Background.csproj", "{C55372F9-CCED-4C86-A877-3431E4FAA14F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -537,6 +539,14 @@ Global
 		{E679DFCB-3180-424F-B1B3-0A6143C95C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E679DFCB-3180-424F-B1B3-0A6143C95C7F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E679DFCB-3180-424F-B1B3-0A6143C95C7F}.Release|x86.Build.0 = Release|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Debug|x86.Build.0 = Debug|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Release|x86.ActiveCfg = Release|Any CPU
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -595,6 +605,7 @@ Global
 		{4013D607-B49D-444B-9423-BF8796411796} = {5028DF4F-007E-4808-9F1C-8CCE4211936D}
 		{121C5873-BCBF-4381-99A6-A189EA6581C9} = {5028DF4F-007E-4808-9F1C-8CCE4211936D}
 		{E679DFCB-3180-424F-B1B3-0A6143C95C7F} = {5028DF4F-007E-4808-9F1C-8CCE4211936D}
+		{C55372F9-CCED-4C86-A877-3431E4FAA14F} = {5028DF4F-007E-4808-9F1C-8CCE4211936D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7026D7F0-4EB7-4B18-A4FE-81D32724A9DF}
