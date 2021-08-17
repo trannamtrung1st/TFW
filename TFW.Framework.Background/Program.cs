@@ -15,20 +15,23 @@ namespace TFW.Framework.Background
     {
         public static void Main(string[] args)
         {
-            GlobalConfiguration.Configuration
-                .UseSqlServerStorage(@"Server=localhost;Database=TFW.Hangfire;Trusted_Connection=True;MultipleActiveResultSets=true");
+            #region Hangfire basic
+            //GlobalConfiguration.Configuration
+            //    .UseSqlServerStorage(@"Server=localhost;Database=TFW.Hangfire;Trusted_Connection=True;MultipleActiveResultSets=true");
 
-            BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
+            //BackgroundJob.Enqueue(() => Console.WriteLine("Hello, world!"));
 
-            BackgroundJob.Schedule(() => Console.WriteLine("Scheduled job"), DateTimeOffset.UtcNow.AddSeconds(5));
+            //BackgroundJob.Schedule(() => Console.WriteLine("Scheduled job"), DateTimeOffset.UtcNow.AddSeconds(5));
 
-            RecurringJob.AddOrUpdate(nameof(WriteTime), () => WriteTime(), "*/5 * * * *");
+            //RecurringJob.AddOrUpdate(nameof(WriteTime), () => WriteTime(), "*/5 * * * *");
 
+            //using (new BackgroundJobServer())
+            //{
+            //    CreateHostBuilder(args).Build().Run();
+            //}
+            #endregion
 
-            using (new BackgroundJobServer())
-            {
-                CreateHostBuilder(args).Build().Run();
-            }
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -1,3 +1,6 @@
+using Hangfire;
+using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TFW.Framework.Background.Auth;
 
 namespace TFW.Framework.Background
 {
@@ -28,6 +32,29 @@ namespace TFW.Framework.Background
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    // Each background worker will refresh the timeout to let other workers know the job is being processed
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.FromSeconds(1),
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+            services.AddAuthorization();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -91,9 +118,27 @@ namespace TFW.Framework.Background
 
             app.UseAuthorization();
 
+            // Can be replaced by MapHangfireDashboard
+            //app.UseHangfireDashboard(pathMatch:
+            //    "/internal/hangfire", options: new DashboardOptions
+            //    {
+            //        //AsyncAuthorization = new[]
+            //        //{
+            //        //    new AppAuthorizeFilter()
+            //        //},
+            //        IsReadOnlyFunc = (context) => true,
+            //    });
+
+            BackgroundJob.Enqueue(() => Console.WriteLine("Hello world from Hangfire!"));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard("/internal/hangfire", options: new DashboardOptions
+                {
+                    IsReadOnlyFunc = (context) => true
+                });
+                //.RequireAuthorization();
             });
         }
     }
