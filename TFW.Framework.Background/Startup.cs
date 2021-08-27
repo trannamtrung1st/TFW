@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TFW.Framework.Background.Auth;
+using TFW.Framework.Background.Services;
 
 namespace TFW.Framework.Background
 {
@@ -32,6 +33,9 @@ namespace TFW.Framework.Background
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<DisposableService>()
+                .AddScoped((_) => new ChildDisposableService());
+
             // Add Hangfire services.
             services.AddHangfire(configuration => configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -95,8 +99,11 @@ namespace TFW.Framework.Background
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            DisposableService disposableService)
         {
+            disposableService.Process();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
