@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using Quartz;
+using Quartz.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +35,24 @@ namespace TFW.Framework.Background
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // base configuration from appsettings.json
+            services.Configure<QuartzOptions>(Configuration.GetSection("Quartz"));
+
+            // if you are using persistent job store, you might want to alter some options
+            services.Configure<QuartzOptions>(options =>
+            {
+                options.Scheduling.IgnoreDuplicates = true; // default: false
+                options.Scheduling.OverWriteExistingData = true; // default: true
+            });
+
+            services.AddQuartz();
+
+            services.AddQuartzServer(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
+            });
+
             services.AddScoped<DisposableService>()
                 .AddScoped((_) => new ChildDisposableService());
 
@@ -100,9 +120,14 @@ namespace TFW.Framework.Background
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
-            DisposableService disposableService)
+            DisposableService disposableService,
+            ISchedulerFactory schedulerFactory)
         {
-            disposableService.Process();
+            #region Quartz basic
+            StartQuartzExampleAsync(schedulerFactory).Wait();
+            #endregion
+
+            //disposableService.Process();
 
             if (env.IsDevelopment())
             {
@@ -148,5 +173,92 @@ namespace TFW.Framework.Background
                 //.RequireAuthorization();
             });
         }
+
+        public class ConsoleLogProvider : ILogProvider
+        {
+            public Logger GetLogger(string name)
+            {
+                return (level, func, exception, parameters) =>
+                {
+                    if (level >= Quartz.Logging.LogLevel.Info && func != null)
+                    {
+                        Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func(), parameters);
+                    }
+                    return true;
+                };
+            }
+
+            public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IDisposable OpenNestedContext(string message)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public class HelloJob : IJob
+        {
+            public string MyParam { get; set; }
+
+            public async Task Execute(IJobExecutionContext context)
+            {
+                await Console.Out.WriteLineAsync($"Greetings from HelloJob! {MyParam}");
+            }
+        }
+
+        public static async Task StartQuartzExampleAsync(ISchedulerFactory schedulerFactory)
+        {
+            var scheduler = await schedulerFactory.GetScheduler();
+            LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
+
+            // and start it off
+            //await scheduler.Start();
+
+            var trigger = await scheduler.GetTrigger(new TriggerKey("trigger1", "group1"));
+            if (trigger == null)
+            {
+                IJobDetail job = JobBuilder.Create<HelloJob>()
+                .WithIdentity("job1", "group1")
+                .UsingJobData(nameof(HelloJob.MyParam), "Hello my param")
+                .Build();
+
+                // Trigger the job to run now, and then repeat every 10 seconds
+                trigger = TriggerBuilder.Create()
+                    .WithIdentity("trigger1", "group1")
+                    .StartNow()
+                    .WithSimpleSchedule(x => x
+                        .WithIntervalInSeconds(10))
+                    .Build();
+
+                // Tell quartz to schedule the job using our trigger
+                await scheduler.ScheduleJob(job, trigger);
+            }
+
+            var laterTrigger = await scheduler.GetTrigger(new TriggerKey("Test"));
+            if (laterTrigger == null)
+            {
+                IJobDetail job2 = JobBuilder.Create<HelloJob>()
+                    .WithIdentity("job2", "group1")
+                    .UsingJobData(nameof(HelloJob.MyParam), "Hello my param ADO STORE")
+                    .Build();
+
+                laterTrigger = TriggerBuilder.Create()
+                    .WithIdentity("Test")
+                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(20))
+                    .Build();
+
+                await scheduler.ScheduleJob(job2, laterTrigger);
+            }
+
+            // some sleep to show what's happening
+            //await Task.Delay(TimeSpan.FromSeconds(10));
+
+            // and last shut down the scheduler when you are ready to close your program
+            //await scheduler.Shutdown();
+        }
+
     }
 }
