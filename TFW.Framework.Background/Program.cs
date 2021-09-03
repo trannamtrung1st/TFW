@@ -89,6 +89,7 @@ namespace TFW.Framework.Background
 
             IJobDetail job = JobBuilder.Create<HelloJob>()
                 .WithIdentity("job1", "group1")
+                .UsingJobData(nameof(HelloJob.MyParam), "Hello my param")
                 .Build();
 
             // Trigger the job to run now, and then repeat every 10 seconds
@@ -113,9 +114,11 @@ namespace TFW.Framework.Background
 
     public class HelloJob : IJob
     {
+        public string MyParam { get; set; }
+
         public async Task Execute(IJobExecutionContext context)
         {
-            await Console.Out.WriteLineAsync("Greetings from HelloJob!");
+            await Console.Out.WriteLineAsync($"Greetings from HelloJob! {MyParam}");
         }
     }
 }
