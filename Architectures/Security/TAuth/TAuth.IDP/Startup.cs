@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer4.AspNetIdentity;
 using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,7 @@ namespace TAuth.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
-            services.AddIdentityCore<IdentityUser>(options =>
+            services.AddIdentityCore<AppUser>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = false;
             }).AddRoles<IdentityRole>()
@@ -81,7 +82,8 @@ namespace TAuth.IDP
                 //.AddInMemoryApiResources(Config.ApiResources)
                 //.AddInMemoryApiScopes(Config.ApiScopes)
                 //.AddInMemoryClients(Config.Clients)
-                .AddTestUsers(TestUsers.Users);
+                //.AddTestUsers(TestUsers.Users);
+                .AddProfileService<ProfileService<AppUser>>();
 
             // not recommended for production - you need to store your key material somewhere secure
             //builder.AddDeveloperSigningCredential();

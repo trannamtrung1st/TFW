@@ -71,7 +71,7 @@ namespace TAuth.IDP
         private static async Task InitAsync(IHost host)
         {
             using var scope = host.Services.CreateScope();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var context = scope.ServiceProvider.GetRequiredService<IdpContext>();
 
@@ -112,7 +112,7 @@ namespace TAuth.IDP
                     return new
                     {
                         Password = o.Password,
-                        User = new IdentityUser()
+                        User = new AppUser()
                         {
                             Id = o.SubjectId,
                             Email = o.Claims.FirstOrDefault(o => o.Type == JwtClaimTypes.Email).Value,

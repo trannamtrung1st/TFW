@@ -2,7 +2,6 @@
 using IdentityServer4.EntityFramework.Interfaces;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 namespace TAuth.IDP.Models
 {
     // Use ConfigurationDbContext, PersistedGrantDbContext for customization (without IdentityFramework)
-    public class IdpContext : ApiAuthorizationDbContext<IdentityUser>, IConfigurationDbContext, IPersistedGrantDbContext
+    public class IdpContext : ApiAuthorizationDbContext<AppUser>, IConfigurationDbContext, IPersistedGrantDbContext
     {
         public IdpContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {

@@ -128,7 +128,7 @@ namespace TAuth.ResourceClient
 
                 opt.AddPolicy("IsAdmin", builder => builder.RequireRole("Administrator"));
 
-                opt.AddPolicy("EmailVerified", builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, $"{true}"));
+                opt.AddPolicy("EmailVerified", builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, "true"));
             });
 
             var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
