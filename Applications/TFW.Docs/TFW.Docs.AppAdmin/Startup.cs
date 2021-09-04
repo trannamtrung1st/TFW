@@ -4,14 +4,11 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TFW.Docs.ApiClient;
+using TFW.Docs.AppAdmin.Models;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Models.Setting;
-using TFW.Docs.AppAdmin.Models;
 using TFW.Framework.Configuration.Extensions;
 
 namespace TFW.Docs.AppAdmin

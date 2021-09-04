@@ -1,8 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace TFW.Docs.Cross.Models.Common
 {
@@ -13,7 +9,7 @@ namespace TFW.Docs.Cross.Models.Common
 
         [JsonProperty("displayName")]
         public string DisplayName { get; set; }
-        
+
         [JsonProperty("englishName")]
         public string EnglishName { get; set; }
     }

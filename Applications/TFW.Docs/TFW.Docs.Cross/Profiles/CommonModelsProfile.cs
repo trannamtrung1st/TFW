@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Security.Claims;
-using System.Text;
 using TFW.Docs.Cross.Models.Common;
 
 namespace TFW.Docs.Cross.Profiles

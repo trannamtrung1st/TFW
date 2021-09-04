@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TFW.Framework.Cross.Schema;
 
 namespace TFW.Framework.Validations.Fluent.Extensions

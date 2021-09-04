@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Framework.ConsoleApp.Options
+﻿namespace TFW.Framework.ConsoleApp.Options
 {
     public class ProgramOptions
     {

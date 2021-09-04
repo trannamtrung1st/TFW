@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Providers;
 using TFW.Docs.Data;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TFW.Docs.Cross.Entities;
 
 namespace TFW.Docs.Business.Core.Queries.AppUser

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Framework.Web.Extensions;
 using PC = TFW.Docs.Cross.Models.PostCategory.ListPostCategoryJoinModel;

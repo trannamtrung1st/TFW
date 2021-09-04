@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Framework.Data
+﻿namespace TFW.Framework.Data
 {
     public static class SqlServerColumnType
     {

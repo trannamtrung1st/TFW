@@ -1,0 +1,65 @@
+﻿@page "/"
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form id="form-change-handler" role="form" method="post" asp-page="/Index/Index" asp-page-handler="ChangeService">
+                <div class="form-group">
+                    <label asp-for="ChangeServiceViewModel.ServiceType"></label>: @Model.ChangeServiceViewModel.ServiceType
+                    <div class="form-check">
+                        @Html.RadioButtonFor(m => m.ChangeServiceViewModel.ServiceType,
+                            AppScheduler.BackgroundServiceTypes.Hangfire, new
+                            {
+                                @class = "form-check-input",
+                                id = "cb-hangfire",
+                                @checked = Model.ChangeServiceViewModel.ServiceType == AppScheduler.BackgroundServiceTypes.Hangfire
+                            })
+                        <label class="form-check-label" for="cb-hangfire">
+                            Hangfire
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        @Html.RadioButtonFor(m => m.ChangeServiceViewModel.ServiceType,
+                            AppScheduler.BackgroundServiceTypes.Quartz, new
+                            {
+                                @class = "form-check-input",
+                                id = "cb-quartz",
+                                @checked = Model.ChangeServiceViewModel.ServiceType == AppScheduler.BackgroundServiceTypes.Quartz
+                            })
+                        <label class="form-check-label" for="cb-quartz">
+                            Quartz
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Change</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form id="form-schedule-task" role="form" method="post" asp-page="/Index/Index" asp-page-handler="ScheduleTask">
+                <div class="form-group">
+                    <label asp-for="ScheduleTaskViewModel.Code"></label>
+                    <div class="text-danger">
+                        @Model.ScheduleTaskViewModel.Message
+                    </div>
+                    <textarea class="form-control" rows="17" asp-for="ScheduleTaskViewModel.Code"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

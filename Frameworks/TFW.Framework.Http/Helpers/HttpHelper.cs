@@ -1,9 +1,6 @@
 ﻿using Microsoft.Net.Http.Headers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
-using System.Text;
 using TFW.Framework.Common.Extensions;
 
 namespace TFW.Framework.Http.Helpers

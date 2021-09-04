@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Framework.Validations.Examples.Models;
 using TFW.Framework.Validations.Fluent;
 using TFW.Framework.Validations.Fluent.Extensions;

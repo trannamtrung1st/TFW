@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross.Entities;
 using TFW.Docs.Cross.Models.PostCategory;
 

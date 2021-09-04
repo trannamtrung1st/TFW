@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TFW.Framework.UoW;
+﻿using TFW.Framework.UoW;
 
 namespace TFW.Docs.Business
 {

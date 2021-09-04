@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross.Entities;
-using TFW.Framework.EFCore.Extensions;
 
 namespace TFW.Docs.Data.EntityConfigs
 {

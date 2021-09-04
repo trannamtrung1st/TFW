@@ -2,7 +2,6 @@
 using System.Data.Common;
 using System.Threading.Tasks;
 using TFW.Framework.Data.Options;
-using TFW.Framework.Data.Wrappers;
 
 namespace TFW.Framework.Data
 {

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Dynamic.Core;
-using System.Text;
 using System.Threading.Tasks;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Docs.Cross.Models.PostCategory;

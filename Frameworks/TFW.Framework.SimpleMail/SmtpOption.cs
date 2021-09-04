@@ -1,7 +1,4 @@
 ﻿using MailKit.Security;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TFW.Framework.SimpleMail
 {

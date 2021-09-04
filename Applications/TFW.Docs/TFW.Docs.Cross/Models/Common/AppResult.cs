@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using TFW.Framework.Common.Extensions;
 
 namespace TFW.Docs.Cross.Models.Common

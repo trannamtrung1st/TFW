@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TFW.Framework.DI.WebExamples.Models;
+﻿using TFW.Framework.DI.WebExamples.Models;
 
 namespace TFW.Framework.DI.WebExamples.Builders
 {

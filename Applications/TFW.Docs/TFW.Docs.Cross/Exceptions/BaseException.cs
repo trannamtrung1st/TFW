@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 using TFW.Docs.Cross.Models.Common;
 
 namespace TFW.Docs.Cross.Exceptions

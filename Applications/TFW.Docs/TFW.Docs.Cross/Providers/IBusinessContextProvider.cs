@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Docs.Cross.Providers
+﻿namespace TFW.Docs.Cross.Providers
 {
     public interface IBusinessContextProvider
     {

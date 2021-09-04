@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Framework.Logging.Serilog
+﻿namespace TFW.Framework.Logging.Serilog
 {
     public static class Properties
     {

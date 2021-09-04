@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,13 @@ using System.Linq.Dynamic.Core;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TFW.Docs.Business.Core.Queries.AppUser;
 using TFW.Docs.Business.Services;
 using TFW.Docs.Cross;
 using TFW.Docs.Cross.Entities;
+using TFW.Docs.Cross.Exceptions;
 using TFW.Docs.Cross.Models.AppUser;
 using TFW.Docs.Cross.Models.Common;
-using TFW.Docs.Cross.Exceptions;
 using TFW.Docs.Cross.Models.Identity;
 using TFW.Docs.Cross.Models.Setting;
 using TFW.Docs.Cross.Providers;
@@ -23,10 +25,8 @@ using TFW.Docs.Data;
 using TFW.Framework.AutoMapper;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.DI.Attributes;
-using TFW.Framework.Security.Extensions;
-using Microsoft.Extensions.Localization;
-using TFW.Docs.Business.Core.Queries.AppUser;
 using TFW.Framework.EFCore.Query;
+using TFW.Framework.Security.Extensions;
 
 namespace TFW.Docs.Business.Core.Services
 {

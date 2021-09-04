@@ -1,7 +1,5 @@
 ﻿using Serilog.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Framework.Logging.Serilog.Enrichers;
 
 namespace Serilog

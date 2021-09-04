@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Docs.Cross.Helpers
+﻿namespace TFW.Docs.Cross.Helpers
 {
     public static class I18nHelper
     {

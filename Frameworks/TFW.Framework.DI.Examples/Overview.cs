@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TFW.Framework.DI.Examples.Loggers;
 using TFW.Framework.DI.Examples.Models;
 

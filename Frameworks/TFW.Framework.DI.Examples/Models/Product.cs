@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Framework.DI.Examples.Models
+﻿namespace TFW.Framework.DI.Examples.Models
 {
     public class Product
     {

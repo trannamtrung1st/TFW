@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TFW.Framework.Common.Extensions;
+﻿using TFW.Framework.Common.Extensions;
 
 namespace TFW.Framework.Web.Attributes
 {

@@ -1,6 +1,4 @@
 ﻿using Amazon;
-using Amazon.Glacier;
-using Amazon.Glacier.Transfer;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;

@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using TFW.Framework.i18n.Helpers;
-using TFW.Framework.Web.Options;
 using TFW.Framework.Web.Binding;
-using TFW.Framework.Web.Middlewares;
-using TFW.Framework.Web.Providers;
 using TFW.Framework.Web.Handlers;
-using Microsoft.AspNetCore.Authorization;
+using TFW.Framework.Web.Middlewares;
+using TFW.Framework.Web.Options;
+using TFW.Framework.Web.Providers;
 
 namespace TFW.Framework.Web
 {

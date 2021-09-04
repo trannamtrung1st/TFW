@@ -3,8 +3,6 @@ using FluentValidation.AspNetCore;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TFW.Framework.Validations.Fluent.Interceptors
 {

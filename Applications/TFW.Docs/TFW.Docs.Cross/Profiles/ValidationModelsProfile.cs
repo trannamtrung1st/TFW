@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross.Models.Common;
-using TFW.Framework.AutoMapper;
 
 namespace TFW.Docs.Cross.Profiles
 {

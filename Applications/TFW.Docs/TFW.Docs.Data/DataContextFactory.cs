@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross.Providers;
 using TFW.Framework.DI.Attributes;
 using TFW.Framework.EFCore.Factory;

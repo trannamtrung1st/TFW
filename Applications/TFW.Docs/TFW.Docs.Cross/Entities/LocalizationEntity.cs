@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using TFW.Framework.Cross.i18n;
 
 namespace TFW.Docs.Cross.Entities

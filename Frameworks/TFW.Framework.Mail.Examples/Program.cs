@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using System;
 using TFW.Framework.SimpleMail;
 using TFW.Framework.SimpleMail.Extensions;
 
@@ -24,7 +23,7 @@ namespace TFW.Framework.Mail.Examples
                 });
 
             var provider = services.BuildServiceProvider();
-            
+
             var optionSnapshot = provider.GetRequiredService<IOptionsSnapshot<SmtpOption>>();
 
             var message1 = new MimeMessage()

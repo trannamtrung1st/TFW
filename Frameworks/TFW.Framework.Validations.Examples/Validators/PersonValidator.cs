@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Framework.Validations.Examples.Models;
 
 namespace TFW.Framework.Validations.Examples.Validators
@@ -10,7 +7,8 @@ namespace TFW.Framework.Validations.Examples.Validators
     {
         public PersonValidator()
         {
-            RuleSet("RealName", () => {
+            RuleSet("RealName", () =>
+            {
                 RuleFor(person => person.FullName).MinimumLength(6);
             });
 

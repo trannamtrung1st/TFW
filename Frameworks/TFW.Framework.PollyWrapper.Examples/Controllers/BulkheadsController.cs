@@ -2,15 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Polly;
 using Polly.Bulkhead;
-using Polly.Contrib.WaitAndRetry;
 using Polly.Registry;
-using Polly.Retry;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace TFW.Framework.PollyWrapper.Examples.Controllers

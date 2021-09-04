@@ -1,8 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TFW.Framework.Validations.Examples.Models;
 using TFW.Framework.Validations.Fluent;
@@ -17,7 +13,7 @@ namespace TFW.Framework.Validations.Examples.Validators
         public AddressValidator(CustomerValidator customerValidator)
         {
             _customerValidator = customerValidator;
-         
+
             RuleFor(address => address.Country)
                 .Cascade(CascadeMode.Continue).NotEmpty();
 

@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Polly;
-using Polly.Caching;
-using Polly.Contrib.WaitAndRetry;
 using Polly.Fallback;
 using Polly.Registry;
-using Polly.Retry;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace TFW.Framework.PollyWrapper.Examples.Controllers

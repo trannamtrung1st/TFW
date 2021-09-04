@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.i18n.Options;
 

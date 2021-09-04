@@ -1,10 +1,7 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Localization;
+﻿using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using TFW.Framework.Common.Extensions;
 
 namespace TFW.Framework.Localization.Json

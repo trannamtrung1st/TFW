@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyModel;
 using Serilog;
 using Serilog.Configuration;
@@ -12,8 +6,11 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Debugging;
 using Serilog.Events;
-using Serilog.Filters;
 using Serilog.Sinks.Async;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.CompilerServices;
 using TFW.Framework.Configuration.Extensions;
 
 namespace TFW.Framework.Logging.Examples

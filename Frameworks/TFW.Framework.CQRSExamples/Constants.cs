@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TFW.Framework.CQRSExamples
+﻿namespace TFW.Framework.CQRSExamples
 {
     public enum TimePeriod
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TFW.Docs.Cross.Models.Common
+﻿namespace TFW.Docs.Cross.Models.Common
 {
     public class PrincipalInfo
     {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TFW.Framework.Logging.Examples
+﻿namespace TFW.Framework.Logging.Examples
 {
     class Program
     {

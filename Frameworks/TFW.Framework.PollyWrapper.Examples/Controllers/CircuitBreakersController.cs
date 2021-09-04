@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Polly;
 using Polly.CircuitBreaker;
-using Polly.Contrib.WaitAndRetry;
 using Polly.Registry;
-using Polly.Retry;
 using Polly.Wrap;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 

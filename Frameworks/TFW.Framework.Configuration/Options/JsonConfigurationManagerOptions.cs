@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TFW.Framework.Configuration.Options
+﻿namespace TFW.Framework.Configuration.Options
 {
     public class JsonConfigurationManagerOptions
     {

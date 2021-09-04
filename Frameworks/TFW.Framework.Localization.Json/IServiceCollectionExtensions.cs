@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace TFW.Framework.Localization.Json
 {

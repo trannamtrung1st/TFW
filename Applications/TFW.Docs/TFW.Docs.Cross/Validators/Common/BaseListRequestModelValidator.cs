@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Localization;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using TFW.Docs.Cross.Models.Common;
 using TFW.Framework.Validations.Fluent;
 

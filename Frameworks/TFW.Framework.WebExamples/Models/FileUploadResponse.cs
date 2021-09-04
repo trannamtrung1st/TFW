@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace TFW.Framework.WebExamples.Models
+﻿namespace TFW.Framework.WebExamples.Models
 {
     public class FileUploadResponse
     {

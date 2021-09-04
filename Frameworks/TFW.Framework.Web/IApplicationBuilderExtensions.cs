@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using TFW.Framework.Web.Middlewares;
 using Microsoft.Extensions.Options;
+using System;
 using TFW.Framework.Web.Handlers;
+using TFW.Framework.Web.Middlewares;
 
 namespace TFW.Framework.Web
 {

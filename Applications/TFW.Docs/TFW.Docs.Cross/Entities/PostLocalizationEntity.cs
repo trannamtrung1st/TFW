@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TFW.Docs.Cross.Entities
+﻿namespace TFW.Docs.Cross.Entities
 {
     public class PostLocalizationEntity : AppLocalizationEntity<int, PostEntity>
     {

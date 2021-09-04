@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using TFW.Framework.Common.Extensions;
 using TFW.Framework.Common.Helpers;
 using TFW.Framework.Cross.Audit;

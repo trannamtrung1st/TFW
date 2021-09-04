@@ -3,7 +3,6 @@ using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Threading.Tasks;
 using TFW.Framework.ConsoleApp;
 using TFW.Framework.Validations.Examples.Models;
@@ -61,7 +60,8 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
                 }
             };
 
-            ValidatorOptions.Global.DisplayNameResolver = (type, member, expression) => {
+            ValidatorOptions.Global.DisplayNameResolver = (type, member, expression) =>
+            {
                 if (member != null)
                 {
                     return member.Name + "Foo";
@@ -71,7 +71,7 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
 
             CustomerValidator validator = new CustomerValidator();
 
-            ValidationResult result = validator.Validate(customer, 
+            ValidationResult result = validator.Validate(customer,
                 opt => opt.IncludeAllRuleSets());
 
             if (!result.IsValid)
@@ -90,8 +90,9 @@ namespace TFW.Framework.Validations.Examples.ConsoleTasks
             try
             {
                 Console.WriteLine("---------------");
-            
-                validator.Validate(customer, options => {
+
+                validator.Validate(customer, options =>
+                {
                     options.ThrowOnFailures();
                     options.IncludeRuleSets("MyRuleSets");
                     options.IncludeProperties(x => x.Surname);

@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TFW.Docs.Cross.Models.Common
 {
@@ -9,7 +6,7 @@ namespace TFW.Docs.Cross.Models.Common
     {
         [JsonProperty("isoCurrencySymbol")]
         public string ISOCurrencySymbol { get; set; }
-        
+
         [JsonProperty("currencySymbol")]
         public string CurrencySymbol { get; set; }
     }
