@@ -56,8 +56,7 @@ namespace IdentityServerHost.Quickstart.UI
                             new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
                             new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                             new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address1), IdentityServerConstants.ClaimValueTypes.Json),
-                            new Claim(JwtClaimTypes.Role, "Administrator")
+                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address1), IdentityServerConstants.ClaimValueTypes.Json)
                         }
                     },
                     new TestUser

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TAuth.ResourceAPI.Services;
@@ -25,6 +26,7 @@ namespace TAuth.ResourceAPI.Entities
         }
 
         public virtual DbSet<ResourceEntity> Resources { get; set; }
+        public virtual DbSet<ApplicationUserClaim> UserClaims { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -58,12 +60,13 @@ namespace TAuth.ResourceAPI.Entities
 
         protected void SetEntitiesOwner()
         {
-            foreach (var entry in ChangeTracker.Entries())
+            var ownedEntities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added)
+                .Select(e => e.Entity)
+                .OfType<IOwnedEntity>().ToArray();
+
+            foreach (var entry in ownedEntities)
             {
-                if (entry.Entity is IOwnedEntity ownedEntity && entry.State == EntityState.Added)
-                {
-                    ownedEntity.OwnerId = _currentUserId;
-                }
+                entry.OwnerId = _currentUserId;
             }
         }
     }

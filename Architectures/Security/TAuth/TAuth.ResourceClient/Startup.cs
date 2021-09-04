@@ -77,7 +77,7 @@ namespace TAuth.ResourceClient
                 //opt.UsePkce = false;
                 opt.Scope.Add("email");
                 opt.Scope.Add("address");
-                opt.Scope.Add("roles");
+                //opt.Scope.Add("roles");
                 opt.Scope.Add("offline_access");
                 opt.Scope.Add("resource_api.full");
                 opt.SaveTokens = true; // HttpContext.GetTokenAsync
@@ -87,7 +87,7 @@ namespace TAuth.ResourceClient
                 opt.ClaimActions.DeleteClaim(JwtRegisteredClaimNames.AuthTime);
                 opt.ClaimActions.DeleteClaim("s_hash");
                 opt.ClaimActions.DeleteClaim("idp");
-                opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
+                //opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role);
                 opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.Address, JwtClaimTypes.Address);
                 opt.ClaimActions.MapUniqueJsonKey(JwtClaimTypes.EmailVerified, JwtClaimTypes.EmailVerified);
 
@@ -95,6 +95,14 @@ namespace TAuth.ResourceClient
                 {
                     NameClaimType = JwtClaimTypes.Name,
                     RoleClaimType = JwtClaimTypes.Role
+                };
+
+                opt.Events = new OpenIdConnectEvents
+                {
+                    OnTokenValidated = async tokenValidatedContext =>
+                    {
+
+                    }
                 };
             });
 
