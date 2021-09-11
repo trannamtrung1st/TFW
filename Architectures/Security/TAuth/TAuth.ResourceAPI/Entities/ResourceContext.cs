@@ -11,18 +11,15 @@ namespace TAuth.ResourceAPI.Entities
         public const string DefaultConnStr = "Data Source=./ResourceContext.db";
 
         private IUserProvider _userProvider;
-        private int _currentUserId;
 
         public ResourceContext(IUserProvider userProvider)
         {
             _userProvider = userProvider;
-            _currentUserId = userProvider.CurrentUserId;
         }
 
         public ResourceContext(DbContextOptions options, IUserProvider userProvider) : base(options)
         {
             _userProvider = userProvider;
-            _currentUserId = userProvider.CurrentUserId;
         }
 
         public virtual DbSet<ResourceEntity> Resources { get; set; }
@@ -42,7 +39,7 @@ namespace TAuth.ResourceAPI.Entities
 
             modelBuilder.Entity<ResourceEntity>(eBuilder =>
             {
-                eBuilder.HasQueryFilter(o => o.OwnerId == _currentUserId);
+                eBuilder.HasQueryFilter(o => o.OwnerId == _userProvider.CurrentUserId);
             });
         }
 
@@ -60,7 +57,7 @@ namespace TAuth.ResourceAPI.Entities
 
         protected void SetEntitiesOwner()
         {
-            if (_currentUserId == 0) return;
+            if (_userProvider.CurrentUserId == null) return;
 
             var ownedEntities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added)
                 .Select(e => e.Entity)
@@ -68,7 +65,7 @@ namespace TAuth.ResourceAPI.Entities
 
             foreach (var entry in ownedEntities)
             {
-                entry.OwnerId = _currentUserId;
+                entry.OwnerId = _userProvider.CurrentUserId;
             }
         }
     }

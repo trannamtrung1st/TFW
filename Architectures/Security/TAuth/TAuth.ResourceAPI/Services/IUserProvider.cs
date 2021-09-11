@@ -6,7 +6,7 @@ namespace TAuth.ResourceAPI.Services
 {
     public interface IUserProvider
     {
-        public int CurrentUserId { get; }
+        public string CurrentUserId { get; }
         public ClaimsPrincipal CurrentPrincipal { get; }
     }
 
@@ -19,15 +19,15 @@ namespace TAuth.ResourceAPI.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int CurrentUserId
+        public string CurrentUserId
         {
             get
             {
                 if (_httpContextAccessor.HttpContext == null) return default;
 
-                var idVal = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
+                var subject = _httpContextAccessor.HttpContext.User.FindFirstValue(JwtClaimTypes.Subject);
 
-                return int.Parse(idVal);
+                return subject;
             }
         }
 

@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TAuth.IDP.Models;
 
@@ -236,10 +238,94 @@ namespace IdentityServerHost.Quickstart.UI
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            var vm = BuildRegisterViewModel(returnUrl);
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var user = new AppUser
+            {
+                UserName = viewModel.UserName,
+                Closed = false
+            };
+
+            var result = await _userManager.CreateAsync(user, viewModel.Password);
+
+            if (!result.Succeeded)
+            {
+                SetIdentityResultErrors(result);
+                return View(viewModel);
+            }
+
+            result = await _userManager.AddClaimsAsync(user, new[]
+            {
+                new Claim(JwtClaimTypes.Name, $"{viewModel.FamilyName} {viewModel.GivenName}"),
+                new Claim(JwtClaimTypes.GivenName, viewModel.GivenName),
+                new Claim(JwtClaimTypes.FamilyName, viewModel.FamilyName),
+                new Claim(JwtClaimTypes.Email, viewModel.Email),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+                new Claim(JwtClaimTypes.WebSite, $"http://{viewModel.UserName}.com"),
+                new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(new
+                {
+                    street_address = viewModel.Address,
+                    locality = "Heidelberg",
+                    postal_code = 69118,
+                    country = viewModel.Country
+                }), IdentityServerConstants.ClaimValueTypes.Json)
+            });
+
+            if (!result.Succeeded)
+            {
+                SetIdentityResultErrors(result);
+                return View(viewModel);
+            }
+
+            // issue authentication cookie with subject ID and username
+            var isuser = new IdentityServerUser(user.Id)
+            {
+                DisplayName = user.UserName
+            };
+
+            await HttpContext.SignInAsync(isuser);
+
+            if (_interaction.IsValidReturnUrl(viewModel.ReturnUrl)
+                || Url.IsLocalUrl(viewModel.ReturnUrl))
+            {
+                return Redirect(viewModel.ReturnUrl);
+            }
+
+            return Redirect("~/");
+        }
 
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+        private void SetIdentityResultErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+        }
+
+        private RegisterViewModel BuildRegisterViewModel(string returnUrl)
+        {
+            return new RegisterViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+        }
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);

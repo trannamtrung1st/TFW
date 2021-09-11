@@ -2,6 +2,6 @@
 {
     public interface IOwnedEntity
     {
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
     }
 }

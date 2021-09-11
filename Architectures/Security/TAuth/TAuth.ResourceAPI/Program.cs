@@ -45,12 +45,12 @@ namespace TAuth.ResourceAPI
                         new ResourceEntity
                         {
                             Name = "Sample Resource 1",
-                            OwnerId = 1,
+                            OwnerId = "1",
                         },
                         new ResourceEntity
                         {
                             Name = "Sample Resource 2",
-                            OwnerId = 2
+                            OwnerId = "2"
                         });
 
                     await dbContext.UserClaims.AddRangeAsync(
@@ -58,7 +58,7 @@ namespace TAuth.ResourceAPI
                         {
                             ClaimType = JwtClaimTypes.Role,
                             ClaimValue = RoleNames.Administrator,
-                            UserId = 1
+                            UserId = "1"
                         });
 
                     await dbContext.SaveChangesAsync();

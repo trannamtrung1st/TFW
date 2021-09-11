@@ -8,7 +8,7 @@ using TAuth.ResourceAPI.Entities;
 namespace TAuth.ResourceAPI.Migrations
 {
     [DbContext(typeof(ResourceContext))]
-    [Migration("20210704134238_InitDb")]
+    [Migration("20210911094146_InitDb")]
     partial class InitDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -16,6 +16,26 @@ namespace TAuth.ResourceAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.16");
+
+            modelBuilder.Entity("TAuth.ResourceAPI.Entities.ApplicationUserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserClaims");
+                });
 
             modelBuilder.Entity("TAuth.ResourceAPI.Entities.ResourceEntity", b =>
                 {
@@ -26,8 +46,8 @@ namespace TAuth.ResourceAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

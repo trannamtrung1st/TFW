@@ -13,7 +13,7 @@ namespace TAuth.ResourceAPI.Auth.Policies
     public class ResourceAuthorizationModel
     {
         public string Name { get; set; }
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
     }
 
     public class DeleteTestResourceHandler : AuthorizationHandler<DeleteResourceRequirement, ResourceAuthorizationModel>

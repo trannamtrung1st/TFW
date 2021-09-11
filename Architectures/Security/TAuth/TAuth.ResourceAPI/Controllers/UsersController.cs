@@ -26,7 +26,7 @@ namespace TAuth.ResourceAPI.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetUserProfileAsync()
         {
-            var subject = int.Parse(User.FindFirst(JwtClaimTypes.Subject).Value);
+            var subject = User.FindFirst(JwtClaimTypes.Subject).Value;
             var claims = await _context.UserClaims.Where(uc => uc.UserId == subject)
                 .Select(c => new UserProfileItem
                 {

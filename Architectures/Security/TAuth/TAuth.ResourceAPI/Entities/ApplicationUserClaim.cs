@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TAuth.ResourceAPI.Entities
 {
-    public class ApplicationUserClaim : IdentityUserClaim<int>
+    public class ApplicationUserClaim : IdentityUserClaim<string>
     {
         public ApplicationUserClaim()
         {
