@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-
+using TAuth.Resource.Cross;
+using TAuth.ResourceAPI.Auth.Policies;
 
 namespace TAuth.ResourceAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize("WorkerOnly", AuthenticationSchemes = "Introspection")]
+    [Authorize(PolicyNames.WorkerOnly, AuthenticationSchemes = OpenIdConnectConstants.AuthSchemes.Introspection)]
     public class BackgroundController : ControllerBase
     {
 

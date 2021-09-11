@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using TAuth.Resource.Cross.Models.Resource;
+using TAuth.ResourceClient.Auth.Policies;
 using TAuth.ResourceClient.Exceptions;
 using TAuth.ResourceClient.Services;
 
@@ -39,7 +40,7 @@ namespace TAuth.ResourceClient.Pages
             try
             {
                 ResourceList = await _resourceService.GetAsync();
-                CanCreateResource = (await _authorizationService.AuthorizeAsync(User, "CanCreateResource")).Succeeded;
+                CanCreateResource = (await _authorizationService.AuthorizeAsync(User, PolicyNames.Resource.CanCreateResource)).Succeeded;
             }
             catch (HttpException ex)
             {

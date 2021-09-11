@@ -11,12 +11,4 @@
         public const string ResourceAPI = nameof(ResourceAPI);
         public const string IdentityAPI = nameof(IdentityAPI);
     }
-
-    public static class OpenIdConnectConstants
-    {
-        public static class PropertyNames
-        {
-            public const string AccessToken = "access_token";
-        }
-    }
 }

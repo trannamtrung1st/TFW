@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using TAuth.Resource.Cross;
 using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
 using TAuth.ResourceAPI.Services;
@@ -59,7 +60,7 @@ namespace TAuth.ResourceAPI
                     opt.Audience = "resource_api";
                 })
                 // Reference tokens
-                .AddOAuth2Introspection("Introspection", opt =>
+                .AddOAuth2Introspection(OpenIdConnectConstants.AuthSchemes.Introspection, opt =>
                 {
                     opt.Authority = "https://localhost:5001";
                     opt.ClientId = "resource_api";
@@ -68,17 +69,19 @@ namespace TAuth.ResourceAPI
 
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("CanDeleteResource", builder => builder
+                opt.AddPolicy(PolicyNames.Resource.CanDeleteResource, builder => builder
                     .AddRequirements(new DeleteResourceRequirement()
                     {
                         TestName = "Test"
                     }));
 
-                opt.AddPolicy("IsOwner", builder => builder.AddRequirements(new IsOwnerRequirement()));
+                opt.AddPolicy(PolicyNames.IsOwner, builder => builder.AddRequirements(new IsOwnerRequirement()));
 
-                opt.AddPolicy("IsLucky", builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 2 == 0));
+                opt.AddPolicy(PolicyNames.IsLucky, builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 2 == 0));
 
-                opt.AddPolicy("WorkerOnly", builder => builder.RequireAuthenticatedUser().RequireScope("resource_api.background"));
+                opt.AddPolicy(PolicyNames.WorkerOnly, builder => builder.RequireAuthenticatedUser().RequireScope("resource_api.background"));
+
+                opt.AddPolicy(PolicyNames.IsAdmin, builder => builder.RequireRole(RoleNames.Administrator));
             });
 
             var allAuthHandlers = typeof(Startup).Assembly.GetTypes()

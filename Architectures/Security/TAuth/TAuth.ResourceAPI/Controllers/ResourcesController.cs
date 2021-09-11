@@ -57,7 +57,7 @@ namespace TAuth.ResourceAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize("IsLucky")]
+        [Authorize(PolicyNames.IsLucky)]
         public async Task<int> Post([FromBody] CreateResourceModel model)
         {
             var entity = new ResourceEntity
@@ -90,7 +90,7 @@ namespace TAuth.ResourceAPI.Controllers
             {
                 Name = item.Name,
                 OwnerId = item.OwnerId
-            }, "CanDeleteResource");
+            }, PolicyNames.Resource.CanDeleteResource);
 
             if (!authResult.Succeeded) return Forbid();
 

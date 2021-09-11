@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.ResourceClient.Auth.Policies;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient.Pages
 {
-    [Authorize("EmailVerified")]
+    [Authorize(PolicyNames.EmailVerified)]
     public class ProfileModel : PageModel
     {
         private readonly IIdentityService _identityService;

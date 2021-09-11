@@ -137,15 +137,15 @@ namespace TAuth.ResourceClient
 
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("CanCreateResource", builder => builder.Requirements.Add(
+                opt.AddPolicy(PolicyNames.Resource.CanCreateResource, builder => builder.Requirements.Add(
                     new CreateResourceRequirement()
                     {
                         AllowedCountries = new[] { "Vietnam", "Germany" }
                     }));
 
-                opt.AddPolicy("IsAdmin", builder => builder.RequireRole(RoleNames.Administrator));
+                opt.AddPolicy(PolicyNames.IsAdmin, builder => builder.RequireRole(RoleNames.Administrator));
 
-                opt.AddPolicy("EmailVerified", builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, "true"));
+                opt.AddPolicy(PolicyNames.EmailVerified, builder => builder.RequireClaim(JwtClaimTypes.EmailVerified, "true"));
             });
 
             var allAuthHandlers = typeof(Startup).Assembly.GetTypes()
