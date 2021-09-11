@@ -1,4 +1,4 @@
-﻿namespace TAuth.ResourceAPI.Models.Resource
+﻿namespace TAuth.Resource.Cross.Models.Resource
 {
     public class CreateResourceModel
     {

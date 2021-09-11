@@ -1,6 +1,6 @@
-﻿namespace TAuth.ResourceClient.Models.Resource
+﻿namespace TAuth.Resource.Cross.Models.Resource
 {
-    public class ResourceDetailModel
+    public class ResourceListItemModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

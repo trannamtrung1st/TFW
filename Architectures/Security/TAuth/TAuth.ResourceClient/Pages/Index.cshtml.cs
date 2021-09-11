@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross.Models.Resource;
 using TAuth.ResourceClient.Exceptions;
-using TAuth.ResourceClient.Models.Resource;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient.Pages

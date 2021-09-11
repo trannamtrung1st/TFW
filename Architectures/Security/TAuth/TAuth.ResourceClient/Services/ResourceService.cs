@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross.Models.Resource;
 using TAuth.ResourceClient.Exceptions;
-using TAuth.ResourceClient.Models.Resource;
 
 namespace TAuth.ResourceClient.Services
 {
@@ -20,9 +20,9 @@ namespace TAuth.ResourceClient.Services
     {
         private readonly HttpClient _httpClient;
 
-        public ResourceService(HttpClient httpClient)
+        public ResourceService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient(HttpClientConstants.ResourceAPI);
         }
 
         public async Task<int> CreateAsync(CreateResourceModel model)

@@ -18,9 +18,9 @@ namespace TAuth.ResourceClient.Services
     {
         private readonly HttpClient _httpClient;
 
-        public IdentityService(HttpClient httpClient)
+        public IdentityService(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient(HttpClientConstants.IdentityAPI);
         }
 
         public async Task<IEnumerable<Claim>> GetUserInfoAsync()

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross.Models.Resource;
 using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
-using TAuth.ResourceAPI.Models.Resource;
 
 
 namespace TAuth.ResourceAPI.Controllers

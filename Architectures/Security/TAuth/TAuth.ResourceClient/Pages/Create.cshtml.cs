@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
-using TAuth.ResourceClient.Models.Resource;
+using TAuth.Resource.Cross.Models.Resource;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient.Pages

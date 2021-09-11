@@ -1,3 +1,4 @@
+using IdentityModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +50,14 @@ namespace TAuth.ResourceAPI
                         {
                             Name = "Sample Resource 2",
                             OwnerId = 2
+                        });
+
+                    await dbContext.UserClaims.AddRangeAsync(
+                        new ApplicationUserClaim
+                        {
+                            ClaimType = JwtClaimTypes.Role,
+                            ClaimValue = "Administrator",
+                            UserId = 1
                         });
 
                     await dbContext.SaveChangesAsync();

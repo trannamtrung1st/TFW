@@ -17,6 +17,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using TAuth.ResourceClient.Auth.Policies;
+using TAuth.ResourceClient.Options;
 using TAuth.ResourceClient.Services;
 
 namespace TAuth.ResourceClient
@@ -39,15 +40,19 @@ namespace TAuth.ResourceClient
         {
             services.AddHttpContextAccessor();
 
-            services.AddHttpClient<IResourceService, ResourceService>(opt =>
+            services.AddHttpClient(HttpClientConstants.ResourceAPI, opt =>
             {
                 opt.BaseAddress = new Uri(AppSettings.ResourceApiUrl);
             }).AddUserAccessTokenHandler();
 
-            services.AddHttpClient<IIdentityService, IdentityService>(opt =>
+            services.AddHttpClient(HttpClientConstants.IdentityAPI, opt =>
             {
                 opt.BaseAddress = new Uri(AppSettings.IdpUrl);
             }).AddUserAccessTokenHandler();
+
+            services.AddSingleton<IUserService, UserService>()
+                .AddSingleton<IIdentityService, IdentityService>()
+                .AddSingleton<IResourceService, ResourceService>();
 
             services.AddAuthentication(opt =>
             {
@@ -97,13 +102,14 @@ namespace TAuth.ResourceClient
                     RoleClaimType = JwtClaimTypes.Role
                 };
 
-                opt.Events = new OpenIdConnectEvents
-                {
-                    OnTokenValidated = async tokenValidatedContext =>
-                    {
+                // Use PostConfigureOptions instead to get services
+                //opt.Events = new OpenIdConnectEvents
+                //{
+                //    OnTokenValidated = async tokenValidatedContext =>
+                //    {
 
-                    }
-                };
+                //    }
+                //};
             });
 
             // adds user and client access token management
@@ -119,6 +125,8 @@ namespace TAuth.ResourceClient
                 TimeSpan.FromSeconds(2),
                 TimeSpan.FromSeconds(3)
             }));
+
+            services.ConfigureOptions<OpenIdConnectOptionsPostConfigureOptions>();
 
             // registers HTTP client that uses the managed client access token
             services.AddClientAccessTokenClient("use_client_credentials_to_get_access_token", configureClient: client =>

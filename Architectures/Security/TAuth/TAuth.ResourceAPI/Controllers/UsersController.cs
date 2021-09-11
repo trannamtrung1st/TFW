@@ -6,8 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross.Models.User;
 using TAuth.ResourceAPI.Entities;
-using TAuth.ResourceAPI.Models.User;
 
 namespace TAuth.ResourceAPI.Controllers
 {
@@ -23,9 +23,10 @@ namespace TAuth.ResourceAPI.Controllers
             _context = context;
         }
 
-        [HttpGet("profile/{subject}")]
-        public async Task<IActionResult> GetUserProfileAsync(int subject)
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetUserProfileAsync()
         {
+            var subject = int.Parse(User.FindFirst(JwtClaimTypes.Subject).Value);
             var claims = await _context.UserClaims.Where(uc => uc.UserId == subject)
                 .Select(c => new UserProfileItem
                 {
