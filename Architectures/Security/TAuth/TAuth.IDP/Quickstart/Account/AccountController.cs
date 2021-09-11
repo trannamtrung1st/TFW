@@ -364,6 +364,83 @@ namespace IdentityServerHost.Quickstart.UI
             return View("Message", new MessageViewModel());
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string userId = null, string token = null)
+        {
+            AppUser user = null;
+
+            if (userId != null)
+            {
+                user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null) return NotFound();
+            }
+
+            var vm = BuildResetPasswordViewModel(user, token);
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestResetPassword(RequestResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var vm = BuildResetPasswordViewModel(requestResetPasswordViewModel: viewModel);
+
+                return View(nameof(ResetPassword), vm);
+            }
+
+            var user = await _userManager.FindByNameAsync(viewModel.UserName);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Not found user");
+
+                var vm = BuildResetPasswordViewModel(requestResetPasswordViewModel: viewModel);
+
+                return View(nameof(ResetPassword), vm);
+            }
+
+            // Default: 1 day timespan for token valid lifetime => need resend function
+            var confirmToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var callbackUrl = Url.Action(
+               nameof(ResetPassword), "Account",
+               new { userId = user.Id, token = confirmToken },
+               protocol: Request.Scheme);
+
+            await _emailService.SendEmailAsync(user.Email,
+               "Reset your password",
+               $"You can reset your password by clicking this <a href=\"{callbackUrl}\">link</a>");
+
+            return View("Message", new MessageViewModel { Message = "An email has been sent." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var user = await _userManager.FindByIdAsync(viewModel.UserId);
+
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ResetPasswordAsync(user, viewModel.ResetPasswordToken, viewModel.Password);
+
+            if (result.Succeeded)
+            {
+                return View("Message", new MessageViewModel { Message = "Reset password successfully!" });
+            }
+
+            SetIdentityResultErrors(result);
+
+            return View("Message", new MessageViewModel());
+        }
+
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
@@ -373,6 +450,26 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 ModelState.AddModelError(error.Code, error.Description);
             }
+        }
+
+        private ResetPasswordViewModel BuildResetPasswordViewModel(AppUser user = null,
+            string token = null,
+            RequestResetPasswordViewModel requestResetPasswordViewModel = null)
+        {
+            var viewModel = new ResetPasswordViewModel();
+
+            if (user != null)
+            {
+                viewModel.UserId = user?.Id;
+                viewModel.ResetPasswordToken = token;
+                viewModel.IdentityConfirmed = true;
+            }
+            else
+            {
+                viewModel.RequestResetPasswordViewModel = requestResetPasswordViewModel ?? new RequestResetPasswordViewModel();
+            }
+
+            return viewModel;
         }
 
         private RegisterViewModel BuildRegisterViewModel(string returnUrl)
