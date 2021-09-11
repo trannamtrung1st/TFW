@@ -15,6 +15,7 @@ using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using TAuth.IDP.Models;
+using TAuth.Resource.Cross.Services;
 
 namespace TAuth.IDP
 {
@@ -42,9 +43,12 @@ namespace TAuth.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
+            services.AddSingleton<IEmailService, MockEmailService>();
+
             services.AddIdentityCore<AppUser>(options =>
             {
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
+                //options.Tokens.EmailConfirmationTokenProvider = "CustomEmailTokenProvider"; // Change lifetime of email confirmation token
             }).AddRoles<IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddSignInManager()

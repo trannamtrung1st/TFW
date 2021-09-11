@@ -871,7 +871,7 @@ namespace TAuth.IDP.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Closed")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")

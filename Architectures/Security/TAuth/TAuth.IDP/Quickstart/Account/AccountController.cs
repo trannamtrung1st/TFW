@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TAuth.IDP.Models;
+using TAuth.Resource.Cross.Services;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -37,12 +38,14 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private readonly IEmailService _emailService;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
+            IEmailService emailService,
             UserManager<AppUser> userManager)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -53,6 +56,7 @@ namespace IdentityServerHost.Quickstart.UI
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
+            _emailService = emailService;
             _events = events;
         }
 
@@ -113,10 +117,27 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (ModelState.IsValid)
             {
+                var validLogin = false;
                 var user = await _userManager.FindByNameAsync(model.Username);
 
                 // validate username/password against identity store
                 if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    validLogin = user.Active;
+
+                    if (!user.Active)
+                    {
+                        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "email not confirmed", clientId: context?.Client.ClientId));
+                        ModelState.AddModelError(string.Empty, AccountOptions.EmailNotConfirmedErrorMessage);
+                    }
+                }
+                else
+                {
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
+                    ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                }
+
+                if (validLogin)
                 {
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
@@ -168,9 +189,6 @@ namespace IdentityServerHost.Quickstart.UI
                         throw new Exception("invalid return URL");
                     }
                 }
-
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
-                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
             }
 
             // something went wrong, show form with error
@@ -256,7 +274,8 @@ namespace IdentityServerHost.Quickstart.UI
             var user = new AppUser
             {
                 UserName = viewModel.UserName,
-                Closed = false
+                Email = viewModel.Email,
+                Active = false
             };
 
             var result = await _userManager.CreateAsync(user, viewModel.Password);
@@ -290,21 +309,59 @@ namespace IdentityServerHost.Quickstart.UI
                 return View(viewModel);
             }
 
+            // Default: 1 day timespan for token valid lifetime => need resend function
+            var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var callbackUrl = Url.Action(
+               nameof(ConfirmEmail), "Account",
+               new { userId = user.Id, token = confirmToken },
+               protocol: Request.Scheme);
+
+            await _emailService.SendEmailAsync(user.Email,
+               "Confirm your account",
+               $"Please confirm your account by clicking this <a href=\"{callbackUrl}\">link</a>");
+
+            return View("Message", new MessageViewModel { Message = "Please confirm your email before login" });
+
             // issue authentication cookie with subject ID and username
-            var isuser = new IdentityServerUser(user.Id)
-            {
-                DisplayName = user.UserName
-            };
+            //var isuser = new IdentityServerUser(user.Id)
+            //{
+            //    DisplayName = user.UserName
+            //};
 
-            await HttpContext.SignInAsync(isuser);
+            //await HttpContext.SignInAsync(isuser);
 
-            if (_interaction.IsValidReturnUrl(viewModel.ReturnUrl)
-                || Url.IsLocalUrl(viewModel.ReturnUrl))
+            //if (_interaction.IsValidReturnUrl(viewModel.ReturnUrl)
+            //    || Url.IsLocalUrl(viewModel.ReturnUrl))
+            //{
+            //    return Redirect(viewModel.ReturnUrl);
+            //}
+
+            //return Redirect("~/");
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (userId == null || token == null) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            if (result.Succeeded)
             {
-                return Redirect(viewModel.ReturnUrl);
+                user.Active = true;
+
+                await _userManager.UpdateAsync(user);
+
+                return View("Message", new MessageViewModel { Message = "Confirmed email successfully!" });
             }
 
-            return Redirect("~/");
+            SetIdentityResultErrors(result);
+
+            return View("Message", new MessageViewModel());
         }
 
         /*****************************************/

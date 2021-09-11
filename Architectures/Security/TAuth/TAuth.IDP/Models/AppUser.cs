@@ -8,6 +8,6 @@ namespace TAuth.IDP.Models
 {
     public class AppUser : IdentityUser
     {
-        public bool Closed { get; set; }
+        public bool Active { get; set; }
     }
 }

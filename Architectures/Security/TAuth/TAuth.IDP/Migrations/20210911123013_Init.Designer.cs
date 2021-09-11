@@ -9,8 +9,8 @@ using TAuth.IDP.Models;
 namespace TAuth.IDP.Migrations
 {
     [DbContext(typeof(IdpContext))]
-    [Migration("20210903140304_AddClosedInAppUser")]
-    partial class AddClosedInAppUser
+    [Migration("20210911123013_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -873,7 +873,7 @@ namespace TAuth.IDP.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Closed")
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ConcurrencyStamp")

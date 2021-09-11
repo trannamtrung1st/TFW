@@ -109,6 +109,7 @@ namespace TAuth.IDP
             {
                 var users = TestUsers.Users.Select(o =>
                 {
+                    var emailConfirmed = bool.Parse(o.Claims.FirstOrDefault(o => o.Type == JwtClaimTypes.EmailVerified).Value);
                     return new
                     {
                         Password = o.Password,
@@ -116,7 +117,8 @@ namespace TAuth.IDP
                         {
                             Id = o.SubjectId,
                             Email = o.Claims.FirstOrDefault(o => o.Type == JwtClaimTypes.Email).Value,
-                            EmailConfirmed = bool.Parse(o.Claims.FirstOrDefault(o => o.Type == JwtClaimTypes.EmailVerified).Value),
+                            EmailConfirmed = emailConfirmed,
+                            Active = emailConfirmed,
                             UserName = o.Username
                         },
                         o.Claims

@@ -20,4 +20,8 @@
   <ItemGroup>
     <Folder Include="Services\" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\TAuth.Resource.Cross\TAuth.Resource.Cross.csproj" />
+  </ItemGroup>
 </Project>

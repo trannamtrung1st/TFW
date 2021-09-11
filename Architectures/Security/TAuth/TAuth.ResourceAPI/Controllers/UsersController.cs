@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross;
 using TAuth.Resource.Cross.Models.User;
 using TAuth.ResourceAPI.Entities;
 
@@ -33,6 +34,29 @@ namespace TAuth.ResourceAPI.Controllers
                     Type = c.ClaimType,
                     Value = c.ClaimValue
                 }).ToArrayAsync();
+
+            if (claims.Length == 0)
+            {
+                var roleClaim = new ApplicationUserClaim
+                {
+                    ClaimType = JwtClaimTypes.Role,
+                    ClaimValue = RoleNames.NormalUser,
+                    UserId = subject
+                };
+
+                _context.UserClaims.Add(roleClaim);
+
+                await _context.SaveChangesAsync();
+
+                claims = new[]
+                {
+                    new UserProfileItem
+                    {
+                        Type = roleClaim.ClaimType,
+                        Value = roleClaim.ClaimValue
+                    }
+                };
+            }
 
             return Ok(claims);
         }
