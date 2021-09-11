@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross;
 using TAuth.Resource.Cross.Models.Resource;
 using TAuth.ResourceAPI.Auth.Policies;
 using TAuth.ResourceAPI.Entities;
@@ -42,8 +43,7 @@ namespace TAuth.ResourceAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var userId = int.Parse(User.FindFirst(JwtClaimTypes.Subject).Value);
-            var item = await _context.Resources.Where(o => o.Id == id && o.OwnerId == userId)
+            var item = await _context.Resources.Where(o => o.Id == id)
                 .Select(o => new ResourceDetailModel
                 {
                     Id = o.Id,
@@ -72,7 +72,7 @@ namespace TAuth.ResourceAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = RoleNames.Administrator)]
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.Resources.IgnoreQueryFilters()

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross;
 using TAuth.ResourceAPI.Entities;
 
 namespace TAuth.ResourceAPI
@@ -56,7 +57,7 @@ namespace TAuth.ResourceAPI
                         new ApplicationUserClaim
                         {
                             ClaimType = JwtClaimTypes.Role,
-                            ClaimValue = "Administrator",
+                            ClaimValue = RoleNames.Administrator,
                             UserId = 1
                         });
 

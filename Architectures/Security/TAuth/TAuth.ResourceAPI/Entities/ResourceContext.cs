@@ -60,6 +60,8 @@ namespace TAuth.ResourceAPI.Entities
 
         protected void SetEntitiesOwner()
         {
+            if (_currentUserId == 0) return;
+
             var ownedEntities = ChangeTracker.Entries().Where(e => e.State == EntityState.Added)
                 .Select(e => e.Entity)
                 .OfType<IOwnedEntity>().ToArray();

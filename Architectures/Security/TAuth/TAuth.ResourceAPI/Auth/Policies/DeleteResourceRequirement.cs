@@ -1,6 +1,7 @@
 ﻿using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross;
 
 namespace TAuth.ResourceAPI.Auth.Policies
 {
@@ -49,7 +50,7 @@ namespace TAuth.ResourceAPI.Auth.Policies
         {
             if (context.HasSucceeded) return Task.CompletedTask;
 
-            if (context.User.IsInRole("Administrator"))
+            if (context.User.IsInRole(RoleNames.Administrator))
                 context.Succeed(requirement);
 
             return Task.CompletedTask;

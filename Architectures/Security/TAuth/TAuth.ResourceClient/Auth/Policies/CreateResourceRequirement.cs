@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TAuth.Resource.Cross;
 
 namespace TAuth.ResourceClient.Auth.Policies
 {
@@ -41,7 +42,7 @@ namespace TAuth.ResourceClient.Auth.Policies
         {
             if (context.HasSucceeded) return Task.CompletedTask;
 
-            if (context.User.IsInRole("Administrator"))
+            if (context.User.IsInRole(RoleNames.Administrator))
                 context.Succeed(requirement);
 
             return Task.CompletedTask;

@@ -29,7 +29,7 @@ namespace TAuth.ResourceClient.Options
                     var accessToken = tokenReceivedContext.Properties.GetTokenValue(OpenIdConnectConstants.PropertyNames.AccessToken);
                     var userProfileItems = await _userService.GetUserProfileAsync(accessToken);
                     var userClaims = userProfileItems.Select(pi => new Claim(pi.Type, pi.Value)).ToArray();
-                    var identity = new ClaimsIdentity(userClaims);
+                    var identity = new ClaimsIdentity(userClaims, authenticationType: null, JwtClaimTypes.Name, JwtClaimTypes.Role);
                     tokenReceivedContext.Principal.AddIdentity(identity);
                 }
             };
