@@ -354,13 +354,26 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 user.Active = true;
 
-                await _userManager.UpdateAsync(user);
+                result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    SetIdentityResultErrors(result);
+                    return View("Message", new MessageViewModel());
+                }
+
+                result = await _userManager.UpdateSecurityStampAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    SetIdentityResultErrors(result);
+                    return View("Message", new MessageViewModel());
+                }
 
                 return View("Message", new MessageViewModel { Message = "Confirmed email successfully!" });
             }
 
             SetIdentityResultErrors(result);
-
             return View("Message", new MessageViewModel());
         }
 
