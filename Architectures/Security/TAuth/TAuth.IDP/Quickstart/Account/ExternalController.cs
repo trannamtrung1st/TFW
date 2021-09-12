@@ -13,7 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using TAuth.IDP;
 using TAuth.IDP.Models;
 
 namespace IdentityServerHost.Quickstart.UI
@@ -50,7 +52,7 @@ namespace IdentityServerHost.Quickstart.UI
         /// initiate roundtrip to external authentication provider
         /// </summary>
         [HttpGet]
-        public IActionResult Challenge(string scheme, string returnUrl)
+        public async Task<IActionResult> Challenge(string scheme, string returnUrl)
         {
             if (string.IsNullOrEmpty(returnUrl)) returnUrl = "~/";
 
@@ -59,6 +61,11 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
+            }
+
+            if (scheme == AuthConstants.IIS.AuthDisplayName)
+            {
+                return await ChallengeWindowsAsync(returnUrl);
             }
 
             // start challenge and roundtrip the return URL and scheme 
@@ -142,6 +149,56 @@ namespace IdentityServerHost.Quickstart.UI
             return Redirect(returnUrl);
         }
 
+        private async Task<IActionResult> ChallengeWindowsAsync(string returnUrl)
+        {
+            // see if windows auth has already been requested and succeeded
+            var result = await HttpContext.AuthenticateAsync(AuthConstants.IIS.AuthDisplayName);
+            if (result?.Principal is WindowsPrincipal wp)
+            {
+                // we will issue the external cookie and then redirect the
+                // user back to the external callback, in essence, treating windows
+                // auth the same as any other external authentication mechanism
+                var props = new AuthenticationProperties()
+                {
+                    RedirectUri = Url.Action(nameof(Callback)),
+                    Items =
+                    {
+                        { "returnUrl", returnUrl },
+                        { "scheme", AuthConstants.IIS.AuthDisplayName },
+                    }
+                };
+
+                var id = new ClaimsIdentity(AuthConstants.IIS.AuthDisplayName);
+
+                // the sid is a good sub value
+                id.AddClaim(new Claim(JwtClaimTypes.Subject, wp.FindFirst(ClaimTypes.PrimarySid).Value));
+
+                // the account name is the closest we have to a display name
+                id.AddClaim(new Claim(JwtClaimTypes.Name, wp.Identity.Name));
+
+                // add the groups as claims -- be careful if the number of groups is too large
+                var wi = wp.Identity as WindowsIdentity;
+
+                // translate group SIDs to display names
+                var groups = wi.Groups.Translate(typeof(NTAccount));
+                var roles = groups.Select(x => new Claim(JwtClaimTypes.Role, x.Value));
+                id.AddClaims(roles);
+
+                await HttpContext.SignInAsync(
+                    IdentityServerConstants.ExternalCookieAuthenticationScheme,
+                    new ClaimsPrincipal(id),
+                    props);
+                return Redirect(props.RedirectUri);
+            }
+            else
+            {
+                // trigger windows auth
+                // since windows auth don't support the redirect uri,
+                // this URL is re-triggered when we call challenge
+                return Challenge(AuthConstants.IIS.AuthDisplayName);
+            }
+        }
+
         private async Task<(IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims)>
             FindUserFromExternalProviderAsync(AuthenticateResult result)
         {
@@ -167,10 +224,14 @@ namespace IdentityServerHost.Quickstart.UI
             return (user, provider, providerUserId, claims);
         }
 
-        private IdentityUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
+        private AppUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
             // Create new user from External provider
-            return default;
+            return new AppUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Name)?.Value ?? "Anonymous"
+            };
         }
 
         // if the external login is OIDC-based, there are certain things we need to preserve to make logout work

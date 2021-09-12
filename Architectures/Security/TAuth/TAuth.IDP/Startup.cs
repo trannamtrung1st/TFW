@@ -107,6 +107,18 @@ namespace TAuth.IDP
                 opt.EnableTokenCleanup = true;
                 opt.TokenCleanupInterval = 30;
             });
+
+            services.Configure<IISOptions>(opt =>
+            {
+                opt.AuthenticationDisplayName = AuthConstants.IIS.AuthDisplayName;
+                opt.AutomaticAuthentication = false;
+            });
+
+            services.Configure<IISServerOptions>(opt =>
+            {
+                opt.AuthenticationDisplayName = AuthConstants.IIS.AuthDisplayName;
+                opt.AutomaticAuthentication = false;
+            });
         }
 
         public void Configure(IApplicationBuilder app)
