@@ -81,13 +81,13 @@ namespace TAuth.IDP
                 //options.Endpoints.EnableEndSessionEndpoint = false;
             })
                 //.AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
-                .AddSigningCredential(signingCert)
+                .AddSigningCredential(signingCert);
                 //.AddInMemoryIdentityResources(Config.IdentityResources)
                 //.AddInMemoryApiResources(Config.ApiResources)
                 //.AddInMemoryApiScopes(Config.ApiScopes)
                 //.AddInMemoryClients(Config.Clients)
                 //.AddTestUsers(TestUsers.Users);
-                .AddProfileService<ProfileService<AppUser>>();
+                //.AddProfileService<ProfileService<AppUser>>();
 
             // not recommended for production - you need to store your key material somewhere secure
             //builder.AddDeveloperSigningCredential();
@@ -119,6 +119,22 @@ namespace TAuth.IDP
                 opt.AuthenticationDisplayName = AuthConstants.IIS.AuthDisplayName;
                 opt.AutomaticAuthentication = false;
             });
+
+            services.AddAuthentication()
+                .AddFacebook(AuthConstants.AuthSchemes.Facebook, "Facebook Login", opt =>
+                {
+                    // Use UsersSecret or Environment variables to configure
+                    opt.AppId = Configuration.GetValue<string>("Facebook:AppId");
+                    opt.AppSecret = Configuration.GetValue<string>("Facebook:AppSecret");
+                    opt.SignInScheme = IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                })
+                .AddGoogle(AuthConstants.AuthSchemes.Google, "Google Login", opt =>
+                {
+                    // Use UsersSecret or Environment variables to configure
+                    opt.ClientId = Configuration.GetValue<string>("Google:ClientId");
+                    opt.ClientSecret = Configuration.GetValue<string>("Google:ClientSecret");
+                    opt.SignInScheme = IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                });
         }
 
         public void Configure(IApplicationBuilder app)

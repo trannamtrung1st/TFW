@@ -20,7 +20,11 @@ namespace TAuth.ResourceClient.Auth.Policies
         {
             if (context.HasSucceeded) return Task.CompletedTask;
 
-            var addressVal = context.User.FindFirst(JwtClaimTypes.Address).Value;
+            var addressClaim = context.User.FindFirst(JwtClaimTypes.Address);
+
+            if (addressClaim == null) return Task.CompletedTask;
+
+            var addressVal = addressClaim.Value;
             var addressObj = JsonConvert.DeserializeAnonymousType(addressVal, new
             {
                 street_address = "",

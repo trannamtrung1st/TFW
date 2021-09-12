@@ -11,5 +11,11 @@ namespace TAuth.IDP
         {
             public const string AuthDisplayName = "Windows";
         }
+
+        public static class AuthSchemes
+        {
+            public const string Facebook = nameof(Facebook);
+            public const string Google = nameof(Google);
+        }
     }
 }
