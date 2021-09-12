@@ -21,9 +21,13 @@ namespace TAuth.ResourceAPI
 {
     public class Startup
     {
+        public static AppSettings AppSettings { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            AppSettings = new AppSettings();
+            Configuration.Bind(nameof(AppSettings), AppSettings);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
@@ -43,7 +47,7 @@ namespace TAuth.ResourceAPI
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //    .AddJwtBearer(opt =>
             //    {
-            //        opt.Authority = "https://localhost:5001";
+            //        opt.Authority = AppSettings.IdpUrl;
             //        opt.Audience = "resource_api";
             //        opt.TokenValidationParameters = new TokenValidationParameters
             //        {
@@ -56,13 +60,13 @@ namespace TAuth.ResourceAPI
                 // JWT tokens
                 .AddJwtBearer(IdentityServerAuthenticationDefaults.AuthenticationScheme, opt =>
                 {
-                    opt.Authority = "https://localhost:5001";
+                    opt.Authority = AppSettings.IdpUrl;
                     opt.Audience = "resource_api";
                 })
                 // Reference tokens
                 .AddOAuth2Introspection(OpenIdConnectConstants.AuthSchemes.Introspection, opt =>
                 {
-                    opt.Authority = "https://localhost:5001";
+                    opt.Authority = AppSettings.IdpUrl;
                     opt.ClientId = "resource_api";
                     opt.ClientSecret = "resource-api-secret";
                 });

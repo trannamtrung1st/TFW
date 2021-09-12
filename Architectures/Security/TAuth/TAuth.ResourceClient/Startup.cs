@@ -25,6 +25,8 @@ namespace TAuth.ResourceClient
 {
     public class Startup
     {
+        public static AppSettings AppSettings { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,7 +35,6 @@ namespace TAuth.ResourceClient
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
         }
 
-        public AppSettings AppSettings { get; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -77,7 +78,7 @@ namespace TAuth.ResourceClient
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opt =>
             {
                 opt.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                opt.Authority = "https://localhost:5001/";
+                opt.Authority = AppSettings.IdpUrl;
                 opt.ClientId = "resource-client-id";
                 opt.ResponseType = OpenIdConnectResponseType.Code;
                 //opt.UsePkce = false;
