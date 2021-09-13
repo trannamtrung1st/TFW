@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
@@ -60,6 +61,7 @@ namespace IdentityServerHost.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _emailService = emailService;
+            _identityService = identityService;
             _events = events;
         }
 
@@ -267,6 +269,65 @@ namespace IdentityServerHost.Quickstart.UI
         }
 
         [HttpPost]
+        public async Task<IActionResult> FillInformation(FillInformationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var user = new AppUser
+            {
+                UserName = Guid.NewGuid().ToString(),
+                Email = viewModel.Email,
+                Active = false
+            };
+
+            var result = await _userManager.CreateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                SetIdentityResultErrors(result);
+                return View(viewModel);
+            }
+
+            result = await _userManager.AddLoginAsync(user, new UserLoginInfo(viewModel.Provider, viewModel.ProviderUserId, viewModel.Provider));
+
+            if (!result.Succeeded)
+            {
+                SetIdentityResultErrors(result);
+                return View(viewModel);
+            }
+
+            result = await _userManager.AddClaimsAsync(user, new[]
+            {
+                new Claim(JwtClaimTypes.Name, $"{viewModel.FamilyName} {viewModel.GivenName}"),
+                new Claim(JwtClaimTypes.GivenName, viewModel.GivenName),
+                new Claim(JwtClaimTypes.FamilyName, viewModel.FamilyName),
+                new Claim(JwtClaimTypes.Email, viewModel.Email),
+                new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
+                new Claim(JwtClaimTypes.WebSite, $"http://{viewModel.Email}.com"),
+                new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(new
+                {
+                    street_address = viewModel.Address,
+                    locality = "Heidelberg",
+                    postal_code = 69118,
+                    country = viewModel.Country
+                }), IdentityServerConstants.ClaimValueTypes.Json)
+            });
+
+            if (!result.Succeeded)
+            {
+                SetIdentityResultErrors(result);
+                return View(viewModel);
+            }
+
+            await _identityService.SendActivationEmailAsync(user, Url, Request.Scheme);
+
+            return View("Message", new MessageViewModel { Message = "Please confirm your email before login" });
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -453,7 +514,6 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             SetIdentityResultErrors(result);
-
             return View("Message", new MessageViewModel());
         }
 

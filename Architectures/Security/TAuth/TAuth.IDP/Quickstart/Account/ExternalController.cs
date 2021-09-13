@@ -106,23 +106,20 @@ namespace IdentityServerHost.Quickstart.UI
                 _logger.LogDebug("External claims: {@claims}", externalClaims);
             }
 
+            // retrieve return URL
+            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+
             // lookup our user and external provider info
             var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
             if (user == null)
             {
-                var (newUser, identityErrorResult) = await AutoProvisionUserAsync(provider, providerUserId, claims);
+                // delete temporary cookie used during external authentication
+                await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
-                if (identityErrorResult != null)
-                {
-                    SetIdentityResultErrors(identityErrorResult);
-                    return View("Message", new MessageViewModel());
-                }
-
-                return View("Message", new MessageViewModel { Message = "Please confirm your email before login" });
+                var userClaims = TransformExternalClaims(provider, claims);
+                var fillInfoVm = BuildFillInformationViewModel(provider, providerUserId, userClaims, returnUrl);
+                return View("FillInformation", fillInfoVm);
             }
-
-            // retrieve return URL
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
             // check if external login is in the context of an OIDC request
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
@@ -245,40 +242,17 @@ namespace IdentityServerHost.Quickstart.UI
             return (user, provider, providerUserId, claims);
         }
 
+        // Not used because we will need additional claims
         private async Task<(AppUser NewUser, IdentityResult IdentityErrorResult)>
             AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
+            var userClaims = TransformExternalClaims(provider, claims);
             var newUser = new AppUser()
             {
                 UserName = Guid.NewGuid().ToString(),
+                Email = userClaims.FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?.Value,
                 Active = false
             };
-
-            string name, givenName, familyName;
-
-            switch (provider)
-            {
-                case AuthConstants.AuthSchemes.Facebook:
-                    newUser.Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                    name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-                    givenName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-                    familyName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-                    break;
-                case AuthConstants.AuthSchemes.Google:
-                    newUser.Email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                    name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-                    givenName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-                    familyName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-                    break;
-                case AuthConstants.AuthSchemes.Windows:
-                    newUser.Email = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Role && c.Value.StartsWith("MicrosoftAccount"))?.Value
-                        .Split('\\')[1];
-                    name = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Name)?.Value;
-                    givenName = null; familyName = null;
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
 
             var result = await _userManager.CreateAsync(newUser);
 
@@ -288,10 +262,47 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (!result.Succeeded) return (null, result);
 
+            result = await _userManager.AddClaimsAsync(newUser, userClaims);
+
+            if (!result.Succeeded) return (null, result);
+
+            await _identityService.SendActivationEmailAsync(newUser, Url, Request.Scheme);
+
+            return (newUser, null);
+        }
+
+        private IEnumerable<Claim> TransformExternalClaims(string provider, IEnumerable<Claim> claims)
+        {
+            string email, name, givenName, familyName;
+
+            switch (provider)
+            {
+                case AuthConstants.AuthSchemes.Facebook:
+                    email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                    name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                    givenName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                    familyName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+                    break;
+                case AuthConstants.AuthSchemes.Google:
+                    email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                    name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                    givenName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                    familyName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+                    break;
+                case AuthConstants.AuthSchemes.Windows:
+                    email = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Role && c.Value.StartsWith("MicrosoftAccount"))?.Value
+                        .Split('\\')[1];
+                    name = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Name)?.Value;
+                    givenName = null; familyName = null;
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+
             var userClaims = new List<Claim>()
             {
                 new Claim(JwtClaimTypes.Name, name),
-                new Claim(JwtClaimTypes.Email, newUser.Email),
+                new Claim(JwtClaimTypes.Email, email),
                 new Claim(JwtClaimTypes.EmailVerified, "false", ClaimValueTypes.Boolean)
             };
 
@@ -304,13 +315,7 @@ namespace IdentityServerHost.Quickstart.UI
                 });
             }
 
-            result = await _userManager.AddClaimsAsync(newUser, userClaims);
-
-            if (!result.Succeeded) return (null, result);
-
-            await _identityService.SendActivationEmailAsync(newUser, Url, Request.Scheme);
-
-            return (newUser, null);
+            return userClaims;
         }
 
         // if the external login is OIDC-based, there are certain things we need to preserve to make logout work
@@ -331,6 +336,19 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 localSignInProps.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = idToken } });
             }
+        }
+
+        private FillInformationViewModel BuildFillInformationViewModel(string provider, string providerUserId, IEnumerable<Claim> claims, string returnUrl)
+        {
+            return new FillInformationViewModel()
+            {
+                Email = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?.Value,
+                FamilyName = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.FamilyName)?.Value,
+                GivenName = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?.Value,
+                ReturnUrl = returnUrl,
+                Provider = provider,
+                ProviderUserId = providerUserId
+            };
         }
     }
 }
