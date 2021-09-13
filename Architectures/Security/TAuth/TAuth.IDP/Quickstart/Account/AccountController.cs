@@ -20,6 +20,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TAuth.IDP.Models;
+using TAuth.IDP.Services;
 using TAuth.Resource.Cross.Services;
 
 namespace IdentityServerHost.Quickstart.UI
@@ -31,7 +32,7 @@ namespace IdentityServerHost.Quickstart.UI
     /// </summary>
     [SecurityHeaders]
     [AllowAnonymous]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IIdentityServerInteractionService _interaction;
@@ -39,6 +40,7 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
         private readonly IEmailService _emailService;
+        private readonly IIdentityService _identityService;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -46,6 +48,7 @@ namespace IdentityServerHost.Quickstart.UI
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
             IEmailService emailService,
+            IIdentityService identityService,
             UserManager<AppUser> userManager)
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
@@ -309,17 +312,7 @@ namespace IdentityServerHost.Quickstart.UI
                 return View(viewModel);
             }
 
-            // Default: 1 day timespan for token valid lifetime => need resend function
-            var confirmToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            var callbackUrl = Url.Action(
-               nameof(ConfirmEmail), "Account",
-               new { userId = user.Id, token = confirmToken },
-               protocol: Request.Scheme);
-
-            await _emailService.SendEmailAsync(user.Email,
-               "Confirm your account",
-               $"Please confirm your account by clicking this <a href=\"{callbackUrl}\">link</a>");
+            await _identityService.SendActivationEmailAsync(user, Url, Request.Scheme);
 
             return View("Message", new MessageViewModel { Message = "Please confirm your email before login" });
 
@@ -355,6 +348,16 @@ namespace IdentityServerHost.Quickstart.UI
                 user.Active = true;
 
                 result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    SetIdentityResultErrors(result);
+                    return View("Message", new MessageViewModel());
+                }
+
+                result = await _userManager.ReplaceClaimAsync(user,
+                    new Claim(JwtClaimTypes.EmailVerified, "false"),
+                    new Claim(JwtClaimTypes.EmailVerified, "true"));
 
                 if (!result.Succeeded)
                 {
@@ -457,14 +460,6 @@ namespace IdentityServerHost.Quickstart.UI
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
-        private void SetIdentityResultErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
-        }
-
         private ResetPasswordViewModel BuildResetPasswordViewModel(AppUser user = null,
             string token = null,
             RequestResetPasswordViewModel requestResetPasswordViewModel = null)

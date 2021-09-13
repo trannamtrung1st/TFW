@@ -15,6 +15,7 @@ using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using TAuth.IDP.Models;
+using TAuth.IDP.Services;
 using TAuth.Resource.Cross.Services;
 
 namespace TAuth.IDP
@@ -43,7 +44,8 @@ namespace TAuth.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
-            services.AddSingleton<IEmailService, MockEmailService>();
+            services.AddSingleton<IEmailService, MockEmailService>()
+                .AddScoped<IIdentityService, IdentityService>();
 
             services.AddIdentityCore<AppUser>(options =>
             {
@@ -81,13 +83,13 @@ namespace TAuth.IDP
                 //options.Endpoints.EnableEndSessionEndpoint = false;
             })
                 //.AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
-                .AddSigningCredential(signingCert);
+                .AddSigningCredential(signingCert)
                 //.AddInMemoryIdentityResources(Config.IdentityResources)
                 //.AddInMemoryApiResources(Config.ApiResources)
                 //.AddInMemoryApiScopes(Config.ApiScopes)
                 //.AddInMemoryClients(Config.Clients)
                 //.AddTestUsers(TestUsers.Users);
-                //.AddProfileService<ProfileService<AppUser>>();
+                .AddProfileService<ProfileService<AppUser>>();
 
             // not recommended for production - you need to store your key material somewhere secure
             //builder.AddDeveloperSigningCredential();

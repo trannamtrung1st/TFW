@@ -16,6 +16,7 @@ namespace TAuth.IDP
         {
             public const string Facebook = nameof(Facebook);
             public const string Google = nameof(Google);
+            public const string Windows = nameof(Windows);
         }
     }
 }
