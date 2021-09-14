@@ -290,7 +290,11 @@ namespace IdentityServerHost.Quickstart.UI
             var provider = externalAuthResult.Properties.Items["scheme"];
             var providerUserId = userIdClaim.Value;
 
-            var user = new AppUser
+            var user = await _userManager.FindByLoginAsync(provider, providerUserId);
+
+            if (user != null) return BadRequest();
+
+            user = new AppUser
             {
                 UserName = Guid.NewGuid().ToString(),
                 Email = viewModel.Email,
