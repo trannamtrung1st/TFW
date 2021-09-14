@@ -113,11 +113,8 @@ namespace IdentityServerHost.Quickstart.UI
             var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
             if (user == null)
             {
-                // delete temporary cookie used during external authentication
-                await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
-
                 var userClaims = TransformExternalClaims(provider, claims);
-                var fillInfoVm = BuildFillInformationViewModel(provider, providerUserId, userClaims, returnUrl);
+                var fillInfoVm = BuildFillInformationViewModel(userClaims, returnUrl);
                 return View("FillInformation", fillInfoVm);
             }
 
@@ -338,16 +335,14 @@ namespace IdentityServerHost.Quickstart.UI
             }
         }
 
-        private FillInformationViewModel BuildFillInformationViewModel(string provider, string providerUserId, IEnumerable<Claim> claims, string returnUrl)
+        private FillInformationViewModel BuildFillInformationViewModel(IEnumerable<Claim> claims, string returnUrl)
         {
             return new FillInformationViewModel()
             {
                 Email = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Email)?.Value,
                 FamilyName = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.FamilyName)?.Value,
                 GivenName = claims.FirstOrDefault(c => c.Type == JwtClaimTypes.GivenName)?.Value,
-                ReturnUrl = returnUrl,
-                Provider = provider,
-                ProviderUserId = providerUserId
+                ReturnUrl = returnUrl
             };
         }
     }

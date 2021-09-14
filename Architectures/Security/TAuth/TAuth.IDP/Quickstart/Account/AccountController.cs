@@ -276,6 +276,20 @@ namespace IdentityServerHost.Quickstart.UI
                 return View(viewModel);
             }
 
+            // read external identity from the temporary cookie
+            var externalAuthResult = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            if (externalAuthResult?.Succeeded != true)
+            {
+                throw new Exception("External authentication error");
+            }
+
+            var externalUser = externalAuthResult.Principal;
+            var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
+                              externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+                              throw new Exception("Unknown userid");
+            var provider = externalAuthResult.Properties.Items["scheme"];
+            var providerUserId = userIdClaim.Value;
+
             var user = new AppUser
             {
                 UserName = Guid.NewGuid().ToString(),
@@ -291,7 +305,7 @@ namespace IdentityServerHost.Quickstart.UI
                 return View(viewModel);
             }
 
-            result = await _userManager.AddLoginAsync(user, new UserLoginInfo(viewModel.Provider, viewModel.ProviderUserId, viewModel.Provider));
+            result = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
 
             if (!result.Succeeded)
             {

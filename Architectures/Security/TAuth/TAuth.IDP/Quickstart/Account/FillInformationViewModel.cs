@@ -45,8 +45,6 @@ namespace IdentityServerHost.Quickstart.UI
             "Id",
             "Value");
 
-        public string Provider { get; set; }
-        public string ProviderUserId { get; set; }
         public string ReturnUrl { get; set; }
     }
 }
