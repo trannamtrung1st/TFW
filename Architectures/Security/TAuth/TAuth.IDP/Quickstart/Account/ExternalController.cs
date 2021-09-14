@@ -75,7 +75,7 @@ namespace IdentityServerHost.Quickstart.UI
             // start challenge and roundtrip the return URL and scheme 
             var props = new AuthenticationProperties
             {
-                RedirectUri = Url.Action(nameof(Callback)),
+                RedirectUri = User.Identity.IsAuthenticated ? Url.Action(nameof(CallbackLinking)) : Url.Action(nameof(Callback)),
                 Items =
                 {
                     { "returnUrl", returnUrl },
@@ -85,6 +85,50 @@ namespace IdentityServerHost.Quickstart.UI
 
             return Challenge(props, scheme);
 
+        }
+
+        /// <summary>
+        /// Post processing of external account linking
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> CallbackLinking()
+        {
+            // read external identity from the temporary cookie
+            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            if (result?.Succeeded != true)
+            {
+                throw new Exception("External authentication error");
+            }
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                var externalClaims = result.Principal.Claims.Select(c => $"{c.Type}: {c.Value}");
+                _logger.LogDebug("External claims: {@claims}", externalClaims);
+            }
+
+            // lookup our user and external provider info
+            var (user, provider, providerUserId, claims) = await FindUserFromExternalProviderAsync(result);
+            if (user == null)
+            {
+                var currentUserSub = User.FindFirstValue(JwtClaimTypes.Subject);
+
+                if (currentUserSub == null) throw new InvalidOperationException();
+
+                user = await _userManager.FindByIdAsync(currentUserSub);
+
+                var identityResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
+
+                if (!identityResult.Succeeded)
+                {
+                    SetIdentityResultErrors(identityResult);
+                    return View("Message", new MessageViewModel());
+                }
+
+                return View("Message", new MessageViewModel() { Message = "Linked account successfully" });
+            }
+
+            ModelState.AddModelError("", "External identity already has an account in system");
+            return View("Message", new MessageViewModel());
         }
 
         /// <summary>
@@ -139,7 +183,7 @@ namespace IdentityServerHost.Quickstart.UI
             // issue authentication cookie for user
             var isuser = new IdentityServerUser(user.Id)
             {
-                DisplayName = user.UserName,
+                DisplayName = user.Email,
                 IdentityProvider = provider,
                 AdditionalClaims = additionalLocalClaims
             };
@@ -175,7 +219,7 @@ namespace IdentityServerHost.Quickstart.UI
                 // auth the same as any other external authentication mechanism
                 var props = new AuthenticationProperties()
                 {
-                    RedirectUri = Url.Action(nameof(Callback)),
+                    RedirectUri = User.Identity.IsAuthenticated ? Url.Action(nameof(CallbackLinking)) : Url.Action(nameof(Callback)),
                     Items =
                     {
                         { "returnUrl", returnUrl },
