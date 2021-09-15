@@ -160,10 +160,12 @@ namespace IdentityServerHost.Quickstart.UI
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(AuthConstants.Mfa.DefaultExpireTime),
                         IsPersistent = true
                     };
+                    // Demo only: should store secret instead of generating new one everytime
                     props.Items[AuthenticatorSecretDictionaryKey] = authenticatorKey;
 
                     await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
 
+                    // Note: can not used for Load balancer since Authenticator is memory-based by default => must implement persistence instead
                     var totp = Startup.Authenticator.GetCode(authenticatorKey);
 
                     await _emailService.SendEmailAsync(user.Email, "Check your OTP to login", $"Your OTP is: {totp}");
