@@ -20,6 +20,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TAuth.IDP;
 using TAuth.IDP.Models;
 using TAuth.IDP.Services;
 using TAuth.Resource.Cross.Services;
@@ -35,6 +36,8 @@ namespace IdentityServerHost.Quickstart.UI
     [AllowAnonymous]
     public class AccountController : BaseController
     {
+        private const string AuthenticatorSecretDictionaryKey = "AuthenticatorSecret";
+
         private readonly UserManager<AppUser> _userManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
@@ -86,6 +89,100 @@ namespace IdentityServerHost.Quickstart.UI
         /// <summary>
         /// Handle postback from username/password login
         /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginInputModel model, string button)
+        {
+            // check if we are in the context of an authorization request
+            var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
+
+            // the user clicked the "cancel" button
+            if (button != "login")
+            {
+                if (context != null)
+                {
+                    // if the user cancels, send a result back into IdentityServer as if they 
+                    // denied the consent (even if this client does not require consent).
+                    // this will send back an access denied OIDC error response to the client.
+                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+
+                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                    if (context.IsNativeClient())
+                    {
+                        // The client is native, so this change in how to
+                        // return the response is for better UX for the end user.
+                        return this.LoadingPage("Redirect", model.ReturnUrl);
+                    }
+
+                    return Redirect(model.ReturnUrl);
+                }
+                else
+                {
+                    // since we don't have a valid context, then we just go back to the home page
+                    return Redirect("~/");
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                var validLogin = false;
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                // validate username/password against identity store
+                if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    validLogin = user.Active;
+
+                    if (!user.Active)
+                    {
+                        await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "email not confirmed", clientId: context?.Client.ClientId));
+                        ModelState.AddModelError(string.Empty, AccountOptions.EmailNotConfirmedErrorMessage);
+                    }
+                }
+                else
+                {
+                    await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId: context?.Client.ClientId));
+                    ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+                }
+
+                if (validLogin)
+                {
+                    var rememberLogin = AccountOptions.AllowRememberLogin && model.RememberLogin;
+
+                    var mfaIdentity = new ClaimsIdentity(AuthConstants.AuthSchemes.IdentityMfa);
+                    mfaIdentity.AddClaim(new Claim(JwtClaimTypes.Subject, user.Id));
+
+                    var mfaPrincipal = new ClaimsPrincipal(mfaIdentity);
+                    var authenticatorKey = TwoStepsAuthenticator.Authenticator.GenerateKey();
+
+                    var props = new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTimeOffset.UtcNow.Add(AuthConstants.Mfa.DefaultExpireTime),
+                        IsPersistent = true
+                    };
+                    props.Items[AuthenticatorSecretDictionaryKey] = authenticatorKey;
+
+                    await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
+
+                    var totp = Startup.Authenticator.GetCode(authenticatorKey);
+
+                    await _emailService.SendEmailAsync(user.Email, "Check your OTP to login", $"Your OTP is: {totp}");
+
+                    return RedirectToAction(nameof(CheckOTP), new
+                    {
+                        rememberLogin,
+                        returnUrl = model.ReturnUrl
+                    });
+                }
+            }
+
+            // something went wrong, show form with error
+            var vm = await BuildLoginViewModelAsync(model);
+            return View(vm);
+        }
+
+        #region Direct Login
+#if false
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model, string button)
@@ -200,7 +297,108 @@ namespace IdentityServerHost.Quickstart.UI
             var vm = await BuildLoginViewModelAsync(model);
             return View(vm);
         }
+#endif
+        #endregion
 
+        /// <summary>
+        /// Show OTP confirm page
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> CheckOTP(bool rememberLogin, string returnUrl)
+        {
+            var mfaAuthResult = await HttpContext.AuthenticateAsync(AuthConstants.AuthSchemes.IdentityMfa);
+
+            if (!mfaAuthResult.Succeeded) return RedirectToAction(nameof(Login));
+
+            var vm = BuildCheckOTPViewModel(rememberLogin, returnUrl);
+
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Check inputted OTP
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> CheckOTP(CheckOTPViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                // something went wrong, show form with error
+                return View(viewModel);
+            }
+
+            var mfaAuthResult = await HttpContext.AuthenticateAsync(AuthConstants.AuthSchemes.IdentityMfa);
+
+            if (!mfaAuthResult.Succeeded) return RedirectToAction(nameof(Login));
+
+            var subject = mfaAuthResult.Principal.FindFirstValue(JwtClaimTypes.Subject);
+            var user = await _userManager.FindByIdAsync(subject);
+
+            if (user == null) return NotFound();
+
+            var authenticatorKey = mfaAuthResult.Properties.Items[AuthenticatorSecretDictionaryKey] as string;
+            var isValidOTP = Startup.Authenticator.CheckCode(authenticatorKey, viewModel.OTPCode, user);
+
+            if (!isValidOTP)
+            {
+                ModelState.AddModelError("", "Invalid OTP");
+                return View(viewModel);
+            }
+
+            var context = await _interaction.GetAuthorizationContextAsync(viewModel.ReturnUrl);
+
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+
+            // only set explicit expiration here if user chooses "remember me". 
+            // otherwise we rely upon expiration configured in cookie middleware.
+            AuthenticationProperties props = null;
+            if (AccountOptions.AllowRememberLogin && viewModel.RememberLogin)
+            {
+                props = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                };
+            };
+
+            // issue authentication cookie with subject ID and username
+            var isuser = new IdentityServerUser(user.Id)
+            {
+                DisplayName = user.UserName
+            };
+
+            await HttpContext.SignInAsync(isuser, props);
+
+            await HttpContext.SignOutAsync(AuthConstants.AuthSchemes.IdentityMfa);
+
+            if (context != null)
+            {
+                if (context.IsNativeClient())
+                {
+                    // The client is native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return this.LoadingPage("Redirect", viewModel.ReturnUrl);
+                }
+
+                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                return Redirect(viewModel.ReturnUrl);
+            }
+
+            // request for a local page
+            if (Url.IsLocalUrl(viewModel.ReturnUrl))
+            {
+                return Redirect(viewModel.ReturnUrl);
+            }
+            else if (string.IsNullOrEmpty(viewModel.ReturnUrl))
+            {
+                return Redirect("~/");
+            }
+            else
+            {
+                // user might have clicked on a malicious link - should be logged
+                throw new Exception("invalid return URL");
+            }
+        }
 
         /// <summary>
         /// Show logout page
@@ -630,6 +828,15 @@ namespace IdentityServerHost.Quickstart.UI
             vm.Username = model.Username;
             vm.RememberLogin = model.RememberLogin;
             return vm;
+        }
+
+        private CheckOTPViewModel BuildCheckOTPViewModel(bool rememberLogin, string returnUrl)
+        {
+            return new CheckOTPViewModel
+            {
+                RememberLogin = rememberLogin,
+                ReturnUrl = returnUrl
+            };
         }
 
         private async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)

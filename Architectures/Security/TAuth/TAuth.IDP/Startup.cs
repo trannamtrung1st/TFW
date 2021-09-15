@@ -17,11 +17,14 @@ using System.Security.Cryptography.X509Certificates;
 using TAuth.IDP.Models;
 using TAuth.IDP.Services;
 using TAuth.Resource.Cross.Services;
+using TwoStepsAuthenticator;
 
 namespace TAuth.IDP
 {
     public class Startup
     {
+        public static TimeAuthenticator Authenticator { get; } = new TimeAuthenticator(intervalSeconds: AuthConstants.Mfa.OTPIntervalSeconds);
+
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
@@ -122,7 +125,15 @@ namespace TAuth.IDP
                 opt.AutomaticAuthentication = false;
             });
 
-            services.AddAuthentication()
+            services.AddAuthentication(opt =>
+            {
+                //opt.RequireAuthenticatedSignIn = false;
+            })
+                .AddCookie(AuthConstants.AuthSchemes.IdentityMfa, opt =>
+                {
+                    opt.ExpireTimeSpan = AuthConstants.Mfa.DefaultExpireTime;
+                    opt.SlidingExpiration = false;
+                })
                 .AddFacebook(AuthConstants.AuthSchemes.Facebook, "Facebook Login", opt =>
                 {
                     // Use UsersSecret or Environment variables to configure
