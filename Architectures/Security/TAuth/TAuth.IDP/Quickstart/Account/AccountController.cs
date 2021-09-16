@@ -162,6 +162,7 @@ namespace IdentityServerHost.Quickstart.UI
                         IsPersistent = true
                     };
 
+                    // demo only: in real scenarios, should use email as backup OTP and change to soft OTP only when user has set it up
                     if (Startup.AppSettings.UseAuthenticatorApp)
                     {
                         await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
