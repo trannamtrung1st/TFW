@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace IdentityServerHost.Quickstart.UI
     {
         private const string AuthenticatorSecretDictionaryKey = "AuthenticatorSecret";
 
+        private readonly IdpContext _dbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
@@ -47,6 +49,7 @@ namespace IdentityServerHost.Quickstart.UI
         private readonly IIdentityService _identityService;
 
         public AccountController(
+            IdpContext dbContext,
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
@@ -59,6 +62,7 @@ namespace IdentityServerHost.Quickstart.UI
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
             //_users = users ?? new TestUserStore(TestUsers.Users);
 
+            _dbContext = dbContext;
             _userManager = userManager;
             _interaction = interaction;
             _clientStore = clientStore;
@@ -151,24 +155,47 @@ namespace IdentityServerHost.Quickstart.UI
 
                     var mfaIdentity = new ClaimsIdentity(AuthConstants.AuthSchemes.IdentityMfa);
                     mfaIdentity.AddClaim(new Claim(JwtClaimTypes.Subject, user.Id));
-
                     var mfaPrincipal = new ClaimsPrincipal(mfaIdentity);
-                    var authenticatorKey = TwoStepsAuthenticator.Authenticator.GenerateKey();
-
                     var props = new AuthenticationProperties
                     {
                         ExpiresUtc = DateTimeOffset.UtcNow.Add(AuthConstants.Mfa.DefaultExpireTime),
                         IsPersistent = true
                     };
-                    // Demo only: should store secret instead of generating new one everytime
-                    props.Items[AuthenticatorSecretDictionaryKey] = authenticatorKey;
 
-                    await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
+                    if (Startup.AppSettings.UseAuthenticatorApp)
+                    {
+                        await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
 
-                    // Note: can not used for Load balancer since Authenticator is memory-based by default => must implement persistence instead
-                    var totp = Startup.Authenticator.GetCode(authenticatorKey);
+                        var hasSecret = _dbContext.UserSecrets.Any(secret => secret.UserId == user.Id
+                            && secret.Name == AuthConstants.Mfa.OTPSecretKeyName);
 
-                    await _emailService.SendEmailAsync(user.Email, "Check your OTP to login", $"Your OTP is: {totp}");
+                        if (!hasSecret)
+                        {
+                            var secretKey = TwoStepsAuthenticator.Authenticator.GenerateKey(AuthConstants.Mfa.AuthenticatorAppSecretKeyLength);
+                            var setupInfo = Startup.GoogleAuthenticator.GenerateSetupCode(AuthConstants.IDPName, user.Email, secretKey, true);
+
+                            return View("SetupOTPApp", new SetupOTPAppViewModel
+                            {
+                                QrCodeSetupImageUrl = setupInfo.QrCodeSetupImageUrl,
+                                RememberLogin = rememberLogin,
+                                ReturnUrl = model.ReturnUrl,
+                                SecretKey = secretKey
+                            });
+                        }
+                    }
+                    else
+                    {
+                        var authenticatorKey = TwoStepsAuthenticator.Authenticator.GenerateKey();
+                        // Note: can not used for Load balancer since Authenticator is memory-based by default => must implement persistence instead
+                        var totp = Startup.Authenticator.GetCode(authenticatorKey);
+
+                        await _emailService.SendEmailAsync(user.Email, "Check your OTP to login", $"Your OTP is: {totp}");
+
+                        // Demo only: should store secret instead of generating new one everytime
+                        props.Items[AuthenticatorSecretDictionaryKey] = authenticatorKey;
+
+                        await HttpContext.SignInAsync(AuthConstants.AuthSchemes.IdentityMfa, mfaPrincipal, props);
+                    }
 
                     return RedirectToAction(nameof(CheckOTP), new
                     {
@@ -338,13 +365,28 @@ namespace IdentityServerHost.Quickstart.UI
 
             if (user == null) return NotFound();
 
-            var authenticatorKey = mfaAuthResult.Properties.Items[AuthenticatorSecretDictionaryKey] as string;
-            var isValidOTP = Startup.Authenticator.CheckCode(authenticatorKey, viewModel.OTPCode, user);
-
-            if (!isValidOTP)
+            if (Startup.AppSettings.UseAuthenticatorApp)
             {
-                ModelState.AddModelError("", "Invalid OTP");
-                return View(viewModel);
+                var totpUserSecret = await _dbContext.UserSecrets.Where(s => s.UserId == subject && s.Name == AuthConstants.Mfa.OTPSecretKeyName)
+                    .Select(s => s.Secret).FirstOrDefaultAsync();
+                var isValidOTP = Startup.GoogleAuthenticator.ValidateTwoFactorPIN(totpUserSecret, viewModel.OTPCode, TimeSpan.Zero, true);
+
+                if (!isValidOTP)
+                {
+                    ModelState.AddModelError("", "Invalid OTP");
+                    return View(viewModel);
+                }
+            }
+            else
+            {
+                var authenticatorKey = mfaAuthResult.Properties.Items[AuthenticatorSecretDictionaryKey];
+                var isValidOTP = Startup.Authenticator.CheckCode(authenticatorKey, viewModel.OTPCode, user);
+
+                if (!isValidOTP)
+                {
+                    ModelState.AddModelError("", "Invalid OTP");
+                    return View(viewModel);
+                }
             }
 
             var context = await _interaction.GetAuthorizationContextAsync(viewModel.ReturnUrl);
@@ -400,6 +442,40 @@ namespace IdentityServerHost.Quickstart.UI
                 // user might have clicked on a malicious link - should be logged
                 throw new Exception("invalid return URL");
             }
+        }
+
+        /// <summary>
+        /// Handle setup OTP app
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> SetupOTPApp(SetupOTPAppViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                // something went wrong, show form with error
+                return View(viewModel);
+            }
+
+            var mfaAuthResult = await HttpContext.AuthenticateAsync(AuthConstants.AuthSchemes.IdentityMfa);
+
+            if (!mfaAuthResult.Succeeded) return RedirectToAction(nameof(Login));
+
+            var subject = mfaAuthResult.Principal.FindFirstValue(JwtClaimTypes.Subject);
+
+            _dbContext.UserSecrets.Add(new UserSecret
+            {
+                Name = AuthConstants.Mfa.OTPSecretKeyName,
+                Secret = viewModel.SecretKey,
+                UserId = subject
+            });
+
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(CheckOTP), new
+            {
+                rememberLogin = viewModel.RememberLogin,
+                returnUrl = viewModel.ReturnUrl
+            });
         }
 
         /// <summary>

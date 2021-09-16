@@ -2,8 +2,10 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Google.Authenticator;
 using IdentityServer4.AspNetIdentity;
 using IdentityServerHost.Quickstart.UI;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using TAuth.IDP.Models;
 using TAuth.IDP.Services;
 using TAuth.Resource.Cross.Services;
@@ -24,6 +27,8 @@ namespace TAuth.IDP
     public class Startup
     {
         public static TimeAuthenticator Authenticator { get; } = new TimeAuthenticator(intervalSeconds: AuthConstants.Mfa.OTPIntervalSeconds);
+        public static AppSettings AppSettings { get; } = new AppSettings();
+        public static TwoFactorAuthenticator GoogleAuthenticator { get; } = new TwoFactorAuthenticator();
 
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
@@ -33,6 +38,7 @@ namespace TAuth.IDP
         {
             Environment = environment;
             Configuration = configuration;
+            Configuration.Bind(nameof(AppSettings), AppSettings);
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -133,6 +139,15 @@ namespace TAuth.IDP
                 {
                     opt.ExpireTimeSpan = AuthConstants.Mfa.DefaultExpireTime;
                     opt.SlidingExpiration = false;
+                    opt.Events = new CookieAuthenticationEvents
+                    {
+                        OnRedirectToReturnUrl = context =>
+                        {
+                            // override default behavior of CookieAuthentication since it is not a real auth scheme
+                            context.RedirectUri = null;
+                            return Task.CompletedTask;
+                        }
+                    };
                 })
                 .AddFacebook(AuthConstants.AuthSchemes.Facebook, "Facebook Login", opt =>
                 {

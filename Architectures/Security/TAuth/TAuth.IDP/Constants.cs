@@ -7,6 +7,8 @@ namespace TAuth.IDP
 {
     public static class AuthConstants
     {
+        public const string IDPName = "TAuth";
+
         public static class IIS
         {
             public const string AuthDisplayName = "Windows";
@@ -26,6 +28,8 @@ namespace TAuth.IDP
 
             public const int OTPLength = 6;
             public const int OTPIntervalSeconds = 60;
+            public const int AuthenticatorAppSecretKeyLength = 64;
+            public const string OTPSecretKeyName = "TOTP";
         }
     }
 }

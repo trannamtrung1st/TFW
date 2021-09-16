@@ -26,6 +26,13 @@ namespace TAuth.IDP.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserSecret>(eBuilder =>
+            {
+                eBuilder.HasOne(e => e.User)
+                    .WithMany(e => e.UserSecrets)
+                    .HasForeignKey(e => e.UserId);
+            });
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -33,6 +40,7 @@ namespace TAuth.IDP.Models
         public DbSet<IdentityResource> IdentityResources { get; set; }
         public DbSet<ApiResource> ApiResources { get; set; }
         public DbSet<ApiScope> ApiScopes { get; set; }
+        public DbSet<UserSecret> UserSecrets { get; set; }
 
         public Task<int> SaveChangesAsync()
         {

@@ -147,4 +147,9 @@ namespace TAuth.IDP
                 },
             };
     }
+
+    public class AppSettings
+    {
+        public bool UseAuthenticatorApp { get; set; }
+    }
 }
