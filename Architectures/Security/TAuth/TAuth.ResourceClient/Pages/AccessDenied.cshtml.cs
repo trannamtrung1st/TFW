@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,8 +9,15 @@ namespace TAuth.ResourceClient.Pages
         [FromQuery]
         public string ReturnUrl { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            var hasAccessDeniedFlag = HttpContext.Session.GetInt32("AccessDenied") == 1;
+
+            if (!hasAccessDeniedFlag) return LocalRedirect("/");
+
+            HttpContext.Session.Remove("AccessDenied");
+
+            return Page();
         }
     }
 }

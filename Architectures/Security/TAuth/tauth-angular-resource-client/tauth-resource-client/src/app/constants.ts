@@ -7,19 +7,29 @@ const BASE_KEYWORD = 'base';
 interface AppRouting {
     [BASE_KEYWORD]: string,
     home: string,
+    resource: {
+        [BASE_KEYWORD]: string,
+        create: string
+    },
     profile: string,
     admin: string,
     accessDenied: string,
-    notFound: string
+    notFound: string,
+    callback: string
 }
 
 export const ROUTING: AppRouting = {
     [BASE_KEYWORD]: '',
     home: '',
+    resource: {
+        [BASE_KEYWORD]: 'resource',
+        create: 'create'
+    },
     profile: 'profile',
     admin: 'admin',
     accessDenied: 'access-denied',
-    notFound: 'not-found'
+    notFound: 'not-found',
+    callback: 'callback'
 };
 
 const absRoutes: any = cloneDeep(ROUTING);

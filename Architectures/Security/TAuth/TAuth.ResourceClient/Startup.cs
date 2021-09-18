@@ -54,7 +54,8 @@ namespace TAuth.ResourceClient
 
             services.AddSingleton<IUserService, UserService>()
                 .AddSingleton<IIdentityService, IdentityService>()
-                .AddSingleton<IResourceService, ResourceService>();
+                .AddSingleton<IResourceService, ResourceService>()
+                .AddSession();
 
             services.AddAuthentication(opt =>
             {
@@ -65,8 +66,8 @@ namespace TAuth.ResourceClient
                 opt.AccessDeniedPath = new PathString("/accessdenied");
                 opt.Events.OnRedirectToAccessDenied = (context) =>
                 {
-                    context.RedirectUri += $"#{DateTimeOffset.UtcNow.Ticks}";
-                    context.Response.Redirect(context.RedirectUri);
+                    context.HttpContext.Session.SetInt32("AccessDenied", 1);
+                    context.HttpContext.Response.Redirect(context.RedirectUri);
                     return Task.CompletedTask;
                 };
                 opt.Events.OnSigningOut = async e =>
@@ -178,6 +179,7 @@ namespace TAuth.ResourceClient
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();

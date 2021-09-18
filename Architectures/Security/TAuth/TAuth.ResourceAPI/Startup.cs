@@ -81,7 +81,7 @@ namespace TAuth.ResourceAPI
 
                 opt.AddPolicy(PolicyNames.IsOwner, builder => builder.AddRequirements(new IsOwnerRequirement()));
 
-                opt.AddPolicy(PolicyNames.IsLucky, builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 2 == 0));
+                opt.AddPolicy(PolicyNames.IsLucky, builder => builder.RequireAssertion(context => DateTime.UtcNow.Ticks % 10 > 3));
 
                 opt.AddPolicy(PolicyNames.WorkerOnly, builder => builder.RequireAuthenticatedUser().RequireScope("resource_api.background"));
 

@@ -151,7 +151,10 @@ namespace IdentityServerHost.Quickstart.UI
 
                 if (validLogin)
                 {
-                    var rememberLogin = AccountOptions.AllowRememberLogin && model.RememberLogin;
+                    if (!Startup.AppSettings.EnableMfa)
+                    {
+                        return await LoginAsync(user, model.ReturnUrl, model.RememberLogin);
+                    }
 
                     var mfaIdentity = new ClaimsIdentity(AuthConstants.AuthSchemes.IdentityMfa);
                     mfaIdentity.AddClaim(new Claim(JwtClaimTypes.Subject, user.Id));
@@ -178,7 +181,7 @@ namespace IdentityServerHost.Quickstart.UI
                             return View("SetupOTPApp", new SetupOTPAppViewModel
                             {
                                 QrCodeSetupImageUrl = setupInfo.QrCodeSetupImageUrl,
-                                RememberLogin = rememberLogin,
+                                RememberLogin = model.RememberLogin,
                                 ReturnUrl = model.ReturnUrl,
                                 SecretKey = secretKey
                             });
@@ -200,7 +203,7 @@ namespace IdentityServerHost.Quickstart.UI
 
                     return RedirectToAction(nameof(CheckOTP), new
                     {
-                        rememberLogin,
+                        model.RememberLogin,
                         returnUrl = model.ReturnUrl
                     });
                 }
@@ -390,59 +393,7 @@ namespace IdentityServerHost.Quickstart.UI
                 }
             }
 
-            var context = await _interaction.GetAuthorizationContextAsync(viewModel.ReturnUrl);
-
-            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
-
-            // only set explicit expiration here if user chooses "remember me". 
-            // otherwise we rely upon expiration configured in cookie middleware.
-            AuthenticationProperties props = null;
-            if (AccountOptions.AllowRememberLogin && viewModel.RememberLogin)
-            {
-                props = new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                    ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                };
-            };
-
-            // issue authentication cookie with subject ID and username
-            var isuser = new IdentityServerUser(user.Id)
-            {
-                DisplayName = user.UserName
-            };
-
-            await HttpContext.SignInAsync(isuser, props);
-
-            await HttpContext.SignOutAsync(AuthConstants.AuthSchemes.IdentityMfa);
-
-            if (context != null)
-            {
-                if (context.IsNativeClient())
-                {
-                    // The client is native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return this.LoadingPage("Redirect", viewModel.ReturnUrl);
-                }
-
-                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                return Redirect(viewModel.ReturnUrl);
-            }
-
-            // request for a local page
-            if (Url.IsLocalUrl(viewModel.ReturnUrl))
-            {
-                return Redirect(viewModel.ReturnUrl);
-            }
-            else if (string.IsNullOrEmpty(viewModel.ReturnUrl))
-            {
-                return Redirect("~/");
-            }
-            else
-            {
-                // user might have clicked on a malicious link - should be logged
-                throw new Exception("invalid return URL");
-            }
+            return await LoginAsync(user, viewModel.ReturnUrl, viewModel.RememberLogin);
         }
 
         /// <summary>
@@ -815,6 +766,63 @@ namespace IdentityServerHost.Quickstart.UI
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+        private async Task<IActionResult> LoginAsync(AppUser user, string returnUrl, bool rememberLogin)
+        {
+            var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+
+            await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+
+            // only set explicit expiration here if user chooses "remember me". 
+            // otherwise we rely upon expiration configured in cookie middleware.
+            AuthenticationProperties props = null;
+            if (AccountOptions.AllowRememberLogin && rememberLogin)
+            {
+                props = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                };
+            };
+
+            // issue authentication cookie with subject ID and username
+            var isuser = new IdentityServerUser(user.Id)
+            {
+                DisplayName = user.UserName
+            };
+
+            await HttpContext.SignInAsync(isuser, props);
+
+            if (Startup.AppSettings.EnableMfa) await HttpContext.SignOutAsync(AuthConstants.AuthSchemes.IdentityMfa);
+
+            if (context != null)
+            {
+                if (context.IsNativeClient())
+                {
+                    // The client is native, so this change in how to
+                    // return the response is for better UX for the end user.
+                    return this.LoadingPage("Redirect", returnUrl);
+                }
+
+                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                return Redirect(returnUrl);
+            }
+
+            // request for a local page
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else if (string.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect("~/");
+            }
+            else
+            {
+                // user might have clicked on a malicious link - should be logged
+                throw new Exception("invalid return URL");
+            }
+        }
+
         private ResetPasswordViewModel BuildResetPasswordViewModel(AppUser user = null,
             string token = null,
             RequestResetPasswordViewModel requestResetPasswordViewModel = null)

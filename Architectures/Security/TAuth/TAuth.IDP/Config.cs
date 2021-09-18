@@ -100,20 +100,20 @@ namespace TAuth.IDP
                 {
                     ClientId = "resource-client-js-id",
                     ClientName = "Resource Client JS",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Code,
                     AllowAccessTokensViaBrowser = true,
+                    RequireClientSecret = false,
                     RedirectUris =
                     {
-                        "http://localhost:52330/callback.html",
-                        "http://localhost:52330/silent-refresh.html"
+                        "http://localhost:4200/callback"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "http://localhost:52330/index.html"
+                        "http://localhost:4200"
                     },
                     AllowedCorsOrigins =
                     {
-                        "http://localhost:52330"
+                        "http://localhost:4200"
                     },
                     AllowedScopes =
                     {
@@ -150,6 +150,7 @@ namespace TAuth.IDP
 
     public class AppSettings
     {
+        public bool EnableMfa { get; set; }
         public bool UseAuthenticatorApp { get; set; }
     }
 }
