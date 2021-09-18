@@ -62,6 +62,7 @@ namespace TAuth.ResourceAPI
                 {
                     opt.Authority = AppSettings.IdpUrl;
                     opt.Audience = "resource_api";
+                    //opt.TokenValidationParameters.ClockSkew = TimeSpan.Zero; // demo only: since local will not have clock skew
                 })
                 // Reference tokens
                 .AddOAuth2Introspection(OpenIdConnectConstants.AuthSchemes.Introspection, opt =>

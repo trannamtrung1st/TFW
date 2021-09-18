@@ -105,7 +105,8 @@ namespace TAuth.IDP
                     RequireClientSecret = false,
                     RedirectUris =
                     {
-                        "http://localhost:4200/callback"
+                        "http://localhost:4200/callback",
+                        "http://localhost:4200/silent-refresh" // important for silent refresh to work
                     },
                     PostLogoutRedirectUris =
                     {

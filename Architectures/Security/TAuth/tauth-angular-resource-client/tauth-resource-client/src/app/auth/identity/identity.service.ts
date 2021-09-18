@@ -13,6 +13,13 @@ export class IdentityService {
   private _userManager: UserManager;
   constructor() {
     this._userManager = new UserManager(ODIC_CONFIG);
+    this._userManager.events.addSilentRenewError((error) => {
+      console.log(error);
+    });
+  }
+
+  signinSilentCallback(): Promise<User | undefined> {
+    return this._userManager.signinSilentCallback();
   }
 
   getUser(): Promise<User | null> {

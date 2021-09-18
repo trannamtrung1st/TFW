@@ -14,6 +14,7 @@ import { AuthModule } from '@auth/auth.module';
 import { NotFoundComponent } from './common/not-found/not-found.component';
 import { AccessDeniedComponent } from './common/access-denied/access-denied.component';
 import { CreateResourceComponent } from './resource/create-resource/create-resource.component';
+import { SilentRefreshComponent } from './oidc/silent-refresh/silent-refresh.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CreateResourceComponent } from './resource/create-resource/create-resou
     NotFoundComponent,
     AccessDeniedComponent,
     CreateResourceComponent,
+    SilentRefreshComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,7 +15,8 @@ interface AppRouting {
     admin: string,
     accessDenied: string,
     notFound: string,
-    callback: string
+    callback: string,
+    silentRefresh: string,
 }
 
 export const ROUTING: AppRouting = {
@@ -29,7 +30,8 @@ export const ROUTING: AppRouting = {
     admin: 'admin',
     accessDenied: 'access-denied',
     notFound: 'not-found',
-    callback: 'callback'
+    callback: 'callback',
+    silentRefresh: 'silent-refresh'
 };
 
 const absRoutes: any = cloneDeep(ROUTING);

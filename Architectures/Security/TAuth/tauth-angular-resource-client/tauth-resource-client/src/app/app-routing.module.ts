@@ -13,6 +13,7 @@ import { CallbackComponent } from './oidc/callback/callback.component';
 import { NotFoundComponent } from './common/not-found/not-found.component';
 import { AccessDeniedComponent } from './common/access-denied/access-denied.component';
 import { CreateResourceComponent } from './resource/create-resource/create-resource.component';
+import { SilentRefreshComponent } from './oidc/silent-refresh/silent-refresh.component';
 
 import { RoutingAuthService } from '@auth/routing/routing-auth.service';
 
@@ -50,6 +51,7 @@ const routes: Routes = [
     ]
   },
   { path: ROUTING.callback, component: CallbackComponent },
+  { path: ROUTING.silentRefresh, component: SilentRefreshComponent },
   { path: ROUTING.notFound, component: NotFoundComponent },
   { path: ROUTING.accessDenied, component: AccessDeniedComponent },
   { path: '**', redirectTo: ROUTING.notFound }

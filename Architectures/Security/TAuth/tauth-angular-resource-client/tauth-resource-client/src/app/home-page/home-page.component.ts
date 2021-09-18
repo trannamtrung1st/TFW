@@ -33,6 +33,6 @@ export class HomePageComponent implements OnInit {
   onDeleteClicked(deletedResource: ResourceListItemModel) {
     this._resourceService.deleteResource(deletedResource.id).subscribe(() => {
       this.resourceList.splice(this.resourceList.findIndex(resource => resource === deletedResource), 1);
-    });
+    }, err => this._httpHelper.handleCommonError(err));
   }
 }
