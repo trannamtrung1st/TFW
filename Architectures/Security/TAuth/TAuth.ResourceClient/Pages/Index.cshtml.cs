@@ -37,21 +37,8 @@ namespace TAuth.ResourceClient.Pages
         {
             await DebugIdentity();
 
-            try
-            {
-                ResourceList = await _resourceService.GetAsync();
-                CanCreateResource = (await _authorizationService.AuthorizeAsync(User, PolicyNames.Resource.CanCreateResource)).Succeeded;
-            }
-            catch (HttpException ex)
-            {
-                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    return RedirectToPage("/Logout");
-
-                if (ex.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                    return Forbid();
-
-                throw ex;
-            }
+            ResourceList = await _resourceService.GetAsync();
+            CanCreateResource = (await _authorizationService.AuthorizeAsync(User, PolicyNames.Resource.CanCreateResource)).Succeeded;
 
             return Page();
         }

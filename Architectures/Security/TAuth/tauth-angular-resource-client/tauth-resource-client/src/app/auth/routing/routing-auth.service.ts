@@ -23,6 +23,7 @@ export class RoutingAuthService implements CanActivate, CanActivateChild {
     private _commonService: CommonService) { }
 
   async canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean | UrlTree> {
+    if (childRoute.routeConfig?.canActivate?.length) return true;
     if (childRoute.parent) return await this.canActivate(childRoute.parent, state);
     return false;
   }

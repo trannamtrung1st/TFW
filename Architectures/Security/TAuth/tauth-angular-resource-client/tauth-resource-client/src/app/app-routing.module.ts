@@ -47,13 +47,13 @@ const routes: Routes = [
             } as RoutingData
           }
         ]
-      }
+      },
+      { path: ROUTING.notFound, component: NotFoundComponent },
+      { path: ROUTING.accessDenied, component: AccessDeniedComponent }
     ]
   },
   { path: ROUTING.callback, component: CallbackComponent },
   { path: ROUTING.silentRefresh, component: SilentRefreshComponent },
-  { path: ROUTING.notFound, component: NotFoundComponent },
-  { path: ROUTING.accessDenied, component: AccessDeniedComponent },
   { path: '**', redirectTo: ROUTING.notFound }
 ];
 

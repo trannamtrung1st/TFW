@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using TAuth.ResourceClient.Exceptions;
 
 namespace TAuth.ResourceClient.Pages
 {
@@ -19,9 +21,26 @@ namespace TAuth.ResourceClient.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet() => HandleError();
+
+        public IActionResult OnPost() => HandleError();
+
+        private IActionResult HandleError()
         {
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            var ex = exceptionFeature?.Error;
+
+            if (ex is HttpException httpEx)
+            {
+                if (httpEx.Response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return Challenge();
+
+                if (httpEx.Response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    return Forbid();
+            }
+
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            return Page();
         }
     }
 }

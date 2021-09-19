@@ -29,7 +29,13 @@ namespace TAuth.ResourceClient.Services
         {
             var resp = await _httpClient.PostAsJsonAsync("/api/resources", model);
 
-            if (!resp.IsSuccessStatusCode) throw new Exception("Failed to create resource");
+            if (!resp.IsSuccessStatusCode)
+            {
+                throw new HttpException()
+                {
+                    Response = resp
+                };
+            }
 
             var createdId = await resp.Content.ReadFromJsonAsync<int>();
             return createdId;
@@ -39,7 +45,13 @@ namespace TAuth.ResourceClient.Services
         {
             var resp = await _httpClient.DeleteAsync($"/api/resources/{id}");
 
-            if (!resp.IsSuccessStatusCode) throw new Exception("Failed to delete resource");
+            if (!resp.IsSuccessStatusCode)
+            {
+                throw new HttpException()
+                {
+                    Response = resp
+                };
+            }
         }
 
         public async Task<IEnumerable<ResourceListItemModel>> GetAsync()
