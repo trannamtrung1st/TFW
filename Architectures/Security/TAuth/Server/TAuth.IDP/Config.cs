@@ -103,12 +103,10 @@ namespace TAuth.IDP
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris = new[]
                     {
-                        "https://localhost:44362/signin-oidc",
                         $"{Startup.AppSettings.DemoSSOClientBasedUrl}/signin-oidc"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "https://localhost:44362/signout-callback-oidc",
                         $"{Startup.AppSettings.DemoSSOClientBasedUrl}/signout-callback-oidc"
                     },
                     AllowedScopes =
