@@ -14,7 +14,8 @@ namespace TAuth.SSOClient.Pages
 
         public void OnGet()
         {
-
+            // debugging purpose only
+            var user = User;
         }
     }
 }

@@ -96,6 +96,35 @@ namespace TAuth.IDP
                     RequirePkce = true,
                     RequireConsent = true
                 },
+                new Client()
+                {
+                    ClientName = "SSO Client",
+                    ClientId = "sso-client-id",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RedirectUris = new[]
+                    {
+                        "https://localhost:44362/signin-oidc",
+                        $"{Startup.AppSettings.DemoSSOClientBasedUrl}/signin-oidc"
+                    },
+                    PostLogoutRedirectUris =
+                    {
+                        "https://localhost:44362/signout-callback-oidc",
+                        $"{Startup.AppSettings.DemoSSOClientBasedUrl}/signout-callback-oidc"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address,
+                        IdentityServerConstants.StandardScopes.Email,
+                    },
+                    ClientSecrets =
+                    {
+                        new Secret("sso-client-secret".Sha256())
+                    },
+                    RequirePkce = true,
+                    RequireConsent = false
+                },
                 new Client
                 {
                     ClientId = "resource-client-js-id",
@@ -153,5 +182,11 @@ namespace TAuth.IDP
     {
         public bool EnableMfa { get; set; }
         public bool UseAuthenticatorApp { get; set; }
+
+        // SSO using shared cookie configuration
+        public bool DemoSSO { get; set; }
+        public string DataProtectionKeyPath { get; set; }
+        public string SharedCookieDomain { get; set; }
+        public string DemoSSOClientBasedUrl { get; set; }
     }
 }

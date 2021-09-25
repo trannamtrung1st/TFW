@@ -3,9 +3,11 @@
 
 
 using Google.Authenticator;
+using IdentityServer4;
 using IdentityServer4.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +15,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using TAuth.Cross;
 using TAuth.Cross.Services;
 using TAuth.IDP.Models;
 using TAuth.IDP.Services;
@@ -82,42 +86,7 @@ namespace TAuth.IDP
                 options.User.RequireUniqueEmail = false;
             });
 
-            var builder = services.AddIdentityServer(options =>
-            {
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;
-
-                // set to False to prevent single sign-out
-                //options.Endpoints.EnableEndSessionEndpoint = false;
-            })
-                //.AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
-                //.AddSigningCredential(signingCert)
-                //.AddInMemoryIdentityResources(Config.IdentityResources)
-                //.AddInMemoryApiResources(Config.ApiResources)
-                //.AddInMemoryApiScopes(Config.ApiScopes)
-                //.AddInMemoryClients(Config.Clients)
-                //.AddTestUsers(TestUsers.Users);
-                .AddProfileService<ProfileService<AppUser>>();
-
-            // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
-
-            builder.AddConfigurationStore<IdpContext>(opt =>
-            {
-                opt.ConfigureDbContext = builder =>
-                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
-            });
-
-            builder.AddOperationalStore<IdpContext>(opt =>
-            {
-                opt.ConfigureDbContext = builder =>
-                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
-
-                // this enables automatic token cleanup. this is optional.
-                opt.EnableTokenCleanup = true;
-                opt.TokenCleanupInterval = 30;
-            });
-
+            #region Authentication
             services.Configure<IISOptions>(opt =>
             {
                 opt.AuthenticationDisplayName = AuthConstants.IIS.AuthDisplayName;
@@ -130,10 +99,22 @@ namespace TAuth.IDP
                 opt.AutomaticAuthentication = false;
             });
 
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(AppSettings.DataProtectionKeyPath))
+                .SetApplicationName(nameof(TAuth));
+
             services.AddAuthentication(opt =>
             {
+                opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                opt.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 //opt.RequireAuthenticatedSignIn = false;
             })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
+                {
+                    opt.Cookie.Name = CookieConstants.SharedCookieName;
+                    if (AppSettings.DemoSSO)
+                        opt.Cookie.Domain = AppSettings.SharedCookieDomain;
+                })
                 .AddCookie(AuthConstants.AuthSchemes.IdentityMfa, opt =>
                 {
                     opt.ExpireTimeSpan = AuthConstants.Mfa.DefaultExpireTime;
@@ -162,6 +143,47 @@ namespace TAuth.IDP
                     opt.ClientSecret = Configuration.GetValue<string>("Google:ClientSecret");
                     opt.SignInScheme = IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 });
+            #endregion
+
+            #region IdentityServer4
+            var builder = services.AddIdentityServer(options =>
+            {
+                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                options.EmitStaticAudienceClaim = true;
+
+                // set to False to prevent single sign-out
+                //options.Endpoints.EnableEndSessionEndpoint = false;
+
+                options.Authentication.CookieAuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                //.AddSigningCredential(new RsaSecurityKey(rsa), IdentityServerConstants.RsaSigningAlgorithm.RS256)
+                //.AddSigningCredential(signingCert)
+                //.AddInMemoryIdentityResources(Config.IdentityResources)
+                //.AddInMemoryApiResources(Config.ApiResources)
+                //.AddInMemoryApiScopes(Config.ApiScopes)
+                //.AddInMemoryClients(Config.Clients)
+                //.AddTestUsers(TestUsers.Users);
+                .AddProfileService<ProfileService<AppUser>>();
+
+            // not recommended for production - you need to store your key material somewhere secure
+            builder.AddDeveloperSigningCredential();
+
+            builder.AddConfigurationStore<IdpContext>(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
+            });
+
+            builder.AddOperationalStore<IdpContext>(opt =>
+            {
+                opt.ConfigureDbContext = builder =>
+                    builder.UseSqlite(Configuration.GetConnectionString(nameof(IdpContext)));
+
+                // this enables automatic token cleanup. this is optional.
+                opt.EnableTokenCleanup = true;
+                opt.TokenCleanupInterval = 30;
+            });
+            #endregion
         }
 
         public void Configure(IApplicationBuilder app)
